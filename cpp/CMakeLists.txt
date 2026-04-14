@@ -76,7 +76,7 @@ if(EXISTS "${FHL4_DIR}")
   list(APPEND PARSER_TARGETS parser_fhl4_json)
 endif()
 
-# Stable custom app target for FFM JSON extraction.
+# Stable custom app target for FFM8 JSON extraction.
 # Custom code lives in src/, generated code stays under data/generated_parsers/.
 set(FFM_DIR "${CMAKE_CURRENT_SOURCE_DIR}/data/generated_parsers/ffm_parsers")
 if(EXISTS "${FFM_DIR}")

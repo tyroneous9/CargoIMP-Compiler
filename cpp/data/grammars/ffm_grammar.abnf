@@ -2,7 +2,7 @@
  # FFM/8 grammar (full-message parsing, stricter structural pass)
  #
  # Goal:
- #   Parse complete FFM messages including flight header, route,
+#   Parse complete FFM8 messages including flight header, route,
  #   ULD sections, AWB lines, OSI/OCI lines, qualifier lines,
  #   continuation lines, and trailer.
  #
