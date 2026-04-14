@@ -1,0 +1,155 @@
+{
+  "MessageHeader": "FFM/8",
+  "FlightIdentificationLine": "5/KZ7134/09APR2215/NRT/N407KZ",
+  "RouteLine": "ORD//09APR2240",
+  "ULDs": {
+    "PMC97589KZ": {
+      "AWBs": [
+        {
+          "AirWaybillLine": "933-20298670NRTORD/S2K480.5MC0.60T15/CONSOLIDATION A",
+          "MasterAirwayBillNumber": "933-20298670",
+          "OriginAndDestination": "NRTORD",
+          "ShipmentSummary": "S2K480.5MC0.60T15",
+          "FreeText": "CONSOLIDATION A",
+          "OSI": ["OSI/."],
+          "OCI": ["OCI///ST/YAMATO TRANSPORT CO. LTD. HAS"],
+          "Qualifiers": ["/EAW/SPX/BSA/GEN", "/JP/SHP/CP/NARICON", "/JP/SHP/CT/81335413411", "/US/SHP/MU/NARICON", "/US/SHP/MD/Y-LOGI.COM", "/US/CNE/CT/16305958114", "/US/CNE/MU/JNO", "/US/CNE/MD/YAMATOAMERICA.COM", "/US/CUS/KP/N", "/US/CUS/AH/3", "/US/CUS/AN/YAMATO TRANSPORT CO.  LTD.", "/US/CUS/AE/23OCT24", "/US/CUS/BT/CHQ", "/US/CUS/AF/R", "/US/CUS/IA/10.244.75.157", "/US/CUS/IR/10.244.75.157"],
+          "Continuations": ["///ST/REVIEWED ALL AVAILABLE", "///ST/DOCUMENTATION AND HAS DETERMINED", "///ST/THAT NONE OF THE CARGO BEING", "///ST/OFFERED IN THIS CONSIGNMENT OR", "///ST/CONSOLIDATION HAS EITHER", "///ST/ORIGINATED IN TRANSFERRED FROM OR", "///ST/TRANSITED THROUGH ANY POINT IN", "///ST/EGYPT SOMALIA SYRIAN ARAB REPUBLIC", "///ST/YEMEN."]
+        },
+        {
+          "AirWaybillLine": "933-34092026BKKORD/S9K2398.5MC7.45T31/CONSOLIDATION P",
+          "MasterAirwayBillNumber": "933-34092026",
+          "OriginAndDestination": "BKKORD",
+          "ShipmentSummary": "S9K2398.5MC7.45T31",
+          "FreeText": "CONSOLIDATION P",
+          "OSI": ["OSI/AGT-I309"],
+          "OCI": ["OCI/US/CNE/CT/8723656675"],
+          "Qualifiers": ["/EAP/GEN"],
+          "Continuations": []
+        },
+        {
+          "AirWaybillLine": "933-34502720HKGORD/S2K50MC0.01T110/HAT CUP NAILBON",
+          "MasterAirwayBillNumber": "933-34502720",
+          "OriginAndDestination": "HKGORD",
+          "ShipmentSummary": "S2K50MC0.01T110",
+          "FreeText": "HAT CUP NAILBON",
+          "OSI": ["OSI/MIX 2705"],
+          "OCI": [],
+          "Qualifiers": ["/BUC/ELI/MCO"],
+          "Continuations": []
+        },
+        {
+          "AirWaybillLine": "933-26672903NRTORD/S22K237MC6.66T50/CONSOLIDATION",
+          "MasterAirwayBillNumber": "933-26672903",
+          "OriginAndDestination": "NRTORD",
+          "ShipmentSummary": "S22K237MC6.66T50",
+          "FreeText": "CONSOLIDATION",
+          "OSI": ["OSI/  NOT RESTRICTED"],
+          "OCI": ["OCI/US/CNE/T/952864414"],
+          "Qualifiers": ["/EAW/GEN", "/US/CNE/CP/MR GALDANTSOGT GANBAATAR", "/US/CNE/CT/8478716200", "/US/SHP/MU/YA.ITOU", "/US/SHP/MD/NISSIN-TW.COM", "/US/CNE/MU/ORD021", "/US/CNE/MD/NITUSA.COM", "/US/CUS/AH/S", "/US/CUS/AN/NISSIN-TW.COM", "/US/CUS/AI/933", "/US/CUS/AR/163-1162-0975", "/US/CUS/AF/O", "/US/CUS/KP/N", "/US/CUS/AE/06232025", "/US/CUS/BT/BILL", "/US/CUS/IA/10.80.42.108", "/US/CUS/IR/10.80.42.108"],
+          "Continuations": []
+        }
+      ]
+    },
+    "PMC95990KZ": {
+      "AWBs": [
+        {
+          "AirWaybillLine": "933-26676790KIXORD/D6K3534MC9.27T20/CONSOLIDATION A",
+          "MasterAirwayBillNumber": "933-26676790",
+          "OriginAndDestination": "KIXORD",
+          "ShipmentSummary": "D6K3534MC9.27T20",
+          "FreeText": "CONSOLIDATION A",
+          "OSI": ["OSI/KIX LOOSE SPLIT DO NOT STACK"],
+          "OCI": ["OCI/US/CNE/CT/18472288500"],
+          "Qualifiers": ["/RBI/CAO/EAP/SBY/GEN"],
+          "Continuations": []
+        }
+      ]
+    },
+    "PMC97449KZ": {
+      "ULDDetailText": "W-4496.0 C-SH ",
+      "AWBs": [
+        {
+          "AirWaybillLine": "933-34359706HKGORD/T15K4396MC15/CNSL DSV BUC 71",
+          "MasterAirwayBillNumber": "933-34359706",
+          "OriginAndDestination": "HKGORD",
+          "ShipmentSummary": "T15K4396MC15",
+          "FreeText": "CNSL DSV BUC 71",
+          "OSI": ["OSI/FIRMS-I367E-FREIGHT.Q. EAP"],
+          "OCI": ["OCI/HK/SHP/CP/RINGO HO"],
+          "Qualifiers": ["/BUC/ELI/SPX/MCO/GEN", "/HK/SHP/CT/85222373621", "/HK/ISS/RA/RA03854", "/US/SHP/VU/RINGO.HO", "/US/SHP/VD/DSV.COM", "/US/CUS/AH/S", "/US/CUS/RT/B2B", "/US/CUS/FT/01", "/US/CUS/VP/85222373621", "/US/CUS/AN/SCHENKER INTERNATIONAL HK LTD", "/US/CUS/AI/BR HK HKG SCHENKER INT. HK LTD.", "/US/CUS/AR/HKHKGHUEXA0001"],
+          "Continuations": ["///ED/1299", "///SM/XRY", "///SN/JOHNHO", "///SD/06APR260000"]
+        }
+      ]
+    },
+    "PMC99432KZ": {
+      "AWBs": [
+        {
+          "AirWaybillLine": "933-27735842NRTORD/S12K1710.2MC3.26T198/CONSOLIDATED CA",
+          "MasterAirwayBillNumber": "933-27735842",
+          "OriginAndDestination": "NRTORD",
+          "ShipmentSummary": "S12K1710.2MC3.26T198",
+          "FreeText": "CONSOLIDATED CA",
+          "OSI": ["OSI/FIRMS-I338"],
+          "OCI": ["OCI/US/SHP/MU/NITTSU-NRC1-TYO"],
+          "Qualifiers": ["/EAW/GEN", "/US/SHP/MD/NIPPONEXPRESS.COM", "/US/CNE/MU/NEU.CHI.DI", "/US/CNE/MD/NIPPONEXPRESS.COM", "/US/CUS/AH/S", "/US/CUS/AN/NIPPON EXPRESS CO LTD", "/US/CUS/AI/933", "/US/CUS/AF/R", "/US/CUS/KP/N", "/US/CUS/BT/EFT"],
+          "Continuations": []
+        }
+      ]
+    },
+    "PMC98721KZ": {
+      "ULDDetailText": "W-1340.0 C-SH ",
+      "AWBs": [
+        {
+          "AirWaybillLine": "933-34525971PVGORD/T2K329MC0.01/CNSL WFF B U BY",
+          "MasterAirwayBillNumber": "933-34525971",
+          "OriginAndDestination": "PVGORD",
+          "ShipmentSummary": "T2K329MC0.01",
+          "FreeText": "CNSL WFF B U BY",
+          "OSI": [],
+          "OCI": [],
+          "Qualifiers": ["/ELI/ELM/EAP/GEN"],
+          "Continuations": []
+        },
+        {
+          "AirWaybillLine": "933-34525842PVGORD/T98K836MC0.01/EXPRESS PVC DEC",
+          "MasterAirwayBillNumber": "933-34525842",
+          "OriginAndDestination": "PVGORD",
+          "ShipmentSummary": "T98K836MC0.01",
+          "FreeText": "EXPRESS PVC DEC",
+          "OSI": [],
+          "OCI": [],
+          "Qualifiers": ["/GEN"],
+          "Continuations": []
+        },
+        {
+          "AirWaybillLine": "933-34525982PVGORD/T6K58MC0.01/CNSL WFF B U BY",
+          "MasterAirwayBillNumber": "933-34525982",
+          "OriginAndDestination": "PVGORD",
+          "ShipmentSummary": "T6K58MC0.01",
+          "FreeText": "CNSL WFF B U BY",
+          "OSI": [],
+          "OCI": [],
+          "Qualifiers": ["/EAP/GEN"],
+          "Continuations": []
+        }
+      ]
+    },
+    "PMC95017KZ": {
+      "ULDDetailText": "W-2030.0 C-L ",
+      "AWBs": [
+        {
+          "AirWaybillLine": "933-34502775HKGORD/T89K1921MC9/CNSL CGH BUC 71",
+          "MasterAirwayBillNumber": "933-34502775",
+          "OriginAndDestination": "HKGORD",
+          "ShipmentSummary": "T89K1921MC9",
+          "FreeText": "CNSL CGH BUC 71",
+          "OSI": ["OSI/FIRM CODE H0A0"],
+          "OCI": [],
+          "Qualifiers": ["/BUC/ELI/MCO"],
+          "Continuations": []
+        }
+      ]
+    }
+  }
+}

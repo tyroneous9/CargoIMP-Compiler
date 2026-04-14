@@ -1,0 +1,137 @@
+ # ------------------------------------------------------------------------
+ # FFM/8 grammar (full-message parsing, stricter structural pass)
+ #
+ # Goal:
+ #   Parse complete FFM messages including flight header, route,
+ #   ULD sections, AWB lines, OSI/OCI lines, qualifier lines,
+ #   continuation lines, and trailer.
+ #
+ # Note:
+ #   This pass tightens several elements (date/month, summary structure,
+ #   qualifier-token splitting). Final normative CIMP conformance still
+ #   requires exact table constraints from your licensed CIMP text.
+ # ------------------------------------------------------------------------
+
+ FFM8 =
+ 	MessageHeader
+ 	EOL
+ 	FlightIdentificationLine
+ 	EOL
+ 	RouteLine
+ 	EOL
+ 	1*UldSection
+ 	[TrailerLine [EOL]];
+
+ MessageHeader = "FFM/8";
+
+ # Example: 5/KZ7134/09APR2215/NRT/N407KZ
+ FlightIdentificationLine =
+ 	MessageFunctionCode
+ 	Slant
+ 	CarrierFlightNumber
+ 	Slant
+ 	DayMonthTime
+ 	Slant
+ 	AirportCode
+ 	Slant
+ 	AircraftRegistration;
+
+ # Example: ORD//09APR2240
+ RouteLine =
+ 	AirportCode
+ 	Slant
+ 	Slant
+ 	DayMonthTime;
+
+ UldSection =
+ 	ULDLine EOL
+ 	1*AwbBlock;
+
+ AwbBlock =
+ 	AirWaybillLine EOL
+ 	*SupplementLine;
+
+ SupplementLine =
+ 	OsiLine EOL
+ 	/ OciLine EOL
+ 	/ ContinuationLine EOL
+ 	/ SlashQualifierLine EOL;
+
+ # Example: ULD/PMC97589KZ or ULD/PMC97449KZ/W-4496.0 C-SH 
+ ULDLine = "ULD" Slant ULDIdentifier [Slant ULDDetailText];
+
+ # Example: 933-20298670NRTORD/S2K480.5MC0.60T15/CONSOLIDATION A
+ AirWaybillLine =
+ 	MasterAirwayBillNumber
+ 	OriginAndDestination
+ 	Slant
+ 	ShipmentSummary
+ 	[Slant FreeText];
+
+ OsiLine = "OSI" Slant *LineChar;
+ OciLine = "OCI" Slant *LineChar;
+
+ # Lines that begin with one slash, e.g. /EAW/SPX/BSA/GEN or /US/CUS/AF/R
+ SlashQualifierLine = Slant QualifierToken *(Slant QualifierToken);
+
+ # Explicit triple-slash continuation lines used in OCI blocks
+ ContinuationLine = Slant Slant Slant *LineChar;
+
+ TrailerLine = "LAST";
+
+ # -------------------------- Elements --------------------------
+
+ MessageFunctionCode = 1*2Digit;
+ CarrierFlightNumber = 2*8AlphaNum;
+ DayMonthTime = 2Digit Month 4Digit;
+ AircraftRegistration = 4*12AlphaNum;
+
+ MasterAirwayBillNumber = AirlinePrefix Hyphen AWBSerialNumber;
+ AirlinePrefix = 3Digit;
+ AWBSerialNumber = 8Digit;
+
+ OriginAndDestination = AirportCode AirportCode;
+ AirportCode = 3Upper;
+
+ ULDIdentifier = 5*20ULDChar;
+ ULDDetailText = 1*LineChar;
+
+ ShipmentSummary =
+ 	SummaryType
+ 	PieceCount
+	WeightUnit
+	WeightValue
+	["M" VolumeUnit VolumeAmount]
+ 	["T" TotalPieceCount];
+
+ SummaryType = "S" / "T" / "D";
+ PieceCount = 1*4Digit;
+ TotalPieceCount = 1*4Digit;
+WeightUnit = "K" / "L";
+WeightValue = 1*7Digit [Dot 1*3Digit];
+VolumeUnit = 1*2Upper;
+VolumeAmount = 1*6Digit [Dot 1*3Digit];
+
+ Month =
+ 	"JAN" / "FEB" / "MAR" / "APR" / "MAY" / "JUN" /
+ 	"JUL" / "AUG" / "SEP" / "OCT" / "NOV" / "DEC";
+ FreeText = 1*LineChar;
+
+ # --------------------------- Character sets ---------------------------
+
+ ULDChar = AlphaNum / Hyphen;
+ SummaryChar = AlphaNum / Dot / Hyphen;
+ QualifierToken = 1*NoSlashChar;
+ NoSlashChar = %x20-2E / %x30-7E;
+
+ LineChar = %x20-7E;
+
+ Slant = "/";
+ Hyphen = "-";
+ Dot = ".";
+
+ Digit = %x30-39;
+ Upper = %x41-5A;
+
+ AlphaNum = Upper / Digit;
+ EOL = [%x0D] %x0A;

@@ -1,0 +1,37 @@
+{
+  "MasterAirwayBillNumber": "933-34502720",
+  "OriginAndDestination": "HKGORD",
+  "TotalConsignmentSummary": "/T110K1978MC0.67",
+  "TotalPieceCount": "110",
+  "WeightUnit": "K",
+  "TotalWeight": "1978",
+  "VolumeUnit": "MC",
+  "VolumeAmount": "0.67",
+  "RoutingLine": "RTG/NRTKZ/ORDKZ",
+  "Shipper": {
+      "NameLine": "NAM/ZHENGXINTONG TRADING CO LTD",
+      "AddressLine": "ADR/FLAT B 12F HONG KONG MANUFACTURING",
+      "LocationLine": "LOC/HONG KONG/HK",
+      "Continuations": ["/ BLDG WAI YIP ST", "/HK/99999"]
+    },
+  "Consignee": {
+      "NameLine": "NAM/TOPLIDA TRADING INC",
+      "AddressLine": "ADR/125 WOLF RD SUITE 101",
+      "LocationLine": "LOC/ALBANY/NY",
+      "Continuations": ["/US/12205"]
+    },
+  "AgentLine": "AGT//1330222/0002/CAG",
+  "AgentContinuations": ["/CARGOHOLIC INTERNATIONAL LIMITED", "/HKG"],
+  "CvdLine": "CVD/HKD/PP/PP/NVD/NCV/XXX",
+  "RatingLine": "RTD/1/P110/K1978/W1978/R95.61/T189116.58",
+  "RatingContinuations": ["/NG/HAT CUP NAILBOND LED", "/2/NG/ LIGHT WATCH CGH MIX", "/3/NG/ 7134 09", "/4/ND//NDA", "/5/NV/MC0.67", "/6/NS/110"],
+  "OtherChargesLine": "OTH/P/SOC2779.5CGC168MYC26703",
+  "OtherChargesContinuations": ["/P/AWC13"],
+  "PrepaidLine": "PPD/WT189116.58/VC0/TX0",
+  "PrepaidContinuations": ["/OA0/OC29663.5/CT218780.08"],
+  "IssuanceLine": "ISU/09APR26/HKG/HKG001",
+  "IssuanceDate": "09APR26",
+  "OsiLines": ["OSI/MIX 2705"],
+  "RefLines": ["REF/TYOFMKZ"],
+  "SphLine": "SPH/BUC/ELI/MCO"
+}

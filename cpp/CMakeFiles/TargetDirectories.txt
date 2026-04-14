@@ -1,3 +1,0 @@
-/home/wesleywu9/tolead/NCAParser/cpp/CMakeFiles/NCAParser.dir
-/home/wesleywu9/tolead/NCAParser/cpp/CMakeFiles/edit_cache.dir
-/home/wesleywu9/tolead/NCAParser/cpp/CMakeFiles/rebuild_cache.dir
