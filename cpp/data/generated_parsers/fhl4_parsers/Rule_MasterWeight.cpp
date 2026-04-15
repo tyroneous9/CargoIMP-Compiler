@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Mon Apr 13 21:33:05 CDT 2026
+ * Produced : Tue Apr 14 23:36:00 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -76,7 +76,7 @@ const Rule_MasterWeight* Rule_MasterWeight::parse(ParserContext& context)
           delete rule;
         }
       }
-      for (int i1 = 1; i1 < 7 && f1; i1++)
+      for (int i1 = 1; i1 < 10 && f1; i1++)
       {
         const Rule* rule = Rule_Digit::parse(context);
         if ((f1 = rule != NULL))
@@ -131,7 +131,7 @@ const Rule_MasterWeight* Rule_MasterWeight::parse(ParserContext& context)
                 delete rule;
               }
             }
-            for (int i2 = 1; i2 < 6 && f2; i2++)
+            for (int i2 = 1; i2 < 3 && f2; i2++)
             {
               const Rule* rule = Rule_Digit::parse(context);
               if ((f2 = rule != NULL))

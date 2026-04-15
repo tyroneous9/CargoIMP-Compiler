@@ -7,6 +7,10 @@ const { simpleParser } = require('mailparser');
 
 require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 
+// Configure: max emails to process per polling run (reads newest first).
+// Set to -1 for no limit (process all new emails).
+const MAX_EMAILS_PER_RUN = 500;
+
 // Read a required environment variable and fail fast if it is missing.
 function requireEnv(key) {
   const value = process.env[key];
@@ -56,6 +60,20 @@ function readLastUid(checkpointFile) {
 function writeLastUid(checkpointFile, uid) {
   fs.mkdirSync(path.dirname(checkpointFile), { recursive: true });
   fs.writeFileSync(checkpointFile, `${uid}\n`, 'utf8');
+}
+
+// Read an optional positive integer env var, or use the provided fallback.
+function readOptionalPositiveIntEnv(key, fallback) {
+  const raw = process.env[key];
+  if (!raw || raw.trim() === '') {
+    return fallback;
+  }
+
+  const value = Number(raw);
+  if (!Number.isInteger(value) || value <= 0) {
+    throw new Error(`${key} must be a positive integer`);
+  }
+  return value;
 }
 
 // Prefer plain text body; fall back to HTML text when plain text is missing.
@@ -197,6 +215,74 @@ function buildOutputEnvelope(message, parsedEmail, body, parsing) {
   return output;
 }
 
+// Return the root directory where local review artifacts are stored.
+function getOutputsRoot() {
+  return path.resolve(__dirname, '..', 'outputs');
+}
+
+// Convert free-form text into a short filename-safe token.
+function toPathToken(value, fallback = 'na') {
+  const normalized = String(value || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  if (!normalized) {
+    return fallback;
+  }
+  return normalized.slice(0, 48);
+}
+
+// Build a readable and mostly-stable filename stem for one email artifact.
+function buildArtifactNameStem(envelope) {
+  const dateToken = envelope.email.date
+    ? envelope.email.date.replace(/[:.]/g, '-').replace('T', '_').replace('Z', 'Z')
+    : 'unknown-date';
+  const uidToken = Number.isFinite(envelope.email.uid) ? String(envelope.email.uid) : 'unknown-uid';
+  const fromToken = toPathToken(envelope.email.from, 'unknown-from');
+  const subjectToken = toPathToken(envelope.email.subject, 'no-subject');
+  return `${dateToken}__uid-${uidToken}__from-${fromToken}__subj-${subjectToken}`;
+}
+
+// Ensure each envelope file path is unique to avoid accidental overwrites.
+function createUniqueEnvelopePath(outputsRoot, baseStem) {
+  let candidate = path.join(outputsRoot, `${baseStem}.json`);
+  let suffix = 1;
+  while (fs.existsSync(candidate)) {
+    suffix += 1;
+    candidate = path.join(outputsRoot, `${baseStem}__${suffix}.json`);
+  }
+  return candidate;
+}
+
+// Store one envelope artifact locally and append one lookup record to data/index.ndjson.
+function persistOutputArtifacts(mailbox, envelope) {
+  const serverRoot = path.resolve(__dirname, '..');
+  const outputsRoot = getOutputsRoot();
+  fs.mkdirSync(outputsRoot, { recursive: true });
+
+  const envelopePath = createUniqueEnvelopePath(outputsRoot, buildArtifactNameStem(envelope));
+
+  fs.writeFileSync(envelopePath, `${JSON.stringify(envelope, null, 2)}\n`, 'utf8');
+
+  const toRelative = (absolutePath) => path.relative(serverRoot, absolutePath).replace(/\\/g, '/');
+  const referenceRecord = {
+    indexedAt: new Date().toISOString(),
+    mailbox,
+    uid: envelope.email.uid,
+    date: envelope.email.date,
+    from: envelope.email.from,
+    subject: envelope.email.subject,
+    parserFormat: envelope.parsing.format,
+    parseStatus: envelope.parsing.status,
+    envelopePath: toRelative(envelopePath),
+  };
+
+  const referenceFile = path.join(serverRoot, 'data', 'index.ndjson');
+  fs.mkdirSync(path.dirname(referenceFile), { recursive: true });
+  fs.appendFileSync(referenceFile, `${JSON.stringify(referenceRecord)}\n`, 'utf8');
+}
+
 // Execute one polling pass: fetch new emails, filter senders, parse, and emit JSON lines.
 async function main() {
   const host = requireEnv('ALIMAIL_NCA_HOST');
@@ -230,7 +316,9 @@ async function main() {
 
     try {
       const uids = await client.search({ uid: `${lastUid + 1}:*` }, { uid: true });
-      const sortedUids = (uids || []).sort((a, b) => a - b);
+      const newestFirst = (uids || []).sort((a, b) => b - a);
+      const limitedNewest = MAX_EMAILS_PER_RUN === -1 ? newestFirst : newestFirst.slice(0, MAX_EMAILS_PER_RUN);
+      const sortedUids = limitedNewest.sort((a, b) => a - b);
 
       let maxSeenUid = lastUid;
 
@@ -264,6 +352,7 @@ async function main() {
         const parsing = runSingleParser(parserConfig, body);
 
         const envelope = buildOutputEnvelope(message, parsedEmail, body, parsing);
+        persistOutputArtifacts(mailbox, envelope);
         process.stdout.write(`${JSON.stringify(envelope)}\n`);
       }
 

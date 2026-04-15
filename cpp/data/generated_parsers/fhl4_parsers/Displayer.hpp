@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Mon Apr 13 21:33:05 CDT 2026
+ * Produced : Tue Apr 14 23:36:00 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -41,6 +41,11 @@ public:
   void* visit(const Rule_DescriptionBlock* rule);
   void* visit(const Rule_DescriptionTagLine* rule);
   void* visit(const Rule_DescriptionContLine* rule);
+  void* visit(const Rule_HtsBlock* rule);
+  void* visit(const Rule_HtsLine* rule);
+  void* visit(const Rule_OciBlock* rule);
+  void* visit(const Rule_OciLine* rule);
+  void* visit(const Rule_OciContLine* rule);
   void* visit(const Rule_ShipperBlock* rule);
   void* visit(const Rule_ShipperTagLine* rule);
   void* visit(const Rule_ShipperContLine* rule);

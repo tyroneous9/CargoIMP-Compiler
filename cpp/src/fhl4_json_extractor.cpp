@@ -32,6 +32,11 @@ using std::vector;
 #include "Rule_DescriptionBlock.hpp"
 #include "Rule_DescriptionTagLine.hpp"
 #include "Rule_DescriptionContLine.hpp"
+#include "Rule_HtsBlock.hpp"
+#include "Rule_HtsLine.hpp"
+#include "Rule_OciBlock.hpp"
+#include "Rule_OciLine.hpp"
+#include "Rule_OciContLine.hpp"
 #include "Rule_ShipperBlock.hpp"
 #include "Rule_ShipperTagLine.hpp"
 #include "Rule_ShipperContLine.hpp"
@@ -93,6 +98,11 @@ void* Fhl4JsonExtractor::visit(const Rule_HouseWeight* rule)               { hou
 void* Fhl4JsonExtractor::visit(const Rule_DescriptionBlock* rule)    { return visitRules(rule->rules); }
 void* Fhl4JsonExtractor::visit(const Rule_DescriptionTagLine* rule)  { descriptionTagLine = rule->spelling; return NULL; }
 void* Fhl4JsonExtractor::visit(const Rule_DescriptionContLine* rule) { descriptionContinuations.push_back(rule->spelling); return NULL; }
+void* Fhl4JsonExtractor::visit(const Rule_HtsBlock* rule)            { return visitRules(rule->rules); }
+void* Fhl4JsonExtractor::visit(const Rule_HtsLine* rule)             { htsLines.push_back(rule->spelling); return NULL; }
+void* Fhl4JsonExtractor::visit(const Rule_OciBlock* rule)            { return visitRules(rule->rules); }
+void* Fhl4JsonExtractor::visit(const Rule_OciLine* rule)             { ociLines.push_back(rule->spelling); return NULL; }
+void* Fhl4JsonExtractor::visit(const Rule_OciContLine* rule)         { ociLines.push_back(rule->spelling); return NULL; }
 
 // --- Shipper ---
 void* Fhl4JsonExtractor::visit(const Rule_ShipperBlock* rule)    { return visitRules(rule->rules); }
@@ -191,6 +201,8 @@ void Fhl4JsonExtractor::printJson() const
   cout << "  \"HouseWeight\": \""               << escapeJson(trimTrailing(houseWeight))          << "\"," << endl;
   cout << "  \"DescriptionLine\": \""           << escapeJson(trimTrailing(descriptionTagLine))   << "\"," << endl;
   cout << "  \"DescriptionContinuations\": "    << jsonArray(descriptionContinuations) << "," << endl;
+  cout << "  \"HtsLines\": "                   << jsonArray(htsLines) << "," << endl;
+  cout << "  \"OciLines\": "                   << jsonArray(ociLines) << "," << endl;
   cout << "  \"Shipper\": "   << jsonParty(shipper,   "ShipperLine")   << "," << endl;
   cout << "  \"Consignee\": " << jsonParty(consignee, "ConsigneeLine") << "," << endl;
   cout << "  \"CvdLine\": \"" << escapeJson(trimTrailing(cvdLine)) << "\"" << endl;

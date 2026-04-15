@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Mon Apr 13 21:33:05 CDT 2026
+ * Produced : Tue Apr 14 23:40:11 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -19,9 +19,10 @@ using std::vector;
 #include "ParserAlternative.hpp"
 #include "ParserContext.hpp"
 
+#include "Rule_LineChar.hpp"
 #include "Rule_AirportCode.hpp"
 #include "Rule_Slant.hpp"
-#include "Rule_DayMonthTime.hpp"
+#include "Terminal_StringValue.hpp"
 
 Rule_RouteLine::Rule_RouteLine(
   const string& spelling, 
@@ -115,9 +116,35 @@ const Rule_RouteLine* Rule_RouteLine::parse(ParserContext& context)
     {
       bool f1 = true;
       int c1 = 0;
+      while (f1)
+      {
+        const Rule* rule = Rule_LineChar::parse(context);
+        if ((f1 = rule != NULL))
+        {
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
+        }
+      }
+      parsed = true;
+    }
+    if (parsed)
+    {
+      as1.push_back(new ParserAlternative(a1));
+    }
+    context.index = s1;
+  }
+  {
+    int s1 = context.index;
+    ParserAlternative a1(s1);
+    parsed = true;
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
       for (int i1 = 0; i1 < 1 && f1; i1++)
       {
-        const Rule* rule = Rule_DayMonthTime::parse(context);
+        const Rule* rule = Rule_AirportCode::parse(context);
         if ((f1 = rule != NULL))
         {
           a1.add(*rule, context.index);
@@ -126,6 +153,70 @@ const Rule_RouteLine* Rule_RouteLine::parse(ParserContext& context)
         }
       }
       parsed = c1 == 1;
+    }
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
+      for (int i1 = 0; i1 < 1 && f1; i1++)
+      {
+        const Rule* rule = Rule_Slant::parse(context);
+        if ((f1 = rule != NULL))
+        {
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
+        }
+      }
+      parsed = c1 == 1;
+    }
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
+      for (int i1 = 0; i1 < 1 && f1; i1++)
+      {
+        const Rule* rule = Terminal_StringValue::parse(context, "NIL");
+        if ((f1 = rule != NULL))
+        {
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
+        }
+      }
+      parsed = c1 == 1;
+    }
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
+      for (int i1 = 0; i1 < 1 && f1; i1++)
+      {
+        const Rule* rule = Rule_Slant::parse(context);
+        if ((f1 = rule != NULL))
+        {
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
+        }
+      }
+      parsed = c1 == 1;
+    }
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
+      while (f1)
+      {
+        const Rule* rule = Rule_LineChar::parse(context);
+        if ((f1 = rule != NULL))
+        {
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
+        }
+      }
+      parsed = true;
     }
     if (parsed)
     {

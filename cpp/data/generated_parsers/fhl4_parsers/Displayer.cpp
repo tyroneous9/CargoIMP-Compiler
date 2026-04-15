@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Mon Apr 13 21:33:05 CDT 2026
+ * Produced : Tue Apr 14 23:36:00 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -37,6 +37,11 @@ using std::vector;
 #include "Rule_DescriptionBlock.hpp"
 #include "Rule_DescriptionTagLine.hpp"
 #include "Rule_DescriptionContLine.hpp"
+#include "Rule_HtsBlock.hpp"
+#include "Rule_HtsLine.hpp"
+#include "Rule_OciBlock.hpp"
+#include "Rule_OciLine.hpp"
+#include "Rule_OciContLine.hpp"
 #include "Rule_ShipperBlock.hpp"
 #include "Rule_ShipperTagLine.hpp"
 #include "Rule_ShipperContLine.hpp"
@@ -155,6 +160,31 @@ void* Displayer::visit(const Rule_DescriptionTagLine* rule)
 }
 
 void* Displayer::visit(const Rule_DescriptionContLine* rule)
+{
+  return visitRules(rule->rules);
+}
+
+void* Displayer::visit(const Rule_HtsBlock* rule)
+{
+  return visitRules(rule->rules);
+}
+
+void* Displayer::visit(const Rule_HtsLine* rule)
+{
+  return visitRules(rule->rules);
+}
+
+void* Displayer::visit(const Rule_OciBlock* rule)
+{
+  return visitRules(rule->rules);
+}
+
+void* Displayer::visit(const Rule_OciLine* rule)
+{
+  return visitRules(rule->rules);
+}
+
+void* Displayer::visit(const Rule_OciContLine* rule)
 {
   return visitRules(rule->rules);
 }

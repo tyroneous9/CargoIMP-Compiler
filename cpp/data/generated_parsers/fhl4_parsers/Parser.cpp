@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Mon Apr 13 21:33:05 CDT 2026
+ * Produced : Tue Apr 14 23:36:00 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -50,6 +50,11 @@ using std::transform;
 #include "Rule_DescriptionBlock.hpp"
 #include "Rule_DescriptionTagLine.hpp"
 #include "Rule_DescriptionContLine.hpp"
+#include "Rule_HtsBlock.hpp"
+#include "Rule_HtsLine.hpp"
+#include "Rule_OciBlock.hpp"
+#include "Rule_OciLine.hpp"
+#include "Rule_OciContLine.hpp"
 #include "Rule_ShipperBlock.hpp"
 #include "Rule_ShipperTagLine.hpp"
 #include "Rule_ShipperContLine.hpp"
@@ -92,6 +97,11 @@ static map<string, pParser> buildParserMap(void)
   parsers["descriptionblock"] = (pParser)Rule_DescriptionBlock::parse;
   parsers["descriptiontagline"] = (pParser)Rule_DescriptionTagLine::parse;
   parsers["descriptioncontline"] = (pParser)Rule_DescriptionContLine::parse;
+  parsers["htsblock"] = (pParser)Rule_HtsBlock::parse;
+  parsers["htsline"] = (pParser)Rule_HtsLine::parse;
+  parsers["ociblock"] = (pParser)Rule_OciBlock::parse;
+  parsers["ociline"] = (pParser)Rule_OciLine::parse;
+  parsers["ocicontline"] = (pParser)Rule_OciContLine::parse;
   parsers["shipperblock"] = (pParser)Rule_ShipperBlock::parse;
   parsers["shippertagline"] = (pParser)Rule_ShipperTagLine::parse;
   parsers["shippercontline"] = (pParser)Rule_ShipperContLine::parse;

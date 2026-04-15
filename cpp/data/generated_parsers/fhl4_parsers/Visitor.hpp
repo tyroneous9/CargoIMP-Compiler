@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Mon Apr 13 21:33:05 CDT 2026
+ * Produced : Tue Apr 14 23:36:00 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -32,6 +32,11 @@ class Rule_HouseWeight;
 class Rule_DescriptionBlock;
 class Rule_DescriptionTagLine;
 class Rule_DescriptionContLine;
+class Rule_HtsBlock;
+class Rule_HtsLine;
+class Rule_OciBlock;
+class Rule_OciLine;
+class Rule_OciContLine;
 class Rule_ShipperBlock;
 class Rule_ShipperTagLine;
 class Rule_ShipperContLine;
@@ -73,6 +78,11 @@ public:
   virtual void* visit(const Rule_DescriptionBlock* rule) = 0;
   virtual void* visit(const Rule_DescriptionTagLine* rule) = 0;
   virtual void* visit(const Rule_DescriptionContLine* rule) = 0;
+  virtual void* visit(const Rule_HtsBlock* rule) = 0;
+  virtual void* visit(const Rule_HtsLine* rule) = 0;
+  virtual void* visit(const Rule_OciBlock* rule) = 0;
+  virtual void* visit(const Rule_OciLine* rule) = 0;
+  virtual void* visit(const Rule_OciContLine* rule) = 0;
   virtual void* visit(const Rule_ShipperBlock* rule) = 0;
   virtual void* visit(const Rule_ShipperTagLine* rule) = 0;
   virtual void* visit(const Rule_ShipperContLine* rule) = 0;

@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Mon Apr 13 21:33:05 CDT 2026
+ * Produced : Tue Apr 14 23:36:00 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -38,6 +38,11 @@ using std::vector;
 #include "Rule_DescriptionBlock.hpp"
 #include "Rule_DescriptionTagLine.hpp"
 #include "Rule_DescriptionContLine.hpp"
+#include "Rule_HtsBlock.hpp"
+#include "Rule_HtsLine.hpp"
+#include "Rule_OciBlock.hpp"
+#include "Rule_OciLine.hpp"
+#include "Rule_OciContLine.hpp"
 #include "Rule_ShipperBlock.hpp"
 #include "Rule_ShipperTagLine.hpp"
 #include "Rule_ShipperContLine.hpp"
@@ -303,6 +308,66 @@ void* XmlDisplayer::visit(const Rule_DescriptionContLine* rule)
   visitRules(rule->rules);
   if (!terminal) cout << endl;
   cout << "</DescriptionContLine>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_HtsBlock* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<HtsBlock>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</HtsBlock>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_HtsLine* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<HtsLine>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</HtsLine>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_OciBlock* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<OciBlock>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</OciBlock>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_OciLine* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<OciLine>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</OciLine>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_OciContLine* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<OciContLine>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</OciContLine>";
   terminal = false;
   return NULL;
 }

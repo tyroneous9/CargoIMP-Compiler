@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Mon Apr 13 21:33:05 CDT 2026
+ * Produced : Tue Apr 14 23:21:29 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -20,6 +20,7 @@ using std::vector;
 #include "ParserContext.hpp"
 
 #include "Rule_LineChar.hpp"
+#include "Rule_Digit.hpp"
 #include "Rule_Slant.hpp"
 #include "Terminal_StringValue.hpp"
 #include "Rule_EOL.hpp"
@@ -100,15 +101,467 @@ const Rule_PrepaidTagLine* Rule_PrepaidTagLine::parse(ParserContext& context)
     {
       bool f1 = true;
       int c1 = 0;
-      while (f1)
+      for (int i1 = 0; i1 < 1 && f1; i1++)
       {
-        const Rule* rule = Rule_LineChar::parse(context);
+        const Rule* rule = Terminal_StringValue::parse(context, "WT");
         if ((f1 = rule != NULL))
         {
           a1.add(*rule, context.index);
           c1++;
           delete rule;
         }
+      }
+      parsed = c1 == 1;
+    }
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
+      for (int i1 = 0; i1 < 1 && f1; i1++)
+      {
+        const Rule* rule = Rule_Digit::parse(context);
+        if ((f1 = rule != NULL))
+        {
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
+        }
+      }
+      for (int i1 = 1; i1 < 10 && f1; i1++)
+      {
+        const Rule* rule = Rule_Digit::parse(context);
+        if ((f1 = rule != NULL))
+        {
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
+        }
+      }
+      parsed = c1 >= 1;
+    }
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
+      for (int i1 = 0; i1 < 1 && f1; i1++)
+      {
+        unsigned int g1 = context.index;
+        vector<const ParserAlternative*> as2;
+        parsed = false;
+        {
+          int s2 = context.index;
+          ParserAlternative a2(s2);
+          parsed = true;
+          if (parsed)
+          {
+            bool f2 = true;
+            int c2 = 0;
+            for (int i2 = 0; i2 < 1 && f2; i2++)
+            {
+              const Rule* rule = Terminal_StringValue::parse(context, ".");
+              if ((f2 = rule != NULL))
+              {
+                a2.add(*rule, context.index);
+                c2++;
+                delete rule;
+              }
+            }
+            parsed = c2 == 1;
+          }
+          if (parsed)
+          {
+            bool f2 = true;
+            int c2 = 0;
+            for (int i2 = 0; i2 < 1 && f2; i2++)
+            {
+              const Rule* rule = Rule_Digit::parse(context);
+              if ((f2 = rule != NULL))
+              {
+                a2.add(*rule, context.index);
+                c2++;
+                delete rule;
+              }
+            }
+            for (int i2 = 1; i2 < 3 && f2; i2++)
+            {
+              const Rule* rule = Rule_Digit::parse(context);
+              if ((f2 = rule != NULL))
+              {
+                a2.add(*rule, context.index);
+                c2++;
+                delete rule;
+              }
+            }
+            parsed = c2 >= 1;
+          }
+          if (parsed)
+          {
+            as2.push_back(new ParserAlternative(a2));
+          }
+          context.index = s2;
+        }
+
+        const ParserAlternative* b = ParserAlternative::getBest(as2);
+
+        if ((parsed = b != NULL))
+        {
+          a1.add(b->rules, b->end);
+          context.index = b->end;
+        }
+
+        for (vector<const ParserAlternative*>::const_iterator a = as2.begin(); a != as2.end(); a++)
+        {
+          delete *a;
+        }
+
+        f1 = context.index > g1;
+        if (parsed) c1++;
+      }
+      parsed = true;
+    }
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
+      for (int i1 = 0; i1 < 1 && f1; i1++)
+      {
+        const Rule* rule = Rule_Slant::parse(context);
+        if ((f1 = rule != NULL))
+        {
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
+        }
+      }
+      parsed = c1 == 1;
+    }
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
+      for (int i1 = 0; i1 < 1 && f1; i1++)
+      {
+        const Rule* rule = Terminal_StringValue::parse(context, "VC");
+        if ((f1 = rule != NULL))
+        {
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
+        }
+      }
+      parsed = c1 == 1;
+    }
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
+      for (int i1 = 0; i1 < 1 && f1; i1++)
+      {
+        const Rule* rule = Rule_Digit::parse(context);
+        if ((f1 = rule != NULL))
+        {
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
+        }
+      }
+      for (int i1 = 1; i1 < 10 && f1; i1++)
+      {
+        const Rule* rule = Rule_Digit::parse(context);
+        if ((f1 = rule != NULL))
+        {
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
+        }
+      }
+      parsed = c1 >= 1;
+    }
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
+      for (int i1 = 0; i1 < 1 && f1; i1++)
+      {
+        unsigned int g1 = context.index;
+        vector<const ParserAlternative*> as2;
+        parsed = false;
+        {
+          int s2 = context.index;
+          ParserAlternative a2(s2);
+          parsed = true;
+          if (parsed)
+          {
+            bool f2 = true;
+            int c2 = 0;
+            for (int i2 = 0; i2 < 1 && f2; i2++)
+            {
+              const Rule* rule = Terminal_StringValue::parse(context, ".");
+              if ((f2 = rule != NULL))
+              {
+                a2.add(*rule, context.index);
+                c2++;
+                delete rule;
+              }
+            }
+            parsed = c2 == 1;
+          }
+          if (parsed)
+          {
+            bool f2 = true;
+            int c2 = 0;
+            for (int i2 = 0; i2 < 1 && f2; i2++)
+            {
+              const Rule* rule = Rule_Digit::parse(context);
+              if ((f2 = rule != NULL))
+              {
+                a2.add(*rule, context.index);
+                c2++;
+                delete rule;
+              }
+            }
+            for (int i2 = 1; i2 < 3 && f2; i2++)
+            {
+              const Rule* rule = Rule_Digit::parse(context);
+              if ((f2 = rule != NULL))
+              {
+                a2.add(*rule, context.index);
+                c2++;
+                delete rule;
+              }
+            }
+            parsed = c2 >= 1;
+          }
+          if (parsed)
+          {
+            as2.push_back(new ParserAlternative(a2));
+          }
+          context.index = s2;
+        }
+
+        const ParserAlternative* b = ParserAlternative::getBest(as2);
+
+        if ((parsed = b != NULL))
+        {
+          a1.add(b->rules, b->end);
+          context.index = b->end;
+        }
+
+        for (vector<const ParserAlternative*>::const_iterator a = as2.begin(); a != as2.end(); a++)
+        {
+          delete *a;
+        }
+
+        f1 = context.index > g1;
+        if (parsed) c1++;
+      }
+      parsed = true;
+    }
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
+      for (int i1 = 0; i1 < 1 && f1; i1++)
+      {
+        const Rule* rule = Rule_Slant::parse(context);
+        if ((f1 = rule != NULL))
+        {
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
+        }
+      }
+      parsed = c1 == 1;
+    }
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
+      for (int i1 = 0; i1 < 1 && f1; i1++)
+      {
+        const Rule* rule = Terminal_StringValue::parse(context, "TX");
+        if ((f1 = rule != NULL))
+        {
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
+        }
+      }
+      parsed = c1 == 1;
+    }
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
+      for (int i1 = 0; i1 < 1 && f1; i1++)
+      {
+        const Rule* rule = Rule_Digit::parse(context);
+        if ((f1 = rule != NULL))
+        {
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
+        }
+      }
+      for (int i1 = 1; i1 < 10 && f1; i1++)
+      {
+        const Rule* rule = Rule_Digit::parse(context);
+        if ((f1 = rule != NULL))
+        {
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
+        }
+      }
+      parsed = c1 >= 1;
+    }
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
+      for (int i1 = 0; i1 < 1 && f1; i1++)
+      {
+        unsigned int g1 = context.index;
+        vector<const ParserAlternative*> as2;
+        parsed = false;
+        {
+          int s2 = context.index;
+          ParserAlternative a2(s2);
+          parsed = true;
+          if (parsed)
+          {
+            bool f2 = true;
+            int c2 = 0;
+            for (int i2 = 0; i2 < 1 && f2; i2++)
+            {
+              const Rule* rule = Terminal_StringValue::parse(context, ".");
+              if ((f2 = rule != NULL))
+              {
+                a2.add(*rule, context.index);
+                c2++;
+                delete rule;
+              }
+            }
+            parsed = c2 == 1;
+          }
+          if (parsed)
+          {
+            bool f2 = true;
+            int c2 = 0;
+            for (int i2 = 0; i2 < 1 && f2; i2++)
+            {
+              const Rule* rule = Rule_Digit::parse(context);
+              if ((f2 = rule != NULL))
+              {
+                a2.add(*rule, context.index);
+                c2++;
+                delete rule;
+              }
+            }
+            for (int i2 = 1; i2 < 3 && f2; i2++)
+            {
+              const Rule* rule = Rule_Digit::parse(context);
+              if ((f2 = rule != NULL))
+              {
+                a2.add(*rule, context.index);
+                c2++;
+                delete rule;
+              }
+            }
+            parsed = c2 >= 1;
+          }
+          if (parsed)
+          {
+            as2.push_back(new ParserAlternative(a2));
+          }
+          context.index = s2;
+        }
+
+        const ParserAlternative* b = ParserAlternative::getBest(as2);
+
+        if ((parsed = b != NULL))
+        {
+          a1.add(b->rules, b->end);
+          context.index = b->end;
+        }
+
+        for (vector<const ParserAlternative*>::const_iterator a = as2.begin(); a != as2.end(); a++)
+        {
+          delete *a;
+        }
+
+        f1 = context.index > g1;
+        if (parsed) c1++;
+      }
+      parsed = true;
+    }
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
+      while (f1)
+      {
+        unsigned int g1 = context.index;
+        vector<const ParserAlternative*> as2;
+        parsed = false;
+        {
+          int s2 = context.index;
+          ParserAlternative a2(s2);
+          parsed = true;
+          if (parsed)
+          {
+            bool f2 = true;
+            int c2 = 0;
+            for (int i2 = 0; i2 < 1 && f2; i2++)
+            {
+              const Rule* rule = Rule_Slant::parse(context);
+              if ((f2 = rule != NULL))
+              {
+                a2.add(*rule, context.index);
+                c2++;
+                delete rule;
+              }
+            }
+            parsed = c2 == 1;
+          }
+          if (parsed)
+          {
+            bool f2 = true;
+            int c2 = 0;
+            while (f2)
+            {
+              const Rule* rule = Rule_LineChar::parse(context);
+              if ((f2 = rule != NULL))
+              {
+                a2.add(*rule, context.index);
+                c2++;
+                delete rule;
+              }
+            }
+            parsed = true;
+          }
+          if (parsed)
+          {
+            as2.push_back(new ParserAlternative(a2));
+          }
+          context.index = s2;
+        }
+
+        const ParserAlternative* b = ParserAlternative::getBest(as2);
+
+        if ((parsed = b != NULL))
+        {
+          a1.add(b->rules, b->end);
+          context.index = b->end;
+        }
+
+        for (vector<const ParserAlternative*>::const_iterator a = as2.begin(); a != as2.end(); a++)
+        {
+          delete *a;
+        }
+
+        f1 = context.index > g1;
+        if (parsed) c1++;
       }
       parsed = true;
     }

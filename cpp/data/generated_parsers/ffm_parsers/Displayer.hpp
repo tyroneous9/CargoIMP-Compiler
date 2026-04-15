@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Mon Apr 13 21:33:05 CDT 2026
+ * Produced : Tue Apr 14 23:40:11 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -31,6 +31,7 @@ public:
   void* visit(const Rule_AirWaybillLine* rule);
   void* visit(const Rule_OsiLine* rule);
   void* visit(const Rule_OciLine* rule);
+  void* visit(const Rule_CorLine* rule);
   void* visit(const Rule_SlashQualifierLine* rule);
   void* visit(const Rule_ContinuationLine* rule);
   void* visit(const Rule_TrailerLine* rule);

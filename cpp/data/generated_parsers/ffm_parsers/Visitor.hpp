@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Mon Apr 13 21:33:05 CDT 2026
+ * Produced : Tue Apr 14 23:40:11 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -22,6 +22,7 @@ class Rule_ULDLine;
 class Rule_AirWaybillLine;
 class Rule_OsiLine;
 class Rule_OciLine;
+class Rule_CorLine;
 class Rule_SlashQualifierLine;
 class Rule_ContinuationLine;
 class Rule_TrailerLine;
@@ -75,6 +76,7 @@ public:
   virtual void* visit(const Rule_AirWaybillLine* rule) = 0;
   virtual void* visit(const Rule_OsiLine* rule) = 0;
   virtual void* visit(const Rule_OciLine* rule) = 0;
+  virtual void* visit(const Rule_CorLine* rule) = 0;
   virtual void* visit(const Rule_SlashQualifierLine* rule) = 0;
   virtual void* visit(const Rule_ContinuationLine* rule) = 0;
   virtual void* visit(const Rule_TrailerLine* rule) = 0;

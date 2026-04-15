@@ -1,68 +1,97 @@
-# FHL/4 CIMP grammar - full message parse
-# CIMP 34th edition - all FHL segment types
+# FHL/4 CIMP 34th edition grammar (structure-first with operational relaxations)
 
 FHL4 =
     MessageHeader EOL
     MasterBillLine EOL
-    HouseBillLine EOL
+    HouseBillLine [EOL]
     [DescriptionBlock]
+    [HtsBlock]
+    [OciBlock]
     [ShipperBlock]
     [ConsigneeBlock]
-    [CvdLine];
+    [CvdLine [EOL]];
 
 MessageHeader = "FHL/4";
 
-# --- Master Bill Information line ---
-# e.g. MBI/933-34507281HKGORD/T94K1045
-MasterBillLine = "MBI" Slant MasterAirwayBillNumber MasterOriginAndDestination MasterBillSummary *LineChar;
+# --- Master Bill Information (MBI) ---
+MasterBillLine =
+    "MBI"
+    Slant
+    MasterAirwayBillNumber
+    MasterOriginAndDestination
+    MasterBillSummary
+    [Slant *LineChar];
 
 MasterAirwayBillNumber = AirlinePrefix Hyphen AWBSerialNumber;
 AirlinePrefix = 3Digit;
 AWBSerialNumber = 8Digit;
 
-# Origin-destination in the MBI line
 MasterOriginAndDestination = AirportCode AirportCode;
 AirportCode = 3Upper;
 
-# e.g. /T94K1045
 MasterBillSummary = Slant "T" MasterPieceCount MasterWeightUnit MasterWeight;
 MasterPieceCount = 1*4Digit;
-MasterWeightUnit = Upper;
-MasterWeight = 1*7Digit ["." 1*6Digit];
+MasterWeightUnit = "K" / "L";
+MasterWeight = 1*10Digit ["." 1*3Digit];
 
-# --- House Bill Summary line ---
-# e.g. HBS/ORD20260411/HKGORD/94/K1045/94/ELECTRONIC SCAL
-HouseBillLine = "HBS" Slant HouseWaybillNumber Slant HouseOriginAndDestination Slant HousePieceCount Slant HouseWeightUnit HouseWeight *LineChar;
+# --- House Bill Summary (HBS) ---
+HouseBillLine =
+    "HBS"
+    Slant
+    HouseWaybillNumber
+    Slant
+    HouseOriginAndDestination
+    Slant
+    HousePieceCount
+    Slant
+    HouseWeightUnit
+    HouseWeight
+    [Slant HousePieceCount]
+    [Slant *LineChar]
+    *(EOL Slant *LineChar);
 
-# Origin-destination in the HBS line (separate rule to distinguish from the master bill)
 HouseOriginAndDestination = AirportCode AirportCode;
-
 HouseWaybillNumber = 1*20AlphaNum;
 HousePieceCount = 1*4Digit;
-HouseWeightUnit = Upper;
-HouseWeight = 1*7Digit ["." 1*6Digit];
+HouseWeightUnit = "K" / "L";
+HouseWeight = 1*10Digit ["." 1*3Digit];
 
-# --- Description text block ---
-# e.g. TXT/ELECTRONIC SCALE ESSENTIAL OIL...
+# --- Description text (TXT) ---
 DescriptionBlock = DescriptionTagLine *DescriptionContLine;
-DescriptionTagLine = "TXT" Slant *LineChar EOL;
-DescriptionContLine = Slant *LineChar EOL;
+DescriptionTagLine = "TXT" Slant *LineChar [EOL];
+DescriptionContLine = Slant *LineChar [EOL];
 
-# --- Shipper party block ---
-# e.g. SHP/ASIAHUB INTL TRADING LTD
+# --- Harmonized Tariff Schedule (HTS) ---
+HtsBlock = 1*HtsLine;
+HtsLine = "HTS" Slant *LineChar [EOL];
+
+# --- OCI block ---
+OciBlock = OciLine *OciContLine;
+OciLine = "OCI" Slant *LineChar [EOL];
+OciContLine = Slant [Slant [Slant]] *LineChar [EOL];
+
+# --- Party blocks ---
 ShipperBlock = ShipperTagLine *ShipperContLine;
-ShipperTagLine = "SHP" Slant *LineChar EOL;
-ShipperContLine = Slant *LineChar EOL;
+ShipperTagLine = "SHP" Slant *LineChar [EOL];
+ShipperContLine = Slant *LineChar [EOL];
 
-# --- Consignee party block ---
-# e.g. CNE/ECOM EXP INC
 ConsigneeBlock = ConsigneeTagLine *ConsigneeContLine;
-ConsigneeTagLine = "CNE" Slant *LineChar EOL;
-ConsigneeContLine = Slant *LineChar EOL;
+ConsigneeTagLine = "CNE" Slant *LineChar [EOL];
+ConsigneeContLine = Slant *LineChar [EOL];
 
-# --- Charges Value Declaration ---
-# e.g. CVD/HKD/PP/NVD/NCV/XXX
-CvdLine = "CVD" Slant *LineChar [EOL];
+# --- Charges Value Declaration (CVD) ---
+CvdLine =
+    "CVD"
+    Slant
+    3Upper
+    Slant
+    2Upper
+    Slant
+    ("NVD" / 1*10Digit ["." 1*3Digit])
+    Slant
+    ("NCV" / "NVD" / 1*10Digit ["." 1*3Digit])
+    Slant
+    ("XXX" / 1*10Digit ["." 1*3Digit]);
 
 LineChar = %x20-7E;
 EOL = [%x0D] %x0A;

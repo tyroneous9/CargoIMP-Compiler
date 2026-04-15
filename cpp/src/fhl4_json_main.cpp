@@ -111,8 +111,20 @@ int main(int argc, char* argv[])
     }
     catch (ParserException& e)
     {
-      parser_logging::logError("parser_fhl4_json", std::string("parser error: ") + e.what());
-      std::cerr << "parser error: " << e.what();
+      std::string detail = std::string("Reason: ") + e.getReason() + 
+                           "\nPosition: " + std::to_string(e.getSubstringIndex()) +
+                           "\nContext: " + e.getSubstring();
+      
+      const std::vector<std::string>& stack = e.getRuleStack();
+      if (!stack.empty()) {
+        detail += "\nRule Stack (innermost first):";
+        for (size_t i = 0; i < stack.size(); i++) {
+          detail += "\n  [" + std::to_string(i) + "] " + stack[i];
+        }
+      }
+      
+      parser_logging::logError("parser_fhl4_json", std::string("parser error: ") + detail);
+      std::cerr << "parser error:\n" << detail << std::endl;
     }
     catch (std::exception& e)
     {

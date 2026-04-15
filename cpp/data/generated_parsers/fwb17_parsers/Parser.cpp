@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Mon Apr 13 21:33:05 CDT 2026
+ * Produced : Tue Apr 14 23:21:29 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -43,6 +43,7 @@ using std::transform;
 #include "Rule_TotalWeight.hpp"
 #include "Rule_VolumeUnit.hpp"
 #include "Rule_VolumeAmount.hpp"
+#include "Rule_FlightBookingsLine.hpp"
 #include "Rule_RoutingLine.hpp"
 #include "Rule_ShipperBlock.hpp"
 #include "Rule_ShipperSubLine.hpp"
@@ -59,6 +60,9 @@ using std::transform;
 #include "Rule_AgentLine.hpp"
 #include "Rule_AgentTagLine.hpp"
 #include "Rule_AgentContLine.hpp"
+#include "Rule_AccountingLine.hpp"
+#include "Rule_AccountingTagLine.hpp"
+#include "Rule_AccountingContLine.hpp"
 #include "Rule_CvdLine.hpp"
 #include "Rule_RatingLine.hpp"
 #include "Rule_RatingTagLine.hpp"
@@ -69,13 +73,27 @@ using std::transform;
 #include "Rule_PrepaidLine.hpp"
 #include "Rule_PrepaidTagLine.hpp"
 #include "Rule_PrepaidContLine.hpp"
+#include "Rule_CertificationLine.hpp"
 #include "Rule_IssuanceLine.hpp"
-#include "Rule_IssuanceDate.hpp"
-#include "Rule_Month.hpp"
 #include "Rule_SupplementalLine.hpp"
+#include "Rule_OsiBlock.hpp"
 #include "Rule_OsiLine.hpp"
+#include "Rule_OciBlock.hpp"
+#include "Rule_OciLine.hpp"
+#include "Rule_ContinuationLine.hpp"
 #include "Rule_RefLine.hpp"
 #include "Rule_SphLine.hpp"
+#include "Rule_SsrLine.hpp"
+#include "Rule_SsrTagLine.hpp"
+#include "Rule_SsrContLine.hpp"
+#include "Rule_NotifyBlock.hpp"
+#include "Rule_NotifySubLine.hpp"
+#include "Rule_NotifyNameLine.hpp"
+#include "Rule_NotifyAddressLine.hpp"
+#include "Rule_NotifyLocationLine.hpp"
+#include "Rule_NotifyContLine.hpp"
+#include "Rule_ArdLine.hpp"
+#include "Rule_SriLine.hpp"
 #include "Rule_LineChar.hpp"
 #include "Rule_EOL.hpp"
 #include "Rule_Slant.hpp"
@@ -103,6 +121,7 @@ static map<string, pParser> buildParserMap(void)
   parsers["totalweight"] = (pParser)Rule_TotalWeight::parse;
   parsers["volumeunit"] = (pParser)Rule_VolumeUnit::parse;
   parsers["volumeamount"] = (pParser)Rule_VolumeAmount::parse;
+  parsers["flightbookingsline"] = (pParser)Rule_FlightBookingsLine::parse;
   parsers["routingline"] = (pParser)Rule_RoutingLine::parse;
   parsers["shipperblock"] = (pParser)Rule_ShipperBlock::parse;
   parsers["shippersubline"] = (pParser)Rule_ShipperSubLine::parse;
@@ -119,6 +138,9 @@ static map<string, pParser> buildParserMap(void)
   parsers["agentline"] = (pParser)Rule_AgentLine::parse;
   parsers["agenttagline"] = (pParser)Rule_AgentTagLine::parse;
   parsers["agentcontline"] = (pParser)Rule_AgentContLine::parse;
+  parsers["accountingline"] = (pParser)Rule_AccountingLine::parse;
+  parsers["accountingtagline"] = (pParser)Rule_AccountingTagLine::parse;
+  parsers["accountingcontline"] = (pParser)Rule_AccountingContLine::parse;
   parsers["cvdline"] = (pParser)Rule_CvdLine::parse;
   parsers["ratingline"] = (pParser)Rule_RatingLine::parse;
   parsers["ratingtagline"] = (pParser)Rule_RatingTagLine::parse;
@@ -129,13 +151,27 @@ static map<string, pParser> buildParserMap(void)
   parsers["prepaidline"] = (pParser)Rule_PrepaidLine::parse;
   parsers["prepaidtagline"] = (pParser)Rule_PrepaidTagLine::parse;
   parsers["prepaidcontline"] = (pParser)Rule_PrepaidContLine::parse;
+  parsers["certificationline"] = (pParser)Rule_CertificationLine::parse;
   parsers["issuanceline"] = (pParser)Rule_IssuanceLine::parse;
-  parsers["issuancedate"] = (pParser)Rule_IssuanceDate::parse;
-  parsers["month"] = (pParser)Rule_Month::parse;
   parsers["supplementalline"] = (pParser)Rule_SupplementalLine::parse;
+  parsers["osiblock"] = (pParser)Rule_OsiBlock::parse;
   parsers["osiline"] = (pParser)Rule_OsiLine::parse;
+  parsers["ociblock"] = (pParser)Rule_OciBlock::parse;
+  parsers["ociline"] = (pParser)Rule_OciLine::parse;
+  parsers["continuationline"] = (pParser)Rule_ContinuationLine::parse;
   parsers["refline"] = (pParser)Rule_RefLine::parse;
   parsers["sphline"] = (pParser)Rule_SphLine::parse;
+  parsers["ssrline"] = (pParser)Rule_SsrLine::parse;
+  parsers["ssrtagline"] = (pParser)Rule_SsrTagLine::parse;
+  parsers["ssrcontline"] = (pParser)Rule_SsrContLine::parse;
+  parsers["notifyblock"] = (pParser)Rule_NotifyBlock::parse;
+  parsers["notifysubline"] = (pParser)Rule_NotifySubLine::parse;
+  parsers["notifynameline"] = (pParser)Rule_NotifyNameLine::parse;
+  parsers["notifyaddressline"] = (pParser)Rule_NotifyAddressLine::parse;
+  parsers["notifylocationline"] = (pParser)Rule_NotifyLocationLine::parse;
+  parsers["notifycontline"] = (pParser)Rule_NotifyContLine::parse;
+  parsers["ardline"] = (pParser)Rule_ArdLine::parse;
+  parsers["sriline"] = (pParser)Rule_SriLine::parse;
   parsers["linechar"] = (pParser)Rule_LineChar::parse;
   parsers["eol"] = (pParser)Rule_EOL::parse;
   parsers["slant"] = (pParser)Rule_Slant::parse;

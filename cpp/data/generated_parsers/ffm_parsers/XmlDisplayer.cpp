@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Mon Apr 13 21:33:05 CDT 2026
+ * Produced : Tue Apr 14 23:40:11 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -28,6 +28,7 @@ using std::vector;
 #include "Rule_AirWaybillLine.hpp"
 #include "Rule_OsiLine.hpp"
 #include "Rule_OciLine.hpp"
+#include "Rule_CorLine.hpp"
 #include "Rule_SlashQualifierLine.hpp"
 #include "Rule_ContinuationLine.hpp"
 #include "Rule_TrailerLine.hpp"
@@ -195,6 +196,18 @@ void* XmlDisplayer::visit(const Rule_OciLine* rule)
   visitRules(rule->rules);
   if (!terminal) cout << endl;
   cout << "</OciLine>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_CorLine* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<CorLine>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</CorLine>";
   terminal = false;
   return NULL;
 }

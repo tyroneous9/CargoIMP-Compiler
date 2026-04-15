@@ -42,6 +42,7 @@ public:
   void* visit(const Rule_AirWaybillLine* rule);
   void* visit(const Rule_OsiLine* rule);
   void* visit(const Rule_OciLine* rule);
+  void* visit(const Rule_CorLine* rule);
   void* visit(const Rule_SlashQualifierLine* rule);
   void* visit(const Rule_ContinuationLine* rule);
   void* visit(const Rule_TrailerLine* rule);

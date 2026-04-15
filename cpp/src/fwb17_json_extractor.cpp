@@ -25,6 +25,7 @@ using std::vector;
 #include "Rule_TotalWeight.hpp"
 #include "Rule_VolumeUnit.hpp"
 #include "Rule_VolumeAmount.hpp"
+#include "Rule_FlightBookingsLine.hpp"
 #include "Rule_RoutingLine.hpp"
 #include "Rule_ShipperBlock.hpp"
 #include "Rule_ShipperSubLine.hpp"
@@ -41,6 +42,7 @@ using std::vector;
 #include "Rule_AgentLine.hpp"
 #include "Rule_AgentTagLine.hpp"
 #include "Rule_AgentContLine.hpp"
+#include "Rule_AccountingLine.hpp"
 #include "Rule_CvdLine.hpp"
 #include "Rule_RatingLine.hpp"
 #include "Rule_RatingTagLine.hpp"
@@ -51,11 +53,27 @@ using std::vector;
 #include "Rule_PrepaidLine.hpp"
 #include "Rule_PrepaidTagLine.hpp"
 #include "Rule_PrepaidContLine.hpp"
+#include "Rule_CertificationLine.hpp"
 #include "Rule_IssuanceLine.hpp"
-#include "Rule_IssuanceDate.hpp"
-#include "Rule_Month.hpp"
+#include "Rule_SsrLine.hpp"
+#include "Rule_SsrTagLine.hpp"
+#include "Rule_SsrContLine.hpp"
+#include "Rule_NotifyBlock.hpp"
+#include "Rule_NotifySubLine.hpp"
+#include "Rule_NotifyNameLine.hpp"
+#include "Rule_NotifyAddressLine.hpp"
+#include "Rule_NotifyLocationLine.hpp"
+#include "Rule_NotifyContLine.hpp"
+#include "Rule_ArdLine.hpp"
+#include "Rule_SriLine.hpp"
+#include "Rule_AccountingTagLine.hpp"
+#include "Rule_AccountingContLine.hpp"
 #include "Rule_SupplementalLine.hpp"
+#include "Rule_OsiBlock.hpp"
 #include "Rule_OsiLine.hpp"
+#include "Rule_OciBlock.hpp"
+#include "Rule_OciLine.hpp"
+#include "Rule_ContinuationLine.hpp"
 #include "Rule_RefLine.hpp"
 #include "Rule_SphLine.hpp"
 #include "Rule_LineChar.hpp"
@@ -93,6 +111,7 @@ void* Fwb17JsonExtractor::visit(const Rule_WeightUnit* rule)           { weightU
 void* Fwb17JsonExtractor::visit(const Rule_TotalWeight* rule)          { totalWeight = rule->spelling; return NULL; }
 void* Fwb17JsonExtractor::visit(const Rule_VolumeUnit* rule)           { volumeUnit = rule->spelling; return NULL; }
 void* Fwb17JsonExtractor::visit(const Rule_VolumeAmount* rule)         { volumeAmount = rule->spelling; return NULL; }
+void* Fwb17JsonExtractor::visit(const Rule_FlightBookingsLine* rule)   { flightBookingsLine = rule->spelling; return NULL; }
 
 // --- Routing ---
 void* Fwb17JsonExtractor::visit(const Rule_RoutingLine* rule) { routingLine = rule->spelling; return NULL; }
@@ -119,6 +138,7 @@ void* Fwb17JsonExtractor::visit(const Rule_AgentTagLine* rule) { agentTagLine = 
 void* Fwb17JsonExtractor::visit(const Rule_AgentContLine* rule){ agentContinuations.push_back(rule->spelling); return NULL; }
 
 // --- Charges ---
+void* Fwb17JsonExtractor::visit(const Rule_AccountingLine* rule) { accountingLine = rule->spelling; return NULL; }
 void* Fwb17JsonExtractor::visit(const Rule_CvdLine* rule) { cvdLine = rule->spelling; return NULL; }
 
 // --- Rating ---
@@ -136,20 +156,64 @@ void* Fwb17JsonExtractor::visit(const Rule_PrepaidLine* rule)    { return visitR
 void* Fwb17JsonExtractor::visit(const Rule_PrepaidTagLine* rule) { prepaidTagLine = rule->spelling; return NULL; }
 void* Fwb17JsonExtractor::visit(const Rule_PrepaidContLine* rule){ prepaidContinuations.push_back(rule->spelling); return NULL; }
 
-// --- Issuance ---
+// --- Certification / Issuance ---
+void* Fwb17JsonExtractor::visit(const Rule_CertificationLine* rule) { certificationLine = rule->spelling; return NULL; }
 void* Fwb17JsonExtractor::visit(const Rule_IssuanceLine* rule)
 {
   issuanceLine = rule->spelling;
   return visitRules(rule->rules);
 }
-void* Fwb17JsonExtractor::visit(const Rule_IssuanceDate* rule) { issuanceDate = rule->spelling; return NULL; }
-void* Fwb17JsonExtractor::visit(const Rule_Month* rule)        { (void)rule; return NULL; }
+void* Fwb17JsonExtractor::visit(const Rule_AccountingTagLine* rule) { (void)rule; return NULL; }
+void* Fwb17JsonExtractor::visit(const Rule_AccountingContLine* rule) { (void)rule; return NULL; }
 
 // --- Supplemental lines ---
 void* Fwb17JsonExtractor::visit(const Rule_SupplementalLine* rule) { return visitRules(rule->rules); }
-void* Fwb17JsonExtractor::visit(const Rule_OsiLine* rule) { osiLines.push_back(rule->spelling); return NULL; }
-void* Fwb17JsonExtractor::visit(const Rule_RefLine* rule) { refLines.push_back(rule->spelling); return NULL; }
-void* Fwb17JsonExtractor::visit(const Rule_SphLine* rule) { sphLine = rule->spelling; return NULL; }
+void* Fwb17JsonExtractor::visit(const Rule_OsiBlock* rule) { return visitRules(rule->rules); }
+void* Fwb17JsonExtractor::visit(const Rule_OsiLine* rule)
+{
+  activeSupplementalBlock = "OSI";
+  osiLines.push_back(rule->spelling);
+  return NULL;
+}
+void* Fwb17JsonExtractor::visit(const Rule_OciBlock* rule) { return visitRules(rule->rules); }
+void* Fwb17JsonExtractor::visit(const Rule_OciLine* rule)
+{
+  activeSupplementalBlock = "OCI";
+  ociLines.push_back(rule->spelling);
+  return NULL;
+}
+void* Fwb17JsonExtractor::visit(const Rule_ContinuationLine* rule)
+{
+  if (activeSupplementalBlock == "OSI") {
+    osiLines.push_back(rule->spelling);
+  } else if (activeSupplementalBlock == "OCI") {
+    ociLines.push_back(rule->spelling);
+  }
+  return NULL;
+}
+void* Fwb17JsonExtractor::visit(const Rule_RefLine* rule)
+{
+  activeSupplementalBlock.clear();
+  refLines.push_back(rule->spelling);
+  return NULL;
+}
+void* Fwb17JsonExtractor::visit(const Rule_SphLine* rule)
+{
+  activeSupplementalBlock.clear();
+  sphLine = rule->spelling;
+  return NULL;
+}
+void* Fwb17JsonExtractor::visit(const Rule_SsrLine* rule)    { return visitRules(rule->rules); }
+void* Fwb17JsonExtractor::visit(const Rule_SsrTagLine* rule) { (void)rule; return NULL; }
+void* Fwb17JsonExtractor::visit(const Rule_SsrContLine* rule){ (void)rule; return NULL; }
+void* Fwb17JsonExtractor::visit(const Rule_NotifyBlock* rule)        { return visitRules(rule->rules); }
+void* Fwb17JsonExtractor::visit(const Rule_NotifySubLine* rule)      { return visitRules(rule->rules); }
+void* Fwb17JsonExtractor::visit(const Rule_NotifyNameLine* rule)     { (void)rule; return NULL; }
+void* Fwb17JsonExtractor::visit(const Rule_NotifyAddressLine* rule)  { (void)rule; return NULL; }
+void* Fwb17JsonExtractor::visit(const Rule_NotifyLocationLine* rule) { (void)rule; return NULL; }
+void* Fwb17JsonExtractor::visit(const Rule_NotifyContLine* rule)     { (void)rule; return NULL; }
+void* Fwb17JsonExtractor::visit(const Rule_ArdLine* rule) { (void)rule; return NULL; }
+void* Fwb17JsonExtractor::visit(const Rule_SriLine* rule) { (void)rule; return NULL; }
 
 // --- Char-level no-ops ---
 void* Fwb17JsonExtractor::visit(const Rule_LineChar* rule) { (void)rule; return NULL; }
@@ -232,11 +296,13 @@ void Fwb17JsonExtractor::printJson() const
     cout << "  \"VolumeUnit\": \""   << escapeJson(trimTrailing(volumeUnit))   << "\"," << endl;
     cout << "  \"VolumeAmount\": \"" << escapeJson(trimTrailing(volumeAmount)) << "\"," << endl;
   }
+  cout << "  \"FlightBookingsLine\": \"" << escapeJson(trimTrailing(flightBookingsLine)) << "\"," << endl;
   cout << "  \"RoutingLine\": \""         << escapeJson(trimTrailing(routingLine))   << "\"," << endl;
   cout << "  \"Shipper\": "               << jsonParty(shipper)        << "," << endl;
   cout << "  \"Consignee\": "             << jsonParty(consignee)      << "," << endl;
   cout << "  \"AgentLine\": \""           << escapeJson(trimTrailing(agentTagLine))  << "\"," << endl;
   cout << "  \"AgentContinuations\": "    << jsonArray(agentContinuations)       << "," << endl;
+  cout << "  \"AccountingLine\": \""      << escapeJson(trimTrailing(accountingLine)) << "\"," << endl;
   cout << "  \"CvdLine\": \""             << escapeJson(trimTrailing(cvdLine))       << "\"," << endl;
   cout << "  \"RatingLine\": \""          << escapeJson(trimTrailing(ratingTagLine)) << "\"," << endl;
   cout << "  \"RatingContinuations\": "   << jsonArray(ratingContinuations)      << "," << endl;
@@ -244,9 +310,10 @@ void Fwb17JsonExtractor::printJson() const
   cout << "  \"OtherChargesContinuations\": " << jsonArray(otherChargesContinuations) << "," << endl;
   cout << "  \"PrepaidLine\": \""         << escapeJson(trimTrailing(prepaidTagLine))<< "\"," << endl;
   cout << "  \"PrepaidContinuations\": "  << jsonArray(prepaidContinuations)     << "," << endl;
+  cout << "  \"CertificationLine\": \""   << escapeJson(trimTrailing(certificationLine)) << "\"," << endl;
   cout << "  \"IssuanceLine\": \""        << escapeJson(trimTrailing(issuanceLine))  << "\"," << endl;
-  cout << "  \"IssuanceDate\": \""        << escapeJson(trimTrailing(issuanceDate))  << "\"," << endl;
   cout << "  \"OsiLines\": "              << jsonArray(osiLines)       << "," << endl;
+  cout << "  \"OciLines\": "              << jsonArray(ociLines)       << "," << endl;
   cout << "  \"RefLines\": "              << jsonArray(refLines)       << "," << endl;
   cout << "  \"SphLine\": \""             << escapeJson(trimTrailing(sphLine))       << "\"" << endl;
   cout << "}" << endl;

@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Mon Apr 13 21:33:05 CDT 2026
+ * Produced : Tue Apr 14 23:36:00 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -19,7 +19,7 @@ using std::vector;
 #include "ParserAlternative.hpp"
 #include "ParserContext.hpp"
 
-#include "Rule_Upper.hpp"
+#include "Terminal_StringValue.hpp"
 
 Rule_MasterWeightUnit::Rule_MasterWeightUnit(
   const string& spelling, 
@@ -67,7 +67,33 @@ const Rule_MasterWeightUnit* Rule_MasterWeightUnit::parse(ParserContext& context
       int c1 = 0;
       for (int i1 = 0; i1 < 1 && f1; i1++)
       {
-        const Rule* rule = Rule_Upper::parse(context);
+        const Rule* rule = Terminal_StringValue::parse(context, "K");
+        if ((f1 = rule != NULL))
+        {
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
+        }
+      }
+      parsed = c1 == 1;
+    }
+    if (parsed)
+    {
+      as1.push_back(new ParserAlternative(a1));
+    }
+    context.index = s1;
+  }
+  {
+    int s1 = context.index;
+    ParserAlternative a1(s1);
+    parsed = true;
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
+      for (int i1 = 0; i1 < 1 && f1; i1++)
+      {
+        const Rule* rule = Terminal_StringValue::parse(context, "L");
         if ((f1 = rule != NULL))
         {
           a1.add(*rule, context.index);

@@ -38,6 +38,11 @@ public:
   void* visit(const Rule_DescriptionBlock* rule);
   void* visit(const Rule_DescriptionTagLine* rule);
   void* visit(const Rule_DescriptionContLine* rule);
+  void* visit(const Rule_HtsBlock* rule);
+  void* visit(const Rule_HtsLine* rule);
+  void* visit(const Rule_OciBlock* rule);
+  void* visit(const Rule_OciLine* rule);
+  void* visit(const Rule_OciContLine* rule);
   void* visit(const Rule_ShipperBlock* rule);
   void* visit(const Rule_ShipperTagLine* rule);
   void* visit(const Rule_ShipperContLine* rule);
@@ -72,6 +77,8 @@ private:
   std::string houseWeight;
   std::string descriptionTagLine;
   std::vector<std::string> descriptionContinuations;
+  std::vector<std::string> htsLines;
+  std::vector<std::string> ociLines;
   Fhl4PartyData shipper;
   Fhl4PartyData consignee;
   std::string cvdLine;

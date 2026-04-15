@@ -23,6 +23,7 @@ using std::vector;
 #include "Rule_AirWaybillLine.hpp"
 #include "Rule_OsiLine.hpp"
 #include "Rule_OciLine.hpp"
+#include "Rule_CorLine.hpp"
 #include "Rule_SlashQualifierLine.hpp"
 #include "Rule_ContinuationLine.hpp"
 #include "Rule_TrailerLine.hpp"
@@ -71,7 +72,7 @@ void* FfmJsonExtractor::visit(const Rule_FFM8* rule)
 
 void* FfmJsonExtractor::visit(const Rule_MessageHeader* rule) { messageHeader = rule->spelling; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_FlightIdentificationLine* rule) { flightLine = rule->spelling; return NULL; }
-void* FfmJsonExtractor::visit(const Rule_RouteLine* rule) { routeLine = rule->spelling; return NULL; }
+void* FfmJsonExtractor::visit(const Rule_RouteLine* rule) { if (!routeLine.empty()) routeLine += "\n"; routeLine += rule->spelling; return NULL; }
 
 void* FfmJsonExtractor::visit(const Rule_UldSection* rule)
 {
@@ -97,6 +98,7 @@ void* FfmJsonExtractor::visit(const Rule_AirWaybillLine* rule)
 void* FfmJsonExtractor::visit(const Rule_OsiLine* rule) { ulds.back().awbs.back().osiLines.push_back(rule->spelling); return NULL; }
 void* FfmJsonExtractor::visit(const Rule_OciLine* rule) { ulds.back().awbs.back().ociLines.push_back(rule->spelling); return NULL; }
 void* FfmJsonExtractor::visit(const Rule_SlashQualifierLine* rule) { ulds.back().awbs.back().qualifiers.push_back(rule->spelling); return NULL; }
+void* FfmJsonExtractor::visit(const Rule_CorLine* rule) { (void)rule; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_ContinuationLine* rule) { ulds.back().awbs.back().continuations.push_back(rule->spelling); return NULL; }
 void* FfmJsonExtractor::visit(const Rule_ULDIdentifier* rule) { ulds.back().uldIdentifier = rule->spelling; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_ULDDetailText* rule) { ulds.back().uldDetailText = rule->spelling; return NULL; }

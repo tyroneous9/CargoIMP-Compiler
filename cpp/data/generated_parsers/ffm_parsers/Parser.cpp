@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Mon Apr 13 21:33:05 CDT 2026
+ * Produced : Tue Apr 14 23:40:11 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -40,6 +40,7 @@ using std::transform;
 #include "Rule_AirWaybillLine.hpp"
 #include "Rule_OsiLine.hpp"
 #include "Rule_OciLine.hpp"
+#include "Rule_CorLine.hpp"
 #include "Rule_SlashQualifierLine.hpp"
 #include "Rule_ContinuationLine.hpp"
 #include "Rule_TrailerLine.hpp"
@@ -94,6 +95,7 @@ static map<string, pParser> buildParserMap(void)
   parsers["airwaybillline"] = (pParser)Rule_AirWaybillLine::parse;
   parsers["osiline"] = (pParser)Rule_OsiLine::parse;
   parsers["ociline"] = (pParser)Rule_OciLine::parse;
+  parsers["corline"] = (pParser)Rule_CorLine::parse;
   parsers["slashqualifierline"] = (pParser)Rule_SlashQualifierLine::parse;
   parsers["continuationline"] = (pParser)Rule_ContinuationLine::parse;
   parsers["trailerline"] = (pParser)Rule_TrailerLine::parse;
