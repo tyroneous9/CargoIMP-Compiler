@@ -50,4 +50,8 @@ preprocessing email: edit preprocessing to be more robust
 
 guard against IMAP/network failures. consider polling algorithm--should verify outputs after creation
 
-this script does too much at once. move the parsing functionality into another file. this script should focus on extracting emails and parsing the header to determine the CIMP message type. once the email is extracted, append each one 
+given the email outputs generated in server/date/outputs/emails, create a script which parses these emails using existing parsers in cpp directory. advice:
+1. reference the already working #file:poll_and_parse_emails.js for its alraedy working parsing functionality.
+2. in the email outputs, reference the #cimpType field to quickly choose the correct parser.
+
+support for FFM/4, FFM/5, FHL/5
