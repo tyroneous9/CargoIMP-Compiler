@@ -9,7 +9,7 @@ set -euo pipefail
 #   3) The script streams parser JSON to stdout and also mirrors output to stderr
 #
 # Quick examples:
-#   cpp/scripts/run_parser_with_input.sh ffm8 cpp/data/input_tests/ffm_test.txt
+#   cpp/scripts/run_parser_with_input.sh ffm8 cpp/data/input_tests/ffm8_test.txt
 #   cpp/scripts/run_parser_with_input.sh fwb17 cpp/data/input_tests/fwb17_test.txt
 #   cpp/scripts/run_parser_with_input.sh fhl4 cpp/data/input_tests/fhl4_test.txt
 #   cpp/scripts/run_parser_with_input.sh cpp/build/parser_fwb17_json cpp/data/input_tests/fwb17_test.txt
@@ -28,7 +28,7 @@ Arguments:
   <input_file>  Path to input file (relative paths resolve from current directory)
 
 Examples:
-  cpp/scripts/run_parser_with_input.sh ffm8 cpp/data/input_tests/ffm_test.txt
+  cpp/scripts/run_parser_with_input.sh ffm8 cpp/data/input_tests/ffm8_test.txt
   cpp/scripts/run_parser_with_input.sh fwb17 cpp/data/input_tests/fwb17_test.txt
   cpp/scripts/run_parser_with_input.sh fhl4 cpp/data/input_tests/fhl4_test.txt
   cpp/scripts/run_parser_with_input.sh cpp/build/parser_fwb17_json cpp/data/input_tests/fwb17_test.txt
@@ -39,7 +39,7 @@ resolve_parser_binary() {
   local parser_input="$1"
   case "${parser_input,,}" in
     ffm|ffm8)
-      echo "$CPP_DIR/build/parser_ffm_json"
+      echo "$CPP_DIR/build/parser_ffm8_json"
       ;;
     fwb|fwb17)
       echo "$CPP_DIR/build/parser_fwb17_json"

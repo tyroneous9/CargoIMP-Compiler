@@ -23,6 +23,7 @@ using std::vector;
 #include "Rule_MasterPieceCount.hpp"
 #include "Rule_MasterWeightUnit.hpp"
 #include "Rule_MasterWeight.hpp"
+#include "Rule_HouseBillGroup.hpp"
 #include "Rule_HouseBillLine.hpp"
 #include "Rule_HouseOriginAndDestination.hpp"
 #include "Rule_HouseWaybillNumber.hpp"
@@ -34,6 +35,7 @@ using std::vector;
 #include "Rule_DescriptionContLine.hpp"
 #include "Rule_HtsBlock.hpp"
 #include "Rule_HtsLine.hpp"
+#include "Rule_HtsContLine.hpp"
 #include "Rule_OciBlock.hpp"
 #include "Rule_OciLine.hpp"
 #include "Rule_OciContLine.hpp"
@@ -82,27 +84,37 @@ void* Fhl4JsonExtractor::visit(const Rule_MasterPieceCount* rule)      { masterP
 void* Fhl4JsonExtractor::visit(const Rule_MasterWeightUnit* rule)      { masterWeightUnit = rule->spelling; return NULL; }
 void* Fhl4JsonExtractor::visit(const Rule_MasterWeight* rule)          { masterWeight = rule->spelling; return NULL; }
 
+// --- House bill group ---
+void* Fhl4JsonExtractor::visit(const Rule_HouseBillGroup* rule)
+{
+  currentHouse = Fhl4HouseData();
+  visitRules(rule->rules);
+  houseBills.push_back(currentHouse);
+  return NULL;
+}
+
 // --- House bill ---
 void* Fhl4JsonExtractor::visit(const Rule_HouseBillLine* rule)
 {
-  houseBillLine = rule->spelling;
+  currentHouse.houseBillLine = rule->spelling;
   return visitRules(rule->rules);
 }
-void* Fhl4JsonExtractor::visit(const Rule_HouseOriginAndDestination* rule) { houseOriginAndDestination = rule->spelling; return NULL; }
-void* Fhl4JsonExtractor::visit(const Rule_HouseWaybillNumber* rule)        { houseWaybillNumber = rule->spelling; return NULL; }
-void* Fhl4JsonExtractor::visit(const Rule_HousePieceCount* rule)           { housePieceCount = rule->spelling; return NULL; }
-void* Fhl4JsonExtractor::visit(const Rule_HouseWeightUnit* rule)           { houseWeightUnit = rule->spelling; return NULL; }
-void* Fhl4JsonExtractor::visit(const Rule_HouseWeight* rule)               { houseWeight = rule->spelling; return NULL; }
+void* Fhl4JsonExtractor::visit(const Rule_HouseOriginAndDestination* rule) { currentHouse.houseOriginAndDestination = rule->spelling; return NULL; }
+void* Fhl4JsonExtractor::visit(const Rule_HouseWaybillNumber* rule)        { currentHouse.houseWaybillNumber = rule->spelling; return NULL; }
+void* Fhl4JsonExtractor::visit(const Rule_HousePieceCount* rule)           { currentHouse.housePieceCount = rule->spelling; return NULL; }
+void* Fhl4JsonExtractor::visit(const Rule_HouseWeightUnit* rule)           { currentHouse.houseWeightUnit = rule->spelling; return NULL; }
+void* Fhl4JsonExtractor::visit(const Rule_HouseWeight* rule)               { currentHouse.houseWeight = rule->spelling; return NULL; }
 
 // --- Description ---
 void* Fhl4JsonExtractor::visit(const Rule_DescriptionBlock* rule)    { return visitRules(rule->rules); }
-void* Fhl4JsonExtractor::visit(const Rule_DescriptionTagLine* rule)  { descriptionTagLine = rule->spelling; return NULL; }
-void* Fhl4JsonExtractor::visit(const Rule_DescriptionContLine* rule) { descriptionContinuations.push_back(rule->spelling); return NULL; }
+void* Fhl4JsonExtractor::visit(const Rule_DescriptionTagLine* rule)  { currentHouse.descriptionTagLine = rule->spelling; return NULL; }
+void* Fhl4JsonExtractor::visit(const Rule_DescriptionContLine* rule) { currentHouse.descriptionContinuations.push_back(rule->spelling); return NULL; }
 void* Fhl4JsonExtractor::visit(const Rule_HtsBlock* rule)            { return visitRules(rule->rules); }
-void* Fhl4JsonExtractor::visit(const Rule_HtsLine* rule)             { htsLines.push_back(rule->spelling); return NULL; }
+void* Fhl4JsonExtractor::visit(const Rule_HtsLine* rule)             { currentHouse.htsLines.push_back(rule->spelling); return NULL; }
+void* Fhl4JsonExtractor::visit(const Rule_HtsContLine* rule)         { currentHouse.htsLines.push_back(rule->spelling); return NULL; }
 void* Fhl4JsonExtractor::visit(const Rule_OciBlock* rule)            { return visitRules(rule->rules); }
-void* Fhl4JsonExtractor::visit(const Rule_OciLine* rule)             { ociLines.push_back(rule->spelling); return NULL; }
-void* Fhl4JsonExtractor::visit(const Rule_OciContLine* rule)         { ociLines.push_back(rule->spelling); return NULL; }
+void* Fhl4JsonExtractor::visit(const Rule_OciLine* rule)             { currentHouse.ociLines.push_back(rule->spelling); return NULL; }
+void* Fhl4JsonExtractor::visit(const Rule_OciContLine* rule)         { currentHouse.ociLines.push_back(rule->spelling); return NULL; }
 
 // --- Shipper ---
 void* Fhl4JsonExtractor::visit(const Rule_ShipperBlock* rule)    { return visitRules(rule->rules); }
@@ -183,6 +195,23 @@ string Fhl4JsonExtractor::jsonParty(const Fhl4PartyData& p, const string& tagKey
   return out;
 }
 
+string Fhl4JsonExtractor::jsonHouse(const Fhl4HouseData& h) const
+{
+  string out = "    {\n";
+  out += "      \"HouseBillLine\": \""             + escapeJson(trimTrailing(h.houseBillLine))             + "\",\n";
+  out += "      \"HouseOriginAndDestination\": \"" + escapeJson(trimTrailing(h.houseOriginAndDestination)) + "\",\n";
+  out += "      \"HouseWaybillNumber\": \""        + escapeJson(trimTrailing(h.houseWaybillNumber))        + "\",\n";
+  out += "      \"HousePieceCount\": \""           + escapeJson(trimTrailing(h.housePieceCount))           + "\",\n";
+  out += "      \"HouseWeightUnit\": \""           + escapeJson(trimTrailing(h.houseWeightUnit))           + "\",\n";
+  out += "      \"HouseWeight\": \""               + escapeJson(trimTrailing(h.houseWeight))               + "\",\n";
+  out += "      \"DescriptionLine\": \""           + escapeJson(trimTrailing(h.descriptionTagLine))        + "\",\n";
+  out += "      \"DescriptionContinuations\": "    + jsonArray(h.descriptionContinuations)                 + ",\n";
+  out += "      \"HtsLines\": "                   + jsonArray(h.htsLines)                                 + ",\n";
+  out += "      \"OciLines\": "                   + jsonArray(h.ociLines)                                 + "\n";
+  out += "    }";
+  return out;
+}
+
 void Fhl4JsonExtractor::printJson() const
 {
   cout << "{" << endl;
@@ -193,16 +222,17 @@ void Fhl4JsonExtractor::printJson() const
   cout << "  \"MasterPieceCount\": \""          << escapeJson(trimTrailing(masterPieceCount))     << "\"," << endl;
   cout << "  \"MasterWeightUnit\": \""          << escapeJson(trimTrailing(masterWeightUnit))     << "\"," << endl;
   cout << "  \"MasterWeight\": \""              << escapeJson(trimTrailing(masterWeight))         << "\"," << endl;
-  cout << "  \"HouseBillLine\": \""             << escapeJson(trimTrailing(houseBillLine))        << "\"," << endl;
-  cout << "  \"HouseOriginAndDestination\": \"" << escapeJson(trimTrailing(houseOriginAndDestination)) << "\"," << endl;
-  cout << "  \"HouseWaybillNumber\": \""        << escapeJson(trimTrailing(houseWaybillNumber))   << "\"," << endl;
-  cout << "  \"HousePieceCount\": \""           << escapeJson(trimTrailing(housePieceCount))      << "\"," << endl;
-  cout << "  \"HouseWeightUnit\": \""           << escapeJson(trimTrailing(houseWeightUnit))      << "\"," << endl;
-  cout << "  \"HouseWeight\": \""               << escapeJson(trimTrailing(houseWeight))          << "\"," << endl;
-  cout << "  \"DescriptionLine\": \""           << escapeJson(trimTrailing(descriptionTagLine))   << "\"," << endl;
-  cout << "  \"DescriptionContinuations\": "    << jsonArray(descriptionContinuations) << "," << endl;
-  cout << "  \"HtsLines\": "                   << jsonArray(htsLines) << "," << endl;
-  cout << "  \"OciLines\": "                   << jsonArray(ociLines) << "," << endl;
+
+  // Output all house-bill groups as an array.
+  cout << "  \"HouseBills\": [" << endl;
+  for (size_t i = 0; i < houseBills.size(); ++i)
+  {
+    cout << jsonHouse(houseBills[i]);
+    if (i + 1 < houseBills.size()) cout << ",";
+    cout << endl;
+  }
+  cout << "  ]," << endl;
+
   cout << "  \"Shipper\": "   << jsonParty(shipper,   "ShipperLine")   << "," << endl;
   cout << "  \"Consignee\": " << jsonParty(consignee, "ConsigneeLine") << "," << endl;
   cout << "  \"CvdLine\": \"" << escapeJson(trimTrailing(cvdLine)) << "\"" << endl;

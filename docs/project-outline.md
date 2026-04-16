@@ -46,6 +46,8 @@ parsed information only--similar to wms data
 temporary email storage:
 store files locally, and reference via .csv
 
-go ahead and implement. these are my requirements:
-1. store email+parsed payloads in server/outputs/
-2. create reference file which updates either upon adding a new update file or upon polling, whichever you recommend.
+preprocessing email: edit preprocessing to be more robust
+
+guard against IMAP/network failures. consider polling algorithm--should verify outputs after creation
+
+stderr exists, but exit status can be good

@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Tue Apr 14 23:36:00 CDT 2026
+ * Produced : Wed Apr 15 00:18:54 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -17,6 +17,7 @@ using std::vector;
 #include "Displayer.hpp"
 
 #include "Rule_FHL4.hpp"
+#include "Rule_HouseBillGroup.hpp"
 #include "Rule_MessageHeader.hpp"
 #include "Rule_MasterBillLine.hpp"
 #include "Rule_MasterAirwayBillNumber.hpp"
@@ -39,6 +40,7 @@ using std::vector;
 #include "Rule_DescriptionContLine.hpp"
 #include "Rule_HtsBlock.hpp"
 #include "Rule_HtsLine.hpp"
+#include "Rule_HtsContLine.hpp"
 #include "Rule_OciBlock.hpp"
 #include "Rule_OciLine.hpp"
 #include "Rule_OciContLine.hpp"
@@ -60,6 +62,11 @@ using std::vector;
 #include "Terminal_NumericValue.hpp"
 
 void* Displayer::visit(const Rule_FHL4* rule)
+{
+  return visitRules(rule->rules);
+}
+
+void* Displayer::visit(const Rule_HouseBillGroup* rule)
 {
   return visitRules(rule->rules);
 }
@@ -170,6 +177,11 @@ void* Displayer::visit(const Rule_HtsBlock* rule)
 }
 
 void* Displayer::visit(const Rule_HtsLine* rule)
+{
+  return visitRules(rule->rules);
+}
+
+void* Displayer::visit(const Rule_HtsContLine* rule)
 {
   return visitRules(rule->rules);
 }

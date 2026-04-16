@@ -78,24 +78,24 @@ endif()
 
 # Stable custom app target for FFM8 JSON extraction.
 # Custom code lives in src/, generated code stays under data/generated_parsers/.
-set(FFM_DIR "${CMAKE_CURRENT_SOURCE_DIR}/data/generated_parsers/ffm_parsers")
+set(FFM_DIR "${CMAKE_CURRENT_SOURCE_DIR}/data/generated_parsers/ffm8_parsers")
 if(EXISTS "${FFM_DIR}")
   file(GLOB FFM_GENERATED_SOURCES "${FFM_DIR}/*.cpp")
   list(FILTER FFM_GENERATED_SOURCES EXCLUDE REGEX "ParserMain\\.cpp$")
   list(FILTER FFM_GENERATED_SOURCES EXCLUDE REGEX "JsonExtractor\\.cpp$")
 
-  add_executable(parser_ffm_json
-    src/ffm_json_main.cpp
-    src/ffm_json_extractor.cpp
+  add_executable(parser_ffm8_json
+    src/ffm8_json_main.cpp
+    src/ffm8_json_extractor.cpp
     ${FFM_GENERATED_SOURCES}
   )
-  target_compile_features(parser_ffm_json PRIVATE cxx_std_17)
-  target_include_directories(parser_ffm_json PRIVATE
+  target_compile_features(parser_ffm8_json PRIVATE cxx_std_17)
+  target_include_directories(parser_ffm8_json PRIVATE
     ${FFM_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/src
   )
 
-  list(APPEND PARSER_TARGETS parser_ffm_json)
+  list(APPEND PARSER_TARGETS parser_ffm8_json)
 endif()
 
 # Print configuration info

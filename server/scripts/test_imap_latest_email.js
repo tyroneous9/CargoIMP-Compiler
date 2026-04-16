@@ -3,7 +3,8 @@
 const path = require('path');
 const { ImapFlow } = require('imapflow');
 const { simpleParser } = require('mailparser');
-require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
+const paths = require('../config/paths');
+require('dotenv').config({ path: paths.ENV_FILE });
 
 function getEnv(keys, fallback) {
   for (const key of keys) {

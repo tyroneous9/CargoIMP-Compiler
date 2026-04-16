@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Tue Apr 14 23:36:00 CDT 2026
+ * Produced : Wed Apr 15 00:18:54 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -19,15 +19,12 @@ using std::vector;
 #include "ParserAlternative.hpp"
 #include "ParserContext.hpp"
 
-#include "Rule_OciBlock.hpp"
 #include "Rule_ShipperBlock.hpp"
 #include "Rule_MessageHeader.hpp"
-#include "Rule_DescriptionBlock.hpp"
-#include "Rule_HtsBlock.hpp"
+#include "Rule_HouseBillGroup.hpp"
 #include "Rule_CvdLine.hpp"
 #include "Rule_MasterBillLine.hpp"
 #include "Rule_ConsigneeBlock.hpp"
-#include "Rule_HouseBillLine.hpp"
 #include "Rule_EOL.hpp"
 
 Rule_FHL4::Rule_FHL4(
@@ -140,7 +137,7 @@ const Rule_FHL4* Rule_FHL4::parse(ParserContext& context)
       int c1 = 0;
       for (int i1 = 0; i1 < 1 && f1; i1++)
       {
-        const Rule* rule = Rule_HouseBillLine::parse(context);
+        const Rule* rule = Rule_HouseBillGroup::parse(context);
         if ((f1 = rule != NULL))
         {
           a1.add(*rule, context.index);
@@ -148,223 +145,17 @@ const Rule_FHL4* Rule_FHL4::parse(ParserContext& context)
           delete rule;
         }
       }
-      parsed = c1 == 1;
-    }
-    if (parsed)
-    {
-      bool f1 = true;
-      int c1 = 0;
-      for (int i1 = 0; i1 < 1 && f1; i1++)
+      while (f1)
       {
-        unsigned int g1 = context.index;
-        vector<const ParserAlternative*> as2;
-        parsed = false;
+        const Rule* rule = Rule_HouseBillGroup::parse(context);
+        if ((f1 = rule != NULL))
         {
-          int s2 = context.index;
-          ParserAlternative a2(s2);
-          parsed = true;
-          if (parsed)
-          {
-            bool f2 = true;
-            int c2 = 0;
-            for (int i2 = 0; i2 < 1 && f2; i2++)
-            {
-              const Rule* rule = Rule_EOL::parse(context);
-              if ((f2 = rule != NULL))
-              {
-                a2.add(*rule, context.index);
-                c2++;
-                delete rule;
-              }
-            }
-            parsed = c2 == 1;
-          }
-          if (parsed)
-          {
-            as2.push_back(new ParserAlternative(a2));
-          }
-          context.index = s2;
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
         }
-
-        const ParserAlternative* b = ParserAlternative::getBest(as2);
-
-        if ((parsed = b != NULL))
-        {
-          a1.add(b->rules, b->end);
-          context.index = b->end;
-        }
-
-        for (vector<const ParserAlternative*>::const_iterator a = as2.begin(); a != as2.end(); a++)
-        {
-          delete *a;
-        }
-
-        f1 = context.index > g1;
-        if (parsed) c1++;
       }
-      parsed = true;
-    }
-    if (parsed)
-    {
-      bool f1 = true;
-      int c1 = 0;
-      for (int i1 = 0; i1 < 1 && f1; i1++)
-      {
-        unsigned int g1 = context.index;
-        vector<const ParserAlternative*> as2;
-        parsed = false;
-        {
-          int s2 = context.index;
-          ParserAlternative a2(s2);
-          parsed = true;
-          if (parsed)
-          {
-            bool f2 = true;
-            int c2 = 0;
-            for (int i2 = 0; i2 < 1 && f2; i2++)
-            {
-              const Rule* rule = Rule_DescriptionBlock::parse(context);
-              if ((f2 = rule != NULL))
-              {
-                a2.add(*rule, context.index);
-                c2++;
-                delete rule;
-              }
-            }
-            parsed = c2 == 1;
-          }
-          if (parsed)
-          {
-            as2.push_back(new ParserAlternative(a2));
-          }
-          context.index = s2;
-        }
-
-        const ParserAlternative* b = ParserAlternative::getBest(as2);
-
-        if ((parsed = b != NULL))
-        {
-          a1.add(b->rules, b->end);
-          context.index = b->end;
-        }
-
-        for (vector<const ParserAlternative*>::const_iterator a = as2.begin(); a != as2.end(); a++)
-        {
-          delete *a;
-        }
-
-        f1 = context.index > g1;
-        if (parsed) c1++;
-      }
-      parsed = true;
-    }
-    if (parsed)
-    {
-      bool f1 = true;
-      int c1 = 0;
-      for (int i1 = 0; i1 < 1 && f1; i1++)
-      {
-        unsigned int g1 = context.index;
-        vector<const ParserAlternative*> as2;
-        parsed = false;
-        {
-          int s2 = context.index;
-          ParserAlternative a2(s2);
-          parsed = true;
-          if (parsed)
-          {
-            bool f2 = true;
-            int c2 = 0;
-            for (int i2 = 0; i2 < 1 && f2; i2++)
-            {
-              const Rule* rule = Rule_HtsBlock::parse(context);
-              if ((f2 = rule != NULL))
-              {
-                a2.add(*rule, context.index);
-                c2++;
-                delete rule;
-              }
-            }
-            parsed = c2 == 1;
-          }
-          if (parsed)
-          {
-            as2.push_back(new ParserAlternative(a2));
-          }
-          context.index = s2;
-        }
-
-        const ParserAlternative* b = ParserAlternative::getBest(as2);
-
-        if ((parsed = b != NULL))
-        {
-          a1.add(b->rules, b->end);
-          context.index = b->end;
-        }
-
-        for (vector<const ParserAlternative*>::const_iterator a = as2.begin(); a != as2.end(); a++)
-        {
-          delete *a;
-        }
-
-        f1 = context.index > g1;
-        if (parsed) c1++;
-      }
-      parsed = true;
-    }
-    if (parsed)
-    {
-      bool f1 = true;
-      int c1 = 0;
-      for (int i1 = 0; i1 < 1 && f1; i1++)
-      {
-        unsigned int g1 = context.index;
-        vector<const ParserAlternative*> as2;
-        parsed = false;
-        {
-          int s2 = context.index;
-          ParserAlternative a2(s2);
-          parsed = true;
-          if (parsed)
-          {
-            bool f2 = true;
-            int c2 = 0;
-            for (int i2 = 0; i2 < 1 && f2; i2++)
-            {
-              const Rule* rule = Rule_OciBlock::parse(context);
-              if ((f2 = rule != NULL))
-              {
-                a2.add(*rule, context.index);
-                c2++;
-                delete rule;
-              }
-            }
-            parsed = c2 == 1;
-          }
-          if (parsed)
-          {
-            as2.push_back(new ParserAlternative(a2));
-          }
-          context.index = s2;
-        }
-
-        const ParserAlternative* b = ParserAlternative::getBest(as2);
-
-        if ((parsed = b != NULL))
-        {
-          a1.add(b->rules, b->end);
-          context.index = b->end;
-        }
-
-        for (vector<const ParserAlternative*>::const_iterator a = as2.begin(); a != as2.end(); a++)
-        {
-          delete *a;
-        }
-
-        f1 = context.index > g1;
-        if (parsed) c1++;
-      }
-      parsed = true;
+      parsed = c1 >= 1;
     }
     if (parsed)
     {

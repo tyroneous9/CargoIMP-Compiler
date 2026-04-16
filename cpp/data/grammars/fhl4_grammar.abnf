@@ -3,13 +3,18 @@
 FHL4 =
     MessageHeader EOL
     MasterBillLine EOL
-    HouseBillLine [EOL]
-    [DescriptionBlock]
-    [HtsBlock]
-    [OciBlock]
+    1*HouseBillGroup
     [ShipperBlock]
     [ConsigneeBlock]
     [CvdLine [EOL]];
+
+# Per CIMP 34 §3: "Ref. 3 can be repeated." and
+# "Refs. 3 thru 6 can be repeated if there is no occurrence of Ref. 7, 8 or 9."
+HouseBillGroup =
+    HouseBillLine [EOL]
+    [DescriptionBlock]
+    [HtsBlock]
+    [OciBlock];
 
 MessageHeader = "FHL/4";
 
@@ -62,8 +67,11 @@ DescriptionTagLine = "TXT" Slant *LineChar [EOL];
 DescriptionContLine = Slant *LineChar [EOL];
 
 # --- Harmonized Tariff Schedule (HTS) ---
-HtsBlock = 1*HtsLine;
+# Per CIMP 34 §5: "Elements 5.2 to 5.4 can be repeated. Can occur a maximum of nine times."
+# Each additional HS code appears on a continuation line starting with Slant.
+HtsBlock = 1*(HtsLine *HtsContLine);
 HtsLine = "HTS" Slant *LineChar [EOL];
+HtsContLine = Slant *LineChar [EOL];
 
 # --- OCI block ---
 OciBlock = OciLine *OciContLine;

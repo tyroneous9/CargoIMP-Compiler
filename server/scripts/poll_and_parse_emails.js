@@ -4,12 +4,13 @@ const path = require('path');
 const { spawnSync } = require('child_process');
 const { ImapFlow } = require('imapflow');
 const { simpleParser } = require('mailparser');
+const paths = require('../config/paths');
 
-require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
+require('dotenv').config({ path: paths.ENV_FILE });
 
 // Configure: max emails to process per polling run (reads newest first).
-// Set to -1 for no limit (process all new emails).
-const MAX_EMAILS_PER_RUN = 500;
+// Set to -1 for no limit (process all new emails for production behavior).
+const MAX_EMAILS_PER_RUN = -1;
 
 // Read a required environment variable and fail fast if it is missing.
 function requireEnv(key) {
@@ -42,7 +43,7 @@ function getSenderAddresses(parsedFrom) {
 
 // Resolve the on-disk UID checkpoint used for incremental polling.
 function getCheckpointPath() {
-  return path.resolve(__dirname, '..', 'data', 'imap_last_uid.txt');
+  return paths.CHECKPOINT_FILE;
 }
 
 // Read the last processed UID; default to 0 if no checkpoint exists yet.
@@ -96,29 +97,30 @@ function firstBodyLine(body) {
     .toUpperCase();
 }
 
-// Choose exactly one parser binary from the CIMP message type in line 1.
+// Choose exactly one parser binary based on the CIMP message type in line 1.
+// WARNING: THIS RELIES ON CONSISTENT FORMATTING IN THE SOURCE EMAILS. If the first line is missing or malformed, the parser will be unable to detect the message type and will fail with an error.
+
 function chooseParserByMessageType(body) {
-  const repoRoot = path.resolve(__dirname, '..', '..');
   const header = firstBodyLine(body);
 
   if (header.startsWith('FFM/8')) {
     return {
       format: 'ffm8',
-      binary: path.resolve(repoRoot, 'cpp', 'build', 'parser_ffm_json'),
+      binary: paths.PARSER_BINARIES.ffm8,
     };
   }
 
   if (header.startsWith('FWB/17')) {
     return {
       format: 'fwb17',
-      binary: path.resolve(repoRoot, 'cpp', 'build', 'parser_fwb17_json'),
+      binary: paths.PARSER_BINARIES.fwb17,
     };
   }
 
   if (header.startsWith('FHL/4')) {
     return {
       format: 'fhl4',
-      binary: path.resolve(repoRoot, 'cpp', 'build', 'parser_fhl4_json'),
+      binary: paths.PARSER_BINARIES.fhl4,
     };
   }
 
@@ -132,8 +134,7 @@ function runSingleParser(parserConfig, body) {
       status: 'error',
       format: null,
       fields: null,
-      stderr: '',
-      error: 'Unsupported CIMP message type in first body line',
+      stderr: 'Unsupported CIMP message type in first body line',
     };
   }
 
@@ -142,8 +143,7 @@ function runSingleParser(parserConfig, body) {
       status: 'error',
       format: parserConfig.format,
       fields: null,
-      stderr: '',
-      error: `Parser binary not found: ${parserConfig.binary}`,
+      stderr: `Parser binary not found: ${parserConfig.binary}`,
     };
   }
 
@@ -161,12 +161,13 @@ function runSingleParser(parserConfig, body) {
     const stderrText = (result.stderr || '').trim();
 
     if (result.status !== 0) {
+      const exitMsg = `Parser exited with status ${result.status}`;
+      const diagnostic = stderrText || stdoutText;
       return {
         status: 'error',
         format: parserConfig.format,
         fields: null,
-        stderr: stderrText || stdoutText,
-        error: `Parser exited with status ${result.status}`,
+        stderr: diagnostic ? `${exitMsg}\n${diagnostic}` : exitMsg,
       };
     }
 
@@ -178,12 +179,13 @@ function runSingleParser(parserConfig, body) {
         stderr: stderrText,
       };
     } catch (error) {
+      const jsonMsg = `Parser output was not valid JSON: ${error.message}`;
+      const diagnostic = stderrText || stdoutText;
       return {
         status: 'error',
         format: parserConfig.format,
         fields: null,
-        stderr: stderrText || stdoutText,
-        error: `Parser output was not valid JSON: ${error.message}`,
+        stderr: diagnostic ? `${jsonMsg}\n${diagnostic}` : jsonMsg,
       };
     }
   } catch (error) {
@@ -191,8 +193,7 @@ function runSingleParser(parserConfig, body) {
       status: 'error',
       format: parserConfig.format,
       fields: null,
-      stderr: '',
-      error: error.message,
+      stderr: error.message,
     };
   } finally {
     fs.rmSync(tmpDir, { recursive: true, force: true });
@@ -201,6 +202,8 @@ function runSingleParser(parserConfig, body) {
 
 // Build the final stdout envelope containing source email data and parse result.
 function buildOutputEnvelope(message, parsedEmail, body, parsing) {
+  const { status: _status, ...parsingPayload } = parsing || {};
+
   const output = {
     email: {
       uid: message.uid,
@@ -209,7 +212,7 @@ function buildOutputEnvelope(message, parsedEmail, body, parsing) {
       from: parsedEmail.from ? parsedEmail.from.text : '(unknown sender)',
       body,
     },
-    parsing,
+    parsing: parsingPayload,
   };
 
   return output;
@@ -217,7 +220,7 @@ function buildOutputEnvelope(message, parsedEmail, body, parsing) {
 
 // Return the root directory where local review artifacts are stored.
 function getOutputsRoot() {
-  return path.resolve(__dirname, '..', 'outputs');
+  return paths.OUTPUTS_DIR;
 }
 
 // Convert free-form text into a short filename-safe token.
@@ -256,8 +259,8 @@ function createUniqueEnvelopePath(outputsRoot, baseStem) {
 }
 
 // Store one envelope artifact locally and append one lookup record to data/index.ndjson.
-function persistOutputArtifacts(mailbox, envelope) {
-  const serverRoot = path.resolve(__dirname, '..');
+function persistOutputArtifacts(mailbox, envelope, status) {
+  const serverRoot = paths.SERVER_ROOT;
   const outputsRoot = getOutputsRoot();
   fs.mkdirSync(outputsRoot, { recursive: true });
 
@@ -273,12 +276,12 @@ function persistOutputArtifacts(mailbox, envelope) {
     date: envelope.email.date,
     from: envelope.email.from,
     subject: envelope.email.subject,
-    parserFormat: envelope.parsing.format,
-    parseStatus: envelope.parsing.status,
+    format: envelope.parsing.format,
+    status: status || 'error',
     envelopePath: toRelative(envelopePath),
   };
 
-  const referenceFile = path.join(serverRoot, 'data', 'index.ndjson');
+  const referenceFile = paths.INDEX_FILE;
   fs.mkdirSync(path.dirname(referenceFile), { recursive: true });
   fs.appendFileSync(referenceFile, `${JSON.stringify(referenceRecord)}\n`, 'utf8');
 }
@@ -352,7 +355,7 @@ async function main() {
         const parsing = runSingleParser(parserConfig, body);
 
         const envelope = buildOutputEnvelope(message, parsedEmail, body, parsing);
-        persistOutputArtifacts(mailbox, envelope);
+        persistOutputArtifacts(mailbox, envelope, parsing.status);
         process.stdout.write(`${JSON.stringify(envelope)}\n`);
       }
 

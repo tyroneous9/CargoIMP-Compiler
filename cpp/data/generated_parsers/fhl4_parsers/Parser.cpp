@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Tue Apr 14 23:36:00 CDT 2026
+ * Produced : Wed Apr 15 00:18:54 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -30,6 +30,7 @@ using std::transform;
 
 #include "Rule.hpp"
 #include "Rule_FHL4.hpp"
+#include "Rule_HouseBillGroup.hpp"
 #include "Rule_MessageHeader.hpp"
 #include "Rule_MasterBillLine.hpp"
 #include "Rule_MasterAirwayBillNumber.hpp"
@@ -52,6 +53,7 @@ using std::transform;
 #include "Rule_DescriptionContLine.hpp"
 #include "Rule_HtsBlock.hpp"
 #include "Rule_HtsLine.hpp"
+#include "Rule_HtsContLine.hpp"
 #include "Rule_OciBlock.hpp"
 #include "Rule_OciLine.hpp"
 #include "Rule_OciContLine.hpp"
@@ -77,6 +79,7 @@ static map<string, pParser> buildParserMap(void)
   map<string, pParser> parsers;
 
   parsers["fhl4"] = (pParser)Rule_FHL4::parse;
+  parsers["housebillgroup"] = (pParser)Rule_HouseBillGroup::parse;
   parsers["messageheader"] = (pParser)Rule_MessageHeader::parse;
   parsers["masterbillline"] = (pParser)Rule_MasterBillLine::parse;
   parsers["masterairwaybillnumber"] = (pParser)Rule_MasterAirwayBillNumber::parse;
@@ -99,6 +102,7 @@ static map<string, pParser> buildParserMap(void)
   parsers["descriptioncontline"] = (pParser)Rule_DescriptionContLine::parse;
   parsers["htsblock"] = (pParser)Rule_HtsBlock::parse;
   parsers["htsline"] = (pParser)Rule_HtsLine::parse;
+  parsers["htscontline"] = (pParser)Rule_HtsContLine::parse;
   parsers["ociblock"] = (pParser)Rule_OciBlock::parse;
   parsers["ociline"] = (pParser)Rule_OciLine::parse;
   parsers["ocicontline"] = (pParser)Rule_OciContLine::parse;

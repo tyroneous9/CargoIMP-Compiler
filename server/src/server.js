@@ -1,26 +1,26 @@
 const express = require('express');
-const path = require('path');
 const { execFile } = require('child_process');
+const paths = require('../config/paths');
 
 const app = express();
 const port = process.env.PORT || 3000;
-const cppDir = path.resolve(__dirname, '..', '..', 'cpp');
+const cppDir = paths.CPP_DIR;
 
 const parserConfigs = {
   ffm8: {
     label: 'FFM/8',
-    binary: path.join(cppDir, 'build', 'parser_ffm_json'),
-    input: path.join(cppDir, 'data', 'input_tests', 'ffm_test.txt'),
+    binary: paths.PARSER_BINARIES.ffm8,
+    input: paths.SAMPLE_INPUTS.ffm8,
   },
   fwb17: {
     label: 'FWB/17',
-    binary: path.join(cppDir, 'build', 'parser_fwb17_json'),
-    input: path.join(cppDir, 'data', 'input_tests', 'fwb17_test.txt'),
+    binary: paths.PARSER_BINARIES.fwb17,
+    input: paths.SAMPLE_INPUTS.fwb17,
   },
   fhl4: {
     label: 'FHL/4',
-    binary: path.join(cppDir, 'build', 'parser_fhl4_json'),
-    input: path.join(cppDir, 'data', 'input_tests', 'fhl4_test.txt'),
+    binary: paths.PARSER_BINARIES.fhl4,
+    input: paths.SAMPLE_INPUTS.fhl4,
   },
 };
 

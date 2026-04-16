@@ -14,6 +14,21 @@ struct Fhl4PartyData
   std::vector<std::string> continuations;
 };
 
+// Holds extracted data for one house-bill group (HBS + TXT + HTS + OCI).
+struct Fhl4HouseData
+{
+  std::string houseBillLine;
+  std::string houseOriginAndDestination;
+  std::string houseWaybillNumber;
+  std::string housePieceCount;
+  std::string houseWeightUnit;
+  std::string houseWeight;
+  std::string descriptionTagLine;
+  std::vector<std::string> descriptionContinuations;
+  std::vector<std::string> htsLines;
+  std::vector<std::string> ociLines;
+};
+
 class Fhl4JsonExtractor : public Visitor
 {
 public:
@@ -29,6 +44,7 @@ public:
   void* visit(const Rule_MasterPieceCount* rule);
   void* visit(const Rule_MasterWeightUnit* rule);
   void* visit(const Rule_MasterWeight* rule);
+  void* visit(const Rule_HouseBillGroup* rule);
   void* visit(const Rule_HouseBillLine* rule);
   void* visit(const Rule_HouseOriginAndDestination* rule);
   void* visit(const Rule_HouseWaybillNumber* rule);
@@ -40,6 +56,7 @@ public:
   void* visit(const Rule_DescriptionContLine* rule);
   void* visit(const Rule_HtsBlock* rule);
   void* visit(const Rule_HtsLine* rule);
+  void* visit(const Rule_HtsContLine* rule);
   void* visit(const Rule_OciBlock* rule);
   void* visit(const Rule_OciLine* rule);
   void* visit(const Rule_OciContLine* rule);
@@ -69,16 +86,12 @@ private:
   std::string masterPieceCount;
   std::string masterWeightUnit;
   std::string masterWeight;
-  std::string houseBillLine;
-  std::string houseOriginAndDestination;
-  std::string houseWaybillNumber;
-  std::string housePieceCount;
-  std::string houseWeightUnit;
-  std::string houseWeight;
-  std::string descriptionTagLine;
-  std::vector<std::string> descriptionContinuations;
-  std::vector<std::string> htsLines;
-  std::vector<std::string> ociLines;
+
+  // Accumulator for the house-bill group currently being parsed.
+  Fhl4HouseData currentHouse;
+  // All house-bill groups in document order.
+  std::vector<Fhl4HouseData> houseBills;
+
   Fhl4PartyData shipper;
   Fhl4PartyData consignee;
   std::string cvdLine;
@@ -88,6 +101,7 @@ private:
   std::string trimTrailing(const std::string& input) const;
   std::string jsonArray(const std::vector<std::string>& items) const;
   std::string jsonParty(const Fhl4PartyData& p, const std::string& tagKey) const;
+  std::string jsonHouse(const Fhl4HouseData& h) const;
   void printJson() const;
 };
 

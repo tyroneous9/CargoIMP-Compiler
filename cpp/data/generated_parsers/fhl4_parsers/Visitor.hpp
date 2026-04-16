@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Tue Apr 14 23:36:00 CDT 2026
+ * Produced : Wed Apr 15 00:18:54 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -12,6 +12,7 @@
 #define visitor_hpp
 
 class Rule_FHL4;
+class Rule_HouseBillGroup;
 class Rule_MessageHeader;
 class Rule_MasterBillLine;
 class Rule_MasterAirwayBillNumber;
@@ -34,6 +35,7 @@ class Rule_DescriptionTagLine;
 class Rule_DescriptionContLine;
 class Rule_HtsBlock;
 class Rule_HtsLine;
+class Rule_HtsContLine;
 class Rule_OciBlock;
 class Rule_OciLine;
 class Rule_OciContLine;
@@ -58,6 +60,7 @@ class Visitor
 {
 public:
   virtual void* visit(const Rule_FHL4* rule) = 0;
+  virtual void* visit(const Rule_HouseBillGroup* rule) = 0;
   virtual void* visit(const Rule_MessageHeader* rule) = 0;
   virtual void* visit(const Rule_MasterBillLine* rule) = 0;
   virtual void* visit(const Rule_MasterAirwayBillNumber* rule) = 0;
@@ -80,6 +83,7 @@ public:
   virtual void* visit(const Rule_DescriptionContLine* rule) = 0;
   virtual void* visit(const Rule_HtsBlock* rule) = 0;
   virtual void* visit(const Rule_HtsLine* rule) = 0;
+  virtual void* visit(const Rule_HtsContLine* rule) = 0;
   virtual void* visit(const Rule_OciBlock* rule) = 0;
   virtual void* visit(const Rule_OciLine* rule) = 0;
   virtual void* visit(const Rule_OciContLine* rule) = 0;

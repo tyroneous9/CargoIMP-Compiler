@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Tue Apr 14 23:36:00 CDT 2026
+ * Produced : Wed Apr 15 00:18:54 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -23,6 +23,7 @@ public:
   XmlDisplayer() : terminal(true) {}
 
   void* visit(const Rule_FHL4* rule);
+  void* visit(const Rule_HouseBillGroup* rule);
   void* visit(const Rule_MessageHeader* rule);
   void* visit(const Rule_MasterBillLine* rule);
   void* visit(const Rule_MasterAirwayBillNumber* rule);
@@ -45,6 +46,7 @@ public:
   void* visit(const Rule_DescriptionContLine* rule);
   void* visit(const Rule_HtsBlock* rule);
   void* visit(const Rule_HtsLine* rule);
+  void* visit(const Rule_HtsContLine* rule);
   void* visit(const Rule_OciBlock* rule);
   void* visit(const Rule_OciLine* rule);
   void* visit(const Rule_OciContLine* rule);
