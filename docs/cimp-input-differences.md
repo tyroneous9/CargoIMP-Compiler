@@ -217,7 +217,7 @@ This section records observed `FFM/8` input variants and compatibility decisions
 - Reasoning: Double-leading-slash qualifier rows encode overflow/continuation qualifier content; supporting empty first segments captures these entries correctly.
 
 ### Grammar compatibility changes
-- `cpp/data/grammars/ffm_grammar.abnf`
+- `cpp/data/grammars/ffm8_grammar.abnf`
 - Key compatibility rules currently include:
   - `FFM8` with repeated route lines: `1*(RouteLine EOL)`
   - `RouteLine` alternatives for both `//` and `/NIL/` patterns

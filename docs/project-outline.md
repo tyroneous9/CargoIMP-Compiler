@@ -15,7 +15,7 @@ Method:
 4. pipeline json into backend. a front end may not be needed in this case unless input is necessary.
 
 Test inputs:
-./build/parser_ffm_json -file data/input_tests/ffm_1.txt
+./build/parser_ffm8_json -file data/input_tests/ffm8_1.txt
 ./build/parser_fwb17_json -file data/input_tests/fwb17_1.txt
 ./build/parser_fhl4_json -file data/input_tests/fhl4_1.txt
 
@@ -50,4 +50,4 @@ preprocessing email: edit preprocessing to be more robust
 
 guard against IMAP/network failures. consider polling algorithm--should verify outputs after creation
 
-stderr exists, but exit status can be good
+this script does too much at once. move the parsing functionality into another file. this script should focus on extracting emails and parsing the header to determine the CIMP message type. once the email is extracted, append each one 
