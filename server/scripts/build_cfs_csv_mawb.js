@@ -1,12 +1,9 @@
 #!/usr/bin/env node
 /**
- * build_cfs_csv.js
+ * build_cfs_csv_mawb.js
  *
  * Generates CFS tracking CSV from parsed CIMP email outputs.
- *
- * Row granularity:
- *   - MAWBs with FHL → one row per HAWB (using house bill weight/pieces)
- *   - MAWBs with FWB but no FHL → one row per MAWB
+ * One row per MAWB. HAWB column excluded.
  *
  * FFM merge rules:
  *   - Same (flightNum, flightDate): union all ULDs, take POB from T-value in summary
@@ -21,12 +18,12 @@ const fs = require('fs');
 const path = require('path');
 const { PARSED_DIR, OUTPUTS_DIR } = require('../config/paths');
 
-const OUTPUT_CSV = path.join(OUTPUTS_DIR, 'temp', 'CFS - output.csv');
+const OUTPUT_CSV = path.join(OUTPUTS_DIR, 'temp', 'CFS - output-mawb.csv');
 
-// ── CSV header (matches CFS - temp.csv column order) ─────────────────────────
+// ── CSV header ────────────────────────────────────────────────────────────────
 
 const HEADERS = [
-  'FLIGHT#', 'ATA', 'LFD', 'MAWB', 'HAWB', 'Weight', 'TTL PCS', 'POB',
+  'FLIGHT#', 'ATA', 'LFD', 'MAWB', 'Weight', 'TTL PCS', 'POB',
   'PCS RCVD', 'PMC#', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
   'P3', 'Trucking/Skid $', 'Storage', 'ISC',
   'Tolead→NCA\nRCF MESSAGE', 'Tolead→NCA\nNFD MESSAGE', 'Tolead→NCA\nDLV MESSAGE',
@@ -42,29 +39,22 @@ const HEADERS = [
 
 const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 
-/**
- * Parse "DDMON" or "DDMONHHMM" → Date (year inferred from current year).
- * Returns null if not parseable.
- */
 function parseDDMON(s) {
   const m = s && s.match(/^(\d{2})([A-Z]{3})/);
   if (!m) return null;
   const day = parseInt(m[1], 10);
   const mon = MONTHS.indexOf(m[2]);
   if (mon < 0) return null;
-  // Infer year: if the month is ahead of the current month by more than 6, assume last year
   const now = new Date();
   let year = now.getFullYear();
   if (mon > now.getMonth() + 6) year--;
   return new Date(year, mon, day);
 }
 
-/** Format Date → "DDMON" */
 function formatDDMON(d) {
   return String(d.getDate()).padStart(2, '0') + MONTHS[d.getMonth()];
 }
 
-/** Add N calendar days to a Date, return new Date */
 function addDays(d, n) {
   return new Date(d.getTime() + n * 86400000);
 }
@@ -73,14 +63,13 @@ function addDays(d, n) {
 
 /**
  * Parse ShipmentSummary — two known formats:
- *   Format 1 (no ULD split):  "T121K2159MC9.37"   → total=121
- *   Format 2 (split ULDs):    "S19K490.2MC2.28T75" → piecesInUld=19, total=75
- * Returns { piecesInUld, totalOnMawb }
+ *   Format 1 (no ULD split):  "T121K2159MC9.37"    → total=121
+ *   Format 2 (split ULDs):    "S19K490.2MC2.28T75"  → piecesInUld=19, total=75
  */
 function parseShipmentSummary(s) {
-  const sIn  = s.match(/^S(\d+)/);    // format 2: pieces in this ULD
-  const tEnd = s.match(/T(\d+)$/);    // format 2: MAWB total at end
-  const tStr = s.match(/^T(\d+)/);    // format 1: total at start
+  const sIn  = s.match(/^S(\d+)/);
+  const tEnd = s.match(/T(\d+)$/);
+  const tStr = s.match(/^T(\d+)/);
   return {
     piecesInUld: sIn  ? parseInt(sIn[1], 10)  : tStr ? parseInt(tStr[1], 10) : null,
     totalOnMawb: tEnd ? parseInt(tEnd[1], 10) : tStr ? parseInt(tStr[1], 10) : null,
@@ -103,29 +92,13 @@ function csvRow(fields) {
 
 // ── Build indices ─────────────────────────────────────────────────────────────
 
-/**
- * ffmIndex: Map<mawb, Map<flightKey, {
- *   maxUid, flightNum, ata, lfd, pmcs: Map<uldKey, {uid, pob}> }>>
- * where flightKey = "FLIGHTNUM/DATE"
- */
-const ffmIndex  = new Map();
-
-/**
- * fwbIndex: Map<mawb, { uid, weight, weightUnit, pieces, consignee }>
- * Keeps the record with the highest UID (latest email = most current).
- */
-const fwbIndex  = new Map();
-
-/**
- * fhlIndex: Map<mawb, { uid, masterPieces, masterWeight, masterWeightUnit,
- *                        consignee, houseBills[] }>
- * Keeps the record with the highest UID.
- */
-const fhlIndex  = new Map();
+const ffmIndex = new Map();  // mawb → Map<flightKey, { maxUid, flightNum, ata, lfd, pmcs: Map<uldKey, {uid, pob}> }>
+const fwbIndex = new Map();  // mawb → { uid, weight, weightUnit, pieces, consignee }
+const fhlIndex = new Map();  // mawb → { uid, masterPieces, masterWeight, masterWeightUnit, consignee }
 
 const filenames = fs.readdirSync(PARSED_DIR)
   .filter(f => f.endsWith('.json'))
-  .sort();  // deterministic order
+  .sort();
 
 for (const filename of filenames) {
   const doc = JSON.parse(fs.readFileSync(path.join(PARSED_DIR, filename), 'utf8'));
@@ -142,18 +115,16 @@ for (const filename of filenames) {
     const flightNum = parts[1] || '';
     const datePart  = parts[2] || '';
 
-    // LFD = departure date + 2 days
     const depDate   = parseDDMON(datePart);
     const lfd       = depDate ? formatDDMON(addDays(depDate, 2)) : '';
 
-    // ATA = ORD arrival timestamp from RouteLine
     let ata = '';
     for (const seg of (fields.RouteLine || '').split('\n')) {
       const m = seg.match(/^ORD\/\/(\d{2}[A-Z]{3}\d{4})/);
       if (m) { ata = m[1]; break; }
     }
 
-    const flightKey = `${flightNum}/${datePart.slice(0, 5)}`; // e.g. "NH8422/06APR"
+    const flightKey = `${flightNum}/${datePart.slice(0, 5)}`;
 
     for (const [uldKey, uld] of Object.entries(fields.ULDs || {})) {
       for (const awb of (uld.AWBs || [])) {
@@ -166,15 +137,11 @@ for (const filename of filenames) {
         const flightMap = ffmIndex.get(mawb);
 
         if (!flightMap.has(flightKey)) {
-          flightMap.set(flightKey, {
-            maxUid: uid, flightNum, ata, lfd,
-            pmcs: new Map(),
-          });
+          flightMap.set(flightKey, { maxUid: uid, flightNum, ata, lfd, pmcs: new Map() });
         }
         const entry = flightMap.get(flightKey);
         if (uid > entry.maxUid) entry.maxUid = uid;
 
-        // For each ULD, keep highest-UID record (true revision case)
         const uldEntry = entry.pmcs.get(uldKey);
         if (!uldEntry || uid > uldEntry.uid) {
           entry.pmcs.set(uldKey, { uid, pob: summary.totalOnMawb ?? summary.piecesInUld });
@@ -189,8 +156,7 @@ for (const filename of filenames) {
     const existing = fwbIndex.get(mawb);
     if (existing && uid <= existing.uid) continue;
 
-    const rawName   = fields.Consignee?.NameLine || '';
-    const consignee = rawName.replace(/^NAM\//, '').trim();
+    const consignee = (fields.Consignee?.NameLine || '').replace(/^NAM\//, '').trim();
 
     fwbIndex.set(mawb, {
       uid,
@@ -207,39 +173,31 @@ for (const filename of filenames) {
     const existing = fhlIndex.get(mawb);
     if (existing && uid <= existing.uid) continue;
 
-    const rawCne   = fields.Consignee?.ConsigneeLine || '';
-    const consignee = rawCne.replace(/^CNE\//, '').trim();
+    const consignee = (fields.Consignee?.ConsigneeLine || '').replace(/^CNE\//, '').trim();
 
     fhlIndex.set(mawb, {
       uid,
-      masterPieces:     fields.MasterPieceCount  || '',
-      masterWeight:     fields.MasterWeight      || '',
-      masterWeightUnit: fields.MasterWeightUnit  || 'K',
+      masterPieces:     fields.MasterPieceCount || '',
+      masterWeight:     fields.MasterWeight     || '',
+      masterWeightUnit: fields.MasterWeightUnit || 'K',
       consignee,
-      houseBills: fields.HouseBills || [],
     });
   }
 }
 
 // ── Resolve best FFM record per MAWB ─────────────────────────────────────────
 
-/**
- * For each MAWB in ffmIndex, pick the flight group with the highest maxUid,
- * then aggregate all its ULDs.
- */
 function resolveFfm(mawb) {
   const flightMap = ffmIndex.get(mawb);
   if (!flightMap) return null;
 
-  // Pick the flight group with the highest maxUid
   let best = null;
   for (const [, entry] of flightMap) {
     if (!best || entry.maxUid > best.maxUid) best = entry;
   }
   if (!best) return null;
 
-  const pmcs = [...best.pmcs.keys()].filter(k => k !== '');
-  // POB = value from any ULD entry (T-value is MAWB-total, same across ULDs for same AWB)
+  const pmcs    = [...best.pmcs.keys()].filter(k => k !== '');
   const pobEntry = [...best.pmcs.values()].find(v => v.pob != null);
 
   return {
@@ -251,11 +209,14 @@ function resolveFfm(mawb) {
   };
 }
 
-// ── Generate rows ─────────────────────────────────────────────────────────────
+// ── Generate rows (one per MAWB) ──────────────────────────────────────────────
 
 const rows = [];
 
-// All MAWBs: FHL ∪ FWB (these are shipments Tolead is acting as agent for)
+// col 0–6 filled, col 7 blank (PCS RCVD), col 8 filled, col 9 blank (PMC LOC),
+// col 10 filled, col 11 blank (AMS), cols 12–32 blank (21 empty)
+const TRAILING_EMPTY = HEADERS.length - 12;
+
 const allMawbs = new Set([...fhlIndex.keys(), ...fwbIndex.keys()]);
 
 for (const mawb of [...allMawbs].sort()) {
@@ -263,50 +224,29 @@ for (const mawb of [...allMawbs].sort()) {
   const fwb = fwbIndex.get(mawb);
   const fhl = fhlIndex.get(mawb);
 
-  const flight     = ffm?.flightNum ?? '';
-  const ata        = ffm?.ata       ?? '';
-  const lfd        = ffm?.lfd       ?? '';
-  const pmcs       = ffm?.pmcs      ?? '';
-  const pob        = ffm?.pob       ?? '';
+  const flight    = ffm?.flightNum ?? '';
+  const ata       = ffm?.ata       ?? '';
+  const lfd       = ffm?.lfd       ?? '';
+  const pmcs      = ffm?.pmcs      ?? '';
+  const pob       = ffm?.pob       ?? '';
 
-  // Consignee: prefer FWB (most complete), fall back to FHL
-  const consignee  = fwb?.consignee || fhl?.consignee || '';
+  // Consignee: FWB preferred (more complete), fall back to FHL
+  const consignee = fwb?.consignee || fhl?.consignee || '';
 
-  // Master-level weight/pieces from FWB (most authoritative), fallback to FHL
-  const mawbWeight = fwb
+  // Weight/pieces: FWB is authoritative (item-level counts); FHL master as fallback
+  const weight = fwb
     ? `${fwb.weight}${fwb.weightUnit}`
     : fhl ? `${fhl.masterWeight}${fhl.masterWeightUnit}` : '';
-  const mawbPieces = fwb?.pieces || fhl?.masterPieces || '';
+  const pieces = fwb?.pieces || fhl?.masterPieces || '';
 
-  const emptyFields = new Array(HEADERS.length - 13).fill('');
-
-  if (fhl && fhl.houseBills.length > 0) {
-    // One row per HAWB
-    for (const hb of fhl.houseBills) {
-      const hawb        = hb.HouseWaybillNumber || '';
-      const houseWeight = hb.HouseWeight
-        ? `${hb.HouseWeight}${hb.HouseWeightUnit || fhl.masterWeightUnit || 'K'}`
-        : mawbWeight;
-      const housePieces = hb.HousePieceCount || mawbPieces;
-
-      rows.push([
-        flight, ata, lfd, mawb, hawb,
-        houseWeight, housePieces, pob,
-        '',    // PCS RCVD
-        pmcs, '', consignee, '',
-        ...emptyFields,
-      ]);
-    }
-  } else {
-    // MAWB-only row (no FHL received)
-    rows.push([
-      flight, ata, lfd, mawb, '',
-      mawbWeight, mawbPieces, pob,
-      '',    // PCS RCVD
-      pmcs, '', consignee, '',
-      ...emptyFields,
-    ]);
-  }
+  rows.push([
+    flight, ata, lfd, mawb,
+    weight, pieces, pob,
+    '',       // PCS RCVD — human input
+    pmcs, '', // PMC#, PMC LOCATION
+    consignee, '',  // Consignee, AMS STATUS
+    ...new Array(TRAILING_EMPTY).fill(''),
+  ]);
 }
 
 // ── Write CSV ─────────────────────────────────────────────────────────────────
@@ -315,11 +255,5 @@ const lines = [csvRow(HEADERS), ...rows.map(csvRow)];
 fs.writeFileSync(OUTPUT_CSV, lines.join('\n') + '\n', 'utf8');
 
 console.log(`Written ${rows.length} rows to ${OUTPUT_CSV}`);
-
-// Quick summary
-const hawbRows  = rows.filter(r => r[4] !== '').length;
-const mawbRows  = rows.length - hawbRows;
-const noFfm     = rows.filter(r => r[0] === '').length;
-console.log(`  HAWB rows: ${hawbRows}`);
-console.log(`  MAWB-only rows: ${mawbRows}`);
+const noFfm = rows.filter(r => r[0] === '').length;
 console.log(`  Rows with no FFM match (no flight data): ${noFfm}`);

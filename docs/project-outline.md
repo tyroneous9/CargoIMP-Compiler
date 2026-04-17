@@ -56,8 +56,7 @@ given the email outputs generated in server/date/outputs/emails, create a script
 
 support for FFM/4, FFM/5, FHL/5
 
-implement #find_missing_cfs.js:
-parse csv for MAWB field. iterate through all files in server/data/outputs/parsed to generate a list of file paths to output files which have a matching MAWB, stored in server/data/outputs/temp/missing_cfs.json
+
 
 CSV Q&A:
 Column questions:
@@ -69,5 +68,11 @@ p3, trucking, storage, isc - leave empty
 all message/milestones - leave empty
 Grouping:
 One row per MAWB or per HAWB? ideally per HAWB. review FHL messages to see if you are able to deduce the flight context (especially the ULD identifier). This is the most crucial step, and if you are unable to deduce it, suggest other approaches to correctly create one row per HAWB.
+!!! Each MAWB can be split onto multiple PMCs, each HAWB can also be split onto multiple PMCs
 Email send order:
 FFM, FWB, FHL
+Filter out out of scope shipments (WRONG DESTINATION, NON-ORD)
+Linking House to PMC by weight/piece count deduction is fundamentally impossible because there are infinite possibilities. Consider this example: Given total weight of HAWB X = 3813 kg, distributed across 7 ULDs whose individual allocations are 4286 kg, 59 kg, 295 kg... — determine how many kg of HAWB X are in each ULD.
+OPTIONS for linking:
+1. investigate working software from NCA.
+2. scan HAWB which an existing PMC mapping.
