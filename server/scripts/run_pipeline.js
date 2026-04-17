@@ -46,18 +46,14 @@ function todayLogPath() {
 }
 
 /**
- * Write a line to the current daily log file AND to the console stream.
- * @param {'log'|'error'} level
+ * Write a line to the current daily log file AND to stderr.
+ * @param {'log'|'warn'|'error'} level
  * @param {string} text
  */
 function log(level, text) {
   const ts = new Date().toISOString();
   const line = `${ts} [${level.toUpperCase()}] ${text}`;
-  if (level === 'error') {
-    process.stderr.write(line + '\n');
-  } else {
-    process.stdout.write(line + '\n');
-  }
+  process.stderr.write(line + '\n');
   fs.appendFileSync(todayLogPath(), line + '\n', 'utf8');
 }
 
@@ -88,15 +84,18 @@ function runScript(scriptName, args = []) {
   const stdout = result.stdout || '';
   const stderr = (result.stderr || '').trim();
 
-  // Echo stdout signals (Extracted:/Parsed: lines) to our stdout
-  if (stdout) process.stdout.write(stdout);
-
-  // Write script's stderr to log file + our stderr
-  if (stderr) {
-    const stderrLabel = `${label} stderr`;
-    for (const line of stderr.split('\n')) {
-      if (line) log('log', `${stderrLabel}: ${line}`);
+  // Echo stdout signals (Extracted:/Parsed: lines) to our stderr and log file
+  if (stdout) {
+    for (const line of stdout.split('\n')) {
+      if (line) log('log', `${label} ${line}`);
     }
+  }
+
+  // Child scripts use logger.js which writes pre-formatted timestamped lines to
+  // stderr. Append them directly to the log file and forward to our stderr.
+  if (stderr) {
+    process.stderr.write(stderr + '\n');
+    fs.appendFileSync(todayLogPath(), stderr + '\n', 'utf8');
   }
 
   if (result.status !== 0) {

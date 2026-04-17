@@ -25,6 +25,7 @@ const fs   = require('fs');
 const path = require('path');
 const { auth: googleAuth, sheets: sheetsFactory } = require('@googleapis/sheets');
 const { PARSED_TABLES_DIR, ENV_FILE } = require('../config/paths');
+const { log } = require('../config/logger');
 
 // ── Load environment ──────────────────────────────────────────────────────────
 
@@ -33,7 +34,7 @@ require('dotenv').config({ path: ENV_FILE });
 const CREDENTIALS_FILE = process.env.GOOGLE_SERVICE_ACCOUNT_FILE;
 
 if (!CREDENTIALS_FILE) {
-  console.error('GOOGLE_SERVICE_ACCOUNT_FILE is not set in .env');
+  log('error', 'GOOGLE_SERVICE_ACCOUNT_FILE is not set in .env');
   process.exit(1);
 }
 
@@ -132,20 +133,20 @@ async function uploadTable(key, config, sheetsClient) {
   const csvPath = path.join(PARSED_TABLES_DIR, config.file);
 
   if (!fs.existsSync(csvPath)) {
-    console.warn(`[${key}] File not found, skipping: ${csvPath}`);
+    log('warn', `[${key}] File not found, skipping: ${csvPath}`);
     return;
   }
 
   const values = parseCsv(fs.readFileSync(csvPath, 'utf8'));
   const sheetRef = `'${config.sheetName}'`;
 
-  console.log(`[${key}] Clearing ${sheetRef}!${config.clearRange} …`);
+  log('log', `[${key}] Clearing ${sheetRef}!${config.clearRange} …`);
   await sheetsClient.spreadsheets.values.clear({
     spreadsheetId: config.spreadsheetId,
     range:         `${sheetRef}!${config.clearRange}`,
   });
 
-  console.log(`[${key}] Writing ${values.length} rows → ${sheetRef}!${config.writeRange} …`);
+  log('log', `[${key}] Writing ${values.length} rows → ${sheetRef}!${config.writeRange} …`);
   await sheetsClient.spreadsheets.values.update({
     spreadsheetId:     config.spreadsheetId,
     range:             `${sheetRef}!${config.writeRange}`,
@@ -153,7 +154,7 @@ async function uploadTable(key, config, sheetsClient) {
     requestBody:       { values },
   });
 
-  console.log(`[${key}] Done — ${values.length - 1} data rows uploaded.`);
+  log('log', `[${key}] Done — ${values.length - 1} data rows uploaded.`);
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
@@ -168,7 +169,7 @@ async function main() {
   for (const key of keys) {
     const config = TABLE_MAP[key];
     if (!config) {
-      console.error(`Unknown table key "${key}". Available: ${Object.keys(TABLE_MAP).join(', ')}`);
+      log('error', `Unknown table key "${key}". Available: ${Object.keys(TABLE_MAP).join(', ')}`);
       process.exit(1);
     }
     await uploadTable(key, config, sheetsClient);
@@ -176,6 +177,6 @@ async function main() {
 }
 
 main().catch(err => {
-  console.error('Upload failed:', err.message);
+  log('error', `Upload failed: ${err.message}`);
   process.exit(1);
 });

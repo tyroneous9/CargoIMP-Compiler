@@ -17,6 +17,7 @@
 const fs = require('fs');
 const path = require('path');
 const { PARSED_EMAILS_DIR, PARSED_TABLES_DIR } = require('../config/paths');
+const { log } = require('../config/logger');
 
 const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, 'CFS - output-mawb.csv');
 
@@ -255,6 +256,6 @@ const lines = [csvRow(HEADERS), ...rows.map(csvRow)];
 fs.mkdirSync(path.dirname(OUTPUT_CSV), { recursive: true });
 fs.writeFileSync(OUTPUT_CSV, lines.join('\n') + '\n', 'utf8');
 
-console.log(`Written ${rows.length} rows to ${OUTPUT_CSV}`);
+log('log', `Written ${rows.length} rows to ${path.basename(OUTPUT_CSV)}`);
 const noFfm = rows.filter(r => r[0] === '').length;
-console.log(`  Rows with no FFM match (no flight data): ${noFfm}`);
+log('log', `  Rows with no FFM match (no flight data): ${noFfm}`);

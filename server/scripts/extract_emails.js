@@ -8,6 +8,7 @@ const path = require('path');
 const { ImapFlow } = require('imapflow');
 const { simpleParser } = require('mailparser');
 const paths = require('../config/paths');
+const { log } = require('../config/logger');
 
 require('dotenv').config({ path: paths.ENV_FILE });
 
@@ -126,11 +127,11 @@ async function main() {
     }
   } finally {
     await client.logout().catch(() => {});
-    process.stderr.write('Email extraction finished\n');
+    log('log', 'extraction finished');
   }
 }
 
 main().catch((error) => {
-  console.error(`extractor failed: ${error.message}`);
+  log('error', `extractor failed: ${error.message}`);
   process.exitCode = 1;
 });
