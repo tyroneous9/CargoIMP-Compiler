@@ -10,6 +10,7 @@
     "poll:imap": "node scripts/poll_and_parse_emails.js"
   },
   "dependencies": {
+    "@googleapis/sheets": "^13.0.1",
     "dotenv": "^16.6.1",
     "express": "^4.21.2",
     "imapflow": "^1.1.0",

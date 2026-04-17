@@ -15,8 +15,8 @@ function main() {
     ? fs.readdirSync(paths.EMAILS_DIR).filter((f) => f.endsWith('.json')).sort()
     : [];
 
-  const parsedFiles = fs.existsSync(paths.PARSED_DIR)
-    ? new Set(fs.readdirSync(paths.PARSED_DIR).filter((f) => f.endsWith('.json')))
+  const parsedFiles = fs.existsSync(paths.PARSED_EMAILS_DIR)
+    ? new Set(fs.readdirSync(paths.PARSED_EMAILS_DIR).filter((f) => f.endsWith('.json')))
     : new Set();
 
   const summaryRecords = [];
@@ -29,7 +29,7 @@ function main() {
     // emails: INBOX-uid-<N>.json → parsed: parsed-INBOX-uid-<N>.json
     const parsedFile = `parsed-${emailFile}`;
     const parsed = parsedFiles.has(parsedFile)
-      ? loadJsonFile(path.join(paths.PARSED_DIR, parsedFile))
+      ? loadJsonFile(path.join(paths.PARSED_EMAILS_DIR, parsedFile))
       : null;
 
     const stderr = parsed?.stderr ?? '';

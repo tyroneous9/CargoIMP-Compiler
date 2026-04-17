@@ -22,9 +22,9 @@
 
 const fs = require('fs');
 const path = require('path');
-const { PARSED_DIR, OUTPUTS_DIR } = require('../config/paths');
+const { PARSED_EMAILS_DIR, PARSED_TABLES_DIR } = require('../config/paths');
 
-const OUTPUT_CSV = path.join(OUTPUTS_DIR, 'temp', 'CFS - output-uld.csv');
+const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, 'CFS - output-uld.csv');
 
 // ── CSV header ────────────────────────────────────────────────────────────────
 
@@ -133,12 +133,12 @@ const fwbIndex = new Map();
 /** fhlIndex: Map<mawb, { uid, masterPieces, masterWeight, masterWeightUnit, consignee }> */
 const fhlIndex = new Map();
 
-const filenames = fs.readdirSync(PARSED_DIR)
+const filenames = fs.readdirSync(PARSED_EMAILS_DIR)
   .filter(f => f.endsWith('.json'))
   .sort();
 
 for (const filename of filenames) {
-  const doc = JSON.parse(fs.readFileSync(path.join(PARSED_DIR, filename), 'utf8'));
+  const doc = JSON.parse(fs.readFileSync(path.join(PARSED_EMAILS_DIR, filename), 'utf8'));
   if (doc.status !== 'ok') continue;
 
   const uidMatch = filename.match(/uid-(\d+)/);
@@ -306,6 +306,7 @@ for (const mawb of [...allMawbs].sort()) {
 // ── Write CSV ─────────────────────────────────────────────────────────────────
 
 const lines = [csvRow(HEADERS), ...rows.map(csvRow)];
+fs.mkdirSync(path.dirname(OUTPUT_CSV), { recursive: true });
 fs.writeFileSync(OUTPUT_CSV, lines.join('\n') + '\n', 'utf8');
 
 console.log(`Written ${rows.length} rows to ${OUTPUT_CSV}`);

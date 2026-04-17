@@ -76,3 +76,17 @@ Linking House to PMC by weight/piece count deduction is fundamentally impossible
 OPTIONS for linking:
 1. investigate working software from NCA.
 2. scan HAWB which an existing PMC mapping.
+
+COMPLETE POLLER SCRIPT:
+create a script which completes the following steps:
+1. initializes
+2. repeats at a time interval "EMAIL_POLL_INTERVAL_MS" set in .env
+3. runs #extract_emails.js
+4. runs #parse_extracted_emails.js
+5. runs #build_cfs_csv_mawb and #build_cfs_csv_uld
+6. update the corresponding existing google sheets (one for mawb sheet, one for uld sheet)
+
+CONFIGURING SHEETS:
+1. should i append or overwrite? the use case of the sheet is to allow high uptime human input to both read and write to the sheet. suggestion: create one sheet for human input which is appended to, and create another sheet which is overwritten every run.
+2. in the #TABLE_MAP, how do i decide on the clearRange and writeRange?
+3. describe my scope of modification on the sheet by using the api. for example, would i be able to combine adjacent ULD cells to show a single ULD, which is more human readable?

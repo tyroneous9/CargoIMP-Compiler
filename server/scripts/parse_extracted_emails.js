@@ -9,7 +9,7 @@ const { spawnSync } = require('child_process');
 const paths = require('../config/paths');
 
 const EMAILS_DIR = paths.EMAILS_DIR;
-const PARSED_DIR = paths.PARSED_DIR;
+const PARSED_EMAILS_DIR = paths.PARSED_EMAILS_DIR;
 
 const PARSER_BINARIES = {
   ffm: paths.PARSER_BINARIES.ffm,
@@ -17,7 +17,7 @@ const PARSER_BINARIES = {
   fhl: paths.PARSER_BINARIES.fhl,
 };
 
-fs.mkdirSync(PARSED_DIR, { recursive: true });
+fs.mkdirSync(PARSED_EMAILS_DIR, { recursive: true });
 
 function buildParsedFilename(mailbox, uid) {
   return `parsed-${mailbox}-uid-${uid}.json`;
@@ -76,7 +76,7 @@ function main() {
       continue;
     }
     const parsedFilename = buildParsedFilename(mailbox, uid);
-    const parsedPath = path.join(PARSED_DIR, parsedFilename);
+    const parsedPath = path.join(PARSED_EMAILS_DIR, parsedFilename);
     if (fs.existsSync(parsedPath)) {
       process.stdout.write(`Already parsed: ${parsedFilename}\n`);
       continue;
