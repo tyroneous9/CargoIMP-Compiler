@@ -22,14 +22,15 @@
 const fs = require('fs');
 const path = require('path');
 const { PARSED_EMAILS_DIR, PARSED_TABLES_DIR } = require('../config/paths');
+const { log } = require('../config/logger');
 
-const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, 'CFS - output.csv');
+const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, 'CFS_hawb.csv');
 
 // ── CSV header (matches CFS - temp.csv column order) ─────────────────────────
 
 const HEADERS = [
-  'FLIGHT#', 'ATA', 'LFD', 'MAWB', 'HAWB', 'Weight', 'TTL PCS', 'POB',
-  'PCS RCVD', 'PMC#', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
+  'FLIGHT#', 'PMC#', 'MAWB#', 'HAWB#', 'ATA', 'LFD', 'Weight', 'TTL PCS', 'POB',
+  'PCS RCVD', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
   'P3', 'Trucking/Skid $', 'Storage', 'ISC',
   'Tolead→NCA\nRCF MESSAGE', 'Tolead→NCA\nNFD MESSAGE', 'Tolead→NCA\nDLV MESSAGE',
   'Tolead→Customer\nCargo Arrive Email', 'Tolead→Customer\nCargo Ready Email',
@@ -124,6 +125,8 @@ const fwbIndex  = new Map();
  * Keeps the record with the highest UID.
  */
 const fhlIndex  = new Map();
+
+fs.mkdirSync(PARSED_EMAILS_DIR, { recursive: true });
 
 const filenames = fs.readdirSync(PARSED_EMAILS_DIR)
   .filter(f => f.endsWith('.json'))
@@ -223,33 +226,45 @@ for (const filename of filenames) {
   }
 }
 
-// ── Resolve best FFM record per MAWB ─────────────────────────────────────────
+// ── Resolve aggregated FFM records per MAWB ──────────────────────────────────
 
 /**
- * For each MAWB in ffmIndex, pick the flight group with the highest maxUid,
- * then aggregate all its ULDs.
+ * For each MAWB, aggregate all flight groups so one row can show multiple
+ * flights and multiple PMCs when HAWB-to-ULD linkage is not deterministic.
  */
 function resolveFfm(mawb) {
   const flightMap = ffmIndex.get(mawb);
   if (!flightMap) return null;
 
-  // Pick the flight group with the highest maxUid
-  let best = null;
-  for (const [, entry] of flightMap) {
-    if (!best || entry.maxUid > best.maxUid) best = entry;
-  }
-  if (!best) return null;
+  const flights = [];
+  const atas = [];
+  const lfds = [];
+  const pmcSet = new Set();
+  let bestPob = null;
+  let bestPobUid = -1;
 
-  const pmcs = [...best.pmcs.keys()].filter(k => k !== '');
-  // POB = value from any ULD entry (T-value is MAWB-total, same across ULDs for same AWB)
-  const pobEntry = [...best.pmcs.values()].find(v => v.pob != null);
+  for (const [, entry] of flightMap) {
+    if (entry.flightNum) flights.push(entry.flightNum);
+    if (entry.ata) atas.push(entry.ata);
+    if (entry.lfd) lfds.push(entry.lfd);
+
+    for (const [uldKey, uldEntry] of entry.pmcs) {
+      if (uldKey) pmcSet.add(uldKey);
+      if (uldEntry && uldEntry.pob != null && uldEntry.uid > bestPobUid) {
+        bestPobUid = uldEntry.uid;
+        bestPob = String(uldEntry.pob);
+      }
+    }
+  }
+
+  const uniqSorted = (arr) => [...new Set(arr)].sort();
 
   return {
-    flightNum: best.flightNum,
-    ata:       best.ata,
-    lfd:       best.lfd,
-    pmcs:      pmcs.join(', '),
-    pob:       pobEntry ? String(pobEntry.pob) : '',
+    flightNum: uniqSorted(flights).join(', '),
+    ata:       uniqSorted(atas).join(', '),
+    lfd:       uniqSorted(lfds).join(', '),
+    pmcs:      [...pmcSet].sort().join(', '),
+    pob:       bestPob ?? '',
   };
 }
 
@@ -257,8 +272,8 @@ function resolveFfm(mawb) {
 
 const rows = [];
 
-// All MAWBs: FHL ∪ FWB (these are shipments Tolead is acting as agent for)
-const allMawbs = new Set([...fhlIndex.keys(), ...fwbIndex.keys()]);
+// All MAWBs: FHL ∪ FWB ∪ FFM
+const allMawbs = new Set([...fhlIndex.keys(), ...fwbIndex.keys(), ...ffmIndex.keys()]);
 
 for (const mawb of [...allMawbs].sort()) {
   const ffm = resolveFfm(mawb);
@@ -292,20 +307,20 @@ for (const mawb of [...allMawbs].sort()) {
       const housePieces = hb.HousePieceCount || mawbPieces;
 
       rows.push([
-        flight, ata, lfd, mawb, hawb,
+        flight, pmcs, mawb, hawb, ata, lfd,
         houseWeight, housePieces, pob,
         '',    // PCS RCVD
-        pmcs, '', consignee, '',
+        '', consignee, '',
         ...emptyFields,
       ]);
     }
   } else {
     // MAWB-only row (no FHL received)
     rows.push([
-      flight, ata, lfd, mawb, '',
+      flight, pmcs, mawb, '', ata, lfd,
       mawbWeight, mawbPieces, pob,
       '',    // PCS RCVD
-      pmcs, '', consignee, '',
+      '', consignee, '',
       ...emptyFields,
     ]);
   }
@@ -317,12 +332,12 @@ const lines = [csvRow(HEADERS), ...rows.map(csvRow)];
 fs.mkdirSync(path.dirname(OUTPUT_CSV), { recursive: true });
 fs.writeFileSync(OUTPUT_CSV, lines.join('\n') + '\n', 'utf8');
 
-console.log(`Written ${rows.length} rows to ${OUTPUT_CSV}`);
+log('log', `Written ${rows.length} rows to ${path.basename(OUTPUT_CSV)}`);
 
 // Quick summary
-const hawbRows  = rows.filter(r => r[4] !== '').length;
+const hawbRows  = rows.filter(r => r[3] !== '').length;
 const mawbRows  = rows.length - hawbRows;
 const noFfm     = rows.filter(r => r[0] === '').length;
-console.log(`  HAWB rows: ${hawbRows}`);
-console.log(`  MAWB-only rows: ${mawbRows}`);
-console.log(`  Rows with no FFM match (no flight data): ${noFfm}`);
+log('log', `  HAWB rows: ${hawbRows}`);
+log('log', `  MAWB-only rows: ${mawbRows}`);
+log('log', `  Rows with no FFM match (no flight data): ${noFfm}`);

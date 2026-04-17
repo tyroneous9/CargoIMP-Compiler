@@ -22,6 +22,16 @@ function requireEnv(key) {
   return value.trim();
 }
 
+function optionalPositiveIntEnv(key) {
+  const raw = process.env[key];
+  if (!raw || raw.trim() === '') return null;
+  const value = Number(raw);
+  if (!Number.isInteger(value) || value <= 0) {
+    throw new Error(`Invalid ${key}: expected a positive integer`);
+  }
+  return value;
+}
+
 function normalizeAddress(raw) {
   return String(raw || '').trim().toLowerCase();
 }
@@ -75,6 +85,7 @@ async function main() {
   const pass = requireEnv('ALIMAIL_NCA_PASS');
   const port = Number(requireEnv('ALIMAIL_NCA_PORT'));
   const mailbox = requireEnv('ALIMAIL_NCA_MAILBOX');
+  const extractLimit = optionalPositiveIntEnv('EXTRACT_EMAIL_LIMIT');
 
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
@@ -90,9 +101,18 @@ async function main() {
     await client.connect();
     const lock = await client.getMailboxLock(mailbox);
     try {
-      // Fetch all UIDs in mailbox
+      // Fetch all UIDs, then process newest-to-oldest for deterministic order.
       const uids = await client.search({ uid: '1:*' }, { uid: true });
+      uids.sort((a, b) => b - a);
+
+      let extractedCount = 0;
       for (const uid of uids) {
+        // Only extract up to the configured limit per run, or unlimited if not set
+        if (extractLimit != null && extractedCount >= extractLimit) {
+          log('log', `reached EXTRACT_EMAIL_LIMIT=${extractLimit}; stopping this run`);
+          break;
+        }
+
         const filename = buildEmailFilename(mailbox, uid);
         const outPath = path.join(OUTPUT_DIR, filename);
         if (fs.existsSync(outPath)) continue; // Skip if already extracted
@@ -121,7 +141,10 @@ async function main() {
         };
         fs.writeFileSync(outPath, JSON.stringify(emailJson, null, 2) + '\n', 'utf8');
         process.stdout.write(`Extracted: ${filename}\n`);
+        extractedCount++;
       }
+
+      log('log', `extracted ${extractedCount} email(s) this run`);
     } finally {
       lock.release();
     }

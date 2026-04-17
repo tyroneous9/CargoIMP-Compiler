@@ -67,32 +67,47 @@ function runParser(parserBinary, body) {
 }
 
 function main() {
+  fs.mkdirSync(EMAILS_DIR, { recursive: true });
   const files = fs.readdirSync(EMAILS_DIR).filter(f => f.endsWith('.json'));
+  let parsedCount = 0;
+  let alreadyParsedCount = 0;
+  let skippedMissingFieldsCount = 0;
+  let missingParserCount = 0;
+  let parserErrorCount = 0;
+
   for (const file of files) {
     const emailPath = path.join(EMAILS_DIR, file);
     const emailJson = JSON.parse(fs.readFileSync(emailPath, 'utf8'));
     const { uid, mailbox, body, cimpType } = emailJson;
     if (!uid || !mailbox || !body || !cimpType) {
-      log('warn', `Skipping ${file}: missing uid, mailbox, body, or cimpType`);
+      skippedMissingFieldsCount++;
       continue;
     }
     const parsedFilename = buildParsedFilename(mailbox, uid);
     const parsedPath = path.join(PARSED_EMAILS_DIR, parsedFilename);
     if (fs.existsSync(parsedPath)) {
-      log('log', `Already parsed: ${parsedFilename}`);
+      alreadyParsedCount++;
       continue;
     }
     const parserBinary = PARSER_BINARIES[cimpType];
     if (!parserBinary || !fs.existsSync(parserBinary)) {
-      log('warn', `No parser for type ${cimpType} or binary missing for ${file}`);
+      missingParserCount++;
       continue;
     }
     const result = runParser(parserBinary, body);
+    if (result.status !== 'ok') parserErrorCount++;
     // Flatten output: only cimpType and all result fields at top level
     const output = { cimpType, ...result };
     fs.writeFileSync(parsedPath, JSON.stringify(output, null, 2) + '\n', 'utf8');
     process.stdout.write(`Parsed: ${parsedFilename}\n`);
+    parsedCount++;
   }
+
+  log(
+    'log',
+    `parse summary: total=${files.length}, parsed=${parsedCount}, alreadyParsed=${alreadyParsedCount}, ` +
+    `missingFields=${skippedMissingFieldsCount}, missingParser=${missingParserCount}, parseErrors=${parserErrorCount}`
+  );
 }
 
 main();

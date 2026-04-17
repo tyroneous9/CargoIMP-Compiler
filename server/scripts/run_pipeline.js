@@ -7,9 +7,10 @@
  *   2. parse_extracted_emails.js — run C++ parsers on new email files
  *   3. build_cfs_csv_mawb.js     — rebuild MAWB CSV from all parsed data
  *   4. build_cfs_csv_uld.js      — rebuild ULD CSV from all parsed data
- *   5. upload_tables_to_sheets.js — push both CSVs to Google Sheets
+ *   5. build_cfs_csv_hawb.js     — rebuild HAWB CSV from all parsed data
+ *   6. upload_tables_to_sheets.js — push all CSVs to Google Sheets
  *
- * Steps 3–5 are skipped when steps 1–2 produced no new output, avoiding
+ * Steps 3–6 are skipped when steps 1–2 produced no new output, avoiding
  * unnecessary Sheets API calls and rate-limit consumption.
  *
  * Usage:
@@ -169,7 +170,14 @@ function runPipeline(runNumber) {
     return;
   }
 
-  // ── Step 5: upload to Google Sheets ───────────────────────────────────────
+  // ── Step 5: rebuild HAWB CSV ───────────────────────────────────────────────
+  const { exitCode: exitHawb } = runScript('build_cfs_csv_hawb.js');
+  if (exitHawb !== 0) {
+    log('error', `${label} aborting: build_cfs_csv_hawb failed`);
+    return;
+  }
+
+  // ── Step 6: upload to Google Sheets ───────────────────────────────────────
   const { exitCode: exitUpload } = runScript('upload_tables_to_sheets.js');
   if (exitUpload !== 0) {
     log('error', `${label} upload_tables_to_sheets failed (CSVs are still up to date locally)`);

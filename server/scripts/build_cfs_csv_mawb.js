@@ -19,13 +19,13 @@ const path = require('path');
 const { PARSED_EMAILS_DIR, PARSED_TABLES_DIR } = require('../config/paths');
 const { log } = require('../config/logger');
 
-const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, 'CFS - output-mawb.csv');
+const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, 'CFS_mawb.csv');
 
 // ── CSV header ────────────────────────────────────────────────────────────────
 
 const HEADERS = [
-  'FLIGHT#', 'ATA', 'LFD', 'MAWB', 'Weight', 'TTL PCS', 'POB',
-  'PCS RCVD', 'PMC#', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
+  'FLIGHT#', 'PMC#', 'MAWB#', 'ATA', 'LFD', 'Weight', 'TTL PCS', 'POB',
+  'PCS RCVD', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
   'P3', 'Trucking/Skid $', 'Storage', 'ISC',
   'Tolead→NCA\nRCF MESSAGE', 'Tolead→NCA\nNFD MESSAGE', 'Tolead→NCA\nDLV MESSAGE',
   'Tolead→Customer\nCargo Arrive Email', 'Tolead→Customer\nCargo Ready Email',
@@ -96,6 +96,8 @@ function csvRow(fields) {
 const ffmIndex = new Map();  // mawb → Map<flightKey, { maxUid, flightNum, ata, lfd, pmcs: Map<uldKey, {uid, pob}> }>
 const fwbIndex = new Map();  // mawb → { uid, weight, weightUnit, pieces, consignee }
 const fhlIndex = new Map();  // mawb → { uid, masterPieces, masterWeight, masterWeightUnit, consignee }
+
+fs.mkdirSync(PARSED_EMAILS_DIR, { recursive: true });
 
 const filenames = fs.readdirSync(PARSED_EMAILS_DIR)
   .filter(f => f.endsWith('.json'))
@@ -214,11 +216,11 @@ function resolveFfm(mawb) {
 
 const rows = [];
 
-// col 0–6 filled, col 7 blank (PCS RCVD), col 8 filled, col 9 blank (PMC LOC),
+// col 0–7 filled, col 8 blank (PCS RCVD), col 9 blank (PMC LOC),
 // col 10 filled, col 11 blank (AMS), cols 12–32 blank (21 empty)
 const TRAILING_EMPTY = HEADERS.length - 12;
 
-const allMawbs = new Set([...fhlIndex.keys(), ...fwbIndex.keys()]);
+const allMawbs = new Set([...fhlIndex.keys(), ...fwbIndex.keys(), ...ffmIndex.keys()]);
 
 for (const mawb of [...allMawbs].sort()) {
   const ffm = resolveFfm(mawb);
@@ -241,10 +243,10 @@ for (const mawb of [...allMawbs].sort()) {
   const pieces = fwb?.pieces || fhl?.masterPieces || '';
 
   rows.push([
-    flight, ata, lfd, mawb,
+    flight, pmcs, mawb, ata, lfd,
     weight, pieces, pob,
-    '',       // PCS RCVD — human input
-    pmcs, '', // PMC#, PMC LOCATION
+    '',  // PCS RCVD — human input
+    '',  // PMC LOCATION
     consignee, '',  // Consignee, AMS STATUS
     ...new Array(TRAILING_EMPTY).fill(''),
   ]);

@@ -58,8 +58,8 @@ support for FFM/4, FFM/5, FHL/5
 
 
 
-CSV Q&A:
-Column questions:
+CSV CREATION:
+Columns:
 LFD (last free day) - departure date+2 days, e.g. KZ134/14APR -> 16APR
 PCS RCVD - leave empty for human input
 PMC LOCATION - leave empty
@@ -67,7 +67,7 @@ AMS STATUS - leave empty
 p3, trucking, storage, isc - leave empty
 all message/milestones - leave empty
 Grouping:
-One row per MAWB or per HAWB? ideally per HAWB. review FHL messages to see if you are able to deduce the flight context (especially the ULD identifier). This is the most crucial step, and if you are unable to deduce it, suggest other approaches to correctly create one row per HAWB.
+One row per ULD, MAWB, HAWB? ideally per HAWB. review FHL messages to see if you are able to deduce the flight context (especially the ULD identifier). This is the most crucial step, and if you are unable to deduce it, suggest other approaches to correctly create one row per HAWB.
 !!! Each MAWB can be split onto multiple PMCs, each HAWB can also be split onto multiple PMCs
 Email send order:
 FFM, FWB, FHL
@@ -77,7 +77,7 @@ OPTIONS for linking:
 1. investigate working software from NCA.
 2. scan HAWB which an existing PMC mapping.
 
-COMPLETE POLLER SCRIPT:
+POLLER SCRIPT:
 create a script which completes the following steps:
 1. initializes
 2. repeats at a time interval "EMAIL_POLL_INTERVAL_MS" set in .env
@@ -86,11 +86,3 @@ create a script which completes the following steps:
 5. runs #build_cfs_csv_mawb.js and #build_cfs_csv_uld.js
 6. runs #upload_tables_to_sheets.js
 
-CONFIGURING SHEETS:
-1. should i append or overwrite? the use case of the sheet is to allow high uptime human input to both read and write to the sheet. suggestion: create one sheet for human input which is appended to, and create another sheet which is overwritten every run.
-2. in the #TABLE_MAP, how do i decide on the clearRange and writeRange?
-3. describe my scope of modification on the sheet by using the api. for example, would i be able to combine adjacent ULD cells to show a single ULD, which is more human readable?
-
-LOGGING:
-command: configure a new path to the logs directory at server/data/logs.
-command: propose how to implement logging throughout the pipeline.
