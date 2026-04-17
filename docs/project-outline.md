@@ -1,9 +1,9 @@
 Setup:
 1. create an email parser for alimail
   - npm: node-imap
-2. From aParse (parse2.com), use their parser generator to create the parser for FWB17, FHL4, FFM8.
-  - create grammar for each message format. e.g. FFM8 should have its own format vs FWB17. Note that the 8 and 17 are the version number.
-  - current grammars to do: FFM8, FHL4, FWB17.
+2. From aParse (parse2.com), use their parser generator to create the parser for FWB, FHL, FFM.
+  - create grammar for each message format. e.g. FFM should have its own format vs FWB.
+  - current grammars: FFM (supports FFM/4, FFM/5, FFM/8), FHL (supports FHL/4, FHL/5), FWB (supports FWB/17).
 3. create a node backend which has an endpoint to the final, parsed data.
 
 Method:
@@ -11,13 +11,13 @@ Method:
   - WARNING: subject can be mismatched with body. For example subject is FFM8, but actually the message is FWB17. Prioritize body line, and also validate the parse.
 2 pipeline the email (stdout) into parser (stdin).
 3. parse the email into json.
-  - example: ./build/parser_fwb17_json -file data/input_tests/fwb17_1.txt
+  - example: ./build/parser_fwb_json -file data/input_tests/fwb_test.txt
 4. pipeline json into backend. a front end may not be needed in this case unless input is necessary.
 
 Test inputs:
-./build/parser_ffm8_json -file data/input_tests/ffm8_1.txt
-./build/parser_fwb17_json -file data/input_tests/fwb17_1.txt
-./build/parser_fhl4_json -file data/input_tests/fhl4_1.txt
+./build/parser_ffm_json -file data/input_tests/ffm_test.txt
+./build/parser_fwb_json -file data/input_tests/fwb_test.txt
+./build/parser_fhl_json -file data/input_tests/fhl_test.txt
 
 Output shape:
 shape:
@@ -31,7 +31,7 @@ shape:
   },
   "parsing": {
     "status": "ok",
-    "format": "fwb17",
+    "format": "fwb",
     "fields": {
       "awbPrefix": "123",
       "awbNumber": "45678901"
@@ -55,3 +55,19 @@ given the email outputs generated in server/date/outputs/emails, create a script
 2. in the email outputs, reference the #cimpType field to quickly choose the correct parser.
 
 support for FFM/4, FFM/5, FHL/5
+
+implement #find_missing_cfs.js:
+parse csv for MAWB field. iterate through all files in server/data/outputs/parsed to generate a list of file paths to output files which have a matching MAWB, stored in server/data/outputs/temp/missing_cfs.json
+
+CSV Q&A:
+Column questions:
+LFD (last free day) - departure date+2 days, e.g. KZ134/14APR -> 16APR
+PCS RCVD - leave empty for human input
+PMC LOCATION - leave empty
+AMS STATUS - leave empty
+p3, trucking, storage, isc - leave empty
+all message/milestones - leave empty
+Grouping:
+One row per MAWB or per HAWB? ideally per HAWB. review FHL messages to see if you are able to deduce the flight context (especially the ULD identifier). This is the most crucial step, and if you are unable to deduce it, suggest other approaches to correctly create one row per HAWB.
+Email send order:
+FFM, FWB, FHL

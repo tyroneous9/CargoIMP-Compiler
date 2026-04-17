@@ -57,17 +57,11 @@ function firstBodyLine(body) {
 
 function chooseParserByMessageType(body) {
   const header = firstBodyLine(body);
-  const headerMap = {
-    'FFM/8': 'ffm8',
-    'FWB/17': 'fwb17',
-    'FHL/4': 'fhl4',
-  };
-  for (const key in headerMap) {
-    if (header.startsWith(key)) {
-      return headerMap[key];
-    }
-  }
-  return null;
+  const match = header.match(/^([A-Z]+)\/\d+/);
+  if (!match) return null;
+  const format = match[1].toLowerCase();
+  const supported = new Set(['ffm', 'fwb', 'fhl']);
+  return supported.has(format) ? format : null;
 }
 
 function buildEmailFilename(mailbox, uid) {
@@ -132,6 +126,7 @@ async function main() {
     }
   } finally {
     await client.logout().catch(() => {});
+    console.log('Email extractionfinished');
   }
 }
 

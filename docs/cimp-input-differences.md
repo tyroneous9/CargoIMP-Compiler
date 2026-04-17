@@ -110,7 +110,7 @@ This section records differences currently observed in `FWB/17` traffic and pars
 - Reasoning: Terminal newline omission is a transport artifact rather than a content error; optional tail EOL handling improves robustness without changing field interpretation.
 
 ### Grammar compatibility changes
-- `cpp/data/grammars/fwb17_grammar.abnf`
+- `cpp/data/grammars/fwb_grammar.abnf`
 - Key compatibility rules currently include:
   - `CvdLine` with uppercase code tolerance
   - `SphLine = ("SPH" / "COR") ...`
@@ -217,7 +217,7 @@ This section records observed `FFM/8` input variants and compatibility decisions
 - Reasoning: Double-leading-slash qualifier rows encode overflow/continuation qualifier content; supporting empty first segments captures these entries correctly.
 
 ### Grammar compatibility changes
-- `cpp/data/grammars/ffm8_grammar.abnf`
+- `cpp/data/grammars/ffm_grammar.abnf`
 - Key compatibility rules currently include:
   - `FFM8` with repeated route lines: `1*(RouteLine EOL)`
   - `RouteLine` alternatives for both `//` and `/NIL/` patterns
@@ -324,7 +324,7 @@ This section records observed `FHL/4` input variants and compatibility decisions
 - Reasoning: HTS values can span follow-on slash rows, not only a single identifier line; HTS continuation support preserves full tariff coding data.
 
 ### Grammar compatibility changes
-- `cpp/data/grammars/fhl4_grammar.abnf`
+- `cpp/data/grammars/fhl_grammar.abnf`
 - Key compatibility rules currently include:
   - `FHL4` with repeating `1*HouseBillGroup`
   - `HouseBillGroup = HouseBillLine [EOL] [DescriptionBlock] [HtsBlock] [OciBlock]`
@@ -333,6 +333,24 @@ This section records observed `FHL/4` input variants and compatibility decisions
   - `OciContLine = Slant [Slant [Slant]] *LineChar [EOL]`
   - Optional terminal EOL handling for selected tail positions
   - Optional message-level tail segments (`ShipperBlock`, `ConsigneeBlock`, `CvdLine`)
+  - `MessageHeader = "FHL/4" / "FHL/5"` — unified header accepting both versions (see FHL-008)
+
+#### FHL-008
+- ID: `FHL-008`
+- Area: FHL/5 message header — version upgrade
+- Strict CIMP Expectation (to verify against official text): `MessageHeader` defined as literal `"FHL/4"` for CIMP 34 messages; FHL/5 is a distinct version identifier introduced in a later CIMP edition
+- Observed Input: `FHL/5\nMBI/205-33502206PVGORD/T1K633\nHBS/FMAE2604004/PVGORD/1/K633/56/HARDWARE SEAT P\nTXT/HARDWARE SEAT PARTS`
+- Parser Decision: Extend `MessageHeader` to `"FHL/4" / "FHL/5"`. All other grammar rules are structurally identical between versions. The sole normative difference documented in the IATA OCI Composition Rule Table is that the colon character `:` is allowed in OCI/CUS/IA and OCI/CUS/IR fields starting from FHL/5 (IPv6/MAC address encoding). Since `LineChar = %x20-7E` already includes `:` (ASCII 0x3A), no other grammar rule requires change.
+- Status: `accepted-compat`
+
+### Evidence Samples (FHL-008)
+
+#### FHL-008 Evidence
+- Source: IATA OCI Composition Rule Table PDF (`docs/oci-composition-rule-table.pdf`), lines 843 and 856
+- Quote: `"Colon character \":\" is not allowed for versions of CIMP messages prior to FWB v16 and FHL v5, it is recommended to use a hyphen \"-\" instead"`
+- Applied to: OCI field identifiers `IA` (IP address for account creation) and `IR` (IP address for pickup request)
+- FHL/5 example message: `FHL/5 / MBI/205-33502206PVGORD/T1K633 / HBS/FMAE2604004/PVGORD/1/K633/56/HARDWARE SEAT P / TXT/HARDWARE SEAT PARTS`
+- Reasoning: The FHL/5 example is structurally identical to FHL/4. The colon-in-IP-address change is already handled by the permissive `LineChar = %x20-7E` rule (`:` = 0x3A is within range). Therefore extending `MessageHeader` to accept `"FHL/5"` is sufficient to achieve full FHL/5 compatibility without any loss of accuracy for FHL/4 inputs. The `cimpType` field in extracted emails is set to `fhl` for both FHL/4 and FHL/5, both routing to the same parser binary (`parser_fhl_json`).
 
 ---
 

@@ -1,0 +1,136 @@
+# FFM/8 CIMP 34th edition grammar (structure-first with operational relaxations)
+
+FFM8 =
+	MessageHeader
+	EOL
+	FlightIdentificationLine
+	EOL
+	1*(RouteLine EOL / UldSection)
+	[TrailerLine [EOL]];
+
+MessageHeader = "FFM/4" / "FFM/5" / "FFM/8";
+
+# --- Flight identification ---
+FlightIdentificationLine =
+	MessageFunctionCode
+	Slant
+	CarrierFlightNumber
+	Slant
+	DayMonthTime
+	Slant
+	AirportCode
+	Slant
+	AircraftRegistration;
+
+# Route variants seen in operations include:
+# - classic destination with double slash timestamp: ORD//14APR1235
+# - transit NIL form: ANC/NIL/14APR0200/14APR0330
+# - bare destination (FFM/4, FFM/5): ORD
+# - bare NIL transit (FFM/4, FFM/5): ANC/NIL
+RouteLine =
+	AirportCode Slant Slant *LineChar
+	/ AirportCode Slant "NIL" Slant *LineChar
+	/ AirportCode Slant "NIL"
+	/ AirportCode;
+
+# Some traffic starts AWB blocks directly without an explicit ULD line.
+UldSection =
+	[ULDLine EOL]
+	1*AwbBlock;
+
+AwbBlock =
+	AirWaybillLine
+	EOL
+	*SupplementLine;
+
+SupplementLine =
+	OsiLine EOL
+	/ OciLine EOL
+	/ SciLine EOL
+	/ ContinuationLine EOL
+	/ SlashQualifierLine EOL
+	/ CorLine EOL;
+
+# --- ULD and AWB lines ---
+ULDLine = "ULD" Slant ULDIdentifier [Slant ULDDetailText];
+
+AirWaybillLine =
+	MasterAirwayBillNumber
+	OriginAndDestination
+	Slant
+	ShipmentSummary
+	[Slant FreeText];
+
+# --- Supplement lines ---
+OsiLine = "OSI" Slant *LineChar;
+OciLine = "OCI" Slant *LineChar;
+SciLine = "SCI" Slant *LineChar;
+CorLine = "COR" Slant *LineChar;
+
+SlashQualifierLine = Slant QualifierToken *(Slant QualifierToken);
+
+# Explicit OCI-style continuation rows.
+ContinuationLine = Slant Slant Slant *LineChar;
+
+TrailerLine = "CONT" / "LAST";
+
+# -------------------------- Elements --------------------------
+
+MessageFunctionCode = 1*2Digit;
+CarrierFlightNumber = 2*8AlphaNum;
+DayMonthTime = 2Digit Month [4Digit];
+AircraftRegistration = 4*12AlphaNum;
+
+MasterAirwayBillNumber = AirlinePrefix Hyphen AWBSerialNumber;
+AirlinePrefix = 3Digit;
+AWBSerialNumber = 8Digit;
+
+OriginAndDestination = AirportCode AirportCode;
+AirportCode = 3Upper;
+
+ULDIdentifier = 5*20ULDChar;
+ULDDetailText = 1*LineChar;
+
+ShipmentSummary =
+	SummaryType
+	PieceCount
+	WeightUnit
+	WeightValue
+	["M" VolumeUnit VolumeAmount]
+	["T" TotalPieceCount];
+
+SummaryType = "S" / "T" / "D" / "P";
+PieceCount = 1*4Digit;
+TotalPieceCount = 1*4Digit;
+WeightUnit = "K" / "L";
+WeightValue = 1*7Digit [Dot 1*3Digit];
+VolumeUnit = 1*2Upper;
+VolumeAmount = 1*6Digit [Dot 1*3Digit];
+
+Month =
+	"JAN" / "FEB" / "MAR" / "APR" / "MAY" / "JUN" /
+	"JUL" / "AUG" / "SEP" / "OCT" / "NOV" / "DEC";
+FreeText = 1*LineChar;
+
+# ------------------------ Character sets ------------------------
+
+ULDChar = AlphaNum / Hyphen;
+SummaryChar = AlphaNum / Dot / Hyphen;
+# Per CIMP 34 §8.8.1 OCI composition rules:
+# - /CC//CRI/data form (empty information identifier) is valid
+# - //DNR/data form is a CIMP-valid DNR overflow continuation
+# QualifierToken allows empty (zero-or-more) so that embedded double-slashes
+# are accepted.  ContinuationLine (///) must remain ordered before this rule.
+QualifierToken = *NoSlashChar;
+NoSlashChar = %x20-2E / %x30-7E;
+
+LineChar = %x20-7E;
+
+Slant = "/";
+Hyphen = "-";
+Dot = ".";
+
+Digit = %x30-39;
+Upper = %x41-5A;
+AlphaNum = Upper / Digit;
+EOL = [%x0D] %x0A;

@@ -8,13 +8,13 @@ const path = require('path');
 const { spawnSync } = require('child_process');
 const paths = require('../config/paths');
 
-const EMAILS_DIR = path.join(paths.SERVER_ROOT, 'data', 'outputs', 'emails');
-const PARSED_DIR = path.join(paths.SERVER_ROOT, 'data', 'outputs', 'parsed');
+const EMAILS_DIR = paths.EMAILS_DIR;
+const PARSED_DIR = paths.PARSED_DIR;
 
 const PARSER_BINARIES = {
-  ffm8: paths.PARSER_BINARIES.ffm8,
-  fwb17: paths.PARSER_BINARIES.fwb17,
-  fhl4: paths.PARSER_BINARIES.fhl4,
+  ffm: paths.PARSER_BINARIES.ffm,
+  fwb: paths.PARSER_BINARIES.fwb,
+  fhl: paths.PARSER_BINARIES.fhl,
 };
 
 fs.mkdirSync(PARSED_DIR, { recursive: true });
@@ -29,7 +29,7 @@ function runParser(parserBinary, body) {
   const inputFile = path.join(tmpDir, 'email_body.txt');
   let resultObj = {};
   try {
-    fs.writeFileSync(inputFile, body, 'utf8');
+    fs.writeFileSync(inputFile, body.endsWith('\n') ? body : body + '\n', 'utf8');
     const result = spawnSync(parserBinary, ['-file', inputFile], {
       encoding: 'utf8',
       maxBuffer: 10 * 1024 * 1024,

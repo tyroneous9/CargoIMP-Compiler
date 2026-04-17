@@ -1,0 +1,110 @@
+# FHL/4 CIMP 34th edition grammar (structure-first with operational relaxations)
+
+FHL4 =
+    MessageHeader EOL
+    MasterBillLine EOL
+    1*HouseBillGroup
+    [ShipperBlock]
+    [ConsigneeBlock]
+    [CvdLine [EOL]];
+
+# Per CIMP 34 §3: "Ref. 3 can be repeated." and
+# "Refs. 3 thru 6 can be repeated if there is no occurrence of Ref. 7, 8 or 9."
+HouseBillGroup =
+    HouseBillLine [EOL]
+    [DescriptionBlock]
+    [HtsBlock]
+    [OciBlock];
+
+MessageHeader = "FHL/4" / "FHL/5";
+
+# --- Master Bill Information (MBI) ---
+MasterBillLine =
+    "MBI"
+    Slant
+    MasterAirwayBillNumber
+    MasterOriginAndDestination
+    MasterBillSummary
+    [Slant *LineChar];
+
+MasterAirwayBillNumber = AirlinePrefix Hyphen AWBSerialNumber;
+AirlinePrefix = 3Digit;
+AWBSerialNumber = 8Digit;
+
+MasterOriginAndDestination = AirportCode AirportCode;
+AirportCode = 3Upper;
+
+MasterBillSummary = Slant "T" MasterPieceCount MasterWeightUnit MasterWeight;
+MasterPieceCount = 1*4Digit;
+MasterWeightUnit = "K" / "L";
+MasterWeight = 1*10Digit ["." 1*3Digit];
+
+# --- House Bill Summary (HBS) ---
+HouseBillLine =
+    "HBS"
+    Slant
+    HouseWaybillNumber
+    Slant
+    HouseOriginAndDestination
+    Slant
+    HousePieceCount
+    Slant
+    HouseWeightUnit
+    HouseWeight
+    [Slant HousePieceCount]
+    [Slant *LineChar]
+    *(EOL Slant *LineChar);
+
+HouseOriginAndDestination = AirportCode AirportCode;
+HouseWaybillNumber = 1*20AlphaNum;
+HousePieceCount = 1*4Digit;
+HouseWeightUnit = "K" / "L";
+HouseWeight = 1*10Digit ["." 1*3Digit];
+
+# --- Description text (TXT) ---
+DescriptionBlock = DescriptionTagLine *DescriptionContLine;
+DescriptionTagLine = "TXT" Slant *LineChar [EOL];
+DescriptionContLine = Slant *LineChar [EOL];
+
+# --- Harmonized Tariff Schedule (HTS) ---
+# Per CIMP 34 §5: "Elements 5.2 to 5.4 can be repeated. Can occur a maximum of nine times."
+# Each additional HS code appears on a continuation line starting with Slant.
+HtsBlock = 1*(HtsLine *HtsContLine);
+HtsLine = "HTS" Slant *LineChar [EOL];
+HtsContLine = Slant *LineChar [EOL];
+
+# --- OCI block ---
+OciBlock = OciLine *OciContLine;
+OciLine = "OCI" Slant *LineChar [EOL];
+OciContLine = Slant [Slant [Slant]] *LineChar [EOL];
+
+# --- Party blocks ---
+ShipperBlock = ShipperTagLine *ShipperContLine;
+ShipperTagLine = "SHP" Slant *LineChar [EOL];
+ShipperContLine = Slant *LineChar [EOL];
+
+ConsigneeBlock = ConsigneeTagLine *ConsigneeContLine;
+ConsigneeTagLine = "CNE" Slant *LineChar [EOL];
+ConsigneeContLine = Slant *LineChar [EOL];
+
+# --- Charges Value Declaration (CVD) ---
+CvdLine =
+    "CVD"
+    Slant
+    3Upper
+    Slant
+    2Upper
+    Slant
+    ("NVD" / 1*10Digit ["." 1*3Digit])
+    Slant
+    ("NCV" / "NVD" / 1*10Digit ["." 1*3Digit])
+    Slant
+    ("XXX" / 1*10Digit ["." 1*3Digit]);
+
+LineChar = %x20-7E;
+EOL = [%x0D] %x0A;
+Slant = "/";
+Hyphen = "-";
+Digit = %x30-39;
+Upper = %x41-5A;
+AlphaNum = Upper / Digit;

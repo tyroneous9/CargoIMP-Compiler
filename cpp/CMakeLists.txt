@@ -7,7 +7,7 @@ project(NCAParser LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 
-# Discover all parser grammar subdirectories (e.g., fwb17_parsers, fhl4_parsers, ffm8_parsers)
+# Discover all parser grammar subdirectories (e.g., fwb_parsers, fhl_parsers, ffm_parsers)
 file(GLOB PARSER_SUBDIRS "data/generated_parsers/*")
 list(FILTER PARSER_SUBDIRS INCLUDE REGEX "_parsers$")
 
@@ -32,70 +32,70 @@ foreach(PARSER_DIR ${PARSER_SUBDIRS})
   list(APPEND PARSER_TARGETS ${PARSER_TARGET})
 endforeach()
 
-# Stable custom app target for FWB17 JSON extraction.
+# Stable custom app target for FWB JSON extraction.
 # Custom code lives in src/, generated code stays under data/generated_parsers/.
-set(FWB17_DIR "${CMAKE_CURRENT_SOURCE_DIR}/data/generated_parsers/fwb17_parsers")
-if(EXISTS "${FWB17_DIR}")
-  file(GLOB FWB17_GENERATED_SOURCES "${FWB17_DIR}/*.cpp")
-  list(FILTER FWB17_GENERATED_SOURCES EXCLUDE REGEX "ParserMain\\.cpp$")
-  list(FILTER FWB17_GENERATED_SOURCES EXCLUDE REGEX "JsonExtractor\\.cpp$")
+set(FWB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/data/generated_parsers/fwb_parsers")
+if(EXISTS "${FWB_DIR}")
+  file(GLOB FWB_GENERATED_SOURCES "${FWB_DIR}/*.cpp")
+  list(FILTER FWB_GENERATED_SOURCES EXCLUDE REGEX "ParserMain\\.cpp$")
+  list(FILTER FWB_GENERATED_SOURCES EXCLUDE REGEX "JsonExtractor\\.cpp$")
 
-  add_executable(parser_fwb17_json
-    src/fwb17_json_main.cpp
-    src/fwb17_json_extractor.cpp
-    ${FWB17_GENERATED_SOURCES}
+  add_executable(parser_fwb_json
+    src/fwb_json_main.cpp
+    src/fwb_json_extractor.cpp
+    ${FWB_GENERATED_SOURCES}
   )
-  target_compile_features(parser_fwb17_json PRIVATE cxx_std_17)
-  target_include_directories(parser_fwb17_json PRIVATE
-    ${FWB17_DIR}
+  target_compile_features(parser_fwb_json PRIVATE cxx_std_17)
+  target_include_directories(parser_fwb_json PRIVATE
+    ${FWB_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/src
   )
 
-  list(APPEND PARSER_TARGETS parser_fwb17_json)
+  list(APPEND PARSER_TARGETS parser_fwb_json)
 endif()
 
-# Stable custom app target for FHL4 JSON extraction.
+# Stable custom app target for FHL JSON extraction.
 # Custom code lives in src/, generated code stays under data/generated_parsers/.
-set(FHL4_DIR "${CMAKE_CURRENT_SOURCE_DIR}/data/generated_parsers/fhl4_parsers")
-if(EXISTS "${FHL4_DIR}")
-  file(GLOB FHL4_GENERATED_SOURCES "${FHL4_DIR}/*.cpp")
-  list(FILTER FHL4_GENERATED_SOURCES EXCLUDE REGEX "ParserMain\\.cpp$")
-  list(FILTER FHL4_GENERATED_SOURCES EXCLUDE REGEX "JsonExtractor\\.cpp$")
+set(FHL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/data/generated_parsers/fhl_parsers")
+if(EXISTS "${FHL_DIR}")
+  file(GLOB FHL_GENERATED_SOURCES "${FHL_DIR}/*.cpp")
+  list(FILTER FHL_GENERATED_SOURCES EXCLUDE REGEX "ParserMain\\.cpp$")
+  list(FILTER FHL_GENERATED_SOURCES EXCLUDE REGEX "JsonExtractor\\.cpp$")
 
-  add_executable(parser_fhl4_json
-    src/fhl4_json_main.cpp
-    src/fhl4_json_extractor.cpp
-    ${FHL4_GENERATED_SOURCES}
+  add_executable(parser_fhl_json
+    src/fhl_json_main.cpp
+    src/fhl_json_extractor.cpp
+    ${FHL_GENERATED_SOURCES}
   )
-  target_compile_features(parser_fhl4_json PRIVATE cxx_std_17)
-  target_include_directories(parser_fhl4_json PRIVATE
-    ${FHL4_DIR}
+  target_compile_features(parser_fhl_json PRIVATE cxx_std_17)
+  target_include_directories(parser_fhl_json PRIVATE
+    ${FHL_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/src
   )
 
-  list(APPEND PARSER_TARGETS parser_fhl4_json)
+  list(APPEND PARSER_TARGETS parser_fhl_json)
 endif()
 
-# Stable custom app target for FFM8 JSON extraction.
+# Stable custom app target for FFM JSON extraction.
 # Custom code lives in src/, generated code stays under data/generated_parsers/.
-set(FFM_DIR "${CMAKE_CURRENT_SOURCE_DIR}/data/generated_parsers/ffm8_parsers")
+set(FFM_DIR "${CMAKE_CURRENT_SOURCE_DIR}/data/generated_parsers/ffm_parsers")
 if(EXISTS "${FFM_DIR}")
   file(GLOB FFM_GENERATED_SOURCES "${FFM_DIR}/*.cpp")
   list(FILTER FFM_GENERATED_SOURCES EXCLUDE REGEX "ParserMain\\.cpp$")
   list(FILTER FFM_GENERATED_SOURCES EXCLUDE REGEX "JsonExtractor\\.cpp$")
 
-  add_executable(parser_ffm8_json
-    src/ffm8_json_main.cpp
-    src/ffm8_json_extractor.cpp
+  add_executable(parser_ffm_json
+    src/ffm_json_main.cpp
+    src/ffm_json_extractor.cpp
     ${FFM_GENERATED_SOURCES}
   )
-  target_compile_features(parser_ffm8_json PRIVATE cxx_std_17)
-  target_include_directories(parser_ffm8_json PRIVATE
+  target_compile_features(parser_ffm_json PRIVATE cxx_std_17)
+  target_include_directories(parser_ffm_json PRIVATE
     ${FFM_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/src
   )
 
-  list(APPEND PARSER_TARGETS parser_ffm8_json)
+  list(APPEND PARSER_TARGETS parser_ffm_json)
 endif()
 
 # Print configuration info

@@ -9,7 +9,7 @@ GENERATED_PARSERS_DIR="$CPP_ROOT/data/generated_parsers"
 
 if [[ $# -lt 1 ]]; then
 	echo "Usage: $0 <grammar.abnf> [visitors]" >&2
-	echo "Example: $0 data/grammars/fwb17_grammar.abnf Displayer,XmlDisplayer" >&2
+    echo "Example: $0 data/grammars/fwb_grammar.abnf Displayer,XmlDisplayer" >&2
 	echo "Default visitors: Displayer,XmlDisplayer" >&2
 	exit 1
 fi

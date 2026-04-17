@@ -7,20 +7,20 @@ const port = process.env.PORT || 3000;
 const cppDir = paths.CPP_DIR;
 
 const parserConfigs = {
-  ffm8: {
-    label: 'FFM/8',
-    binary: paths.PARSER_BINARIES.ffm8,
-    input: paths.SAMPLE_INPUTS.ffm8,
+  ffm: {
+    label: 'FFM',
+    binary: paths.PARSER_BINARIES.ffm,
+    input: paths.SAMPLE_INPUTS.ffm,
   },
-  fwb17: {
+  fwb: {
     label: 'FWB/17',
-    binary: paths.PARSER_BINARIES.fwb17,
-    input: paths.SAMPLE_INPUTS.fwb17,
+    binary: paths.PARSER_BINARIES.fwb,
+    input: paths.SAMPLE_INPUTS.fwb,
   },
-  fhl4: {
-    label: 'FHL/4',
-    binary: paths.PARSER_BINARIES.fhl4,
-    input: paths.SAMPLE_INPUTS.fhl4,
+  fhl: {
+    label: 'FHL',
+    binary: paths.PARSER_BINARIES.fhl,
+    input: paths.SAMPLE_INPUTS.fhl,
   },
 };
 
@@ -128,9 +128,9 @@ app.get('/', (_req, res) => {
     `<div class="card">
       <h1>test results</h1>
       <ul>
-        <li><a href="/results/ffm8">/results/ffm8</a> - FFM/8 sample output</li>
-        <li><a href="/results/fwb17">/results/fwb17</a> - FWB/17 sample output</li>
-        <li><a href="/results/fhl4">/results/fhl4</a> - FHL/4 sample output</li>
+        <li><a href="/results/ffm">/results/ffm</a> - FFM sample output</li>
+        <li><a href="/results/fwb">/results/fwb</a> - FWB/17 sample output</li>
+        <li><a href="/results/fhl">/results/fhl</a> - FHL sample output</li>
       </ul>
     </div>`
   ));
