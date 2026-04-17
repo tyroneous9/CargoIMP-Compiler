@@ -126,7 +126,7 @@ async function main() {
     }
   } finally {
     await client.logout().catch(() => {});
-    console.log('Email extractionfinished');
+    process.stderr.write('Email extraction finished\n');
   }
 }
 

@@ -1,0 +1,202 @@
+#!/usr/bin/env node
+/**
+ * run_pipeline.js
+ *
+ * Full polling pipeline:
+ *   1. extract_emails.js         — fetch new emails from IMAP
+ *   2. parse_extracted_emails.js — run C++ parsers on new email files
+ *   3. build_cfs_csv_mawb.js     — rebuild MAWB CSV from all parsed data
+ *   4. build_cfs_csv_uld.js      — rebuild ULD CSV from all parsed data
+ *   5. upload_tables_to_sheets.js — push both CSVs to Google Sheets
+ *
+ * Steps 3–5 are skipped when steps 1–2 produced no new output, avoiding
+ * unnecessary Sheets API calls and rate-limit consumption.
+ *
+ * Usage:
+ *   node scripts/run_pipeline.js          # run once immediately, then poll
+ *   node scripts/run_pipeline.js --once   # run exactly once and exit
+ *
+ * Interval is controlled by EMAIL_POLL_INTERVAL_MS in .env.
+ */
+
+'use strict';
+
+const { spawnSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+const { ENV_FILE, LOGS_DIR } = require('../config/paths');
+
+require('dotenv').config({ path: ENV_FILE });
+
+const SCRIPTS_DIR = __dirname;
+const POLL_INTERVAL_MS = parseInt(process.env.EMAIL_POLL_INTERVAL_MS, 10) || 600_000;
+const RUN_ONCE = process.argv.includes('--once');
+
+// ── Logger ────────────────────────────────────────────────────────────────────
+
+fs.mkdirSync(LOGS_DIR, { recursive: true });
+
+/**
+ * Returns a path like server/data/logs/2026-04-17.log (UTC date).
+ * As midnight rolls over the pipeline naturally rotates to a new file.
+ */
+function todayLogPath() {
+  const date = new Date().toISOString().slice(0, 10);  // YYYY-MM-DD
+  return path.join(LOGS_DIR, `${date}.log`);
+}
+
+/**
+ * Write a line to the current daily log file AND to the console stream.
+ * @param {'log'|'error'} level
+ * @param {string} text
+ */
+function log(level, text) {
+  const ts = new Date().toISOString();
+  const line = `${ts} [${level.toUpperCase()}] ${text}`;
+  if (level === 'error') {
+    process.stderr.write(line + '\n');
+  } else {
+    process.stdout.write(line + '\n');
+  }
+  fs.appendFileSync(todayLogPath(), line + '\n', 'utf8');
+}
+
+// ── Step runner ───────────────────────────────────────────────────────────────
+
+/**
+ * Run a script as a child process, capturing both stdout and stderr.
+ * stdout is returned for signal counting (Extracted:/Parsed: lines).
+ * stderr is the script's own diagnostic log — written to the log file and
+ * forwarded to our stderr so it appears in the terminal.
+ * Throws on spawn failure (e.g. file not found).
+ */
+function runScript(scriptName, args = []) {
+  const scriptPath = path.join(SCRIPTS_DIR, scriptName);
+  const label = `[${scriptName}]`;
+
+  log('log', `${label} starting…`);
+
+  const result = spawnSync(process.execPath, [scriptPath, ...args], {
+    stdio: ['ignore', 'pipe', 'pipe'],  // capture both stdout and stderr
+    encoding: 'utf8',
+  });
+
+  if (result.error) {
+    throw new Error(`${label} failed to spawn: ${result.error.message}`);
+  }
+
+  const stdout = result.stdout || '';
+  const stderr = (result.stderr || '').trim();
+
+  // Echo stdout signals (Extracted:/Parsed: lines) to our stdout
+  if (stdout) process.stdout.write(stdout);
+
+  // Write script's stderr to log file + our stderr
+  if (stderr) {
+    const stderrLabel = `${label} stderr`;
+    for (const line of stderr.split('\n')) {
+      if (line) log('log', `${stderrLabel}: ${line}`);
+    }
+  }
+
+  if (result.status !== 0) {
+    log('error', `${label} exited with code ${result.status}`);
+  } else {
+    log('log', `${label} done`);
+  }
+
+  return { exitCode: result.status ?? 1, stdout };
+}
+
+// ── New-data detection ────────────────────────────────────────────────────────
+
+/**
+ * Count lines in stdout that start with "Extracted:" or "Parsed:" —
+ * these are emitted by extract_emails.js and parse_extracted_emails.js
+ * respectively for each new file written.
+ */
+function countNewFiles(stdout, marker) {
+  return (stdout.match(new RegExp(`^${marker}`, 'gm')) || []).length;
+}
+
+// ── Single pipeline run ───────────────────────────────────────────────────────
+
+function runPipeline(runNumber) {
+  const label = `[pipeline #${runNumber}]`;
+  log('log', `${'─'.repeat(60)}`);
+  log('log', `${label} ${new Date().toISOString()}`);
+
+  // ── Step 1: extract emails ─────────────────────────────────────────────────
+  const { exitCode: exitExtract, stdout: stdoutExtract } =
+    runScript('extract_emails.js');
+
+  if (exitExtract !== 0) {
+    log('error', `${label} aborting: extract_emails failed`);
+    return;
+  }
+
+  const newEmails = countNewFiles(stdoutExtract, 'Extracted:');
+  log('log', `${label} new emails extracted: ${newEmails}`);
+
+  // ── Step 2: parse new emails ───────────────────────────────────────────────
+  const { exitCode: exitParse, stdout: stdoutParse } =
+    runScript('parse_extracted_emails.js');
+
+  if (exitParse !== 0) {
+    log('error', `${label} aborting: parse_extracted_emails failed`);
+    return;
+  }
+
+  const newParsed = countNewFiles(stdoutParse, 'Parsed:');
+  log('log', `${label} new emails parsed: ${newParsed}`);
+
+  // ── Skip downstream steps if nothing changed ───────────────────────────────
+  if (newEmails === 0 && newParsed === 0) {
+    log('log', `${label} no new data — skipping CSV rebuild and Sheets upload`);
+    return;
+  }
+
+  // ── Step 3: rebuild MAWB CSV ───────────────────────────────────────────────
+  const { exitCode: exitMawb } = runScript('build_cfs_csv_mawb.js');
+  if (exitMawb !== 0) {
+    log('error', `${label} aborting: build_cfs_csv_mawb failed`);
+    return;
+  }
+
+  // ── Step 4: rebuild ULD CSV ────────────────────────────────────────────────
+  const { exitCode: exitUld } = runScript('build_cfs_csv_uld.js');
+  if (exitUld !== 0) {
+    log('error', `${label} aborting: build_cfs_csv_uld failed`);
+    return;
+  }
+
+  // ── Step 5: upload to Google Sheets ───────────────────────────────────────
+  const { exitCode: exitUpload } = runScript('upload_tables_to_sheets.js');
+  if (exitUpload !== 0) {
+    log('error', `${label} upload_tables_to_sheets failed (CSVs are still up to date locally)`);
+    return;
+  }
+
+  log('log', `${label} pipeline complete`);
+}
+
+// ── Polling loop ──────────────────────────────────────────────────────────────
+
+let runNumber = 0;
+
+async function tick() {
+  runNumber++;
+  try {
+    runPipeline(runNumber);
+  } catch (err) {
+    log('error', `[pipeline #${runNumber}] unexpected error: ${err.message}`);
+  }
+}
+
+if (RUN_ONCE) {
+  tick();
+} else {
+  log('log', `Pipeline polling every ${POLL_INTERVAL_MS / 1000}s. Press Ctrl+C to stop.`);
+  tick();  // run immediately on start
+  setInterval(tick, POLL_INTERVAL_MS);
+}

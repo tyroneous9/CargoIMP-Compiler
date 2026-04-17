@@ -83,10 +83,14 @@ create a script which completes the following steps:
 2. repeats at a time interval "EMAIL_POLL_INTERVAL_MS" set in .env
 3. runs #extract_emails.js
 4. runs #parse_extracted_emails.js
-5. runs #build_cfs_csv_mawb and #build_cfs_csv_uld
-6. update the corresponding existing google sheets (one for mawb sheet, one for uld sheet)
+5. runs #build_cfs_csv_mawb.js and #build_cfs_csv_uld.js
+6. runs #upload_tables_to_sheets.js
 
 CONFIGURING SHEETS:
 1. should i append or overwrite? the use case of the sheet is to allow high uptime human input to both read and write to the sheet. suggestion: create one sheet for human input which is appended to, and create another sheet which is overwritten every run.
 2. in the #TABLE_MAP, how do i decide on the clearRange and writeRange?
 3. describe my scope of modification on the sheet by using the api. for example, would i be able to combine adjacent ULD cells to show a single ULD, which is more human readable?
+
+LOGGING:
+command: configure a new path to the logs directory at server/data/logs.
+command: propose how to implement logging throughout the pipeline.

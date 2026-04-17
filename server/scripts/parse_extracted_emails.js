@@ -72,18 +72,18 @@ function main() {
     const emailJson = JSON.parse(fs.readFileSync(emailPath, 'utf8'));
     const { uid, mailbox, body, cimpType } = emailJson;
     if (!uid || !mailbox || !body || !cimpType) {
-      process.stdout.write(`Skipping ${file}: missing uid, mailbox, body, or cimpType\n`);
+      process.stderr.write(`Skipping ${file}: missing uid, mailbox, body, or cimpType\n`);
       continue;
     }
     const parsedFilename = buildParsedFilename(mailbox, uid);
     const parsedPath = path.join(PARSED_EMAILS_DIR, parsedFilename);
     if (fs.existsSync(parsedPath)) {
-      process.stdout.write(`Already parsed: ${parsedFilename}\n`);
+      process.stderr.write(`Already parsed: ${parsedFilename}\n`);
       continue;
     }
     const parserBinary = PARSER_BINARIES[cimpType];
     if (!parserBinary || !fs.existsSync(parserBinary)) {
-      process.stdout.write(`No parser for type ${cimpType} or binary missing for ${file}\n`);
+      process.stderr.write(`No parser for type ${cimpType} or binary missing for ${file}\n`);
       continue;
     }
     const result = runParser(parserBinary, body);

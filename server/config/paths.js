@@ -4,6 +4,7 @@ const SERVER_ROOT = path.resolve(__dirname, '..');
 const REPO_ROOT = path.resolve(SERVER_ROOT, '..');
 
 const DATA_DIR = path.join(SERVER_ROOT, 'data');
+const LOGS_DIR = path.join(DATA_DIR, 'logs');
 const OUTPUTS_DIR = path.join(DATA_DIR, 'outputs');
 const EMAILS_DIR = path.join(OUTPUTS_DIR, 'emails');
 const PARSED_EMAILS_DIR = path.join(OUTPUTS_DIR, 'parsed_emails');
@@ -29,6 +30,7 @@ module.exports = {
   SERVER_ROOT,
   REPO_ROOT,
   DATA_DIR,
+  LOGS_DIR,
   OUTPUTS_DIR,
   EMAILS_DIR,
   PARSED_EMAILS_DIR,
