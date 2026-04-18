@@ -31,6 +31,7 @@ require('dotenv').config({ path: ENV_FILE });
 
 const SCRIPTS_DIR = __dirname;
 const POLL_INTERVAL_MS = parseInt(process.env.EMAIL_POLL_INTERVAL_MS, 10) || 600_000;
+const SCRIPT_TIMEOUT_MS = parseInt(process.env.PIPELINE_SCRIPT_TIMEOUT_MS, 10) || 300_000;
 const RUN_ONCE = process.argv.includes('--once');
 
 // ── Logger ────────────────────────────────────────────────────────────────────
@@ -76,9 +77,16 @@ function runScript(scriptName, args = []) {
   const result = spawnSync(process.execPath, [scriptPath, ...args], {
     stdio: ['ignore', 'pipe', 'pipe'],  // capture both stdout and stderr
     encoding: 'utf8',
+    timeout: SCRIPT_TIMEOUT_MS,
+    killSignal: 'SIGTERM',
   });
 
   if (result.error) {
+    // Timeout should not crash the whole poller process.
+    if (result.error.code === 'ETIMEDOUT') {
+      log('error', `${label} timed out after ${SCRIPT_TIMEOUT_MS}ms`);
+      return { exitCode: 1, stdout: '' };
+    }
     throw new Error(`${label} failed to spawn: ${result.error.message}`);
   }
 
@@ -130,13 +138,14 @@ function runPipeline(runNumber) {
   const { exitCode: exitExtract, stdout: stdoutExtract } =
     runScript('extract_emails.js');
 
+  let newEmails = 0;
   if (exitExtract !== 0) {
-    log('error', `${label} aborting: extract_emails failed`);
-    return;
+    // IMAP connectivity can fail transiently (e.g. DNS EAI_AGAIN); keep pipeline alive.
+    log('warn', `${label} extract_emails failed; continuing to parse existing extracted files`);
+  } else {
+    newEmails = countNewFiles(stdoutExtract, 'Extracted:');
+    log('log', `${label} new emails extracted: ${newEmails}`);
   }
-
-  const newEmails = countNewFiles(stdoutExtract, 'Extracted:');
-  log('log', `${label} new emails extracted: ${newEmails}`);
 
   // ── Step 2: parse new emails ───────────────────────────────────────────────
   const { exitCode: exitParse, stdout: stdoutParse } =
@@ -190,20 +199,44 @@ function runPipeline(runNumber) {
 // ── Polling loop ──────────────────────────────────────────────────────────────
 
 let runNumber = 0;
+let isRunning = false;
+let isShuttingDown = false;
+let pollTimer = null;
 
 async function tick() {
+  if (isRunning) {
+    log('warn', '[pipeline] previous run is still active; skipping this tick');
+    return;
+  }
+  if (isShuttingDown) return;
+
   runNumber++;
+  isRunning = true;
   try {
     runPipeline(runNumber);
   } catch (err) {
     log('error', `[pipeline #${runNumber}] unexpected error: ${err.message}`);
+  } finally {
+    isRunning = false;
+    if (isShuttingDown) process.exit(0);
   }
 }
+
+function requestShutdown(signal) {
+  if (isShuttingDown) return;
+  isShuttingDown = true;
+  if (pollTimer) clearInterval(pollTimer);
+  log('warn', `Received ${signal}; shutting down pipeline...`);
+  if (!isRunning) process.exit(0);
+}
+
+process.on('SIGINT', () => requestShutdown('SIGINT'));
+process.on('SIGTERM', () => requestShutdown('SIGTERM'));
 
 if (RUN_ONCE) {
   tick();
 } else {
   log('log', `Pipeline polling every ${POLL_INTERVAL_MS / 1000}s. Press Ctrl+C to stop.`);
   tick();  // run immediately on start
-  setInterval(tick, POLL_INTERVAL_MS);
+  pollTimer = setInterval(tick, POLL_INTERVAL_MS);
 }
