@@ -1,213 +1,1084 @@
-2026-04-18T04:38:38.105Z [LOG] Pipeline polling every 600s. Press Ctrl+C to stop.
-2026-04-18T04:38:38.108Z [LOG] ────────────────────────────────────────────────────────────
-2026-04-18T04:38:38.108Z [LOG] [pipeline #1] 2026-04-18T04:38:38.108Z
-2026-04-18T04:38:38.108Z [LOG] [extract_emails.js] starting…
-2026-04-18T04:38:38.352Z [LOG] extraction finished
-2026-04-18T04:38:38.354Z [ERROR] extractor failed: getaddrinfo EAI_AGAIN imap.qiye.aliyun.com
-2026-04-18T04:38:38.360Z [ERROR] [extract_emails.js] exited with code 1
-2026-04-18T04:38:38.360Z [ERROR] [pipeline #1] aborting: extract_emails failed
-2026-04-18T04:41:36.729Z [LOG] ────────────────────────────────────────────────────────────
-2026-04-18T04:41:36.731Z [LOG] [pipeline #1] 2026-04-18T04:41:36.731Z
-2026-04-18T04:41:36.732Z [LOG] [extract_emails.js] starting…
-2026-04-18T04:42:17.160Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6742.json
-2026-04-18T04:42:17.160Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6741.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6740.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6739.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6738.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6737.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6736.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6735.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6734.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6733.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6732.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6731.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6730.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6729.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6728.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6727.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6726.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6725.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6724.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6723.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6722.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6721.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6720.json
-2026-04-18T04:42:17.161Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6719.json
-2026-04-18T04:42:17.162Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6718.json
-2026-04-18T04:42:17.162Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6717.json
-2026-04-18T04:42:17.162Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6716.json
-2026-04-18T04:42:17.162Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6715.json
-2026-04-18T04:42:17.162Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6714.json
-2026-04-18T04:42:17.162Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6713.json
-2026-04-18T04:42:17.162Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6712.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6711.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6710.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6709.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6708.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6707.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6706.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6705.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6704.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6703.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6702.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6701.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6700.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6699.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6698.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6697.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6696.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6695.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6694.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6693.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6692.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6691.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6690.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6689.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6688.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6687.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6686.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6685.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6684.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6683.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6682.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6681.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6680.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6679.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6678.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6677.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6676.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6675.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6674.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6673.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6672.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6671.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6670.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6669.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6668.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6667.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6666.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6665.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6664.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6663.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6662.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6661.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6660.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6659.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6658.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6657.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6656.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6655.json
-2026-04-18T04:42:17.163Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6654.json
-2026-04-18T04:42:17.164Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6653.json
-2026-04-18T04:42:17.164Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6652.json
-2026-04-18T04:42:17.164Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6651.json
-2026-04-18T04:42:17.164Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6650.json
-2026-04-18T04:42:17.164Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6649.json
-2026-04-18T04:42:17.164Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6648.json
-2026-04-18T04:42:17.164Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6647.json
-2026-04-18T04:42:17.164Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6646.json
-2026-04-18T04:42:17.164Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6645.json
-2026-04-18T04:42:17.164Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6644.json
-2026-04-18T04:42:17.164Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6643.json
-2026-04-18T04:42:16.875Z [LOG] reached EXTRACT_EMAIL_LIMIT=100; stopping this run
-2026-04-18T04:42:16.875Z [LOG] extracted 100 email(s) this run
-2026-04-18T04:42:17.149Z [LOG] extraction finished
-2026-04-18T04:42:17.164Z [LOG] [extract_emails.js] done
-2026-04-18T04:42:17.164Z [LOG] [pipeline #1] new emails extracted: 100
-2026-04-18T04:42:17.164Z [LOG] [parse_extracted_emails.js] starting…
-2026-04-18T04:42:18.526Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6647.json
-2026-04-18T04:42:18.526Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6648.json
-2026-04-18T04:42:18.526Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6649.json
-2026-04-18T04:42:18.526Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6650.json
-2026-04-18T04:42:18.526Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6652.json
-2026-04-18T04:42:18.526Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6653.json
-2026-04-18T04:42:18.526Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6654.json
-2026-04-18T04:42:18.526Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6655.json
-2026-04-18T04:42:18.526Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6667.json
-2026-04-18T04:42:18.526Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6668.json
-2026-04-18T04:42:18.526Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6669.json
-2026-04-18T04:42:18.526Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6670.json
-2026-04-18T04:42:18.526Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6671.json
-2026-04-18T04:42:18.526Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6672.json
-2026-04-18T04:42:18.526Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6673.json
-2026-04-18T04:42:18.526Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6674.json
-2026-04-18T04:42:18.526Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6675.json
-2026-04-18T04:42:18.526Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6676.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6677.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6678.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6679.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6680.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6681.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6682.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6683.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6684.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6685.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6686.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6687.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6688.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6689.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6690.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6692.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6693.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6694.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6695.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6696.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6697.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6698.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6699.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6700.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6701.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6702.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6703.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6704.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6705.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6706.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6707.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6708.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6709.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6710.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6711.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6718.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6722.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6723.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6725.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6726.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6729.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6730.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6732.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6733.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6734.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6735.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6736.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6737.json
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6738.json
-2026-04-18T04:42:18.523Z [LOG] parse summary: total=100, parsed=66, alreadyParsed=0, missingFields=34, missingParser=0, parseErrors=0
-2026-04-18T04:42:18.527Z [LOG] [parse_extracted_emails.js] done
-2026-04-18T04:42:18.527Z [LOG] [pipeline #1] new emails parsed: 66
-2026-04-18T04:42:18.528Z [LOG] [build_cfs_csv_mawb.js] starting…
-2026-04-18T04:42:18.552Z [LOG] Written 106 rows to CFS_mawb.csv
-2026-04-18T04:42:18.555Z [LOG]   Rows with no FFM match (no flight data): 0
-2026-04-18T04:42:18.558Z [LOG] [build_cfs_csv_mawb.js] done
-2026-04-18T04:42:18.559Z [LOG] [build_cfs_csv_uld.js] starting…
-2026-04-18T04:42:18.595Z [LOG] [build_cfs_csv_uld.js] Written 13 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS - output-uld.csv
-2026-04-18T04:42:18.595Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 0
-2026-04-18T04:42:18.595Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 5
-2026-04-18T04:42:18.595Z [LOG] [build_cfs_csv_uld.js] done
-2026-04-18T04:42:18.595Z [LOG] [build_cfs_csv_hawb.js] starting…
-2026-04-18T04:42:18.619Z [LOG] Written 108 rows to CFS_hawb.csv
-2026-04-18T04:42:18.622Z [LOG]   HAWB rows: 7
-2026-04-18T04:42:18.622Z [LOG]   MAWB-only rows: 101
-2026-04-18T04:42:18.622Z [LOG]   Rows with no FFM match (no flight data): 0
-2026-04-18T04:42:18.625Z [LOG] [build_cfs_csv_hawb.js] done
-2026-04-18T04:42:18.625Z [LOG] [upload_tables_to_sheets.js] starting…
-2026-04-18T04:42:18.728Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AG …
-2026-04-18T04:42:19.507Z [LOG] [mawb] Writing 107 rows → 'CFS_by_MAWB'!A1 …
-2026-04-18T04:42:20.830Z [LOG] [mawb] Applied sheet formatting and sorting
-2026-04-18T04:42:20.830Z [LOG] [mawb] Done — 106 data rows uploaded.
-2026-04-18T04:42:20.830Z [WARN] [uld] File not found, skipping: /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
-2026-04-18T04:42:20.831Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AG …
-2026-04-18T04:42:21.081Z [LOG] [hawb] Writing 109 rows → 'CFS_by_HAWB'!A1 …
-2026-04-18T04:42:21.941Z [LOG] [hawb] Applied sheet formatting and sorting
-2026-04-18T04:42:21.941Z [LOG] [hawb] Done — 108 data rows uploaded.
-2026-04-18T04:42:21.946Z [LOG] [upload_tables_to_sheets.js] done
-2026-04-18T04:42:21.946Z [LOG] [pipeline #1] pipeline complete
+2026-04-18T05:07:05.920Z [LOG] Pipeline polling every 600s. Press Ctrl+C to stop.
+2026-04-18T05:07:05.923Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T05:07:05.923Z [LOG] [pipeline #1] 2026-04-18T05:07:05.923Z
+2026-04-18T05:07:05.924Z [LOG] [extract_emails.js] starting…
+2026-04-18T05:07:44.090Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6542.json
+2026-04-18T05:07:44.090Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6541.json
+2026-04-18T05:07:44.090Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6540.json
+2026-04-18T05:07:44.090Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6539.json
+2026-04-18T05:07:44.090Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6538.json
+2026-04-18T05:07:44.090Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6537.json
+2026-04-18T05:07:44.090Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6536.json
+2026-04-18T05:07:44.091Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6535.json
+2026-04-18T05:07:44.091Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6534.json
+2026-04-18T05:07:44.091Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6533.json
+2026-04-18T05:07:44.091Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6532.json
+2026-04-18T05:07:44.091Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6531.json
+2026-04-18T05:07:44.091Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6530.json
+2026-04-18T05:07:44.091Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6529.json
+2026-04-18T05:07:44.091Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6528.json
+2026-04-18T05:07:44.091Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6527.json
+2026-04-18T05:07:44.091Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6526.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6525.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6524.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6523.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6522.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6521.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6520.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6519.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6518.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6517.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6516.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6515.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6514.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6513.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6512.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6511.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6510.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6509.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6508.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6507.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6506.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6505.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6504.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6503.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6502.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6501.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6500.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6499.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6498.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6497.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6496.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6495.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6494.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6493.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6492.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6491.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6490.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6489.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6488.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6487.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6486.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6485.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6484.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6483.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6482.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6481.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6480.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6479.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6478.json
+2026-04-18T05:07:44.092Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6477.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6476.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6475.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6474.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6473.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6472.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6471.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6470.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6469.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6468.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6467.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6466.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6465.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6464.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6463.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6462.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6461.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6460.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6459.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6458.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6457.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6456.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6455.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6454.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6453.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6452.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6451.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6450.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6449.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6448.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6447.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6446.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6445.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6444.json
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6443.json
+2026-04-18T05:07:43.833Z [LOG] reached EXTRACT_EMAIL_LIMIT=100; stopping this run
+2026-04-18T05:07:43.833Z [LOG] extracted 100 email(s) this run
+2026-04-18T05:07:44.080Z [LOG] extraction finished
+2026-04-18T05:07:44.093Z [LOG] [extract_emails.js] done
+2026-04-18T05:07:44.093Z [LOG] [pipeline #1] new emails extracted: 100
+2026-04-18T05:07:44.094Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T05:07:44.940Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6443.json
+2026-04-18T05:07:44.940Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6444.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6445.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6446.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6447.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6448.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6449.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6450.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6451.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6452.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6456.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6457.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6459.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6460.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6461.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6462.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6463.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6465.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6466.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6467.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6468.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6469.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6470.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6471.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6472.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6473.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6474.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6475.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6476.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6477.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6478.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6479.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6480.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6481.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6482.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6483.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6484.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6485.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6486.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6487.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6488.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6489.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6490.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6491.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6492.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6493.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6494.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6495.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6515.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6516.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6517.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6518.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6519.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6520.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6521.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6522.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6523.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6524.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6525.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6526.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6527.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6528.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6529.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6530.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6531.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6532.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6533.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6534.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6535.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6536.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6537.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6538.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6539.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6540.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6541.json
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6542.json
+2026-04-18T05:07:44.936Z [LOG] parse summary: total=300, parsed=76, alreadyParsed=140, missingFields=84, missingParser=0, parseErrors=0
+2026-04-18T05:07:44.941Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T05:07:44.941Z [LOG] [pipeline #1] new emails parsed: 76
+2026-04-18T05:07:44.942Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-18T05:07:44.976Z [LOG] Written 207 rows to CFS_mawb.csv
+2026-04-18T05:07:44.982Z [LOG]   Rows with no FFM match (no flight data): 1
+2026-04-18T05:07:44.987Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-18T05:07:44.989Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-18T05:07:45.058Z [LOG] [build_cfs_csv_uld.js] Written 64 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS - output-uld.csv
+2026-04-18T05:07:45.058Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 1
+2026-04-18T05:07:45.058Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 20
+2026-04-18T05:07:45.058Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-18T05:07:45.059Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-18T05:07:45.092Z [LOG] Written 209 rows to CFS_hawb.csv
+2026-04-18T05:07:45.098Z [LOG]   HAWB rows: 33
+2026-04-18T05:07:45.098Z [LOG]   MAWB-only rows: 176
+2026-04-18T05:07:45.102Z [LOG]   Rows with no FFM match (no flight data): 1
+2026-04-18T05:07:45.109Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-18T05:07:45.109Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-18T05:07:45.226Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AG …
+2026-04-18T05:07:45.884Z [LOG] [mawb] Writing 208 rows → 'CFS_by_MAWB'!A1 …
+2026-04-18T05:07:47.453Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-18T05:07:47.453Z [LOG] [mawb] Done — 207 data rows uploaded.
+2026-04-18T05:07:47.453Z [WARN] [uld] File not found, skipping: /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-18T05:07:47.454Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AG …
+2026-04-18T05:07:47.623Z [LOG] [hawb] Writing 210 rows → 'CFS_by_HAWB'!A1 …
+2026-04-18T05:07:48.465Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-18T05:07:48.465Z [LOG] [hawb] Done — 209 data rows uploaded.
+2026-04-18T05:07:48.472Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-18T05:07:48.472Z [LOG] [pipeline #1] pipeline complete
+2026-04-18T05:17:48.472Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T05:17:48.473Z [LOG] [pipeline #2] 2026-04-18T05:17:48.473Z
+2026-04-18T05:17:48.473Z [LOG] [extract_emails.js] starting…
+2026-04-18T05:18:32.371Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6442.json
+2026-04-18T05:18:32.371Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6441.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6440.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6439.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6438.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6437.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6436.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6435.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6434.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6433.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6432.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6431.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6430.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6429.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6428.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6427.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6426.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6425.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6424.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6423.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6422.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6421.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6420.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6419.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6418.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6417.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6416.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6415.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6414.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6413.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6412.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6411.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6410.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6409.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6408.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6407.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6406.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6405.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6404.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6403.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6402.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6401.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6400.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6399.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6398.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6397.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6396.json
+2026-04-18T05:18:32.372Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6395.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6394.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6393.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6392.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6391.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6390.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6389.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6388.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6387.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6386.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6385.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6384.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6383.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6382.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6381.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6380.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6379.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6378.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6377.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6376.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6375.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6374.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6373.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6372.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6371.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6370.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6369.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6368.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6367.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6366.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6365.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6364.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6363.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6362.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6361.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6360.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6359.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6358.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6357.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6356.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6355.json
+2026-04-18T05:18:32.373Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6354.json
+2026-04-18T05:18:32.374Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6353.json
+2026-04-18T05:18:32.374Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6352.json
+2026-04-18T05:18:32.374Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6351.json
+2026-04-18T05:18:32.374Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6350.json
+2026-04-18T05:18:32.374Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6349.json
+2026-04-18T05:18:32.374Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6348.json
+2026-04-18T05:18:32.374Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6347.json
+2026-04-18T05:18:32.374Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6346.json
+2026-04-18T05:18:32.374Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6345.json
+2026-04-18T05:18:32.374Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6344.json
+2026-04-18T05:18:32.374Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6343.json
+2026-04-18T05:18:32.112Z [LOG] reached EXTRACT_EMAIL_LIMIT=100; stopping this run
+2026-04-18T05:18:32.112Z [LOG] extracted 100 email(s) this run
+2026-04-18T05:18:32.360Z [LOG] extraction finished
+2026-04-18T05:18:32.374Z [LOG] [extract_emails.js] done
+2026-04-18T05:18:32.374Z [LOG] [pipeline #2] new emails extracted: 100
+2026-04-18T05:18:32.374Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T05:18:32.966Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6343.json
+2026-04-18T05:18:32.966Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6344.json
+2026-04-18T05:18:32.966Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6345.json
+2026-04-18T05:18:32.966Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6346.json
+2026-04-18T05:18:32.966Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6347.json
+2026-04-18T05:18:32.966Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6348.json
+2026-04-18T05:18:32.966Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6350.json
+2026-04-18T05:18:32.966Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6351.json
+2026-04-18T05:18:32.966Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6352.json
+2026-04-18T05:18:32.966Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6353.json
+2026-04-18T05:18:32.966Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6354.json
+2026-04-18T05:18:32.966Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6429.json
+2026-04-18T05:18:32.966Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6430.json
+2026-04-18T05:18:32.966Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6436.json
+2026-04-18T05:18:32.966Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6437.json
+2026-04-18T05:18:32.966Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6438.json
+2026-04-18T05:18:32.966Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6439.json
+2026-04-18T05:18:32.966Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6440.json
+2026-04-18T05:18:32.966Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6441.json
+2026-04-18T05:18:32.966Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6442.json
+2026-04-18T05:18:32.962Z [LOG] parse summary: total=400, parsed=20, alreadyParsed=216, missingFields=164, missingParser=0, parseErrors=0
+2026-04-18T05:18:32.967Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T05:18:32.967Z [LOG] [pipeline #2] new emails parsed: 20
+2026-04-18T05:18:32.967Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-18T05:18:32.995Z [LOG] Written 235 rows to CFS_mawb.csv
+2026-04-18T05:18:32.999Z [LOG]   Rows with no FFM match (no flight data): 1
+2026-04-18T05:18:33.001Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-18T05:18:33.001Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-18T05:18:33.043Z [LOG] [build_cfs_csv_uld.js] Written 64 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-18T05:18:33.043Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 1
+2026-04-18T05:18:33.043Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 20
+2026-04-18T05:18:33.043Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-18T05:18:33.043Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-18T05:18:33.068Z [LOG] Written 237 rows to CFS_hawb.csv
+2026-04-18T05:18:33.071Z [LOG]   HAWB rows: 33
+2026-04-18T05:18:33.071Z [LOG]   MAWB-only rows: 204
+2026-04-18T05:18:33.071Z [LOG]   Rows with no FFM match (no flight data): 1
+2026-04-18T05:18:33.074Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-18T05:18:33.075Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-18T05:18:33.170Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AG …
+2026-04-18T05:18:33.786Z [LOG] [mawb] Writing 236 rows → 'CFS_by_MAWB'!A1 …
+2026-04-18T05:18:35.517Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-18T05:18:35.517Z [LOG] [mawb] Done — 235 data rows uploaded.
+2026-04-18T05:18:35.518Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AG …
+2026-04-18T05:18:35.734Z [LOG] [uld] Writing 65 rows → 'CFS_by_ULD'!A1 …
+2026-04-18T05:18:36.511Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-18T05:18:36.511Z [LOG] [uld] Done — 64 data rows uploaded.
+2026-04-18T05:18:36.512Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AG …
+2026-04-18T05:18:36.734Z [LOG] [hawb] Writing 238 rows → 'CFS_by_HAWB'!A1 …
+2026-04-18T05:18:37.576Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-18T05:18:37.576Z [LOG] [hawb] Done — 237 data rows uploaded.
+2026-04-18T05:18:37.583Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-18T05:18:37.583Z [LOG] [pipeline #2] pipeline complete
+2026-04-18T05:27:48.481Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T05:27:48.481Z [LOG] [pipeline #3] 2026-04-18T05:27:48.481Z
+2026-04-18T05:27:48.481Z [LOG] [extract_emails.js] starting…
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6342.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6341.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6340.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6339.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6338.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6337.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6336.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6335.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6334.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6333.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6332.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6331.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6330.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6329.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6328.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6327.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6326.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6325.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6324.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6323.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6322.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6321.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6320.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6319.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6318.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6317.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6316.json
+2026-04-18T05:28:28.072Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6315.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6314.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6313.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6312.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6311.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6310.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6309.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6308.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6307.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6306.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6305.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6304.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6303.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6302.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6301.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6300.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6299.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6298.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6297.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6296.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6295.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6294.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6293.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6292.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6291.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6290.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6289.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6288.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6287.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6286.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6285.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6284.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6283.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6282.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6281.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6280.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6279.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6278.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6277.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6276.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6275.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6274.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6273.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6272.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6271.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6270.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6269.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6268.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6267.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6266.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6265.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6264.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6263.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6262.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6261.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6260.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6259.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6258.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6257.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6256.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6255.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6254.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6253.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6252.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6251.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6250.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6249.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6248.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6247.json
+2026-04-18T05:28:28.073Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6246.json
+2026-04-18T05:28:28.074Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6245.json
+2026-04-18T05:28:28.074Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6244.json
+2026-04-18T05:28:28.074Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6243.json
+2026-04-18T05:28:27.821Z [LOG] reached EXTRACT_EMAIL_LIMIT=100; stopping this run
+2026-04-18T05:28:27.821Z [LOG] extracted 100 email(s) this run
+2026-04-18T05:28:28.063Z [LOG] extraction finished
+2026-04-18T05:28:28.074Z [LOG] [extract_emails.js] done
+2026-04-18T05:28:28.074Z [LOG] [pipeline #3] new emails extracted: 100
+2026-04-18T05:28:28.074Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T05:28:29.289Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6243.json
+2026-04-18T05:28:29.289Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6244.json
+2026-04-18T05:28:29.289Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6245.json
+2026-04-18T05:28:29.289Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6246.json
+2026-04-18T05:28:29.289Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6247.json
+2026-04-18T05:28:29.289Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6248.json
+2026-04-18T05:28:29.289Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6249.json
+2026-04-18T05:28:29.289Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6250.json
+2026-04-18T05:28:29.289Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6251.json
+2026-04-18T05:28:29.289Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6252.json
+2026-04-18T05:28:29.289Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6253.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6254.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6255.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6256.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6257.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6258.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6259.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6260.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6261.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6262.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6263.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6264.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6265.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6266.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6267.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6268.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6269.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6270.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6271.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6272.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6273.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6274.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6275.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6276.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6277.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6278.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6279.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6280.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6281.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6282.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6283.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6284.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6285.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6286.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6287.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6288.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6289.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6290.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6291.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6292.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6293.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6296.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6297.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6298.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6299.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6300.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6301.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6302.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6303.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6304.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6305.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6306.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6307.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6308.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6309.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6310.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6311.json
+2026-04-18T05:28:29.290Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6312.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6313.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6314.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6315.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6316.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6317.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6318.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6319.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6320.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6321.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6322.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6323.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6324.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6325.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6326.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6327.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6328.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6329.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6330.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6331.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6332.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6333.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6334.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6335.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6336.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6337.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6338.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6339.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6340.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6341.json
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6342.json
+2026-04-18T05:28:29.286Z [LOG] parse summary: total=500, parsed=98, alreadyParsed=236, missingFields=166, missingParser=0, parseErrors=0
+2026-04-18T05:28:29.291Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T05:28:29.291Z [LOG] [pipeline #3] new emails parsed: 98
+2026-04-18T05:28:29.291Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-18T05:28:29.317Z [LOG] Written 305 rows to CFS_mawb.csv
+2026-04-18T05:28:29.320Z [LOG]   Rows with no FFM match (no flight data): 1
+2026-04-18T05:28:29.322Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-18T05:28:29.322Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-18T05:28:29.357Z [LOG] [build_cfs_csv_uld.js] Written 142 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-18T05:28:29.358Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 1
+2026-04-18T05:28:29.358Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 58
+2026-04-18T05:28:29.358Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-18T05:28:29.358Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-18T05:28:29.391Z [LOG] Written 313 rows to CFS_hawb.csv
+2026-04-18T05:28:29.394Z [LOG]   HAWB rows: 61
+2026-04-18T05:28:29.394Z [LOG]   MAWB-only rows: 252
+2026-04-18T05:28:29.394Z [LOG]   Rows with no FFM match (no flight data): 1
+2026-04-18T05:28:29.396Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-18T05:28:29.396Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-18T05:28:29.483Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AG …
+2026-04-18T05:28:30.356Z [LOG] [mawb] Writing 306 rows → 'CFS_by_MAWB'!A1 …
+2026-04-18T05:28:32.043Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-18T05:28:32.043Z [LOG] [mawb] Done — 305 data rows uploaded.
+2026-04-18T05:28:32.044Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AG …
+2026-04-18T05:28:32.315Z [LOG] [uld] Writing 143 rows → 'CFS_by_ULD'!A1 …
+2026-04-18T05:28:33.460Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-18T05:28:33.460Z [LOG] [uld] Done — 142 data rows uploaded.
+2026-04-18T05:28:33.461Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AG …
+2026-04-18T05:28:33.759Z [LOG] [hawb] Writing 314 rows → 'CFS_by_HAWB'!A1 …
+2026-04-18T05:28:34.988Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-18T05:28:34.988Z [LOG] [hawb] Done — 313 data rows uploaded.
+2026-04-18T05:28:34.995Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-18T05:28:34.995Z [LOG] [pipeline #3] pipeline complete
+2026-04-18T05:37:48.482Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T05:37:48.482Z [LOG] [pipeline #4] 2026-04-18T05:37:48.482Z
+2026-04-18T05:37:48.483Z [LOG] [extract_emails.js] starting…
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6242.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6241.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6240.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6239.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6238.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6237.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6236.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6235.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6234.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6233.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6232.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6231.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6230.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6229.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6228.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6227.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6226.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6225.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6224.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6223.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6222.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6221.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6220.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6219.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6218.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6217.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6216.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6215.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6214.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6213.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6212.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6211.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6210.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6209.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6208.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6207.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6206.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6205.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6204.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6203.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6202.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6201.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6200.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6199.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6198.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6197.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6196.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6195.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6194.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6193.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6192.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6191.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6190.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6189.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6188.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6187.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6186.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6185.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6184.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6183.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6182.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6181.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6180.json
+2026-04-18T05:38:26.507Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6179.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6178.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6177.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6176.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6175.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6174.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6173.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6172.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6171.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6170.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6169.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6168.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6167.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6166.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6165.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6164.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6163.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6162.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6161.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6160.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6159.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6158.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6157.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6156.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6155.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6154.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6153.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6152.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6151.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6150.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6149.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6148.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6147.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6146.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6145.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6144.json
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6143.json
+2026-04-18T05:38:26.253Z [LOG] reached EXTRACT_EMAIL_LIMIT=100; stopping this run
+2026-04-18T05:38:26.253Z [LOG] extracted 100 email(s) this run
+2026-04-18T05:38:26.497Z [LOG] extraction finished
+2026-04-18T05:38:26.508Z [LOG] [extract_emails.js] done
+2026-04-18T05:38:26.508Z [LOG] [pipeline #4] new emails extracted: 100
+2026-04-18T05:38:26.508Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6143.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6144.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6145.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6146.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6147.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6148.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6149.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6150.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6151.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6152.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6156.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6157.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6158.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6159.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6161.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6162.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6163.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6164.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6165.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6166.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6167.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6168.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6169.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6170.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6171.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6172.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6173.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6174.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6175.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6176.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6177.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6178.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6179.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6180.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6181.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6182.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6183.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6184.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6185.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6192.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6196.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6197.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6198.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6199.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6200.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6201.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6202.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6203.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6204.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6205.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6206.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6207.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6208.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6209.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6210.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6211.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6212.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6213.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6214.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6215.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6216.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6217.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6218.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6219.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6220.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6221.json
+2026-04-18T05:38:27.944Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6222.json
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6223.json
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6224.json
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6225.json
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6226.json
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6227.json
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6228.json
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6229.json
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6230.json
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6231.json
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6232.json
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6233.json
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6234.json
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6235.json
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6236.json
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6237.json
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6238.json
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6239.json
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6240.json
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6241.json
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6242.json
+2026-04-18T05:38:27.940Z [LOG] parse summary: total=600, parsed=87, alreadyParsed=334, missingFields=179, missingParser=0, parseErrors=0
+2026-04-18T05:38:27.945Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T05:38:27.945Z [LOG] [pipeline #4] new emails parsed: 87
+2026-04-18T05:38:27.945Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-18T05:38:27.977Z [LOG] Written 340 rows to CFS_mawb.csv
+2026-04-18T05:38:27.980Z [LOG]   Rows with no FFM match (no flight data): 1
+2026-04-18T05:38:27.983Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-18T05:38:27.983Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-18T05:38:28.021Z [LOG] [build_cfs_csv_uld.js] Written 205 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-18T05:38:28.021Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 1
+2026-04-18T05:38:28.021Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 99
+2026-04-18T05:38:28.021Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-18T05:38:28.021Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-18T05:38:28.052Z [LOG] Written 387 rows to CFS_hawb.csv
+2026-04-18T05:38:28.055Z [LOG]   HAWB rows: 120
+2026-04-18T05:38:28.056Z [LOG]   MAWB-only rows: 267
+2026-04-18T05:38:28.056Z [LOG]   Rows with no FFM match (no flight data): 1
+2026-04-18T05:38:28.058Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-18T05:38:28.058Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-18T05:38:28.143Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AG …
+2026-04-18T05:38:29.057Z [LOG] [mawb] Writing 341 rows → 'CFS_by_MAWB'!A1 …
+2026-04-18T05:38:30.744Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-18T05:38:30.745Z [LOG] [mawb] Done — 340 data rows uploaded.
+2026-04-18T05:38:30.746Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AG …
+2026-04-18T05:38:31.040Z [LOG] [uld] Writing 206 rows → 'CFS_by_ULD'!A1 …
+2026-04-18T05:38:32.095Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-18T05:38:32.095Z [LOG] [uld] Done — 205 data rows uploaded.
+2026-04-18T05:38:32.096Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AG …
+2026-04-18T05:38:32.391Z [LOG] [hawb] Writing 388 rows → 'CFS_by_HAWB'!A1 …
+2026-04-18T05:38:33.545Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-18T05:38:33.545Z [LOG] [hawb] Done — 387 data rows uploaded.
+2026-04-18T05:38:33.553Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-18T05:38:33.553Z [LOG] [pipeline #4] pipeline complete
+2026-04-18T05:44:42.591Z [WARN] Received SIGINT; shutting down pipeline...
+2026-04-18T05:44:46.849Z [LOG] Pipeline polling every 600s. Press Ctrl+C to stop.
+2026-04-18T05:44:46.852Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T05:44:46.852Z [LOG] [pipeline #1] 2026-04-18T05:44:46.852Z
+2026-04-18T05:44:46.852Z [LOG] [extract_emails.js] starting…
+2026-04-18T05:45:21.512Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6142.json
+2026-04-18T05:45:21.513Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6141.json
+2026-04-18T05:45:21.513Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6140.json
+2026-04-18T05:45:21.513Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6139.json
+2026-04-18T05:45:21.513Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6138.json
+2026-04-18T05:45:21.513Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6137.json
+2026-04-18T05:45:21.513Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6136.json
+2026-04-18T05:45:21.513Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6135.json
+2026-04-18T05:45:21.513Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6134.json
+2026-04-18T05:45:21.513Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6133.json
+2026-04-18T05:45:21.513Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6132.json
+2026-04-18T05:45:21.513Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6131.json
+2026-04-18T05:45:21.513Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6130.json
+2026-04-18T05:45:21.513Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6129.json
+2026-04-18T05:45:21.513Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6128.json
+2026-04-18T05:45:21.513Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6127.json
+2026-04-18T05:45:21.514Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6126.json
+2026-04-18T05:45:21.514Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6125.json
+2026-04-18T05:45:21.514Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6124.json
+2026-04-18T05:45:21.514Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6123.json
+2026-04-18T05:45:21.514Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6122.json
+2026-04-18T05:45:21.514Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6121.json
+2026-04-18T05:45:21.514Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6120.json
+2026-04-18T05:45:21.514Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6119.json
+2026-04-18T05:45:21.514Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6118.json
+2026-04-18T05:45:21.514Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6117.json
+2026-04-18T05:45:21.514Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6116.json
+2026-04-18T05:45:21.514Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6115.json
+2026-04-18T05:45:21.514Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6114.json
+2026-04-18T05:45:21.514Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6113.json
+2026-04-18T05:45:21.514Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6112.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6111.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6110.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6109.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6108.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6107.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6106.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6105.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6104.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6103.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6102.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6101.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6100.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6099.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6098.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6097.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6096.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6095.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6094.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6093.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6092.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6091.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6090.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6089.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6088.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6087.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6086.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6085.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6084.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6083.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6082.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6081.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6080.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6079.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6078.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6077.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6076.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6075.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6074.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6073.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6072.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6071.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6070.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6069.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6068.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6067.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6066.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6065.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6064.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6063.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6062.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6061.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6060.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6059.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6058.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6057.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6056.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6055.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6054.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6053.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6052.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6051.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6050.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6049.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6048.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6047.json
+2026-04-18T05:45:21.515Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6046.json
+2026-04-18T05:45:21.516Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6045.json
+2026-04-18T05:45:21.516Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6044.json
+2026-04-18T05:45:21.516Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6043.json
+2026-04-18T05:45:21.272Z [LOG] reached EXTRACT_EMAIL_LIMIT=100; stopping this run
+2026-04-18T05:45:21.272Z [LOG] extracted 100 email(s) this run
+2026-04-18T05:45:21.504Z [LOG] extraction finished
+2026-04-18T05:45:21.516Z [LOG] [extract_emails.js] done
+2026-04-18T05:45:21.516Z [LOG] [pipeline #1] new emails extracted: 100
+2026-04-18T05:45:21.516Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6043.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6044.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6045.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6046.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6047.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6048.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6049.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6050.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6051.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6052.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6053.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6054.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6055.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6056.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6057.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6058.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6059.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6060.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6061.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6062.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6063.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6064.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6065.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6066.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6067.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6068.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6069.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6070.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6071.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6072.json
+2026-04-18T05:45:23.605Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6073.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6074.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6075.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6076.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6077.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6078.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6079.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6080.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6081.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6082.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6083.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6088.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6089.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6090.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6091.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6092.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6093.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6094.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6095.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6096.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6097.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6098.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6099.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6100.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6101.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6102.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6103.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6104.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6105.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6106.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6107.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6108.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6109.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6110.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6111.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6112.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6113.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6114.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6115.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6116.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6117.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6118.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6119.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6120.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6125.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6126.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6127.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6128.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6129.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6130.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6131.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6132.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6133.json
+2026-04-18T05:45:23.606Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6134.json
+2026-04-18T05:45:23.607Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6135.json
+2026-04-18T05:45:23.607Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6136.json
+2026-04-18T05:45:23.607Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6137.json
+2026-04-18T05:45:23.607Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6138.json
+2026-04-18T05:45:23.607Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6139.json
+2026-04-18T05:45:23.607Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6140.json
+2026-04-18T05:45:23.607Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6141.json
+2026-04-18T05:45:23.607Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6142.json
+2026-04-18T05:45:23.601Z [LOG] parse summary: total=700, parsed=92, alreadyParsed=421, missingFields=187, missingParser=0, parseErrors=0
+2026-04-18T05:45:23.607Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T05:45:23.607Z [LOG] [pipeline #1] new emails parsed: 92
+2026-04-18T05:45:23.608Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-18T05:45:23.647Z [LOG] Written 478 rows to CFS_mawb.csv
+2026-04-18T05:45:23.651Z [LOG]   Rows with no FFM match (no flight data): 1
+2026-04-18T05:45:23.654Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-18T05:45:23.654Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-18T05:45:23.702Z [LOG] [build_cfs_csv_uld.js] Written 242 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-18T05:45:23.702Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 1
+2026-04-18T05:45:23.702Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 114
+2026-04-18T05:45:23.702Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-18T05:45:23.702Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-18T05:45:23.742Z [LOG] Written 525 rows to CFS_hawb.csv
+2026-04-18T05:45:23.745Z [LOG]   HAWB rows: 137
+2026-04-18T05:45:23.745Z [LOG]   MAWB-only rows: 388
+2026-04-18T05:45:23.745Z [LOG]   Rows with no FFM match (no flight data): 1
+2026-04-18T05:45:23.750Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-18T05:45:23.750Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-18T05:45:23.847Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AG …
+2026-04-18T05:45:24.543Z [LOG] [mawb] Writing 479 rows → 'CFS_by_MAWB'!A1 …
+2026-04-18T05:45:26.197Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-18T05:45:26.197Z [LOG] [mawb] Done — 478 data rows uploaded.
+2026-04-18T05:45:26.198Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AG …
+2026-04-18T05:45:26.401Z [LOG] [uld] Writing 243 rows → 'CFS_by_ULD'!A1 …
+2026-04-18T05:45:27.426Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-18T05:45:27.426Z [LOG] [uld] Done — 242 data rows uploaded.
+2026-04-18T05:45:27.427Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AG …
+2026-04-18T05:45:27.629Z [LOG] [hawb] Writing 526 rows → 'CFS_by_HAWB'!A1 …
+2026-04-18T05:45:28.610Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-18T05:45:28.610Z [LOG] [hawb] Done — 525 data rows uploaded.
+2026-04-18T05:45:28.615Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-18T05:45:28.615Z [LOG] [pipeline #1] pipeline complete
+2026-04-18T05:48:05.145Z [WARN] Received SIGINT; shutting down pipeline...

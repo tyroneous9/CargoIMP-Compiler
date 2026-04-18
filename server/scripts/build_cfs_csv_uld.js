@@ -22,9 +22,9 @@
 
 const fs = require('fs');
 const path = require('path');
-const { PARSED_EMAILS_DIR, PARSED_TABLES_DIR } = require('../config/paths');
+const { PARSED_EMAILS_DIR, PARSED_TABLES_DIR, TABLE_FILES } = require('../config/paths');
 
-const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, 'CFS - output-uld.csv');
+const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, TABLE_FILES.uld);
 
 // ── CSV header ────────────────────────────────────────────────────────────────
 

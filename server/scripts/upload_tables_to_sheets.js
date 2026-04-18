@@ -24,7 +24,7 @@
 const fs   = require('fs');
 const path = require('path');
 const { auth: googleAuth, sheets: sheetsFactory } = require('@googleapis/sheets');
-const { PARSED_TABLES_DIR, ENV_FILE } = require('../config/paths');
+const { PARSED_TABLES_DIR, ENV_FILE, TABLE_FILES } = require('../config/paths');
 const { log } = require('../config/logger');
 
 // ── Load environment ──────────────────────────────────────────────────────────
@@ -53,21 +53,21 @@ if (!CREDENTIALS_FILE) {
  */
 const TABLE_MAP = {
   mawb: {
-    file:          'CFS_mawb.csv',
+    file:          TABLE_FILES.mawb,
     spreadsheetId: '1jzyEDGNmtubDM0Uj1HIKEiy0bkSO2ad4r2Z6N95vpzs',
     sheetName:     'CFS_by_MAWB',
     clearRange:    'A:AG',   // 33 columns
     writeRange:    'A1',
   },
   uld: {
-    file:          'CFS_uld.csv',
+    file:          TABLE_FILES.uld,
     spreadsheetId: '1jzyEDGNmtubDM0Uj1HIKEiy0bkSO2ad4r2Z6N95vpzs',
     sheetName:     'CFS_by_ULD',
     clearRange:    'A:AG',   // 33 columns
     writeRange:    'A1',
   },
   hawb: {
-    file:          'CFS_hawb.csv',
+    file:          TABLE_FILES.hawb,
     spreadsheetId: '1jzyEDGNmtubDM0Uj1HIKEiy0bkSO2ad4r2Z6N95vpzs',
     sheetName:     'CFS_by_HAWB',
     clearRange:    'A:AG',   // 33 columns
@@ -268,8 +268,9 @@ async function uploadTable(key, config, sheetsClient) {
   const csvPath = path.join(PARSED_TABLES_DIR, config.file);
 
   if (!fs.existsSync(csvPath)) {
-    log('warn', `[${key}] File not found, skipping: ${csvPath}`);
-    return;
+    const msg = `[${key}] File not found: ${csvPath}`;
+    log('error', msg);
+    throw new Error(msg);
   }
 
   const values = parseCsv(fs.readFileSync(csvPath, 'utf8'));

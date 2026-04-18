@@ -112,8 +112,3 @@ create a script which completes the following steps:
 4. runs #parse_extracted_emails.js
 5. runs #build_cfs_csv_mawb.js and #build_cfs_csv_uld.js
 6. runs #upload_tables_to_sheets.js
-
-MVT PARSE: 
-1. exclusively come from this sender: no-reply@flightservices.cae.com
-2. purpose is to find actual arrival time
-3. modify the csv output to use routeline time to be expected time

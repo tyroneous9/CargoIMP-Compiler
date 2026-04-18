@@ -48,8 +48,8 @@ function main() {
     });
   }
 
-  fs.mkdirSync(paths.DATA_DIR, { recursive: true });
-  const reportPath = path.join(paths.DATA_DIR, 'stderr-summary.ndjson');
+  fs.mkdirSync(paths.OUTPUTS_DIR, { recursive: true });
+  const reportPath = path.join(paths.OUTPUTS_DIR, 'stderr-summary.ndjson');
 
   const ndjson = summaryRecords.map((r) => JSON.stringify(r)).join('\n');
   fs.writeFileSync(reportPath, ndjson ? `${ndjson}\n` : '', 'utf8');

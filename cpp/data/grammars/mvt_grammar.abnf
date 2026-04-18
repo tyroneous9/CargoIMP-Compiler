@@ -1,0 +1,126 @@
+# Induced MVT grammar from observed mailbox corpus (no official CIMP MVT spec available)
+# Corpus basis: server/data/outputs/emails bodies with first line "MVT".
+# This grammar is intentionally permissive and structure-first.
+#
+# Important: all semantics below are provisional and were inferred from observed
+# messages plus operator guidance. In particular, for AA lines:
+# - the required timestamp is treated as actual departure time
+# - the optional second timestamp is treated as actual arrival time
+#
+# Timestamp shape is currently inferred as DDHHMM (day-of-month + time).
+# Time zone is not encoded in the message text itself. Based on operator mapping
+# of "172115" -> "April 17, 16:15 CDT", the encoded value is most consistent
+# with UTC time (often written UTC; sometimes informally mistyped as UCT).
+
+MVTMessage =
+    MessageHeader EOL
+    FlightIdentificationLine EOL
+    EventLine
+    *SupplementLine
+    [EOL];
+
+MessageHeader = "MVT";
+
+# Observed examples:
+# - KZ7132/15.N407KZ.ANC
+# - KZ143/16.JA13KZ.NRT
+# Useful fields:
+# - CarrierFlightNumber: airline + numeric flight identifier
+# - Day: operational day number carried on the flight identification line
+# - AircraftRegistration: aircraft tail / registration
+# - AirportCode: three-letter airport code carried on the identification line
+FlightIdentificationLine =
+    CarrierFlightNumber
+    Slant
+    Day
+    Dot
+    AircraftRegistration
+    Dot
+    AirportCode;
+
+CarrierFlightNumber = 2Upper 3*4Digit;
+Day = 2Digit;
+AircraftRegistration = 5*10AlphaNum;
+AirportCode = 3Upper;
+
+# Observed event families in line 3:
+# - AA142229
+# - AA142229/142253
+# - AD151424 EA1954 ORD
+# - AD151424/151435 EA1955 ORD
+# - EA2220
+# - ED150930
+EventLine =
+    ActualMovementLine EOL
+    / ActualDepartureEstimatedArrivalLine EOL
+    / EstimatedArrivalOnlyLine EOL
+    / EventDepartureLine EOL;
+
+# Provisional semantics from observed messages and operator guidance:
+# - first DateTime6  = ActualDepartureDateTime
+# - second DateTime6 = ActualArrivalDateTime
+# Example: AA172109/172115 => departure 17 21:09, arrival 17 21:15
+ActualMovementLine =
+    "AA"
+    ActualDepartureDateTime
+    [Slant ActualArrivalDateTime];
+
+# AD lines are still less certain semantically than AA lines.
+# Current provisional reading:
+# - required DateTime6       = actual departure datetime
+# - optional second DateTime6 = additional actual movement datetime, often
+#   likely arrival-related, but not yet firmly confirmed
+# - optional EA time/airport = estimated arrival time at the named airport
+ActualDepartureEstimatedArrivalLine =
+    "AD"
+    ActualDepartureDateTime
+    [Slant AdditionalActualDateTime]
+    [SP "EA" EstimatedArrivalTime SP EstimatedArrivalAirport];
+
+EstimatedArrivalOnlyLine = "EA" Time4;
+EventDepartureLine = "ED" DateTime6;
+
+# Supplemental operational lines observed after EventLine:
+# - DLRA/TD/2255/0200, DLWT/0130, DLRA, DLFS/0025
+# - PX0
+# - EB0415
+# - FLD14
+# - EDLAT/0005
+# - SI FMOC26-077 080 090 098 099 100
+SupplementLine =
+    DelayLine EOL
+    / PaxLine EOL
+    / EventBlockLine EOL
+    / FieldStateLine EOL
+    / EdlatLine EOL
+    / SiLine EOL;
+
+DelayLine = DelayCode [Slant DelayReason] [Slant Time4] [Slant Time4];
+DelayCode = "DLRA" / "DLWT" / "DLFS";
+DelayReason = 1*4Upper;
+
+PaxLine = "PX" 1*3Digit;
+EventBlockLine = "EB" Time4;
+FieldStateLine = "FLD" 2Digit;
+EdlatLine = "EDLAT" Slant Time4;
+SiLine = "SI" SP 1*LineChar;
+
+# DDHHMM, provisionally interpreted as UTC-based when external business logic
+# maps values like 172115 -> April 17 16:15 CDT.
+ActualDepartureDateTime = DateTime6;
+ActualArrivalDateTime = DateTime6;
+AdditionalActualDateTime = DateTime6;
+EstimatedArrivalTime = Time4;
+EstimatedArrivalAirport = AirportCode;
+
+DateTime6 = 6Digit;
+Time4 = 4Digit;
+
+LineChar = %x20-7E;
+SP = %x20;
+EOL = [%x0D] %x0A;
+Slant = "/";
+Dot = ".";
+Digit = %x30-39;
+Upper = %x41-5A;
+AlphaNum = Upper / Digit;
