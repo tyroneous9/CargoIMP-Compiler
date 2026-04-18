@@ -67,9 +67,42 @@ function formatDDMON(d) {
   return String(d.getDate()).padStart(2, '0') + MONTHS[d.getMonth()];
 }
 
+function formatMMDD(d) {
+  return String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
 /** Add N calendar days to a Date, return new Date */
 function addDays(d, n) {
   return new Date(d.getTime() + n * 86400000);
+}
+
+function getChicagoTimeZoneName(year, month, day, hour, minute) {
+  const probe = new Date(Date.UTC(year, month, day, hour, minute, 0));
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Chicago',
+    timeZoneName: 'short',
+  }).formatToParts(probe);
+  return (parts.find((part) => part.type === 'timeZoneName') || {}).value || 'CT';
+}
+
+function formatStaDateTimeToChicago(rawDateTime) {
+  const match = typeof rawDateTime === 'string' && rawDateTime.match(/^(\d{2})([A-Z]{3})(\d{2})(\d{2})$/);
+  if (!match) return rawDateTime || '';
+
+  const baseDate = parseDDMON(rawDateTime);
+  if (!baseDate) return rawDateTime;
+
+  const hour = parseInt(match[3], 10);
+  const minute = parseInt(match[4], 10);
+  const timeZoneName = getChicagoTimeZoneName(
+    baseDate.getFullYear(),
+    baseDate.getMonth(),
+    baseDate.getDate(),
+    hour,
+    minute,
+  );
+
+  return `${formatMMDD(baseDate)} ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')} ${timeZoneName}`;
 }
 
 // ── Summary parser ────────────────────────────────────────────────────────────
@@ -166,6 +199,8 @@ for (const filename of filenames) {
       }
     }
 
+    const formattedSta = formatStaDateTimeToChicago(sta);
+
     const flightKey = `${flightNum}/${datePart.slice(0, 5)}`; // e.g. "NH8422/06APR"
 
     for (const [uldKey, uld] of Object.entries(fields.ULDs || {})) {
@@ -180,7 +215,7 @@ for (const filename of filenames) {
 
         if (!flightMap.has(flightKey)) {
           flightMap.set(flightKey, {
-            maxUid: uid, flightNum, sta, lfd,
+            maxUid: uid, flightNum, sta: formattedSta, lfd,
             pmcs: new Map(),
           });
         }

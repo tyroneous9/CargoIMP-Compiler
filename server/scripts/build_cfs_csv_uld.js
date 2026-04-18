@@ -15,7 +15,7 @@
  *   T<pcs><KL><wt>MC...          → no ULD split; uld_pcs = total, uld_wt = total_wt
  *   [SPD]<pcs><KL><wt>MC...T<n>  → ULD split; uld_pcs = prefix num, total = T suffix
  *
- * LFD = departure date from FlightIdentificationLine + 2 calendar days
+ * LFD = scheduled arrival date (STA) + 2 calendar days
  */
 
 'use strict';
@@ -63,8 +63,71 @@ function formatDDMON(d) {
   return String(d.getDate()).padStart(2, '0') + MONTHS[d.getMonth()];
 }
 
+function formatMMDD(d) {
+  return String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
 function addDays(d, n) {
   return new Date(d.getTime() + n * 86400000);
+}
+
+function getChicagoTimeZoneName(year, month, day, hour, minute) {
+  const probe = new Date(Date.UTC(year, month, day, hour, minute, 0));
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Chicago',
+    timeZoneName: 'short',
+  }).formatToParts(probe);
+  return (parts.find((part) => part.type === 'timeZoneName') || {}).value || 'CT';
+}
+
+function formatStaDateTimeToChicago(rawDateTime) {
+  const match = typeof rawDateTime === 'string' && rawDateTime.match(/^(\d{2})([A-Z]{3})(\d{2})(\d{2})$/);
+  if (!match) return rawDateTime || '';
+
+  const baseDate = parseDDMON(rawDateTime);
+  if (!baseDate) return rawDateTime;
+
+  const hour = parseInt(match[3], 10);
+  const minute = parseInt(match[4], 10);
+  const timeZoneName = getChicagoTimeZoneName(
+    baseDate.getFullYear(),
+    baseDate.getMonth(),
+    baseDate.getDate(),
+    hour,
+    minute,
+  );
+
+  return `${formatMMDD(baseDate)} ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')} ${timeZoneName}`;
+}
+
+function formatUtcDateTime6ToChicago(rawDateTime6, referenceDatePart) {
+  const dtMatch = typeof rawDateTime6 === 'string' && rawDateTime6.match(/^(\d{2})(\d{2})(\d{2})$/);
+  if (!dtMatch) return '';
+
+  const refDate = parseDDMON(referenceDatePart || '');
+  if (!refDate) return rawDateTime6;
+
+  const day = parseInt(dtMatch[1], 10);
+  const hour = parseInt(dtMatch[2], 10);
+  const minute = parseInt(dtMatch[3], 10);
+  const year = refDate.getFullYear();
+  const month = refDate.getMonth();
+
+  const utcInstant = new Date(Date.UTC(year, month, day, hour, minute, 0));
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Chicago',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZoneName: 'short',
+  });
+  const parts = formatter.formatToParts(utcInstant);
+  const get = (type) => (parts.find((p) => p.type === type) || {}).value || '';
+
+  return `${get('month')}-${get('day')} ${get('hour')}:${get('minute')} ${get('timeZoneName')}`.trim();
 }
 
 // ── Summary parser ────────────────────────────────────────────────────────────
@@ -121,7 +184,7 @@ function csvRow(fields) {
 
 /**
  * ffmIndex: Map<mawb, Map<flightKey, {
- *   maxUid, flightNum, sta, lfd,
+ *   maxUid, flightNum, datePart, sta, lfd,
  *   ulds: Map<uldKey, { uid, uldPcs, uldWt, wtUnit, totalPcs }>
  * }>>
  */
@@ -132,6 +195,9 @@ const fwbIndex = new Map();
 
 /** fhlIndex: Map<mawb, { uid, masterPieces, masterWeight, masterWeightUnit, consignee }> */
 const fhlIndex = new Map();
+
+/** mvtIndex: Map<flightNum, { uid, ata }> */
+const mvtIndex = new Map();
 
 const filenames = fs.readdirSync(PARSED_EMAILS_DIR)
   .filter(f => f.endsWith('.json'))
@@ -154,9 +220,6 @@ for (const filename of filenames) {
     const flightNum = flightId.CarrierFlightNumber || parts[1] || '';
     const datePart = flightId.DayMonthTime || parts[2] || '';
 
-    const depDate = parseDDMON(datePart);
-    const lfd     = depDate ? formatDDMON(addDays(depDate, 2)) : '';
-
     // STA = scheduled arrival at ORD, prefer structured Routes then fall back.
     let sta = '';
     if (Array.isArray(fields.Routes)) {
@@ -169,6 +232,12 @@ for (const filename of filenames) {
         if (m) { sta = m[1]; break; }
       }
     }
+
+    const formattedSta = formatStaDateTimeToChicago(sta);
+
+    // LFD = STA + 2 calendar days
+    const staDate = parseDDMON(sta);
+    const lfd     = staDate ? formatMMDD(addDays(staDate, 2)) : '';
 
     const flightKey = `${flightNum}/${datePart.slice(0, 5)}`;
 
@@ -183,7 +252,7 @@ for (const filename of filenames) {
         const flightMap = ffmIndex.get(mawb);
 
         if (!flightMap.has(flightKey)) {
-          flightMap.set(flightKey, { maxUid: uid, flightNum, sta, lfd, ulds: new Map() });
+          flightMap.set(flightKey, { maxUid: uid, flightNum, datePart, sta: formattedSta, lfd, ulds: new Map() });
         }
         const entry = flightMap.get(flightKey);
         if (uid > entry.maxUid) entry.maxUid = uid;
@@ -229,6 +298,19 @@ for (const filename of filenames) {
       masterWeightUnit: fields.MasterWeightUnit || 'K',
       consignee,
     });
+
+  // ── MVT ──────────────────────────────────────────────────────────────────
+  } else if (doc.messageType === 'mvt') {
+    const flightId = fields.FlightIdentification || {};
+    const event = fields.Event || {};
+    const flightNum = flightId.CarrierFlightNumber || '';
+    const ata = event.ActualArrivalDateTime || '';
+    if (!flightNum || !ata) continue;
+
+    const existing = mvtIndex.get(flightNum);
+    if (!existing || uid > existing.uid) {
+      mvtIndex.set(flightNum, { uid, ata });
+    }
   }
 }
 
@@ -249,6 +331,13 @@ function resolveFfm(mawb) {
   return best;
 }
 
+function resolveAta(flightNum, referenceDatePart) {
+  if (!flightNum) return '';
+  const match = mvtIndex.get(flightNum);
+  if (!match) return '';
+  return formatUtcDateTime6ToChicago(match.ata, referenceDatePart);
+}
+
 // ── Generate rows (one per MAWB+ULD) ─────────────────────────────────────────
 
 const rows = [];
@@ -262,6 +351,7 @@ for (const mawb of [...allMawbs].sort()) {
 
   const flight = ffm?.flightNum ?? '';
   const sta    = ffm?.sta       ?? '';
+  const ata    = resolveAta(ffm?.flightNum ?? '', ffm?.datePart ?? '');
   const lfd    = ffm?.lfd       ?? '';
 
   // Consignee: FWB preferred, FHL fallback
@@ -292,7 +382,7 @@ for (const mawb of [...allMawbs].sort()) {
         : fallbackPieces;
 
       rows.push([
-        flight, sta, '', lfd, mawb,
+        flight, sta, ata, lfd, mawb,
         uldWeight, uldPcs, pob,
         '',         // PCS RCVD — human input
         uldKey, '', // PMC#, PMC LOCATION
@@ -303,7 +393,7 @@ for (const mawb of [...allMawbs].sort()) {
   } else {
     // No FFM or no ULD info: single fallback row with blank PMC#
     rows.push([
-      flight, sta, '', lfd, mawb,
+      flight, sta, ata, lfd, mawb,
       fallbackWeight, fallbackPieces, '',
       '',    // PCS RCVD
       '', '', consignee, '',

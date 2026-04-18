@@ -16,6 +16,8 @@
  * Usage:
  *   node scripts/run_pipeline.js          # run once immediately, then poll
  *   node scripts/run_pipeline.js --once   # run exactly once and exit
+ *   node scripts/run_pipeline.js --force  # run steps 3–6 even with no new data
+ *   node scripts/run_pipeline.js --once --force  # single run with forced rebuild
  *
  * Interval is controlled by EMAIL_POLL_INTERVAL_MS in .env.
  */
@@ -33,6 +35,7 @@ const SCRIPTS_DIR = __dirname;
 const POLL_INTERVAL_MS = parseInt(process.env.EMAIL_POLL_INTERVAL_MS, 10) || 600_000;
 const SCRIPT_TIMEOUT_MS = parseInt(process.env.PIPELINE_SCRIPT_TIMEOUT_MS, 10) || 300_000;
 const RUN_ONCE = process.argv.includes('--once');
+const FORCE = process.argv.includes('--force');
 
 // ── Logger ────────────────────────────────────────────────────────────────────
 
@@ -159,10 +162,14 @@ function runPipeline(runNumber) {
   const newParsed = countNewFiles(stdoutParse, 'Parsed:');
   log('log', `${label} new emails parsed: ${newParsed}`);
 
-  // ── Skip downstream steps if nothing changed ───────────────────────────────
-  if (newEmails === 0 && newParsed === 0) {
+  // ── Skip downstream steps if nothing changed (unless --force is set) ──────
+  if (newEmails === 0 && newParsed === 0 && !FORCE) {
     log('log', `${label} no new data — skipping CSV rebuild and Sheets upload`);
     return;
+  }
+
+  if (FORCE && newEmails === 0 && newParsed === 0) {
+    log('log', `${label} --force flag set; forcing CSV rebuild and Sheets upload`);
   }
 
   // ── Step 3: rebuild MAWB CSV ───────────────────────────────────────────────

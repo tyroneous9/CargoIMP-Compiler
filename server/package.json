@@ -11,9 +11,11 @@
     "parse:emails": "node scripts/parse_extracted_emails.js",
     "build:mawb": "node scripts/build_cfs_csv_mawb.js",
     "build:uld": "node scripts/build_cfs_csv_uld.js",
+    "build:hawb": "node scripts/build_cfs_csv_hawb.js",
     "upload:sheets": "node scripts/upload_tables_to_sheets.js",
     "pipeline": "node scripts/run_pipeline.js",
     "pipeline:once": "node scripts/run_pipeline.js --once",
+    "pipeline:force": "node scripts/run_pipeline.js --once --force",
     "poll:imap": "npm run extract:emails && npm run parse:emails && npm run build:mawb && npm run build:uld && npm run upload:sheets"
   },
   "dependencies": {

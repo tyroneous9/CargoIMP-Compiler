@@ -286,7 +286,7 @@ async function uploadTable(key, config, sheetsClient) {
   await sheetsClient.spreadsheets.values.update({
     spreadsheetId:     config.spreadsheetId,
     range:             `${sheetRef}!${config.writeRange}`,
-    valueInputOption:  'USER_ENTERED',
+    valueInputOption:  'RAW',
     requestBody:       { values },
   });
 
