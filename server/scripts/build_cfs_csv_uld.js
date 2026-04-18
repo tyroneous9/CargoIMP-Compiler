@@ -22,14 +22,14 @@
 
 const fs = require('fs');
 const path = require('path');
-const { PARSED_EMAILS_DIR, PARSED_TABLES_DIR, TABLE_FILES } = require('../config/paths');
+const { EMAILS_DIR, PARSED_EMAILS_DIR, PARSED_TABLES_DIR, TABLE_FILES } = require('../config/paths');
 
 const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, TABLE_FILES.uld);
 
 // ── CSV header ────────────────────────────────────────────────────────────────
 
 const HEADERS = [
-  'FLIGHT#', 'STA', 'ATA', 'LFD', 'MAWB', 'Weight', 'TTL PCS', 'POB',
+  'FLIGHT#', 'STA', 'ATA', 'LFD', 'EMAIL-RCVD', 'MAWB', 'Weight', 'TTL PCS', 'POB',
   'PCS RCVD', 'PMC#', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
   'P3', 'Trucking/Skid $', 'Storage', 'ISC',
   'Tolead→NCA\nRCF MESSAGE', 'Tolead→NCA\nNFD MESSAGE', 'Tolead→NCA\nDLV MESSAGE',
@@ -130,6 +130,26 @@ function formatUtcDateTime6ToChicago(rawDateTime6, referenceDatePart) {
   return `${get('month')}-${get('day')} ${get('hour')}:${get('minute')} ${get('timeZoneName')}`.trim();
 }
 
+function formatIsoToChicago(iso) {
+  if (typeof iso !== 'string' || !iso) return '';
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return '';
+
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Chicago',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZoneName: 'short',
+  });
+  const parts = formatter.formatToParts(date);
+  const get = (type) => (parts.find((p) => p.type === type) || {}).value || '';
+
+  return `${get('month')}-${get('day')} ${get('hour')}:${get('minute')} ${get('timeZoneName')}`.trim();
+}
+
 // ── Summary parser ────────────────────────────────────────────────────────────
 
 /**
@@ -199,6 +219,28 @@ const fhlIndex = new Map();
 /** mvtIndex: Map<flightNum, { uid, ata }> */
 const mvtIndex = new Map();
 
+/** emailReceivedIndex: Map<uid, formattedDateTime> */
+const emailReceivedIndex = new Map();
+
+if (fs.existsSync(EMAILS_DIR)) {
+  const emailFilenames = fs.readdirSync(EMAILS_DIR)
+    .filter((f) => f.endsWith('.json'));
+  for (const filename of emailFilenames) {
+    const uidMatch = filename.match(/uid-(\d+)/);
+    if (!uidMatch) continue;
+    const uid = parseInt(uidMatch[1], 10);
+    if (emailReceivedIndex.has(uid)) continue;
+
+    try {
+      const emailDoc = JSON.parse(fs.readFileSync(path.join(EMAILS_DIR, filename), 'utf8'));
+      const formatted = formatIsoToChicago(emailDoc.date);
+      if (formatted) emailReceivedIndex.set(uid, formatted);
+    } catch (_) {
+      // Ignore malformed files; missing EMAIL-RCVD is acceptable fallback.
+    }
+  }
+}
+
 const filenames = fs.readdirSync(PARSED_EMAILS_DIR)
   .filter(f => f.endsWith('.json'))
   .sort();
@@ -252,10 +294,21 @@ for (const filename of filenames) {
         const flightMap = ffmIndex.get(mawb);
 
         if (!flightMap.has(flightKey)) {
-          flightMap.set(flightKey, { maxUid: uid, flightNum, datePart, sta: formattedSta, lfd, ulds: new Map() });
+          flightMap.set(flightKey, {
+            maxUid: uid,
+            flightNum,
+            datePart,
+            sta: formattedSta,
+            lfd,
+            emailRcvd: emailReceivedIndex.get(uid) || '',
+            ulds: new Map(),
+          });
         }
         const entry = flightMap.get(flightKey);
-        if (uid > entry.maxUid) entry.maxUid = uid;
+        if (uid > entry.maxUid) {
+          entry.maxUid = uid;
+          entry.emailRcvd = emailReceivedIndex.get(uid) || entry.emailRcvd || '';
+        }
 
         // Keep highest-UID record per ULD (handles FFM revision emails)
         const existing = entry.ulds.get(uldKey);
@@ -353,6 +406,7 @@ for (const mawb of [...allMawbs].sort()) {
   const sta    = ffm?.sta       ?? '';
   const ata    = resolveAta(ffm?.flightNum ?? '', ffm?.datePart ?? '');
   const lfd    = ffm?.lfd       ?? '';
+  const emailRcvd = ffm?.emailRcvd ?? '';
 
   // Consignee: FWB preferred, FHL fallback
   const consignee = fwb?.consignee || fhl?.consignee || '';
@@ -382,7 +436,7 @@ for (const mawb of [...allMawbs].sort()) {
         : fallbackPieces;
 
       rows.push([
-        flight, sta, ata, lfd, mawb,
+        flight, sta, ata, lfd, emailRcvd, mawb,
         uldWeight, uldPcs, pob,
         '',         // PCS RCVD — human input
         uldKey, '', // PMC#, PMC LOCATION
@@ -393,7 +447,7 @@ for (const mawb of [...allMawbs].sort()) {
   } else {
     // No FFM or no ULD info: single fallback row with blank PMC#
     rows.push([
-      flight, sta, ata, lfd, mawb,
+      flight, sta, ata, lfd, emailRcvd, mawb,
       fallbackWeight, fallbackPieces, '',
       '',    // PCS RCVD
       '', '', consignee, '',

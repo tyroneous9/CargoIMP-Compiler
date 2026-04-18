@@ -21,7 +21,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { PARSED_EMAILS_DIR, PARSED_TABLES_DIR, TABLE_FILES } = require('../config/paths');
+const { EMAILS_DIR, PARSED_EMAILS_DIR, PARSED_TABLES_DIR, TABLE_FILES } = require('../config/paths');
 const { log } = require('../config/logger');
 
 const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, TABLE_FILES.hawb);
@@ -29,7 +29,7 @@ const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, TABLE_FILES.hawb);
 // ── CSV header (matches CFS - temp.csv column order) ─────────────────────────
 
 const HEADERS = [
-  'FLIGHT#', 'PMC#', 'MAWB#', 'HAWB#', 'STA', 'ATA', 'LFD', 'Weight', 'TTL PCS', 'POB',
+  'FLIGHT#', 'PMC#', 'MAWB#', 'HAWB#', 'STA', 'ATA', 'LFD', 'EMAIL-RCVD', 'Weight', 'POB',
   'PCS RCVD', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
   'P3', 'Trucking/Skid $', 'Storage', 'ISC',
   'Tolead→NCA\nRCF MESSAGE', 'Tolead→NCA\nNFD MESSAGE', 'Tolead→NCA\nDLV MESSAGE',
@@ -40,6 +40,8 @@ const HEADERS = [
   'Break down start', 'Break down complete',
   'Ready for pick-up', 'Cargo delivery', 'POD', 'PTT/DO', 'Note',
 ];
+
+const TRAILING_EMPTY = HEADERS.length - 14;  // cols after Consignee+AMS STATUS
 
 // ── Date helpers ──────────────────────────────────────────────────────────────
 
@@ -71,7 +73,6 @@ function formatMMDD(d) {
   return String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 }
 
-/** Add N calendar days to a Date, return new Date */
 function addDays(d, n) {
   return new Date(d.getTime() + n * 86400000);
 }
@@ -103,6 +104,26 @@ function formatStaDateTimeToChicago(rawDateTime) {
   );
 
   return `${formatMMDD(baseDate)} ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')} ${timeZoneName}`;
+}
+
+function formatIsoToChicago(iso) {
+  if (typeof iso !== 'string' || !iso) return '';
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return '';
+
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Chicago',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZoneName: 'short',
+  });
+  const parts = formatter.formatToParts(date);
+  const get = (type) => (parts.find((p) => p.type === type) || {}).value || '';
+
+  return `${get('month')}-${get('day')} ${get('hour')}:${get('minute')} ${get('timeZoneName')}`.trim();
 }
 
 // ── Summary parser ────────────────────────────────────────────────────────────
@@ -146,18 +167,33 @@ function csvRow(fields) {
  */
 const ffmIndex  = new Map();
 
-/**
- * fwbIndex: Map<mawb, { uid, weight, weightUnit, pieces, consignee }>
- * Keeps the record with the highest UID (latest email = most current).
- */
+/** fwbIndex: Map<mawb, { uid, weight, weightUnit, pieces, consignee }> */
 const fwbIndex  = new Map();
 
-/**
- * fhlIndex: Map<mawb, { uid, masterPieces, masterWeight, masterWeightUnit,
- *                        consignee, houseBills[] }>
- * Keeps the record with the highest UID.
- */
+/** fhlIndex: Map<mawb, { uid, masterPieces, masterWeight, masterWeightUnit, consignee, houseBills[] }> */
 const fhlIndex  = new Map();
+
+/** emailReceivedIndex: Map<uid, formattedDateTime> */
+const emailReceivedIndex = new Map();
+
+if (fs.existsSync(EMAILS_DIR)) {
+  const emailFilenames = fs.readdirSync(EMAILS_DIR)
+    .filter((f) => f.endsWith('.json'));
+  for (const filename of emailFilenames) {
+    const uidMatch = filename.match(/uid-(\d+)/);
+    if (!uidMatch) continue;
+    const uid = parseInt(uidMatch[1], 10);
+    if (emailReceivedIndex.has(uid)) continue;
+
+    try {
+      const emailDoc = JSON.parse(fs.readFileSync(path.join(EMAILS_DIR, filename), 'utf8'));
+      const formatted = formatIsoToChicago(emailDoc.date);
+      if (formatted) emailReceivedIndex.set(uid, formatted);
+    } catch (_) {
+      // Ignore malformed files; missing EMAIL-RCVD is acceptable fallback.
+    }
+  }
+}
 
 fs.mkdirSync(PARSED_EMAILS_DIR, { recursive: true });
 
@@ -184,7 +220,7 @@ for (const filename of filenames) {
 
     // LFD = departure date + 2 days
     const depDate   = parseDDMON(datePart);
-    const lfd       = depDate ? formatDDMON(addDays(depDate, 2)) : '';
+    const lfd       = depDate ? formatMMDD(addDays(depDate, 2)) : '';
 
     // STA = scheduled arrival at ORD, prefer structured Routes then fall back.
     let sta = '';
@@ -315,8 +351,7 @@ function resolveFfm(mawb) {
 
 const rows = [];
 
-// All MAWBs: FHL ∪ FWB ∪ FFM
-const allMawbs = new Set([...fhlIndex.keys(), ...fwbIndex.keys(), ...ffmIndex.keys()]);
+const allMawbs = new Set([...fhlIndex.keys(), ...fwbIndex.keys()]);
 
 for (const mawb of [...allMawbs].sort()) {
   const ffm = resolveFfm(mawb);
@@ -336,9 +371,9 @@ for (const mawb of [...allMawbs].sort()) {
   const mawbWeight = fwb
     ? `${fwb.weight}${fwb.weightUnit}`
     : fhl ? `${fhl.masterWeight}${fhl.masterWeightUnit}` : '';
-  const mawbPieces = fwb?.pieces || fhl?.masterPieces || '';
 
-  const emptyFields = new Array(HEADERS.length - 13).fill('');
+  // EMAIL-RCVD: use FHL uid if available (primary HAWB source), else FWB uid
+  const emailRcvd = emailReceivedIndex.get(fhl?.uid) || emailReceivedIndex.get(fwb?.uid) || '';
 
   if (fhl && fhl.houseBills.length > 0) {
     // One row per HAWB
@@ -347,24 +382,24 @@ for (const mawb of [...allMawbs].sort()) {
       const houseWeight = hb.HouseWeight
         ? `${hb.HouseWeight}${hb.HouseWeightUnit || fhl.masterWeightUnit || 'K'}`
         : mawbWeight;
-      const housePieces = hb.HousePieceCount || mawbPieces;
+      const housePieces = hb.HousePieceCount || '';
 
       rows.push([
-        flight, pmcs, mawb, hawb, sta, '', lfd,
-        houseWeight, housePieces, pob,
-        '',    // PCS RCVD
+        flight, pmcs, mawb, hawb, sta, '', lfd, emailRcvd,
+        houseWeight, pob,
+        housePieces,    // PCS RCVD from FHL HousePieceCount
         '', consignee, '',
-        ...emptyFields,
+        ...new Array(TRAILING_EMPTY).fill(''),
       ]);
     }
   } else {
     // MAWB-only row (no FHL received)
     rows.push([
-      flight, pmcs, mawb, '', sta, '', lfd,
-      mawbWeight, mawbPieces, pob,
+      flight, pmcs, mawb, '', sta, '', lfd, emailRcvd,
+      mawbWeight, pob,
       '',    // PCS RCVD
       '', consignee, '',
-      ...emptyFields,
+      ...new Array(TRAILING_EMPTY).fill(''),
     ]);
   }
 }

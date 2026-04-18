@@ -16,7 +16,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { PARSED_EMAILS_DIR, PARSED_TABLES_DIR, TABLE_FILES } = require('../config/paths');
+const { EMAILS_DIR, PARSED_EMAILS_DIR, PARSED_TABLES_DIR, TABLE_FILES } = require('../config/paths');
 const { log } = require('../config/logger');
 
 const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, TABLE_FILES.mawb);
@@ -24,7 +24,7 @@ const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, TABLE_FILES.mawb);
 // ── CSV header ────────────────────────────────────────────────────────────────
 
 const HEADERS = [
-  'FLIGHT#', 'PMC#', 'MAWB#', 'STA', 'ATA', 'LFD', 'Weight', 'TTL PCS', 'POB',
+  'FLIGHT#', 'PMC#', 'MAWB#', 'STA', 'ATA', 'LFD', 'EMAIL-RCVD', 'Weight', 'TTL PCS', 'POB',
   'PCS RCVD', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
   'P3', 'Trucking/Skid $', 'Storage', 'ISC',
   'Tolead→NCA\nRCF MESSAGE', 'Tolead→NCA\nNFD MESSAGE', 'Tolead→NCA\nDLV MESSAGE',
@@ -93,6 +93,26 @@ function formatStaDateTimeToChicago(rawDateTime) {
   return `${formatMMDD(baseDate)} ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')} ${timeZoneName}`;
 }
 
+function formatIsoToChicago(iso) {
+  if (typeof iso !== 'string' || !iso) return '';
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return '';
+
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Chicago',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZoneName: 'short',
+  });
+  const parts = formatter.formatToParts(date);
+  const get = (type) => (parts.find((p) => p.type === type) || {}).value || '';
+
+  return `${get('month')}-${get('day')} ${get('hour')}:${get('minute')} ${get('timeZoneName')}`.trim();
+}
+
 // ── Summary parser ────────────────────────────────────────────────────────────
 
 /**
@@ -129,6 +149,28 @@ function csvRow(fields) {
 const ffmIndex = new Map();  // mawb → Map<flightKey, { maxUid, flightNum, sta, lfd, pmcs: Map<uldKey, {uid, pob}> }>
 const fwbIndex = new Map();  // mawb → { uid, weight, weightUnit, pieces, consignee }
 const fhlIndex = new Map();  // mawb → { uid, masterPieces, masterWeight, masterWeightUnit, consignee }
+
+/** emailReceivedIndex: Map<uid, formattedDateTime> */
+const emailReceivedIndex = new Map();
+
+if (fs.existsSync(EMAILS_DIR)) {
+  const emailFilenames = fs.readdirSync(EMAILS_DIR)
+    .filter((f) => f.endsWith('.json'));
+  for (const filename of emailFilenames) {
+    const uidMatch = filename.match(/uid-(\d+)/);
+    if (!uidMatch) continue;
+    const uid = parseInt(uidMatch[1], 10);
+    if (emailReceivedIndex.has(uid)) continue;
+
+    try {
+      const emailDoc = JSON.parse(fs.readFileSync(path.join(EMAILS_DIR, filename), 'utf8'));
+      const formatted = formatIsoToChicago(emailDoc.date);
+      if (formatted) emailReceivedIndex.set(uid, formatted);
+    } catch (_) {
+      // Ignore malformed files; missing EMAIL-RCVD is acceptable fallback.
+    }
+  }
+}
 
 fs.mkdirSync(PARSED_EMAILS_DIR, { recursive: true });
 
@@ -184,10 +226,20 @@ for (const filename of filenames) {
         const flightMap = ffmIndex.get(mawb);
 
         if (!flightMap.has(flightKey)) {
-          flightMap.set(flightKey, { maxUid: uid, flightNum, sta: formattedSta, lfd, pmcs: new Map() });
+          flightMap.set(flightKey, {
+            maxUid: uid,
+            flightNum,
+            sta: formattedSta,
+            lfd,
+            emailRcvd: emailReceivedIndex.get(uid) || '',
+            pmcs: new Map(),
+          });
         }
         const entry = flightMap.get(flightKey);
-        if (uid > entry.maxUid) entry.maxUid = uid;
+        if (uid > entry.maxUid) {
+          entry.maxUid = uid;
+          entry.emailRcvd = emailReceivedIndex.get(uid) || entry.emailRcvd || '';
+        }
 
         const uldEntry = entry.pmcs.get(uldKey);
         if (!uldEntry || uid > uldEntry.uid) {
@@ -251,6 +303,7 @@ function resolveFfm(mawb) {
     flightNum: best.flightNum,
     sta:       best.sta,
     lfd:       best.lfd,
+    emailRcvd: best.emailRcvd || '',
     pmcs:      pmcs.join(', '),
     pob:       pobEntry ? String(pobEntry.pob) : '',
   };
@@ -264,7 +317,7 @@ const rows = [];
 // col 10 filled, col 11 blank (AMS), cols 12–32 blank (21 empty)
 const TRAILING_EMPTY = HEADERS.length - 12;
 
-const allMawbs = new Set([...fhlIndex.keys(), ...fwbIndex.keys(), ...ffmIndex.keys()]);
+const allMawbs = new Set([...fwbIndex.keys()]);
 
 for (const mawb of [...allMawbs].sort()) {
   const ffm = resolveFfm(mawb);
@@ -274,6 +327,7 @@ for (const mawb of [...allMawbs].sort()) {
   const flight    = ffm?.flightNum ?? '';
   const sta       = ffm?.sta       ?? '';
   const lfd       = ffm?.lfd       ?? '';
+  const emailRcvd = ffm?.emailRcvd ?? '';
   const pmcs      = ffm?.pmcs      ?? '';
   const pob       = ffm?.pob       ?? '';
 
@@ -287,7 +341,7 @@ for (const mawb of [...allMawbs].sort()) {
   const pieces = fwb?.pieces || fhl?.masterPieces || '';
 
   rows.push([
-    flight, pmcs, mawb, sta, '', lfd,
+    flight, pmcs, mawb, sta, '', lfd, emailRcvd,
     weight, pieces, pob,
     '',  // PCS RCVD — human input
     '',  // PMC LOCATION

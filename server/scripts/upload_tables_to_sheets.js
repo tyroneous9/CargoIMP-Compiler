@@ -56,21 +56,21 @@ const TABLE_MAP = {
     file:          TABLE_FILES.mawb,
     spreadsheetId: '1jzyEDGNmtubDM0Uj1HIKEiy0bkSO2ad4r2Z6N95vpzs',
     sheetName:     'CFS_by_MAWB',
-    clearRange:    'A:AG',   // 33 columns
+    clearRange:    'A:AH',   // supports EMAIL-RCVD expansion
     writeRange:    'A1',
   },
   uld: {
     file:          TABLE_FILES.uld,
     spreadsheetId: '1jzyEDGNmtubDM0Uj1HIKEiy0bkSO2ad4r2Z6N95vpzs',
     sheetName:     'CFS_by_ULD',
-    clearRange:    'A:AG',   // 33 columns
+    clearRange:    'A:AH',   // supports EMAIL-RCVD expansion
     writeRange:    'A1',
   },
   hawb: {
     file:          TABLE_FILES.hawb,
     spreadsheetId: '1jzyEDGNmtubDM0Uj1HIKEiy0bkSO2ad4r2Z6N95vpzs',
     sheetName:     'CFS_by_HAWB',
-    clearRange:    'A:AG',   // 33 columns
+    clearRange:    'A:AH',   // keep clear range aligned across tabs
     writeRange:    'A1',
   },
 };

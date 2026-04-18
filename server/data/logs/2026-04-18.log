@@ -2991,3 +2991,830 @@
 2026-04-18T18:51:19.893Z [LOG] [hawb] Done — 1681 data rows uploaded.
 2026-04-18T18:51:19.901Z [LOG] [upload_tables_to_sheets.js] done
 2026-04-18T18:51:19.901Z [LOG] [pipeline #1] pipeline complete
+2026-04-18T19:01:19.901Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T19:01:19.902Z [LOG] [pipeline #2] 2026-04-18T19:01:19.902Z
+2026-04-18T19:01:19.902Z [LOG] [extract_emails.js] starting…
+2026-04-18T19:01:33.886Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6836.json
+2026-04-18T19:01:33.886Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6835.json
+2026-04-18T19:01:33.886Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6834.json
+2026-04-18T19:01:33.886Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6833.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6832.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6831.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6830.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6829.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6828.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6827.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6826.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6825.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6824.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6823.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6822.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6821.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6820.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6819.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6818.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6817.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6816.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6815.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6814.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6813.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6812.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6811.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6810.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6809.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6808.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6807.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6806.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6805.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6804.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6803.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6802.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6801.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6800.json
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6799.json
+2026-04-18T19:01:33.631Z [LOG] extracted 38 email(s) this run
+2026-04-18T19:01:33.877Z [LOG] extraction finished
+2026-04-18T19:01:33.887Z [LOG] [extract_emails.js] done
+2026-04-18T19:01:33.888Z [LOG] [pipeline #2] new emails extracted: 38
+2026-04-18T19:01:33.888Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6799.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6800.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6801.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6802.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6803.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6804.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6805.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6806.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6807.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6808.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6809.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6810.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6811.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6812.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6813.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6814.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6815.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6816.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6817.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6818.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6819.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6820.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6821.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6822.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6823.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6824.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6825.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6826.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6827.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6828.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6829.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6830.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6831.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6832.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6833.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6834.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6835.json
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6836.json
+2026-04-18T19:01:34.783Z [LOG] parse summary: total=1631, parsed=38, alreadyParsed=1409, missingFields=184, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T19:01:34.787Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T19:01:34.787Z [LOG] [pipeline #2] new emails parsed: 38
+2026-04-18T19:01:34.787Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-18T19:01:34.874Z [LOG] Written 1635 rows to CFS_mawb.csv
+2026-04-18T19:01:34.877Z [LOG]   Rows with no FFM match (no flight data): 20
+2026-04-18T19:01:34.880Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-18T19:01:34.880Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-18T19:01:34.980Z [LOG] [build_cfs_csv_uld.js] Written 613 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-18T19:01:34.980Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 20
+2026-04-18T19:01:34.980Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 251
+2026-04-18T19:01:34.980Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-18T19:01:34.980Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-18T19:01:35.058Z [LOG] Written 1711 rows to CFS_hawb.csv
+2026-04-18T19:01:35.060Z [LOG]   HAWB rows: 347
+2026-04-18T19:01:35.060Z [LOG]   MAWB-only rows: 1364
+2026-04-18T19:01:35.060Z [LOG]   Rows with no FFM match (no flight data): 20
+2026-04-18T19:01:35.063Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-18T19:01:35.063Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-18T19:01:35.117Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AG …
+2026-04-18T19:01:35.832Z [LOG] [mawb] Writing 1636 rows → 'CFS_by_MAWB'!A1 …
+2026-04-18T19:01:37.882Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-18T19:01:37.883Z [LOG] [mawb] Done — 1635 data rows uploaded.
+2026-04-18T19:01:37.884Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AG …
+2026-04-18T19:01:38.047Z [LOG] [uld] Writing 614 rows → 'CFS_by_ULD'!A1 …
+2026-04-18T19:01:38.989Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-18T19:01:38.989Z [LOG] [uld] Done — 613 data rows uploaded.
+2026-04-18T19:01:38.993Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AG …
+2026-04-18T19:01:39.146Z [LOG] [hawb] Writing 1712 rows → 'CFS_by_HAWB'!A1 …
+2026-04-18T19:01:40.840Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-18T19:01:40.841Z [LOG] [hawb] Done — 1711 data rows uploaded.
+2026-04-18T19:01:40.847Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-18T19:01:40.847Z [LOG] [pipeline #2] pipeline complete
+2026-04-18T19:06:36.674Z [WARN] Received SIGINT; shutting down pipeline...
+2026-04-18T19:06:38.450Z [LOG] Pipeline polling every 600s. Press Ctrl+C to stop.
+2026-04-18T19:06:38.451Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T19:06:38.451Z [LOG] [pipeline #1] 2026-04-18T19:06:38.451Z
+2026-04-18T19:06:38.451Z [LOG] [extract_emails.js] starting…
+2026-04-18T19:06:52.427Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6875.json
+2026-04-18T19:06:52.427Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6874.json
+2026-04-18T19:06:52.427Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6873.json
+2026-04-18T19:06:52.427Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6872.json
+2026-04-18T19:06:52.427Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6871.json
+2026-04-18T19:06:52.427Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6870.json
+2026-04-18T19:06:52.427Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6869.json
+2026-04-18T19:06:52.428Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6868.json
+2026-04-18T19:06:52.428Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6867.json
+2026-04-18T19:06:52.428Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6866.json
+2026-04-18T19:06:52.428Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6865.json
+2026-04-18T19:06:52.428Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6864.json
+2026-04-18T19:06:52.428Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6863.json
+2026-04-18T19:06:52.428Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6862.json
+2026-04-18T19:06:52.428Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6861.json
+2026-04-18T19:06:52.428Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6860.json
+2026-04-18T19:06:52.428Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6859.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6858.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6857.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6856.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6855.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6854.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6853.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6852.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6851.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6850.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6849.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6848.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6847.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6846.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6845.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6844.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6843.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6842.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6841.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6840.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6839.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6838.json
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6837.json
+2026-04-18T19:06:52.136Z [LOG] extracted 39 email(s) this run
+2026-04-18T19:06:52.421Z [LOG] extraction finished
+2026-04-18T19:06:52.429Z [LOG] [extract_emails.js] done
+2026-04-18T19:06:52.429Z [LOG] [pipeline #1] new emails extracted: 39
+2026-04-18T19:06:52.429Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6837.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6838.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6839.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6840.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6841.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6842.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6843.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6844.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6845.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6846.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6847.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6848.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6849.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6850.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6851.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6852.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6853.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6854.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6855.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6856.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6857.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6858.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6859.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6860.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6861.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6862.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6863.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6864.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6865.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6866.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6867.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6868.json
+2026-04-18T19:06:53.060Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6869.json
+2026-04-18T19:06:53.061Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6870.json
+2026-04-18T19:06:53.061Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6871.json
+2026-04-18T19:06:53.061Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6872.json
+2026-04-18T19:06:53.061Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6873.json
+2026-04-18T19:06:53.061Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6874.json
+2026-04-18T19:06:53.061Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-6875.json
+2026-04-18T19:06:53.057Z [LOG] parse summary: total=1670, parsed=39, alreadyParsed=1447, missingFields=184, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T19:06:53.061Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T19:06:53.061Z [LOG] [pipeline #1] new emails parsed: 39
+2026-04-18T19:06:53.061Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-18T19:06:53.160Z [LOG] Written 1672 rows to CFS_mawb.csv
+2026-04-18T19:06:53.163Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-18T19:06:53.168Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-18T19:06:53.168Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-18T19:06:53.277Z [LOG] [build_cfs_csv_uld.js] Written 619 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-18T19:06:53.277Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 3
+2026-04-18T19:06:53.277Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 257
+2026-04-18T19:06:53.277Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-18T19:06:53.277Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-18T19:06:53.373Z [LOG] Written 1748 rows to CFS_hawb.csv
+2026-04-18T19:06:53.376Z [LOG]   HAWB rows: 350
+2026-04-18T19:06:53.376Z [LOG]   MAWB-only rows: 1398
+2026-04-18T19:06:53.376Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-18T19:06:53.379Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-18T19:06:53.379Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-18T19:06:53.446Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AG …
+2026-04-18T19:06:54.060Z [LOG] [mawb] Writing 1673 rows → 'CFS_by_MAWB'!A1 …
+2026-04-18T19:06:55.688Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-18T19:06:55.688Z [LOG] [mawb] Done — 1672 data rows uploaded.
+2026-04-18T19:06:55.690Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AG …
+2026-04-18T19:06:55.838Z [LOG] [uld] Writing 620 rows → 'CFS_by_ULD'!A1 …
+2026-04-18T19:06:56.710Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-18T19:06:56.710Z [LOG] [uld] Done — 619 data rows uploaded.
+2026-04-18T19:06:56.714Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AG …
+2026-04-18T19:06:56.857Z [LOG] [hawb] Writing 1749 rows → 'CFS_by_HAWB'!A1 …
+2026-04-18T19:06:58.511Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-18T19:06:58.511Z [LOG] [hawb] Done — 1748 data rows uploaded.
+2026-04-18T19:06:58.517Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-18T19:06:58.517Z [LOG] [pipeline #1] pipeline complete
+2026-04-18T19:16:58.517Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T19:16:58.517Z [LOG] [pipeline #2] 2026-04-18T19:16:58.517Z
+2026-04-18T19:16:58.518Z [LOG] [extract_emails.js] starting…
+2026-04-18T19:17:01.788Z [LOG] extracted 0 email(s) this run
+2026-04-18T19:17:02.047Z [LOG] extraction finished
+2026-04-18T19:17:02.053Z [LOG] [extract_emails.js] done
+2026-04-18T19:17:02.053Z [LOG] [pipeline #2] new emails extracted: 0
+2026-04-18T19:17:02.053Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T19:17:02.096Z [LOG] parse summary: total=1670, parsed=0, alreadyParsed=1486, missingFields=184, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T19:17:02.103Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T19:17:02.103Z [LOG] [pipeline #2] new emails parsed: 0
+2026-04-18T19:17:02.103Z [LOG] [pipeline #2] no new data — skipping CSV rebuild and Sheets upload
+2026-04-18T19:26:58.517Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T19:26:58.518Z [LOG] [pipeline #3] 2026-04-18T19:26:58.518Z
+2026-04-18T19:26:58.518Z [LOG] [extract_emails.js] starting…
+2026-04-18T19:27:03.577Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6876.json
+2026-04-18T19:27:03.327Z [LOG] extracted 1 email(s) this run
+2026-04-18T19:27:03.570Z [LOG] extraction finished
+2026-04-18T19:27:03.577Z [LOG] [extract_emails.js] done
+2026-04-18T19:27:03.577Z [LOG] [pipeline #3] new emails extracted: 1
+2026-04-18T19:27:03.577Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T19:27:03.617Z [LOG] parse summary: total=1671, parsed=0, alreadyParsed=1486, missingFields=185, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T19:27:03.623Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T19:27:03.623Z [LOG] [pipeline #3] new emails parsed: 0
+2026-04-18T19:27:03.623Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-18T19:27:03.780Z [LOG] Written 1672 rows to CFS_mawb.csv
+2026-04-18T19:27:03.783Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-18T19:27:03.788Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-18T19:27:03.788Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-18T19:27:03.956Z [LOG] [build_cfs_csv_uld.js] Written 619 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-18T19:27:03.956Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 3
+2026-04-18T19:27:03.957Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 257
+2026-04-18T19:27:03.957Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-18T19:27:03.957Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-18T19:27:04.038Z [LOG] Written 1748 rows to CFS_hawb.csv
+2026-04-18T19:27:04.040Z [LOG]   HAWB rows: 350
+2026-04-18T19:27:04.040Z [LOG]   MAWB-only rows: 1398
+2026-04-18T19:27:04.040Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-18T19:27:04.044Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-18T19:27:04.044Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-18T19:27:04.099Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AH …
+2026-04-18T19:27:04.478Z [LOG] [mawb] Writing 1673 rows → 'CFS_by_MAWB'!A1 …
+2026-04-18T19:27:06.220Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-18T19:27:06.220Z [LOG] [mawb] Done — 1672 data rows uploaded.
+2026-04-18T19:27:06.222Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AH …
+2026-04-18T19:27:06.407Z [LOG] [uld] Writing 620 rows → 'CFS_by_ULD'!A1 …
+2026-04-18T19:27:07.480Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-18T19:27:07.480Z [LOG] [uld] Done — 619 data rows uploaded.
+2026-04-18T19:27:07.482Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AH …
+2026-04-18T19:27:07.656Z [LOG] [hawb] Writing 1749 rows → 'CFS_by_HAWB'!A1 …
+2026-04-18T19:27:09.388Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-18T19:27:09.388Z [LOG] [hawb] Done — 1748 data rows uploaded.
+2026-04-18T19:27:09.394Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-18T19:27:09.394Z [LOG] [pipeline #3] pipeline complete
+2026-04-18T19:31:23.004Z [WARN] Received SIGINT; shutting down pipeline...
+2026-04-18T19:31:35.929Z [LOG] Pipeline polling every 600s. Press Ctrl+C to stop.
+2026-04-18T19:31:35.930Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T19:31:35.930Z [LOG] [pipeline #1] 2026-04-18T19:31:35.930Z
+2026-04-18T19:31:35.930Z [LOG] [extract_emails.js] starting…
+2026-04-18T19:31:40.921Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6877.json
+2026-04-18T19:31:40.668Z [LOG] extracted 1 email(s) this run
+2026-04-18T19:31:40.914Z [LOG] extraction finished
+2026-04-18T19:31:40.921Z [LOG] [extract_emails.js] done
+2026-04-18T19:31:40.921Z [LOG] [pipeline #1] new emails extracted: 1
+2026-04-18T19:31:40.921Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T19:31:40.968Z [LOG] parse summary: total=1672, parsed=0, alreadyParsed=1486, missingFields=186, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T19:31:40.973Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T19:31:40.973Z [LOG] [pipeline #1] new emails parsed: 0
+2026-04-18T19:31:40.973Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-18T19:31:41.130Z [LOG] Written 1672 rows to CFS_mawb.csv
+2026-04-18T19:31:41.132Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-18T19:31:41.136Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-18T19:31:41.136Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-18T19:31:41.326Z [LOG] [build_cfs_csv_uld.js] Written 619 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-18T19:31:41.326Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 3
+2026-04-18T19:31:41.326Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 257
+2026-04-18T19:31:41.326Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-18T19:31:41.326Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-18T19:31:41.415Z [LOG] Written 1748 rows to CFS_hawb.csv
+2026-04-18T19:31:41.418Z [LOG]   HAWB rows: 350
+2026-04-18T19:31:41.418Z [LOG]   MAWB-only rows: 1398
+2026-04-18T19:31:41.418Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-18T19:31:41.421Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-18T19:31:41.421Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-18T19:31:41.486Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AH …
+2026-04-18T19:31:42.051Z [LOG] [mawb] Writing 1673 rows → 'CFS_by_MAWB'!A1 …
+2026-04-18T19:31:43.898Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-18T19:31:43.898Z [LOG] [mawb] Done — 1672 data rows uploaded.
+2026-04-18T19:31:43.900Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AH …
+2026-04-18T19:31:44.101Z [LOG] [uld] Writing 620 rows → 'CFS_by_ULD'!A1 …
+2026-04-18T19:31:45.023Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-18T19:31:45.023Z [LOG] [uld] Done — 619 data rows uploaded.
+2026-04-18T19:31:45.026Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AH …
+2026-04-18T19:31:45.185Z [LOG] [hawb] Writing 1749 rows → 'CFS_by_HAWB'!A1 …
+2026-04-18T19:31:46.717Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-18T19:31:46.718Z [LOG] [hawb] Done — 1748 data rows uploaded.
+2026-04-18T19:31:46.725Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-18T19:31:46.725Z [LOG] [pipeline #1] pipeline complete
+2026-04-18T19:36:10.910Z [WARN] Received SIGINT; shutting down pipeline...
+2026-04-18T19:36:12.843Z [LOG] Pipeline polling every 600s. Press Ctrl+C to stop.
+2026-04-18T19:36:12.845Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T19:36:12.845Z [LOG] [pipeline #1] 2026-04-18T19:36:12.845Z
+2026-04-18T19:36:12.845Z [LOG] [extract_emails.js] starting…
+2026-04-18T19:36:16.583Z [LOG] extracted 0 email(s) this run
+2026-04-18T19:36:16.837Z [LOG] extraction finished
+2026-04-18T19:36:16.846Z [LOG] [extract_emails.js] done
+2026-04-18T19:36:16.846Z [LOG] [pipeline #1] new emails extracted: 0
+2026-04-18T19:36:16.846Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T19:36:16.895Z [LOG] parse summary: total=1672, parsed=0, alreadyParsed=1486, missingFields=186, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T19:36:16.909Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T19:36:16.909Z [LOG] [pipeline #1] new emails parsed: 0
+2026-04-18T19:36:16.909Z [LOG] [pipeline #1] no new data — skipping CSV rebuild and Sheets upload
+2026-04-18T19:36:47.435Z [WARN] Received SIGINT; shutting down pipeline...
+2026-04-18T19:37:13.181Z [LOG] Pipeline polling every 600s. Press Ctrl+C to stop.
+2026-04-18T19:37:13.182Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T19:37:13.182Z [LOG] [pipeline #1] 2026-04-18T19:37:13.182Z
+2026-04-18T19:37:13.182Z [LOG] [extract_emails.js] starting…
+2026-04-18T19:37:16.920Z [LOG] extracted 0 email(s) this run
+2026-04-18T19:37:17.176Z [LOG] extraction finished
+2026-04-18T19:37:17.183Z [LOG] [extract_emails.js] done
+2026-04-18T19:37:17.183Z [LOG] [pipeline #1] new emails extracted: 0
+2026-04-18T19:37:17.183Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T19:37:17.220Z [LOG] parse summary: total=1672, parsed=0, alreadyParsed=1486, missingFields=186, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T19:37:17.225Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T19:37:17.225Z [LOG] [pipeline #1] new emails parsed: 0
+2026-04-18T19:37:17.225Z [LOG] [pipeline #1] no new data — skipping CSV rebuild and Sheets upload
+2026-04-18T19:37:24.206Z [WARN] Received SIGINT; shutting down pipeline...
+2026-04-18T19:37:29.704Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T19:37:29.705Z [LOG] [pipeline #1] 2026-04-18T19:37:29.705Z
+2026-04-18T19:37:29.705Z [LOG] [extract_emails.js] starting…
+2026-04-18T19:37:33.363Z [LOG] extracted 0 email(s) this run
+2026-04-18T19:37:33.613Z [LOG] extraction finished
+2026-04-18T19:37:33.621Z [LOG] [extract_emails.js] done
+2026-04-18T19:37:33.621Z [LOG] [pipeline #1] new emails extracted: 0
+2026-04-18T19:37:33.621Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T19:37:33.670Z [LOG] parse summary: total=1672, parsed=0, alreadyParsed=1486, missingFields=186, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T19:37:33.674Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T19:37:33.675Z [LOG] [pipeline #1] new emails parsed: 0
+2026-04-18T19:37:33.675Z [LOG] [pipeline #1] --force flag set; forcing CSV rebuild and Sheets upload
+2026-04-18T19:37:33.675Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-18T19:37:33.851Z [LOG] Written 361 rows to CFS_mawb.csv
+2026-04-18T19:37:33.854Z [LOG]   Rows with no FFM match (no flight data): 2
+2026-04-18T19:37:33.859Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-18T19:37:33.859Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-18T19:37:34.040Z [LOG] [build_cfs_csv_uld.js] Written 619 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-18T19:37:34.040Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 3
+2026-04-18T19:37:34.040Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 257
+2026-04-18T19:37:34.040Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-18T19:37:34.040Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-18T19:37:34.141Z [LOG] Written 1748 rows to CFS_hawb.csv
+2026-04-18T19:37:34.145Z [LOG]   HAWB rows: 350
+2026-04-18T19:37:34.145Z [LOG]   MAWB-only rows: 1398
+2026-04-18T19:37:34.145Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-18T19:37:34.148Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-18T19:37:34.148Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-18T19:37:34.207Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AH …
+2026-04-18T19:37:34.860Z [LOG] [mawb] Writing 362 rows → 'CFS_by_MAWB'!A1 …
+2026-04-18T19:37:35.969Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-18T19:37:35.969Z [LOG] [mawb] Done — 361 data rows uploaded.
+2026-04-18T19:37:35.970Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AH …
+2026-04-18T19:37:36.176Z [LOG] [uld] Writing 620 rows → 'CFS_by_ULD'!A1 …
+2026-04-18T19:37:37.303Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-18T19:37:37.303Z [LOG] [uld] Done — 619 data rows uploaded.
+2026-04-18T19:37:37.307Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AH …
+2026-04-18T19:37:37.563Z [LOG] [hawb] Writing 1749 rows → 'CFS_by_HAWB'!A1 …
+2026-04-18T19:37:39.546Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-18T19:37:39.546Z [LOG] [hawb] Done — 1748 data rows uploaded.
+2026-04-18T19:37:39.551Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-18T19:37:39.552Z [LOG] [pipeline #1] pipeline complete
+2026-04-18T19:37:44.099Z [LOG] Pipeline polling every 600s. Press Ctrl+C to stop.
+2026-04-18T19:37:44.100Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T19:37:44.100Z [LOG] [pipeline #1] 2026-04-18T19:37:44.100Z
+2026-04-18T19:37:44.100Z [LOG] [extract_emails.js] starting…
+2026-04-18T19:37:47.338Z [LOG] extracted 0 email(s) this run
+2026-04-18T19:37:47.565Z [LOG] extraction finished
+2026-04-18T19:37:47.571Z [LOG] [extract_emails.js] done
+2026-04-18T19:37:47.571Z [LOG] [pipeline #1] new emails extracted: 0
+2026-04-18T19:37:47.571Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T19:37:47.625Z [LOG] parse summary: total=1672, parsed=0, alreadyParsed=1486, missingFields=186, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T19:37:47.630Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T19:37:47.630Z [LOG] [pipeline #1] new emails parsed: 0
+2026-04-18T19:37:47.630Z [LOG] [pipeline #1] no new data — skipping CSV rebuild and Sheets upload
+2026-04-18T19:47:47.669Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T19:47:47.670Z [LOG] [pipeline #2] 2026-04-18T19:47:47.670Z
+2026-04-18T19:47:47.670Z [LOG] [extract_emails.js] starting…
+2026-04-18T19:47:53.640Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6878.json
+2026-04-18T19:47:53.225Z [LOG] extracted 1 email(s) this run
+2026-04-18T19:47:53.631Z [LOG] extraction finished
+2026-04-18T19:47:53.641Z [LOG] [extract_emails.js] done
+2026-04-18T19:47:53.641Z [LOG] [pipeline #2] new emails extracted: 1
+2026-04-18T19:47:53.641Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T19:47:53.690Z [LOG] parse summary: total=1673, parsed=0, alreadyParsed=1486, missingFields=187, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T19:47:53.694Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T19:47:53.694Z [LOG] [pipeline #2] new emails parsed: 0
+2026-04-18T19:47:53.694Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-18T19:47:53.887Z [LOG] Written 361 rows to CFS_mawb.csv
+2026-04-18T19:47:53.890Z [LOG]   Rows with no FFM match (no flight data): 2
+2026-04-18T19:47:53.895Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-18T19:47:53.895Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-18T19:47:54.082Z [LOG] [build_cfs_csv_uld.js] Written 619 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-18T19:47:54.082Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 3
+2026-04-18T19:47:54.082Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 257
+2026-04-18T19:47:54.082Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-18T19:47:54.082Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-18T19:47:54.161Z [LOG] Written 1748 rows to CFS_hawb.csv
+2026-04-18T19:47:54.163Z [LOG]   HAWB rows: 350
+2026-04-18T19:47:54.163Z [LOG]   MAWB-only rows: 1398
+2026-04-18T19:47:54.163Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-18T19:47:54.166Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-18T19:47:54.167Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-18T19:47:54.217Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AH …
+2026-04-18T19:47:55.166Z [LOG] [mawb] Writing 362 rows → 'CFS_by_MAWB'!A1 …
+2026-04-18T19:47:56.905Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-18T19:47:56.906Z [LOG] [mawb] Done — 361 data rows uploaded.
+2026-04-18T19:47:56.908Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AH …
+2026-04-18T19:47:57.112Z [LOG] [uld] Writing 620 rows → 'CFS_by_ULD'!A1 …
+2026-04-18T19:47:58.237Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-18T19:47:58.237Z [LOG] [uld] Done — 619 data rows uploaded.
+2026-04-18T19:47:58.241Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AH …
+2026-04-18T19:47:58.441Z [LOG] [hawb] Writing 1749 rows → 'CFS_by_HAWB'!A1 …
+2026-04-18T19:47:59.980Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-18T19:47:59.980Z [LOG] [hawb] Done — 1748 data rows uploaded.
+2026-04-18T19:47:59.987Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-18T19:47:59.987Z [LOG] [pipeline #2] pipeline complete
+2026-04-18T19:57:47.674Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T19:57:47.675Z [LOG] [pipeline #3] 2026-04-18T19:57:47.675Z
+2026-04-18T19:57:47.675Z [LOG] [extract_emails.js] starting…
+2026-04-18T19:57:51.542Z [LOG] extracted 0 email(s) this run
+2026-04-18T19:57:51.771Z [LOG] extraction finished
+2026-04-18T19:57:51.778Z [LOG] [extract_emails.js] done
+2026-04-18T19:57:51.778Z [LOG] [pipeline #3] new emails extracted: 0
+2026-04-18T19:57:51.778Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T19:57:51.822Z [LOG] parse summary: total=1673, parsed=0, alreadyParsed=1486, missingFields=187, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T19:57:51.826Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T19:57:51.826Z [LOG] [pipeline #3] new emails parsed: 0
+2026-04-18T19:57:51.826Z [LOG] [pipeline #3] no new data — skipping CSV rebuild and Sheets upload
+2026-04-18T20:07:47.678Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T20:07:47.679Z [LOG] [pipeline #4] 2026-04-18T20:07:47.679Z
+2026-04-18T20:07:47.679Z [LOG] [extract_emails.js] starting…
+2026-04-18T20:07:51.904Z [LOG] extracted 0 email(s) this run
+2026-04-18T20:07:52.201Z [LOG] extraction finished
+2026-04-18T20:07:52.209Z [LOG] [extract_emails.js] done
+2026-04-18T20:07:52.209Z [LOG] [pipeline #4] new emails extracted: 0
+2026-04-18T20:07:52.209Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T20:07:52.259Z [LOG] parse summary: total=1673, parsed=0, alreadyParsed=1486, missingFields=187, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T20:07:52.265Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T20:07:52.265Z [LOG] [pipeline #4] new emails parsed: 0
+2026-04-18T20:07:52.265Z [LOG] [pipeline #4] no new data — skipping CSV rebuild and Sheets upload
+2026-04-18T20:17:47.682Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T20:17:47.683Z [LOG] [pipeline #5] 2026-04-18T20:17:47.683Z
+2026-04-18T20:17:47.683Z [LOG] [extract_emails.js] starting…
+2026-04-18T20:17:51.760Z [LOG] extracted 0 email(s) this run
+2026-04-18T20:17:52.057Z [LOG] extraction finished
+2026-04-18T20:17:52.065Z [LOG] [extract_emails.js] done
+2026-04-18T20:17:52.065Z [LOG] [pipeline #5] new emails extracted: 0
+2026-04-18T20:17:52.065Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T20:17:52.109Z [LOG] parse summary: total=1673, parsed=0, alreadyParsed=1486, missingFields=187, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T20:17:52.113Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T20:17:52.113Z [LOG] [pipeline #5] new emails parsed: 0
+2026-04-18T20:17:52.113Z [LOG] [pipeline #5] no new data — skipping CSV rebuild and Sheets upload
+2026-04-18T20:25:54.782Z [WARN] Received SIGINT; shutting down pipeline...
+2026-04-18T20:25:57.613Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T20:25:57.614Z [LOG] [pipeline #1] 2026-04-18T20:25:57.614Z
+2026-04-18T20:25:57.614Z [LOG] [extract_emails.js] starting…
+2026-04-18T20:26:01.032Z [LOG] extracted 0 email(s) this run
+2026-04-18T20:26:01.328Z [LOG] extraction finished
+2026-04-18T20:26:01.335Z [LOG] [extract_emails.js] done
+2026-04-18T20:26:01.335Z [LOG] [pipeline #1] new emails extracted: 0
+2026-04-18T20:26:01.335Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T20:26:01.377Z [LOG] parse summary: total=1673, parsed=0, alreadyParsed=1486, missingFields=187, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T20:26:01.382Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T20:26:01.383Z [LOG] [pipeline #1] new emails parsed: 0
+2026-04-18T20:26:01.383Z [LOG] [pipeline #1] --force flag set; forcing CSV rebuild and Sheets upload
+2026-04-18T20:26:01.383Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-18T20:26:01.553Z [LOG] Written 361 rows to CFS_mawb.csv
+2026-04-18T20:26:01.555Z [LOG]   Rows with no FFM match (no flight data): 2
+2026-04-18T20:26:01.566Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-18T20:26:01.567Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-18T20:26:01.743Z [LOG] [build_cfs_csv_uld.js] Written 619 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-18T20:26:01.743Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 3
+2026-04-18T20:26:01.743Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 257
+2026-04-18T20:26:01.743Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-18T20:26:01.743Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-18T20:26:01.828Z [LOG] Written 1748 rows to CFS_hawb.csv
+2026-04-18T20:26:01.830Z [LOG]   HAWB rows: 350
+2026-04-18T20:26:01.830Z [LOG]   MAWB-only rows: 1398
+2026-04-18T20:26:01.830Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-18T20:26:01.834Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-18T20:26:01.834Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-18T20:26:01.900Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AH …
+2026-04-18T20:26:02.562Z [LOG] [mawb] Writing 362 rows → 'CFS_by_MAWB'!A1 …
+2026-04-18T20:26:03.809Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-18T20:26:03.809Z [LOG] [mawb] Done — 361 data rows uploaded.
+2026-04-18T20:26:03.811Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AH …
+2026-04-18T20:26:03.988Z [LOG] [uld] Writing 620 rows → 'CFS_by_ULD'!A1 …
+2026-04-18T20:26:06.916Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-18T20:26:06.916Z [LOG] [uld] Done — 619 data rows uploaded.
+2026-04-18T20:26:06.921Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AH …
+2026-04-18T20:26:07.090Z [LOG] [hawb] Writing 1749 rows → 'CFS_by_HAWB'!A1 …
+2026-04-18T20:26:09.116Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-18T20:26:09.116Z [LOG] [hawb] Done — 1748 data rows uploaded.
+2026-04-18T20:26:09.122Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-18T20:26:09.122Z [LOG] [pipeline #1] pipeline complete
+2026-04-18T20:31:01.404Z [LOG] Pipeline polling every 600s. Press Ctrl+C to stop.
+2026-04-18T20:31:01.406Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T20:31:01.406Z [LOG] [pipeline #1] 2026-04-18T20:31:01.406Z
+2026-04-18T20:31:01.406Z [LOG] [extract_emails.js] starting…
+2026-04-18T20:31:05.233Z [LOG] extracted 0 email(s) this run
+2026-04-18T20:31:05.483Z [LOG] extraction finished
+2026-04-18T20:31:05.491Z [LOG] [extract_emails.js] done
+2026-04-18T20:31:05.491Z [LOG] [pipeline #1] new emails extracted: 0
+2026-04-18T20:31:05.491Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T20:31:05.542Z [LOG] parse summary: total=1673, parsed=0, alreadyParsed=1486, missingFields=187, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T20:31:05.546Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T20:31:05.546Z [LOG] [pipeline #1] new emails parsed: 0
+2026-04-18T20:31:05.546Z [LOG] [pipeline #1] no new data — skipping CSV rebuild and Sheets upload
+2026-04-18T20:41:05.646Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T20:41:05.647Z [LOG] [pipeline #2] 2026-04-18T20:41:05.647Z
+2026-04-18T20:41:05.647Z [LOG] [extract_emails.js] starting…
+2026-04-18T20:41:09.165Z [LOG] extracted 0 email(s) this run
+2026-04-18T20:41:09.462Z [LOG] extraction finished
+2026-04-18T20:41:09.468Z [LOG] [extract_emails.js] done
+2026-04-18T20:41:09.468Z [LOG] [pipeline #2] new emails extracted: 0
+2026-04-18T20:41:09.468Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T20:41:09.506Z [LOG] parse summary: total=1673, parsed=0, alreadyParsed=1486, missingFields=187, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T20:41:09.511Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T20:41:09.511Z [LOG] [pipeline #2] new emails parsed: 0
+2026-04-18T20:41:09.511Z [LOG] [pipeline #2] no new data — skipping CSV rebuild and Sheets upload
+2026-04-18T20:51:05.650Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T20:51:05.651Z [LOG] [pipeline #3] 2026-04-18T20:51:05.651Z
+2026-04-18T20:51:05.651Z [LOG] [extract_emails.js] starting…
+2026-04-18T20:51:09.033Z [LOG] extracted 0 email(s) this run
+2026-04-18T20:51:09.275Z [LOG] extraction finished
+2026-04-18T20:51:09.283Z [LOG] [extract_emails.js] done
+2026-04-18T20:51:09.283Z [LOG] [pipeline #3] new emails extracted: 0
+2026-04-18T20:51:09.283Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T20:51:09.323Z [LOG] parse summary: total=1673, parsed=0, alreadyParsed=1486, missingFields=187, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T20:51:09.327Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T20:51:09.327Z [LOG] [pipeline #3] new emails parsed: 0
+2026-04-18T20:51:09.327Z [LOG] [pipeline #3] no new data — skipping CSV rebuild and Sheets upload
+2026-04-18T21:01:05.653Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T21:01:05.653Z [LOG] [pipeline #4] 2026-04-18T21:01:05.653Z
+2026-04-18T21:01:05.653Z [LOG] [extract_emails.js] starting…
+2026-04-18T21:01:09.622Z [LOG] extracted 0 email(s) this run
+2026-04-18T21:01:09.920Z [LOG] extraction finished
+2026-04-18T21:01:09.928Z [LOG] [extract_emails.js] done
+2026-04-18T21:01:09.928Z [LOG] [pipeline #4] new emails extracted: 0
+2026-04-18T21:01:09.928Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T21:01:09.976Z [LOG] parse summary: total=1673, parsed=0, alreadyParsed=1486, missingFields=187, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T21:01:09.981Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T21:01:09.981Z [LOG] [pipeline #4] new emails parsed: 0
+2026-04-18T21:01:09.981Z [LOG] [pipeline #4] no new data — skipping CSV rebuild and Sheets upload
+2026-04-18T21:11:05.654Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T21:11:05.654Z [LOG] [pipeline #5] 2026-04-18T21:11:05.654Z
+2026-04-18T21:11:05.660Z [LOG] [extract_emails.js] starting…
+2026-04-18T21:11:09.884Z [LOG] extracted 0 email(s) this run
+2026-04-18T21:11:10.182Z [LOG] extraction finished
+2026-04-18T21:11:10.190Z [LOG] [extract_emails.js] done
+2026-04-18T21:11:10.190Z [LOG] [pipeline #5] new emails extracted: 0
+2026-04-18T21:11:10.190Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T21:11:10.238Z [LOG] parse summary: total=1673, parsed=0, alreadyParsed=1486, missingFields=187, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T21:11:10.243Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T21:11:10.243Z [LOG] [pipeline #5] new emails parsed: 0
+2026-04-18T21:11:10.243Z [LOG] [pipeline #5] no new data — skipping CSV rebuild and Sheets upload
+2026-04-18T21:21:05.657Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T21:21:05.657Z [LOG] [pipeline #6] 2026-04-18T21:21:05.657Z
+2026-04-18T21:21:05.657Z [LOG] [extract_emails.js] starting…
+2026-04-18T21:21:09.208Z [LOG] extracted 0 email(s) this run
+2026-04-18T21:21:09.426Z [LOG] extraction finished
+2026-04-18T21:21:09.434Z [LOG] [extract_emails.js] done
+2026-04-18T21:21:09.434Z [LOG] [pipeline #6] new emails extracted: 0
+2026-04-18T21:21:09.434Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T21:21:09.473Z [LOG] parse summary: total=1673, parsed=0, alreadyParsed=1486, missingFields=187, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T21:21:09.477Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T21:21:09.477Z [LOG] [pipeline #6] new emails parsed: 0
+2026-04-18T21:21:09.477Z [LOG] [pipeline #6] no new data — skipping CSV rebuild and Sheets upload
+2026-04-18T21:31:05.659Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T21:31:05.660Z [LOG] [pipeline #7] 2026-04-18T21:31:05.660Z
+2026-04-18T21:31:05.660Z [LOG] [extract_emails.js] starting…
+2026-04-18T21:31:09.300Z [LOG] extracted 0 email(s) this run
+2026-04-18T21:31:09.600Z [LOG] extraction finished
+2026-04-18T21:31:09.607Z [LOG] [extract_emails.js] done
+2026-04-18T21:31:09.607Z [LOG] [pipeline #7] new emails extracted: 0
+2026-04-18T21:31:09.607Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T21:31:09.649Z [LOG] parse summary: total=1673, parsed=0, alreadyParsed=1486, missingFields=187, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T21:31:09.655Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T21:31:09.655Z [LOG] [pipeline #7] new emails parsed: 0
+2026-04-18T21:31:09.655Z [LOG] [pipeline #7] no new data — skipping CSV rebuild and Sheets upload
+2026-04-18T21:37:52.867Z [WARN] Received SIGINT; shutting down pipeline...
+2026-04-18T21:38:01.471Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T21:38:01.472Z [LOG] [pipeline #1] 2026-04-18T21:38:01.472Z
+2026-04-18T21:38:01.472Z [LOG] [extract_emails.js] starting…
+2026-04-18T21:38:04.772Z [LOG] extracted 0 email(s) this run
+2026-04-18T21:38:04.997Z [LOG] extraction finished
+2026-04-18T21:38:05.003Z [LOG] [extract_emails.js] done
+2026-04-18T21:38:05.003Z [LOG] [pipeline #1] new emails extracted: 0
+2026-04-18T21:38:05.003Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T21:38:05.052Z [LOG] parse summary: total=1673, parsed=0, alreadyParsed=1486, missingFields=187, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T21:38:05.059Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T21:38:05.059Z [LOG] [pipeline #1] new emails parsed: 0
+2026-04-18T21:38:05.059Z [LOG] [pipeline #1] --force flag set; forcing CSV rebuild and Sheets upload
+2026-04-18T21:38:05.059Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-18T21:38:05.219Z [LOG] Written 361 rows to CFS_mawb.csv
+2026-04-18T21:38:05.221Z [LOG]   Rows with no FFM match (no flight data): 2
+2026-04-18T21:38:05.227Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-18T21:38:05.227Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-18T21:38:05.410Z [LOG] [build_cfs_csv_uld.js] Written 619 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-18T21:38:05.410Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 3
+2026-04-18T21:38:05.410Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 257
+2026-04-18T21:38:05.410Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-18T21:38:05.410Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-18T21:38:05.566Z [LOG] Written 438 rows to CFS_hawb.csv
+2026-04-18T21:38:05.568Z [LOG]   HAWB rows: 350
+2026-04-18T21:38:05.568Z [LOG]   MAWB-only rows: 88
+2026-04-18T21:38:05.568Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-18T21:38:05.579Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-18T21:38:05.579Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-18T21:38:05.645Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AH …
+2026-04-18T21:38:06.602Z [LOG] [mawb] Writing 362 rows → 'CFS_by_MAWB'!A1 …
+2026-04-18T21:38:09.576Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-18T21:38:09.576Z [LOG] [mawb] Done — 361 data rows uploaded.
+2026-04-18T21:38:09.578Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AH …
+2026-04-18T21:38:10.053Z [LOG] [uld] Writing 620 rows → 'CFS_by_ULD'!A1 …
+2026-04-18T21:38:11.778Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-18T21:38:11.778Z [LOG] [uld] Done — 619 data rows uploaded.
+2026-04-18T21:38:11.780Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AH …
+2026-04-18T21:38:12.289Z [LOG] [hawb] Writing 439 rows → 'CFS_by_HAWB'!A1 …
+2026-04-18T21:38:14.128Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-18T21:38:14.128Z [LOG] [hawb] Done — 438 data rows uploaded.
+2026-04-18T21:38:14.133Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-18T21:38:14.133Z [LOG] [pipeline #1] pipeline complete
+2026-04-18T21:38:17.563Z [LOG] Pipeline polling every 600s. Press Ctrl+C to stop.
+2026-04-18T21:38:17.565Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T21:38:17.565Z [LOG] [pipeline #1] 2026-04-18T21:38:17.565Z
+2026-04-18T21:38:17.565Z [LOG] [extract_emails.js] starting…
+2026-04-18T21:38:20.914Z [LOG] extracted 0 email(s) this run
+2026-04-18T21:38:21.155Z [LOG] extraction finished
+2026-04-18T21:38:21.163Z [LOG] [extract_emails.js] done
+2026-04-18T21:38:21.164Z [LOG] [pipeline #1] new emails extracted: 0
+2026-04-18T21:38:21.164Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T21:38:21.205Z [LOG] parse summary: total=1673, parsed=0, alreadyParsed=1486, missingFields=187, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T21:38:21.212Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T21:38:21.212Z [LOG] [pipeline #1] new emails parsed: 0
+2026-04-18T21:38:21.212Z [LOG] [pipeline #1] no new data — skipping CSV rebuild and Sheets upload
+2026-04-18T21:48:21.311Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T21:48:21.312Z [LOG] [pipeline #2] 2026-04-18T21:48:21.312Z
+2026-04-18T21:48:21.312Z [LOG] [extract_emails.js] starting…
+2026-04-18T21:48:24.771Z [LOG] extracted 0 email(s) this run
+2026-04-18T21:48:25.022Z [LOG] extraction finished
+2026-04-18T21:48:25.027Z [LOG] [extract_emails.js] done
+2026-04-18T21:48:25.027Z [LOG] [pipeline #2] new emails extracted: 0
+2026-04-18T21:48:25.027Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T21:48:25.068Z [LOG] parse summary: total=1673, parsed=0, alreadyParsed=1486, missingFields=187, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T21:48:25.073Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T21:48:25.073Z [LOG] [pipeline #2] new emails parsed: 0
+2026-04-18T21:48:25.073Z [LOG] [pipeline #2] no new data — skipping CSV rebuild and Sheets upload
+2026-04-18T21:58:21.315Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T21:58:21.315Z [LOG] [pipeline #3] 2026-04-18T21:58:21.315Z
+2026-04-18T21:58:21.315Z [LOG] [extract_emails.js] starting…
+2026-04-18T21:58:24.792Z [LOG] extracted 0 email(s) this run
+2026-04-18T21:58:25.038Z [LOG] extraction finished
+2026-04-18T21:58:25.043Z [LOG] [extract_emails.js] done
+2026-04-18T21:58:25.043Z [LOG] [pipeline #3] new emails extracted: 0
+2026-04-18T21:58:25.043Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T21:58:25.085Z [LOG] parse summary: total=1673, parsed=0, alreadyParsed=1486, missingFields=187, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T21:58:25.090Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T21:58:25.090Z [LOG] [pipeline #3] new emails parsed: 0
+2026-04-18T21:58:25.090Z [LOG] [pipeline #3] no new data — skipping CSV rebuild and Sheets upload
+2026-04-18T22:08:21.317Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T22:08:21.317Z [LOG] [pipeline #4] 2026-04-18T22:08:21.317Z
+2026-04-18T22:08:21.317Z [LOG] [extract_emails.js] starting…
+2026-04-18T22:08:25.057Z [LOG] extracted 0 email(s) this run
+2026-04-18T22:08:25.313Z [LOG] extraction finished
+2026-04-18T22:08:25.320Z [LOG] [extract_emails.js] done
+2026-04-18T22:08:25.321Z [LOG] [pipeline #4] new emails extracted: 0
+2026-04-18T22:08:25.321Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T22:08:25.366Z [LOG] parse summary: total=1673, parsed=0, alreadyParsed=1486, missingFields=187, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T22:08:25.370Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T22:08:25.371Z [LOG] [pipeline #4] new emails parsed: 0
+2026-04-18T22:08:25.371Z [LOG] [pipeline #4] no new data — skipping CSV rebuild and Sheets upload
+2026-04-18T22:18:21.321Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T22:18:21.322Z [LOG] [pipeline #5] 2026-04-18T22:18:21.322Z
+2026-04-18T22:18:21.322Z [LOG] [extract_emails.js] starting…
+2026-04-18T22:18:24.824Z [LOG] extracted 0 email(s) this run
+2026-04-18T22:18:25.077Z [LOG] extraction finished
+2026-04-18T22:18:25.082Z [LOG] [extract_emails.js] done
+2026-04-18T22:18:25.082Z [LOG] [pipeline #5] new emails extracted: 0
+2026-04-18T22:18:25.082Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T22:18:25.128Z [LOG] parse summary: total=1673, parsed=0, alreadyParsed=1486, missingFields=187, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T22:18:25.133Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T22:18:25.133Z [LOG] [pipeline #5] new emails parsed: 0
+2026-04-18T22:18:25.133Z [LOG] [pipeline #5] no new data — skipping CSV rebuild and Sheets upload
+2026-04-18T22:28:21.325Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T22:28:21.325Z [LOG] [pipeline #6] 2026-04-18T22:28:21.325Z
+2026-04-18T22:28:21.325Z [LOG] [extract_emails.js] starting…
+2026-04-18T22:28:25.685Z [LOG] [extract_emails.js] Extracted: INBOX-uid-6879.json
+2026-04-18T22:28:25.425Z [LOG] extracted 1 email(s) this run
+2026-04-18T22:28:25.679Z [LOG] extraction finished
+2026-04-18T22:28:25.685Z [LOG] [extract_emails.js] done
+2026-04-18T22:28:25.685Z [LOG] [pipeline #6] new emails extracted: 1
+2026-04-18T22:28:25.685Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T22:28:25.727Z [LOG] parse summary: total=1674, parsed=0, alreadyParsed=1486, missingFields=188, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T22:28:25.731Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T22:28:25.731Z [LOG] [pipeline #6] new emails parsed: 0
+2026-04-18T22:28:25.731Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-18T22:28:25.880Z [LOG] Written 361 rows to CFS_mawb.csv
+2026-04-18T22:28:25.882Z [LOG]   Rows with no FFM match (no flight data): 2
+2026-04-18T22:28:25.886Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-18T22:28:25.886Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-18T22:28:26.064Z [LOG] [build_cfs_csv_uld.js] Written 619 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-18T22:28:26.064Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 3
+2026-04-18T22:28:26.064Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 257
+2026-04-18T22:28:26.064Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-18T22:28:26.064Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-18T22:28:26.221Z [LOG] Written 438 rows to CFS_hawb.csv
+2026-04-18T22:28:26.224Z [LOG]   HAWB rows: 350
+2026-04-18T22:28:26.224Z [LOG]   MAWB-only rows: 88
+2026-04-18T22:28:26.224Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-18T22:28:26.231Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-18T22:28:26.231Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-18T22:28:26.285Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AH …
+2026-04-18T22:28:27.039Z [LOG] [mawb] Writing 362 rows → 'CFS_by_MAWB'!A1 …
+2026-04-18T22:28:28.817Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-18T22:28:28.817Z [LOG] [mawb] Done — 361 data rows uploaded.
+2026-04-18T22:28:28.819Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AH …
+2026-04-18T22:28:29.341Z [LOG] [uld] Writing 620 rows → 'CFS_by_ULD'!A1 …
+2026-04-18T22:28:31.594Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-18T22:28:31.594Z [LOG] [uld] Done — 619 data rows uploaded.
+2026-04-18T22:28:31.597Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AH …
+2026-04-18T22:28:32.154Z [LOG] [hawb] Writing 439 rows → 'CFS_by_HAWB'!A1 …
+2026-04-18T22:28:34.006Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-18T22:28:34.006Z [LOG] [hawb] Done — 438 data rows uploaded.
+2026-04-18T22:28:34.013Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-18T22:28:34.013Z [LOG] [pipeline #6] pipeline complete
+2026-04-18T22:38:21.329Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T22:38:21.329Z [LOG] [pipeline #7] 2026-04-18T22:38:21.329Z
+2026-04-18T22:38:21.329Z [LOG] [extract_emails.js] starting…
+2026-04-18T22:38:24.792Z [LOG] extracted 0 email(s) this run
+2026-04-18T22:38:25.036Z [LOG] extraction finished
+2026-04-18T22:38:25.041Z [LOG] [extract_emails.js] done
+2026-04-18T22:38:25.041Z [LOG] [pipeline #7] new emails extracted: 0
+2026-04-18T22:38:25.041Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T22:38:25.071Z [LOG] parse summary: total=1674, parsed=0, alreadyParsed=1486, missingFields=188, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T22:38:25.078Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T22:38:25.078Z [LOG] [pipeline #7] new emails parsed: 0
+2026-04-18T22:38:25.078Z [LOG] [pipeline #7] no new data — skipping CSV rebuild and Sheets upload
+2026-04-18T22:44:39.258Z [WARN] Received SIGINT; shutting down pipeline...
+2026-04-18T22:44:42.162Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-18T22:44:42.163Z [LOG] [pipeline #1] 2026-04-18T22:44:42.163Z
+2026-04-18T22:44:42.163Z [LOG] [extract_emails.js] starting…
+2026-04-18T22:44:45.653Z [LOG] extracted 0 email(s) this run
+2026-04-18T22:44:45.882Z [LOG] extraction finished
+2026-04-18T22:44:45.888Z [LOG] [extract_emails.js] done
+2026-04-18T22:44:45.888Z [LOG] [pipeline #1] new emails extracted: 0
+2026-04-18T22:44:45.888Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-18T22:44:45.943Z [LOG] parse summary: total=1674, parsed=0, alreadyParsed=1486, missingFields=188, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-18T22:44:45.950Z [LOG] [parse_extracted_emails.js] done
+2026-04-18T22:44:45.950Z [LOG] [pipeline #1] new emails parsed: 0
+2026-04-18T22:44:45.950Z [LOG] [pipeline #1] --force flag set; forcing CSV rebuild and Sheets upload
+2026-04-18T22:44:45.950Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-18T22:44:46.115Z [LOG] Written 361 rows to CFS_mawb.csv
+2026-04-18T22:44:46.119Z [LOG]   Rows with no FFM match (no flight data): 2
+2026-04-18T22:44:46.123Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-18T22:44:46.123Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-18T22:44:46.303Z [LOG] [build_cfs_csv_uld.js] Written 619 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-18T22:44:46.303Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 3
+2026-04-18T22:44:46.303Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 257
+2026-04-18T22:44:46.303Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-18T22:44:46.303Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-18T22:44:46.477Z [LOG] Written 438 rows to CFS_hawb.csv
+2026-04-18T22:44:46.480Z [LOG]   HAWB rows: 350
+2026-04-18T22:44:46.480Z [LOG]   MAWB-only rows: 88
+2026-04-18T22:44:46.480Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-18T22:44:46.484Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-18T22:44:46.484Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-18T22:44:46.548Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AH …
+2026-04-18T22:44:47.382Z [LOG] [mawb] Writing 362 rows → 'CFS_by_MAWB'!A1 …
+2026-04-18T22:44:50.148Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-18T22:44:50.148Z [LOG] [mawb] Done — 361 data rows uploaded.
+2026-04-18T22:44:50.149Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AH …
+2026-04-18T22:44:50.674Z [LOG] [uld] Writing 620 rows → 'CFS_by_ULD'!A1 …
+2026-04-18T22:44:52.900Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-18T22:44:52.900Z [LOG] [uld] Done — 619 data rows uploaded.
+2026-04-18T22:44:52.903Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AH …
+2026-04-18T22:44:53.408Z [LOG] [hawb] Writing 439 rows → 'CFS_by_HAWB'!A1 …
+2026-04-18T22:44:55.258Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-18T22:44:55.258Z [LOG] [hawb] Done — 438 data rows uploaded.
+2026-04-18T22:44:55.263Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-18T22:44:55.263Z [LOG] [pipeline #1] pipeline complete
