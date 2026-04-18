@@ -198,7 +198,6 @@ string Fhl4JsonExtractor::jsonParty(const Fhl4PartyData& p, const string& tagKey
 string Fhl4JsonExtractor::jsonHouse(const Fhl4HouseData& h) const
 {
   string out = "    {\n";
-  out += "      \"HouseBillLine\": \""             + escapeJson(trimTrailing(h.houseBillLine))             + "\",\n";
   out += "      \"HouseOriginAndDestination\": \"" + escapeJson(trimTrailing(h.houseOriginAndDestination)) + "\",\n";
   out += "      \"HouseWaybillNumber\": \""        + escapeJson(trimTrailing(h.houseWaybillNumber))        + "\",\n";
   out += "      \"HousePieceCount\": \""           + escapeJson(trimTrailing(h.housePieceCount))           + "\",\n";
@@ -212,13 +211,38 @@ string Fhl4JsonExtractor::jsonHouse(const Fhl4HouseData& h) const
   return out;
 }
 
+string Fhl4JsonExtractor::jsonChargesDeclaration() const
+{
+  const string line = trimTrailing(cvdLine);
+  vector<string> tokens;
+  size_t start = 0;
+  size_t end = line.find('/');
+
+  while (end != string::npos)
+  {
+    tokens.push_back(line.substr(start, end - start));
+    start = end + 1;
+    end = line.find('/', start);
+  }
+  tokens.push_back(line.substr(start));
+
+  if (tokens.size() < 6 || tokens[0] != "CVD") return "{}";
+
+  string out = "{";
+  out += "\"CurrencyCode\": \"" + escapeJson(tokens[1]) + "\", ";
+  out += "\"WeightValuation\": \"" + escapeJson(tokens[2]) + "\", ";
+  out += "\"DeclaredValueForCarriage\": \"" + escapeJson(tokens[3]) + "\", ";
+  out += "\"DeclaredValueForCustoms\": \"" + escapeJson(tokens[4]) + "\", ";
+  out += "\"InsuranceValue\": \"" + escapeJson(tokens[5]) + "\"";
+  out += "}";
+  return out;
+}
+
 void Fhl4JsonExtractor::printJson() const
 {
   cout << "{" << endl;
-  cout << "  \"MasterBillLine\": \""            << escapeJson(trimTrailing(masterBillLine))       << "\"," << endl;
   cout << "  \"MasterAirwayBillNumber\": \""    << escapeJson(trimTrailing(masterAWB))            << "\"," << endl;
   cout << "  \"MasterOriginAndDestination\": \"" << escapeJson(trimTrailing(masterOriginAndDestination)) << "\"," << endl;
-  cout << "  \"MasterBillSummary\": \""         << escapeJson(trimTrailing(masterBillSummary))    << "\"," << endl;
   cout << "  \"MasterPieceCount\": \""          << escapeJson(trimTrailing(masterPieceCount))     << "\"," << endl;
   cout << "  \"MasterWeightUnit\": \""          << escapeJson(trimTrailing(masterWeightUnit))     << "\"," << endl;
   cout << "  \"MasterWeight\": \""              << escapeJson(trimTrailing(masterWeight))         << "\"," << endl;
@@ -235,6 +259,6 @@ void Fhl4JsonExtractor::printJson() const
 
   cout << "  \"Shipper\": "   << jsonParty(shipper,   "ShipperLine")   << "," << endl;
   cout << "  \"Consignee\": " << jsonParty(consignee, "ConsigneeLine") << "," << endl;
-  cout << "  \"CvdLine\": \"" << escapeJson(trimTrailing(cvdLine)) << "\"" << endl;
+  cout << "  \"ChargesDeclaration\": " << jsonChargesDeclaration() << endl;
   cout << "}" << endl;
 }

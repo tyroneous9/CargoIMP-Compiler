@@ -111,7 +111,11 @@ void* Fwb17JsonExtractor::visit(const Rule_WeightUnit* rule)           { weightU
 void* Fwb17JsonExtractor::visit(const Rule_TotalWeight* rule)          { totalWeight = rule->spelling; return NULL; }
 void* Fwb17JsonExtractor::visit(const Rule_VolumeUnit* rule)           { volumeUnit = rule->spelling; return NULL; }
 void* Fwb17JsonExtractor::visit(const Rule_VolumeAmount* rule)         { volumeAmount = rule->spelling; return NULL; }
-void* Fwb17JsonExtractor::visit(const Rule_FlightBookingsLine* rule)   { flightBookingsLine = rule->spelling; return NULL; }
+void* Fwb17JsonExtractor::visit(const Rule_FlightBookingsLine* rule)
+{
+  flightBookingsLines.push_back(rule->spelling);
+  return NULL;
+}
 
 // --- Routing ---
 void* Fwb17JsonExtractor::visit(const Rule_RoutingLine* rule) { routingLine = rule->spelling; return NULL; }
@@ -282,12 +286,108 @@ string Fwb17JsonExtractor::jsonParty(const Fwb17PartyData& p) const
   return out;
 }
 
+string Fwb17JsonExtractor::jsonFlightBookings() const
+{
+  string out = "[";
+  bool firstObj = true;
+
+  for (size_t i = 0; i < flightBookingsLines.size(); ++i)
+  {
+    const string line = trimTrailing(flightBookingsLines[i]);
+    size_t start = 0;
+    size_t end = line.find('/');
+    vector<string> tokens;
+
+    while (end != string::npos)
+    {
+      tokens.push_back(line.substr(start, end - start));
+      start = end + 1;
+      end = line.find('/', start);
+    }
+    tokens.push_back(line.substr(start));
+
+    if (tokens.empty() || tokens[0] != "FLT") continue;
+
+    for (size_t t = 1; t + 1 < tokens.size(); t += 2)
+    {
+      if (!firstObj) out += ", ";
+      firstObj = false;
+      out += "{\"CarrierFlightNumber\": \"" + escapeJson(tokens[t]) + "\", ";
+      out += "\"Day\": \"" + escapeJson(tokens[t + 1]) + "\"}";
+    }
+  }
+
+  out += "]";
+  return out;
+}
+
+string Fwb17JsonExtractor::jsonRouting() const
+{
+  const string line = trimTrailing(routingLine);
+  vector<string> tokens;
+  size_t start = 0;
+  size_t end = line.find('/');
+
+  while (end != string::npos)
+  {
+    tokens.push_back(line.substr(start, end - start));
+    start = end + 1;
+    end = line.find('/', start);
+  }
+  tokens.push_back(line.substr(start));
+
+  if (tokens.empty() || tokens[0] != "RTG") return "[]";
+
+  string out = "[";
+  bool first = true;
+  for (size_t i = 1; i < tokens.size(); ++i)
+  {
+    const string token = tokens[i];
+    const string airport = token.size() >= 3 ? token.substr(0, 3) : token;
+    const string carrier = token.size() > 3 ? token.substr(3) : "";
+
+    if (!first) out += ", ";
+    first = false;
+    out += "{\"AirportCode\": \"" + escapeJson(airport) + "\", ";
+    out += "\"CarrierCode\": \"" + escapeJson(carrier) + "\"}";
+  }
+  out += "]";
+  return out;
+}
+
+string Fwb17JsonExtractor::jsonChargesDeclaration() const
+{
+  const string line = trimTrailing(cvdLine);
+  vector<string> tokens;
+  size_t start = 0;
+  size_t end = line.find('/');
+
+  while (end != string::npos)
+  {
+    tokens.push_back(line.substr(start, end - start));
+    start = end + 1;
+    end = line.find('/', start);
+  }
+  tokens.push_back(line.substr(start));
+
+  if (tokens.size() < 7 || tokens[0] != "CVD") return "{}";
+
+  string out = "{";
+  out += "\"CurrencyCode\": \"" + escapeJson(tokens[1]) + "\", ";
+  out += "\"WeightValuation\": \"" + escapeJson(tokens[2]) + "\", ";
+  out += "\"OtherCharges\": \"" + escapeJson(tokens[3]) + "\", ";
+  out += "\"DeclaredValueForCarriage\": \"" + escapeJson(tokens[4]) + "\", ";
+  out += "\"DeclaredValueForCustoms\": \"" + escapeJson(tokens[5]) + "\", ";
+  out += "\"InsuranceValue\": \"" + escapeJson(tokens[6]) + "\"";
+  out += "}";
+  return out;
+}
+
 void Fwb17JsonExtractor::printJson() const
 {
   cout << "{" << endl;
   cout << "  \"MasterAirwayBillNumber\": \""   << escapeJson(trimTrailing(masterAWB))              << "\"," << endl;
   cout << "  \"OriginAndDestination\": \""      << escapeJson(trimTrailing(originAndDest))          << "\"," << endl;
-  cout << "  \"TotalConsignmentSummary\": \""   << escapeJson(trimTrailing(totalConsignmentSummary))<< "\"," << endl;
   cout << "  \"TotalPieceCount\": \""           << escapeJson(trimTrailing(totalPieceCount))        << "\"," << endl;
   cout << "  \"WeightUnit\": \""                << escapeJson(trimTrailing(weightUnit))             << "\"," << endl;
   cout << "  \"TotalWeight\": \""               << escapeJson(trimTrailing(totalWeight))            << "\"," << endl;
@@ -296,14 +396,14 @@ void Fwb17JsonExtractor::printJson() const
     cout << "  \"VolumeUnit\": \""   << escapeJson(trimTrailing(volumeUnit))   << "\"," << endl;
     cout << "  \"VolumeAmount\": \"" << escapeJson(trimTrailing(volumeAmount)) << "\"," << endl;
   }
-  cout << "  \"FlightBookingsLine\": \"" << escapeJson(trimTrailing(flightBookingsLine)) << "\"," << endl;
-  cout << "  \"RoutingLine\": \""         << escapeJson(trimTrailing(routingLine))   << "\"," << endl;
+  cout << "  \"FlightBookings\": "         << jsonFlightBookings()                << "," << endl;
+  cout << "  \"Routing\": "                << jsonRouting()                       << "," << endl;
   cout << "  \"Shipper\": "               << jsonParty(shipper)        << "," << endl;
   cout << "  \"Consignee\": "             << jsonParty(consignee)      << "," << endl;
   cout << "  \"AgentLine\": \""           << escapeJson(trimTrailing(agentTagLine))  << "\"," << endl;
   cout << "  \"AgentContinuations\": "    << jsonArray(agentContinuations)       << "," << endl;
   cout << "  \"AccountingLine\": \""      << escapeJson(trimTrailing(accountingLine)) << "\"," << endl;
-  cout << "  \"CvdLine\": \""             << escapeJson(trimTrailing(cvdLine))       << "\"," << endl;
+  cout << "  \"ChargesDeclaration\": "    << jsonChargesDeclaration()            << "," << endl;
   cout << "  \"RatingLine\": \""          << escapeJson(trimTrailing(ratingTagLine)) << "\"," << endl;
   cout << "  \"RatingContinuations\": "   << jsonArray(ratingContinuations)      << "," << endl;
   cout << "  \"OtherChargesLine\": \""    << escapeJson(trimTrailing(otherChargesTagLine)) << "\"," << endl;

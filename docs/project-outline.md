@@ -20,7 +20,32 @@ Test inputs:
 ./build/parser_fhl_json -file data/input_tests/fhl_test.txt
 
 Output shape:
-shape:
+canonical parsed file shape (see docs/parsed-output-contract.md):
+{
+  "cimpType": "ffm",
+  "status": "ok",
+  "fields": {
+    "MessageHeader": "FFM/8",
+    "FlightIdentification": {
+      "MessageFunctionCode": "1",
+      "CarrierFlightNumber": "KZ7134",
+      "DayMonthTime": "30MAR2215",
+      "BoardPoint": "NRT",
+      "AircraftRegistration": "N404KZ"
+    },
+    "Routes": [
+      {
+        "AirportCode": "ORD",
+        "RouteKind": "Direct",
+        "ScheduledArrivalTime": "30MAR2240",
+        "ScheduledDepartureTime": ""
+      }
+    ]
+  },
+  "stderr": ""
+}
+
+legacy conceptual wrapper (for reference):
 {
   "email": {
     "uid": 6001,
@@ -60,12 +85,14 @@ support for FFM/4, FFM/5, FHL/5
 
 CSV CREATION:
 Columns:
-LFD (last free day) - departure date+2 days, e.g. KZ134/14APR -> 16APR
-PCS RCVD - leave empty for human input
-PMC LOCATION - leave empty
-AMS STATUS - leave empty
-p3, trucking, storage, isc - leave empty
-all message/milestones - leave empty
+1. create scheduled arrival time - obtained from the routeline in ffm messages
+2. ATA (actual time arrival) - obtained from MVT message
+3. LFD (last free day) - departure date+2 days, e.g. KZ134/14APR -> 16APR
+4. PCS RCVD - leave empty for human input
+5. PMC LOCATION - leave empty
+6. AMS STATUS - leave empty
+7. p3, trucking, storage, isc - leave empty
+8. all message/milestones - leave empty
 Grouping:
 One row per ULD, MAWB, HAWB? ideally per HAWB. review FHL messages to see if you are able to deduce the flight context (especially the ULD identifier). This is the most crucial step, and if you are unable to deduce it, suggest other approaches to correctly create one row per HAWB.
 !!! Each MAWB can be split onto multiple PMCs, each HAWB can also be split onto multiple PMCs
@@ -86,3 +113,7 @@ create a script which completes the following steps:
 5. runs #build_cfs_csv_mawb.js and #build_cfs_csv_uld.js
 6. runs #upload_tables_to_sheets.js
 
+MVT PARSE: 
+1. exclusively come from this sender: no-reply@flightservices.cae.com
+2. purpose is to find actual arrival time
+3. modify the csv output to use routeline time to be expected time

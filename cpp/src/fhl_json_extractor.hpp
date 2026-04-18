@@ -102,6 +102,7 @@ private:
   std::string jsonArray(const std::vector<std::string>& items) const;
   std::string jsonParty(const Fhl4PartyData& p, const std::string& tagKey) const;
   std::string jsonHouse(const Fhl4HouseData& h) const;
+  std::string jsonChargesDeclaration() const;
   void printJson() const;
 };
 

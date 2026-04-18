@@ -8,6 +8,8 @@ using std::string;
 #include <vector>
 using std::vector;
 
+#include <cstddef>
+
 #include "ffm_json_extractor.hpp"
 
 #include "Rule.hpp"
@@ -72,8 +74,17 @@ void* FfmJsonExtractor::visit(const Rule_FFM8* rule)
 }
 
 void* FfmJsonExtractor::visit(const Rule_MessageHeader* rule) { messageHeader = rule->spelling; return NULL; }
-void* FfmJsonExtractor::visit(const Rule_FlightIdentificationLine* rule) { flightLine = rule->spelling; return NULL; }
-void* FfmJsonExtractor::visit(const Rule_RouteLine* rule) { if (!routeLine.empty()) routeLine += "\n"; routeLine += rule->spelling; return NULL; }
+void* FfmJsonExtractor::visit(const Rule_FlightIdentificationLine* rule)
+{
+  flightIdentification = parseFlightIdentificationLine(rule->spelling);
+  return NULL;
+}
+
+void* FfmJsonExtractor::visit(const Rule_RouteLine* rule)
+{
+  routes.push_back(parseRouteLine(rule->spelling));
+  return NULL;
+}
 
 void* FfmJsonExtractor::visit(const Rule_UldSection* rule)
 {
@@ -92,7 +103,7 @@ void* FfmJsonExtractor::visit(const Rule_ULDLine* rule) { return visitRules(rule
 
 void* FfmJsonExtractor::visit(const Rule_AirWaybillLine* rule)
 {
-  ulds.back().awbs.back().airWaybillLine = rule->spelling;
+  (void)rule;
   return visitRules(rule->rules);
 }
 
@@ -193,12 +204,107 @@ string FfmJsonExtractor::jsonArray(const vector<string>& items) const
   return out;
 }
 
+FfmFlightIdentificationData FfmJsonExtractor::parseFlightIdentificationLine(const string& line) const
+{
+  FfmFlightIdentificationData data;
+
+  size_t p0 = line.find('/');
+  if (p0 == string::npos) return data;
+  data.messageFunctionCode = line.substr(0, p0);
+
+  size_t p1 = line.find('/', p0 + 1);
+  if (p1 == string::npos) return data;
+  data.carrierFlightNumber = line.substr(p0 + 1, p1 - (p0 + 1));
+
+  size_t p2 = line.find('/', p1 + 1);
+  if (p2 == string::npos) return data;
+  data.dayMonthTime = line.substr(p1 + 1, p2 - (p1 + 1));
+
+  size_t p3 = line.find('/', p2 + 1);
+  if (p3 == string::npos) return data;
+  data.boardPoint = line.substr(p2 + 1, p3 - (p2 + 1));
+
+  data.aircraftRegistration = line.substr(p3 + 1);
+  return data;
+}
+
+FfmRouteData FfmJsonExtractor::parseRouteLine(const string& line) const
+{
+  FfmRouteData route;
+
+  size_t p0 = line.find('/');
+  if (p0 == string::npos)
+  {
+    route.airportCode = line;
+    route.routeKind = "DestinationOnly";
+    return route;
+  }
+
+  route.airportCode = line.substr(0, p0);
+
+  // ORD//30MAR2240
+  if (p0 + 1 < line.size() && line[p0 + 1] == '/')
+  {
+    route.routeKind = "Direct";
+    route.scheduledArrivalTime = line.substr(p0 + 2);
+    return route;
+  }
+
+  size_t p1 = line.find('/', p0 + 1);
+  if (p1 == string::npos)
+  {
+    route.routeKind = "DestinationOnly";
+    return route;
+  }
+
+  string second = line.substr(p0 + 1, p1 - (p0 + 1));
+  if (second == "NIL")
+  {
+    route.routeKind = "TransitNIL";
+
+    size_t p2 = line.find('/', p1 + 1);
+    if (p2 == string::npos)
+    {
+      route.scheduledArrivalTime = line.substr(p1 + 1);
+      return route;
+    }
+
+    route.scheduledArrivalTime = line.substr(p1 + 1, p2 - (p1 + 1));
+    route.scheduledDepartureTime = line.substr(p2 + 1);
+    return route;
+  }
+
+  route.routeKind = "DestinationOnly";
+  return route;
+}
+
 void FfmJsonExtractor::printJson() const
 {
   cout << "{" << endl;
   cout << "  \"MessageHeader\": \"" << escapeJson(messageHeader) << "\"," << endl;
-  cout << "  \"FlightIdentificationLine\": \"" << escapeJson(flightLine) << "\"," << endl;
-  cout << "  \"RouteLine\": \"" << escapeJson(routeLine) << "\"," << endl;
+  cout << "  \"FlightIdentification\": {" << endl;
+  cout << "    \"MessageFunctionCode\": \"" << escapeJson(flightIdentification.messageFunctionCode) << "\"," << endl;
+  cout << "    \"CarrierFlightNumber\": \"" << escapeJson(flightIdentification.carrierFlightNumber) << "\"," << endl;
+  cout << "    \"DayMonthTime\": \"" << escapeJson(flightIdentification.dayMonthTime) << "\"," << endl;
+  cout << "    \"BoardPoint\": \"" << escapeJson(flightIdentification.boardPoint) << "\"," << endl;
+  cout << "    \"AircraftRegistration\": \"" << escapeJson(flightIdentification.aircraftRegistration) << "\"" << endl;
+  cout << "  }," << endl;
+  cout << "  \"Routes\": [" << endl;
+
+  for (size_t i = 0; i < routes.size(); ++i)
+  {
+    const FfmRouteData& route = routes[i];
+    cout << "    {" << endl;
+    cout << "      \"AirportCode\": \"" << escapeJson(route.airportCode) << "\"," << endl;
+    cout << "      \"RouteKind\": \"" << escapeJson(route.routeKind) << "\"," << endl;
+    cout << "      \"ScheduledArrivalTime\": \"" << escapeJson(route.scheduledArrivalTime) << "\"," << endl;
+    cout << "      \"ScheduledDepartureTime\": \"" << escapeJson(route.scheduledDepartureTime) << "\"" << endl;
+    cout << "    }";
+    if (i + 1 < routes.size()) cout << ",";
+    cout << endl;
+  }
+
+  cout << "  ]," << endl;
   cout << "  \"ULDs\": {" << endl;
 
   for (size_t i = 0; i < ulds.size(); ++i)
@@ -213,7 +319,6 @@ void FfmJsonExtractor::printJson() const
     {
       const FfmAwbData& awb = uld.awbs[j];
       cout << "        {" << endl;
-      cout << "          \"AirWaybillLine\": \"" << escapeJson(awb.airWaybillLine) << "\"," << endl;
       cout << "          \"MasterAirwayBillNumber\": \"" << escapeJson(awb.masterAWBNumber) << "\"," << endl;
       cout << "          \"OriginAndDestination\": \"" << escapeJson(awb.originAndDest) << "\"," << endl;
       cout << "          \"ShipmentSummary\": \"" << escapeJson(awb.shipmentSummary) << "\"," << endl;

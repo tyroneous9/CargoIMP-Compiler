@@ -103,7 +103,7 @@ private:
   std::string totalWeight;
   std::string volumeUnit;
   std::string volumeAmount;
-  std::string flightBookingsLine;
+  std::vector<std::string> flightBookingsLines;
   std::string routingLine;
   Fwb17PartyData shipper;
   Fwb17PartyData consignee;
@@ -130,6 +130,9 @@ private:
   std::string trimTrailing(const std::string& input) const;
   std::string jsonArray(const std::vector<std::string>& items) const;
   std::string jsonParty(const Fwb17PartyData& p) const;
+  std::string jsonFlightBookings() const;
+  std::string jsonRouting() const;
+  std::string jsonChargesDeclaration() const;
   void printJson() const;
 };
 

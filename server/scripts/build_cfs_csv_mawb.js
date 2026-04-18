@@ -24,7 +24,7 @@ const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, 'CFS_mawb.csv');
 // ── CSV header ────────────────────────────────────────────────────────────────
 
 const HEADERS = [
-  'FLIGHT#', 'PMC#', 'MAWB#', 'ATA', 'LFD', 'Weight', 'TTL PCS', 'POB',
+  'FLIGHT#', 'PMC#', 'MAWB#', 'STA', 'ATA', 'LFD', 'Weight', 'TTL PCS', 'POB',
   'PCS RCVD', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
   'P3', 'Trucking/Skid $', 'Storage', 'ISC',
   'Tolead→NCA\nRCF MESSAGE', 'Tolead→NCA\nNFD MESSAGE', 'Tolead→NCA\nDLV MESSAGE',
@@ -93,7 +93,7 @@ function csvRow(fields) {
 
 // ── Build indices ─────────────────────────────────────────────────────────────
 
-const ffmIndex = new Map();  // mawb → Map<flightKey, { maxUid, flightNum, ata, lfd, pmcs: Map<uldKey, {uid, pob}> }>
+const ffmIndex = new Map();  // mawb → Map<flightKey, { maxUid, flightNum, sta, lfd, pmcs: Map<uldKey, {uid, pob}> }>
 const fwbIndex = new Map();  // mawb → { uid, weight, weightUnit, pieces, consignee }
 const fhlIndex = new Map();  // mawb → { uid, masterPieces, masterWeight, masterWeightUnit, consignee }
 
@@ -113,18 +113,27 @@ for (const filename of filenames) {
 
   // ── FFM ──────────────────────────────────────────────────────────────────
   if (doc.cimpType === 'ffm') {
+    const flightId = fields.FlightIdentification || {};
     const rawFlight = fields.FlightIdentificationLine || '';
-    const parts     = rawFlight.split('/');
-    const flightNum = parts[1] || '';
-    const datePart  = parts[2] || '';
+    const parts = rawFlight.split('/');
+
+    const flightNum = flightId.CarrierFlightNumber || parts[1] || '';
+    const datePart = flightId.DayMonthTime || parts[2] || '';
 
     const depDate   = parseDDMON(datePart);
     const lfd       = depDate ? formatDDMON(addDays(depDate, 2)) : '';
 
-    let ata = '';
-    for (const seg of (fields.RouteLine || '').split('\n')) {
-      const m = seg.match(/^ORD\/\/(\d{2}[A-Z]{3}\d{4})/);
-      if (m) { ata = m[1]; break; }
+    // STA = scheduled arrival at ORD, prefer structured Routes then fall back.
+    let sta = '';
+    if (Array.isArray(fields.Routes)) {
+      const ordRoute = fields.Routes.find(r => r && r.AirportCode === 'ORD' && r.ScheduledArrivalTime);
+      if (ordRoute) sta = ordRoute.ScheduledArrivalTime;
+    }
+    if (!sta) {
+      for (const seg of (fields.RouteLine || '').split('\n')) {
+        const m = seg.match(/^ORD\/\/([\d]{2}[A-Z]{3}\d{4})/);
+        if (m) { sta = m[1]; break; }
+      }
     }
 
     const flightKey = `${flightNum}/${datePart.slice(0, 5)}`;
@@ -140,7 +149,7 @@ for (const filename of filenames) {
         const flightMap = ffmIndex.get(mawb);
 
         if (!flightMap.has(flightKey)) {
-          flightMap.set(flightKey, { maxUid: uid, flightNum, ata, lfd, pmcs: new Map() });
+          flightMap.set(flightKey, { maxUid: uid, flightNum, sta, lfd, pmcs: new Map() });
         }
         const entry = flightMap.get(flightKey);
         if (uid > entry.maxUid) entry.maxUid = uid;
@@ -205,7 +214,7 @@ function resolveFfm(mawb) {
 
   return {
     flightNum: best.flightNum,
-    ata:       best.ata,
+    sta:       best.sta,
     lfd:       best.lfd,
     pmcs:      pmcs.join(', '),
     pob:       pobEntry ? String(pobEntry.pob) : '',
@@ -228,7 +237,7 @@ for (const mawb of [...allMawbs].sort()) {
   const fhl = fhlIndex.get(mawb);
 
   const flight    = ffm?.flightNum ?? '';
-  const ata       = ffm?.ata       ?? '';
+  const sta       = ffm?.sta       ?? '';
   const lfd       = ffm?.lfd       ?? '';
   const pmcs      = ffm?.pmcs      ?? '';
   const pob       = ffm?.pob       ?? '';
@@ -243,7 +252,7 @@ for (const mawb of [...allMawbs].sort()) {
   const pieces = fwb?.pieces || fhl?.masterPieces || '';
 
   rows.push([
-    flight, pmcs, mawb, ata, lfd,
+    flight, pmcs, mawb, sta, '', lfd,
     weight, pieces, pob,
     '',  // PCS RCVD — human input
     '',  // PMC LOCATION

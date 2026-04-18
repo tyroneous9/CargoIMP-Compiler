@@ -10,7 +10,6 @@ class Rule;
 
 struct FfmAwbData
 {
-  std::string airWaybillLine;
   std::string masterAWBNumber;
   std::string originAndDest;
   std::string shipmentSummary;
@@ -27,6 +26,23 @@ struct FfmUldData
   std::string uldIdentifier;
   std::string uldDetailText;
   std::vector<FfmAwbData> awbs;
+};
+
+struct FfmFlightIdentificationData
+{
+  std::string messageFunctionCode;
+  std::string carrierFlightNumber;
+  std::string dayMonthTime;
+  std::string boardPoint;
+  std::string aircraftRegistration;
+};
+
+struct FfmRouteData
+{
+  std::string airportCode;
+  std::string routeKind;
+  std::string scheduledArrivalTime;
+  std::string scheduledDepartureTime;
 };
 
 class FfmJsonExtractor : public Visitor
@@ -87,13 +103,15 @@ public:
 
 private:
   std::string messageHeader;
-  std::string flightLine;
-  std::string routeLine;
+  FfmFlightIdentificationData flightIdentification;
+  std::vector<FfmRouteData> routes;
   std::vector<FfmUldData> ulds;
 
   void* visitRules(const std::vector<const Rule*>& rules);
   std::string escapeJson(const std::string& input) const;
   std::string jsonArray(const std::vector<std::string>& items) const;
+  FfmFlightIdentificationData parseFlightIdentificationLine(const std::string& line) const;
+  FfmRouteData parseRouteLine(const std::string& line) const;
   void printJson() const;
 };
 
