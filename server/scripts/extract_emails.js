@@ -1,13 +1,14 @@
 // Email extractor script for NCAParser
 // Extracts email body and metadata, outputs one JSON per email as INBOX-uid-<UID>.json
 // Output directory: server/data/outputs/emails
-// Includes CIMP message type (if detected)
+// Includes message type (if a supported format is detected)
 
 const fs = require('fs');
 const path = require('path');
 const { ImapFlow } = require('imapflow');
 const { simpleParser } = require('mailparser');
 const paths = require('../config/paths');
+const { SUPPORTED_MESSAGE_TYPES, SUPPORTED_CIMP_MESSAGE_TYPES } = require('../config/messageTypes');
 const { log } = require('../config/logger');
 
 require('dotenv').config({ path: paths.ENV_FILE });
@@ -66,13 +67,21 @@ function firstBodyLine(body) {
     .toUpperCase();
 }
 
-function chooseParserByMessageType(body) {
+// Inspects the first body line and returns a supported message type string
+// (e.g. 'ffm', 'fwb', 'fhl', 'mvt'), or null if the body does not begin with
+// a recognised format header.
+//
+// CIMP cargo formats (FFM, FWB, FHL) use the header pattern FORMAT/DIGIT.
+// MVT movement messages use the bare header "MVT".
+function detectMessageFormat(body) {
   const header = firstBodyLine(body);
-  const match = header.match(/^([A-Z]+)\/\d+/);
-  if (!match) return null;
-  const format = match[1].toLowerCase();
-  const supported = new Set(['ffm', 'fwb', 'fhl']);
-  return supported.has(format) ? format : null;
+  const cimpMatch = header.match(/^([A-Z]+)\/\d+/);
+  if (cimpMatch) {
+    const format = cimpMatch[1].toLowerCase();
+    if (SUPPORTED_CIMP_MESSAGE_TYPES.includes(format)) return format;
+  }
+  if (header === 'MVT') return SUPPORTED_MESSAGE_TYPES.MVT;
+  return null;
 }
 
 function buildEmailFilename(mailbox, uid) {
@@ -128,7 +137,7 @@ async function main() {
         if (!message) continue;
         const parsedEmail = await simpleParser(message.source);
         const body = normalizeBody(parsedEmail);
-        const cimpType = chooseParserByMessageType(body);
+        const messageType = detectMessageFormat(body);
         const emailJson = {
           uid: message.uid,
           mailbox,
@@ -137,7 +146,7 @@ async function main() {
           from: parsedEmail.from ? parsedEmail.from.text : '(unknown sender)',
           to: parsedEmail.to ? parsedEmail.to.text : undefined,
           body,
-          cimpType,
+          messageType,
         };
         fs.writeFileSync(outPath, JSON.stringify(emailJson, null, 2) + '\n', 'utf8');
         process.stdout.write(`Extracted: ${filename}\n`);

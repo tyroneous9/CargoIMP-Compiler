@@ -1,4 +1,5 @@
 const path = require('path');
+const { SUPPORTED_MESSAGE_TYPES } = require('./messageTypes');
 
 const SERVER_ROOT = path.resolve(__dirname, '..');
 const REPO_ROOT = path.resolve(SERVER_ROOT, '..');
@@ -20,15 +21,17 @@ const ENV_FILE = path.join(SERVER_ROOT, '.env');
 const CPP_DIR = path.join(REPO_ROOT, 'cpp');
 
 const PARSER_BINARIES = {
-  ffm: path.join(CPP_DIR, 'build', 'parser_ffm_json'),
-  fwb: path.join(CPP_DIR, 'build', 'parser_fwb_json'),
-  fhl: path.join(CPP_DIR, 'build', 'parser_fhl_json'),
+  [SUPPORTED_MESSAGE_TYPES.FFM]: path.join(CPP_DIR, 'build', 'parser_ffm_json'),
+  [SUPPORTED_MESSAGE_TYPES.FWB]: path.join(CPP_DIR, 'build', 'parser_fwb_json'),
+  [SUPPORTED_MESSAGE_TYPES.FHL]: path.join(CPP_DIR, 'build', 'parser_fhl_json'),
+  [SUPPORTED_MESSAGE_TYPES.MVT]: path.join(CPP_DIR, 'build', 'parser_mvt_json'),
 };
 
 const SAMPLE_INPUTS = {
-  ffm: path.join(CPP_DIR, 'data', 'input_tests', 'ffm_test.txt'),
-  fwb: path.join(CPP_DIR, 'data', 'input_tests', 'fwb_test.txt'),
-  fhl: path.join(CPP_DIR, 'data', 'input_tests', 'fhl_test.txt'),
+  [SUPPORTED_MESSAGE_TYPES.FFM]: path.join(CPP_DIR, 'data', 'input_tests', 'ffm_test.txt'),
+  [SUPPORTED_MESSAGE_TYPES.FWB]: path.join(CPP_DIR, 'data', 'input_tests', 'fwb_test.txt'),
+  [SUPPORTED_MESSAGE_TYPES.FHL]: path.join(CPP_DIR, 'data', 'input_tests', 'fhl_test.txt'),
+  [SUPPORTED_MESSAGE_TYPES.MVT]: path.join(CPP_DIR, 'data', 'input_tests', 'mvt_test.txt'),
 };
 
 module.exports = {

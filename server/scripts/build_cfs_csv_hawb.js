@@ -141,7 +141,7 @@ for (const filename of filenames) {
   const fields = doc.fields;
 
   // ── FFM ──────────────────────────────────────────────────────────────────
-  if (doc.cimpType === 'ffm') {
+  if (doc.messageType === 'ffm') {
     const flightId = fields.FlightIdentification || {};
     const rawFlight = fields.FlightIdentificationLine || '';
     const parts = rawFlight.split('/');
@@ -196,7 +196,7 @@ for (const filename of filenames) {
     }
 
   // ── FWB ──────────────────────────────────────────────────────────────────
-  } else if (doc.cimpType === 'fwb') {
+  } else if (doc.messageType === 'fwb') {
     const mawb = fields.MasterAirwayBillNumber;
     if (!mawb) continue;
     const existing = fwbIndex.get(mawb);
@@ -214,7 +214,7 @@ for (const filename of filenames) {
     });
 
   // ── FHL ──────────────────────────────────────────────────────────────────
-  } else if (doc.cimpType === 'fhl') {
+  } else if (doc.messageType === 'fhl') {
     const mawb = fields.MasterAirwayBillNumber;
     if (!mawb) continue;
     const existing = fhlIndex.get(mawb);

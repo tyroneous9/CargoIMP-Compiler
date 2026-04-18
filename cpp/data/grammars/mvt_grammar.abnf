@@ -16,7 +16,7 @@ MVTMessage =
     MessageHeader EOL
     FlightIdentificationLine EOL
     EventLine
-    *SupplementLine
+    *(EOL SupplementLine)
     [EOL];
 
 MessageHeader = "MVT";
@@ -51,10 +51,10 @@ AirportCode = 3Upper;
 # - EA2220
 # - ED150930
 EventLine =
-    ActualMovementLine EOL
-    / ActualDepartureEstimatedArrivalLine EOL
-    / EstimatedArrivalOnlyLine EOL
-    / EventDepartureLine EOL;
+    ActualMovementLine
+    / ActualDepartureEstimatedArrivalLine
+    / EstimatedArrivalOnlyLine
+    / EventDepartureLine;
 
 # Provisional semantics from observed messages and operator guidance:
 # - first DateTime6  = ActualDepartureDateTime
@@ -88,12 +88,12 @@ EventDepartureLine = "ED" DateTime6;
 # - EDLAT/0005
 # - SI FMOC26-077 080 090 098 099 100
 SupplementLine =
-    DelayLine EOL
-    / PaxLine EOL
-    / EventBlockLine EOL
-    / FieldStateLine EOL
-    / EdlatLine EOL
-    / SiLine EOL;
+    DelayLine
+    / PaxLine
+    / EventBlockLine
+    / FieldStateLine
+    / EdlatLine
+    / SiLine;
 
 DelayLine = DelayCode [Slant DelayReason] [Slant Time4] [Slant Time4];
 DelayCode = "DLRA" / "DLWT" / "DLFS";

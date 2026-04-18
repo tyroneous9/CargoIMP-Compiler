@@ -1,22 +1,17 @@
 // Script to parse extracted emails using C++ parsers
 // Reads email JSONs from server/data/outputs/emails/INBOX-uid-<UID>.json
-// Uses cimpType field to select parser
+// Uses messageType field to select parser
 // Outputs to server/data/outputs/parsed/parsed-INBOX-uid-<UID>.json
 
 const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 const paths = require('../config/paths');
+const { SUPPORTED_MESSAGE_TYPES, isSupportedMessageType } = require('../config/messageTypes');
 const { log } = require('../config/logger');
 
 const EMAILS_DIR = paths.EMAILS_DIR;
 const PARSED_EMAILS_DIR = paths.PARSED_EMAILS_DIR;
-
-const PARSER_BINARIES = {
-  ffm: paths.PARSER_BINARIES.ffm,
-  fwb: paths.PARSER_BINARIES.fwb,
-  fhl: paths.PARSER_BINARIES.fhl,
-};
 
 fs.mkdirSync(PARSED_EMAILS_DIR, { recursive: true });
 
@@ -209,10 +204,15 @@ function normalizeFhlFields(fields) {
   return fields;
 }
 
-function normalizeParsedFields(cimpType, fields) {
-  if (cimpType === 'ffm') return normalizeFfmFields(fields);
-  if (cimpType === 'fwb') return normalizeFwbFields(fields);
-  if (cimpType === 'fhl') return normalizeFhlFields(fields);
+function normalizeMvtFields(fields) {
+  return fields;
+}
+
+function normalizeParsedFields(messageType, fields) {
+  if (messageType === SUPPORTED_MESSAGE_TYPES.FFM) return normalizeFfmFields(fields);
+  if (messageType === SUPPORTED_MESSAGE_TYPES.FWB) return normalizeFwbFields(fields);
+  if (messageType === SUPPORTED_MESSAGE_TYPES.FHL) return normalizeFhlFields(fields);
+  if (messageType === SUPPORTED_MESSAGE_TYPES.MVT) return normalizeMvtFields(fields);
   return fields;
 }
 
@@ -222,15 +222,20 @@ function main() {
   let parsedCount = 0;
   let alreadyParsedCount = 0;
   let skippedMissingFieldsCount = 0;
+  let invalidMessageTypeCount = 0;
   let missingParserCount = 0;
   let parserErrorCount = 0;
 
   for (const file of files) {
     const emailPath = path.join(EMAILS_DIR, file);
     const emailJson = JSON.parse(fs.readFileSync(emailPath, 'utf8'));
-    const { uid, mailbox, body, cimpType } = emailJson;
-    if (!uid || !mailbox || !body || !cimpType) {
+    const { uid, mailbox, body, messageType } = emailJson;
+    if (!uid || !mailbox || !body || !messageType) {
       skippedMissingFieldsCount++;
+      continue;
+    }
+    if (!isSupportedMessageType(messageType)) {
+      invalidMessageTypeCount++;
       continue;
     }
     const parsedFilename = buildParsedFilename(mailbox, uid);
@@ -239,18 +244,18 @@ function main() {
       alreadyParsedCount++;
       continue;
     }
-    const parserBinary = PARSER_BINARIES[cimpType];
+    const parserBinary = paths.PARSER_BINARIES[messageType];
     if (!parserBinary || !fs.existsSync(parserBinary)) {
       missingParserCount++;
       continue;
     }
     const result = runParser(parserBinary, body);
     if (result.status !== 'ok') parserErrorCount++;
-    // Flatten output: only cimpType and all result fields at top level
+    // Flatten output: only messageType and all result fields at top level
     const normalizedFields = result.status === 'ok'
-      ? normalizeParsedFields(cimpType, result.fields)
+      ? normalizeParsedFields(messageType, result.fields)
       : result.fields;
-    const output = { cimpType, ...result, fields: normalizedFields };
+    const output = { messageType, ...result, fields: normalizedFields };
     fs.writeFileSync(parsedPath, JSON.stringify(output, null, 2) + '\n', 'utf8');
     process.stdout.write(`Parsed: ${parsedFilename}\n`);
     parsedCount++;
@@ -259,7 +264,8 @@ function main() {
   log(
     'log',
     `parse summary: total=${files.length}, parsed=${parsedCount}, alreadyParsed=${alreadyParsedCount}, ` +
-    `missingFields=${skippedMissingFieldsCount}, missingParser=${missingParserCount}, parseErrors=${parserErrorCount}`
+    `missingFields=${skippedMissingFieldsCount}, invalidMessageType=${invalidMessageTypeCount}, ` +
+    `missingParser=${missingParserCount}, parseErrors=${parserErrorCount}`
   );
 }
 

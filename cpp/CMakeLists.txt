@@ -98,6 +98,28 @@ if(EXISTS "${FFM_DIR}")
   list(APPEND PARSER_TARGETS parser_ffm_json)
 endif()
 
+# Stable custom app target for MVT JSON extraction.
+# Custom code lives in src/, generated code stays under data/generated_parsers/.
+set(MVT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/data/generated_parsers/mvt_parsers")
+if(EXISTS "${MVT_DIR}")
+  file(GLOB MVT_GENERATED_SOURCES "${MVT_DIR}/*.cpp")
+  list(FILTER MVT_GENERATED_SOURCES EXCLUDE REGEX "ParserMain\\.cpp$")
+  list(FILTER MVT_GENERATED_SOURCES EXCLUDE REGEX "JsonExtractor\\.cpp$")
+
+  add_executable(parser_mvt_json
+    src/mvt_json_main.cpp
+    src/mvt_json_extractor.cpp
+    ${MVT_GENERATED_SOURCES}
+  )
+  target_compile_features(parser_mvt_json PRIVATE cxx_std_17)
+  target_include_directories(parser_mvt_json PRIVATE
+    ${MVT_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+  )
+
+  list(APPEND PARSER_TARGETS parser_mvt_json)
+endif()
+
 # Print configuration info
 message(STATUS "Found parser directories: ${PARSER_SUBDIRS}")
 message(STATUS "Parser executables created: ${PARSER_TARGETS}")

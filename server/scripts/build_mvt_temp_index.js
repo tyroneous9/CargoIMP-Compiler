@@ -44,7 +44,7 @@ function main() {
       subject: email.subject ?? null,
       from: email.from ?? null,
       to: email.to ?? null,
-      cimpType: email.cimpType ?? null,
+      messageType: email.messageType ?? null,
       emailFile,
       emailPath: `data/outputs/emails/${emailFile}`,
     });

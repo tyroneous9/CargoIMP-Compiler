@@ -40,7 +40,7 @@ function main() {
       date: email.date ?? null,
       from: email.from ?? null,
       subject: email.subject ?? null,
-      cimpType: email.cimpType ?? null,
+      messageType: email.messageType ?? null,
       status: parsed?.status ?? null,
       envelopePath: `data/outputs/emails/${emailFile}`,
       parsedPath: `data/outputs/parsed/${parsedFile}`,
