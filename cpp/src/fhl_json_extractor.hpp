@@ -21,6 +21,7 @@ struct Fhl4HouseData
   std::string houseOriginAndDestination;
   std::string houseWaybillNumber;
   std::string housePieceCount;
+  std::string houseSlac;
   std::string houseWeightUnit;
   std::string houseWeight;
   std::string descriptionTagLine;
@@ -49,6 +50,7 @@ public:
   void* visit(const Rule_HouseOriginAndDestination* rule);
   void* visit(const Rule_HouseWaybillNumber* rule);
   void* visit(const Rule_HousePieceCount* rule);
+  void* visit(const Rule_HouseSlac* rule);
   void* visit(const Rule_HouseWeightUnit* rule);
   void* visit(const Rule_HouseWeight* rule);
   void* visit(const Rule_DescriptionBlock* rule);

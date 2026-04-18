@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Thu Apr 16 22:01:29 CDT 2026
+ * Produced : Sat Apr 18 18:43:25 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -33,6 +33,7 @@ using std::vector;
 #include "Rule_HouseOriginAndDestination.hpp"
 #include "Rule_HouseWaybillNumber.hpp"
 #include "Rule_HousePieceCount.hpp"
+#include "Rule_HouseSlac.hpp"
 #include "Rule_HouseWeightUnit.hpp"
 #include "Rule_HouseWeight.hpp"
 #include "Rule_DescriptionBlock.hpp"
@@ -142,6 +143,11 @@ void* Displayer::visit(const Rule_HouseWaybillNumber* rule)
 }
 
 void* Displayer::visit(const Rule_HousePieceCount* rule)
+{
+  return visitRules(rule->rules);
+}
+
+void* Displayer::visit(const Rule_HouseSlac* rule)
 {
   return visitRules(rule->rules);
 }

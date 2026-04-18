@@ -30,7 +30,7 @@ const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, TABLE_FILES.hawb);
 
 const HEADERS = [
   'FLIGHT#', 'PMC#', 'MAWB#', 'HAWB#', 'STA', 'ATA', 'LFD', 'EMAIL-RCVD', 'Weight', 'POB',
-  'PCS RCVD', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
+  'TTL PCS', 'SLAC', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
   'P3', 'Trucking/Skid $', 'Storage', 'ISC',
   'Tolead→NCA\nRCF MESSAGE', 'Tolead→NCA\nNFD MESSAGE', 'Tolead→NCA\nDLV MESSAGE',
   'Tolead→Customer\nCargo Arrive Email', 'Tolead→Customer\nCargo Ready Email',
@@ -41,7 +41,7 @@ const HEADERS = [
   'Ready for pick-up', 'Cargo delivery', 'POD', 'PTT/DO', 'Note',
 ];
 
-const TRAILING_EMPTY = HEADERS.length - 14;  // cols after Consignee+AMS STATUS
+const TRAILING_EMPTY = HEADERS.length - 15;  // cols after Consignee+AMS STATUS
 
 // ── Date helpers ──────────────────────────────────────────────────────────────
 
@@ -382,12 +382,14 @@ for (const mawb of [...allMawbs].sort()) {
       const houseWeight = hb.HouseWeight
         ? `${hb.HouseWeight}${hb.HouseWeightUnit || fhl.masterWeightUnit || 'K'}`
         : mawbWeight;
-      const housePieces = hb.HousePieceCount || '';
+      const ttlPcs    = hb.HousePieceCount || '';
+      const houseSlac = hb.HouseSlac || '';
 
       rows.push([
         flight, pmcs, mawb, hawb, sta, '', lfd, emailRcvd,
         houseWeight, pob,
-        housePieces,    // PCS RCVD from FHL HousePieceCount
+        ttlPcs,      // TTL PCS from FHL HousePieceCount
+        houseSlac,   // SLAC from FHL HouseSlac
         '', consignee, '',
         ...new Array(TRAILING_EMPTY).fill(''),
       ]);

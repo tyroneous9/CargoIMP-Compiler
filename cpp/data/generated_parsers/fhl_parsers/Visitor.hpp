@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Thu Apr 16 22:01:29 CDT 2026
+ * Produced : Sat Apr 18 18:43:25 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -28,6 +28,7 @@ class Rule_HouseBillLine;
 class Rule_HouseOriginAndDestination;
 class Rule_HouseWaybillNumber;
 class Rule_HousePieceCount;
+class Rule_HouseSlac;
 class Rule_HouseWeightUnit;
 class Rule_HouseWeight;
 class Rule_DescriptionBlock;
@@ -76,6 +77,7 @@ public:
   virtual void* visit(const Rule_HouseOriginAndDestination* rule) = 0;
   virtual void* visit(const Rule_HouseWaybillNumber* rule) = 0;
   virtual void* visit(const Rule_HousePieceCount* rule) = 0;
+  virtual void* visit(const Rule_HouseSlac* rule) = 0;
   virtual void* visit(const Rule_HouseWeightUnit* rule) = 0;
   virtual void* visit(const Rule_HouseWeight* rule) = 0;
   virtual void* visit(const Rule_DescriptionBlock* rule) = 0;

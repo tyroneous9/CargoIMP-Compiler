@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Thu Apr 16 22:01:29 CDT 2026
+ * Produced : Sat Apr 18 18:43:25 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -37,6 +37,7 @@ public:
   void* visit(const Rule_HouseOriginAndDestination* rule);
   void* visit(const Rule_HouseWaybillNumber* rule);
   void* visit(const Rule_HousePieceCount* rule);
+  void* visit(const Rule_HouseSlac* rule);
   void* visit(const Rule_HouseWeightUnit* rule);
   void* visit(const Rule_HouseWeight* rule);
   void* visit(const Rule_DescriptionBlock* rule);

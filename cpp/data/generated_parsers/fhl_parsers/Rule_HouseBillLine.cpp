@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Thu Apr 16 22:01:29 CDT 2026
+ * Produced : Sat Apr 18 18:43:25 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -19,6 +19,7 @@ using std::vector;
 #include "ParserAlternative.hpp"
 #include "ParserContext.hpp"
 
+#include "Rule_HouseSlac.hpp"
 #include "Rule_HouseWaybillNumber.hpp"
 #include "Rule_HouseOriginAndDestination.hpp"
 #include "Rule_LineChar.hpp"
@@ -264,7 +265,7 @@ const Rule_HouseBillLine* Rule_HouseBillLine::parse(ParserContext& context)
             int c2 = 0;
             for (int i2 = 0; i2 < 1 && f2; i2++)
             {
-              const Rule* rule = Rule_HousePieceCount::parse(context);
+              const Rule* rule = Rule_HouseSlac::parse(context);
               if ((f2 = rule != NULL))
               {
                 a2.add(*rule, context.index);

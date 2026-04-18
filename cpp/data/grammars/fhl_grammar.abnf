@@ -51,13 +51,16 @@ HouseBillLine =
     Slant
     HouseWeightUnit
     HouseWeight
-    [Slant HousePieceCount]
+    [Slant HouseSlac]
     [Slant *LineChar]
     *(EOL Slant *LineChar);
 
 HouseOriginAndDestination = AirportCode AirportCode;
 HouseWaybillNumber = 1*20AlphaNum;
+# pieces of this HAWB as counted by the carrier (outer pieces loaded)
 HousePieceCount = 1*4Digit;
+# SLAC: Shipper's Load and Count (declared count inside sealed unit, optional)
+HouseSlac = 1*4Digit;
 HouseWeightUnit = "K" / "L";
 HouseWeight = 1*10Digit ["." 1*3Digit];
 

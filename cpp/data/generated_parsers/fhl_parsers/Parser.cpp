@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Thu Apr 16 22:01:29 CDT 2026
+ * Produced : Sat Apr 18 18:43:25 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -46,6 +46,7 @@ using std::transform;
 #include "Rule_HouseOriginAndDestination.hpp"
 #include "Rule_HouseWaybillNumber.hpp"
 #include "Rule_HousePieceCount.hpp"
+#include "Rule_HouseSlac.hpp"
 #include "Rule_HouseWeightUnit.hpp"
 #include "Rule_HouseWeight.hpp"
 #include "Rule_DescriptionBlock.hpp"
@@ -95,6 +96,7 @@ static map<string, pParser> buildParserMap(void)
   parsers["houseoriginanddestination"] = (pParser)Rule_HouseOriginAndDestination::parse;
   parsers["housewaybillnumber"] = (pParser)Rule_HouseWaybillNumber::parse;
   parsers["housepiececount"] = (pParser)Rule_HousePieceCount::parse;
+  parsers["houseslac"] = (pParser)Rule_HouseSlac::parse;
   parsers["houseweightunit"] = (pParser)Rule_HouseWeightUnit::parse;
   parsers["houseweight"] = (pParser)Rule_HouseWeight::parse;
   parsers["descriptionblock"] = (pParser)Rule_DescriptionBlock::parse;

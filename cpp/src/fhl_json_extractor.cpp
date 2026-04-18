@@ -28,6 +28,7 @@ using std::vector;
 #include "Rule_HouseOriginAndDestination.hpp"
 #include "Rule_HouseWaybillNumber.hpp"
 #include "Rule_HousePieceCount.hpp"
+#include "Rule_HouseSlac.hpp"
 #include "Rule_HouseWeightUnit.hpp"
 #include "Rule_HouseWeight.hpp"
 #include "Rule_DescriptionBlock.hpp"
@@ -102,6 +103,7 @@ void* Fhl4JsonExtractor::visit(const Rule_HouseBillLine* rule)
 void* Fhl4JsonExtractor::visit(const Rule_HouseOriginAndDestination* rule) { currentHouse.houseOriginAndDestination = rule->spelling; return NULL; }
 void* Fhl4JsonExtractor::visit(const Rule_HouseWaybillNumber* rule)        { currentHouse.houseWaybillNumber = rule->spelling; return NULL; }
 void* Fhl4JsonExtractor::visit(const Rule_HousePieceCount* rule)           { currentHouse.housePieceCount = rule->spelling; return NULL; }
+void* Fhl4JsonExtractor::visit(const Rule_HouseSlac* rule)                 { currentHouse.houseSlac = rule->spelling; return NULL; }
 void* Fhl4JsonExtractor::visit(const Rule_HouseWeightUnit* rule)           { currentHouse.houseWeightUnit = rule->spelling; return NULL; }
 void* Fhl4JsonExtractor::visit(const Rule_HouseWeight* rule)               { currentHouse.houseWeight = rule->spelling; return NULL; }
 
@@ -201,6 +203,7 @@ string Fhl4JsonExtractor::jsonHouse(const Fhl4HouseData& h) const
   out += "      \"HouseOriginAndDestination\": \"" + escapeJson(trimTrailing(h.houseOriginAndDestination)) + "\",\n";
   out += "      \"HouseWaybillNumber\": \""        + escapeJson(trimTrailing(h.houseWaybillNumber))        + "\",\n";
   out += "      \"HousePieceCount\": \""           + escapeJson(trimTrailing(h.housePieceCount))           + "\",\n";
+  out += "      \"HouseSlac\": \""                 + escapeJson(trimTrailing(h.houseSlac))                 + "\",\n";
   out += "      \"HouseWeightUnit\": \""           + escapeJson(trimTrailing(h.houseWeightUnit))           + "\",\n";
   out += "      \"HouseWeight\": \""               + escapeJson(trimTrailing(h.houseWeight))               + "\",\n";
   out += "      \"DescriptionLine\": \""           + escapeJson(trimTrailing(h.descriptionTagLine))        + "\",\n";
