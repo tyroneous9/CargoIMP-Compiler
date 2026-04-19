@@ -1,9 +1,9 @@
 /* -----------------------------------------------------------------------------
- * Rule_DayMonthTime.cpp
+ * Rule_ScheduledDepartureDateTime.cpp
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Sat Apr 18 18:43:25 CDT 2026
+ * Produced : Sat Apr 18 22:09:18 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -14,43 +14,43 @@ using std::string;
 #include <vector>
 using std::vector;
 
-#include "Rule_DayMonthTime.hpp"
+#include "Rule_ScheduledDepartureDateTime.hpp"
 #include "Visitor.hpp"
 #include "ParserAlternative.hpp"
 #include "ParserContext.hpp"
 
-#include "Rule_Month.hpp"
-#include "Rule_Digit.hpp"
+#include "Rule_ScheduledDepartureTime.hpp"
+#include "Rule_ScheduledDepartureDate.hpp"
 
-Rule_DayMonthTime::Rule_DayMonthTime(
+Rule_ScheduledDepartureDateTime::Rule_ScheduledDepartureDateTime(
   const string& spelling, 
   const vector<const Rule*>& rules) : Rule(spelling, rules)
 {
 }
 
-Rule_DayMonthTime::Rule_DayMonthTime(const Rule_DayMonthTime& rule) : Rule(rule)
+Rule_ScheduledDepartureDateTime::Rule_ScheduledDepartureDateTime(const Rule_ScheduledDepartureDateTime& rule) : Rule(rule)
 {
 }
 
-Rule_DayMonthTime& Rule_DayMonthTime::operator=(const Rule_DayMonthTime& rule)
+Rule_ScheduledDepartureDateTime& Rule_ScheduledDepartureDateTime::operator=(const Rule_ScheduledDepartureDateTime& rule)
 {
   Rule::operator=(rule);
   return *this;
 }
 
-const Rule_DayMonthTime* Rule_DayMonthTime::clone() const
+const Rule_ScheduledDepartureDateTime* Rule_ScheduledDepartureDateTime::clone() const
 {
-  return new Rule_DayMonthTime(this->spelling, this->rules);
+  return new Rule_ScheduledDepartureDateTime(this->spelling, this->rules);
 }
 
-void* Rule_DayMonthTime::accept(Visitor& visitor) const
+void* Rule_ScheduledDepartureDateTime::accept(Visitor& visitor) const
 {
   return visitor.visit(this);
 }
 
-const Rule_DayMonthTime* Rule_DayMonthTime::parse(ParserContext& context)
+const Rule_ScheduledDepartureDateTime* Rule_ScheduledDepartureDateTime::parse(ParserContext& context)
 {
-  context.push("DayMonthTime");
+  context.push("ScheduledDepartureDateTime");
 
   bool parsed = true;
   int s0 = context.index;
@@ -66,25 +66,9 @@ const Rule_DayMonthTime* Rule_DayMonthTime::parse(ParserContext& context)
     {
       bool f1 = true;
       int c1 = 0;
-      for (int i1 = 0; i1 < 2 && f1; i1++)
-      {
-        const Rule* rule = Rule_Digit::parse(context);
-        if ((f1 = rule != NULL))
-        {
-          a1.add(*rule, context.index);
-          c1++;
-          delete rule;
-        }
-      }
-      parsed = c1 == 2;
-    }
-    if (parsed)
-    {
-      bool f1 = true;
-      int c1 = 0;
       for (int i1 = 0; i1 < 1 && f1; i1++)
       {
-        const Rule* rule = Rule_Month::parse(context);
+        const Rule* rule = Rule_ScheduledDepartureDate::parse(context);
         if ((f1 = rule != NULL))
         {
           a1.add(*rule, context.index);
@@ -111,9 +95,9 @@ const Rule_DayMonthTime* Rule_DayMonthTime::parse(ParserContext& context)
           {
             bool f2 = true;
             int c2 = 0;
-            for (int i2 = 0; i2 < 4 && f2; i2++)
+            for (int i2 = 0; i2 < 1 && f2; i2++)
             {
-              const Rule* rule = Rule_Digit::parse(context);
+              const Rule* rule = Rule_ScheduledDepartureTime::parse(context);
               if ((f2 = rule != NULL))
               {
                 a2.add(*rule, context.index);
@@ -121,7 +105,7 @@ const Rule_DayMonthTime* Rule_DayMonthTime::parse(ParserContext& context)
                 delete rule;
               }
             }
-            parsed = c2 == 4;
+            parsed = c2 == 1;
           }
           if (parsed)
           {
@@ -171,16 +155,16 @@ const Rule_DayMonthTime* Rule_DayMonthTime::parse(ParserContext& context)
   const Rule* rule = NULL;
   if (parsed)
   {
-    rule = new Rule_DayMonthTime(context.text.substr(a0.start, a0.end - a0.start), a0.rules);
+    rule = new Rule_ScheduledDepartureDateTime(context.text.substr(a0.start, a0.end - a0.start), a0.rules);
   }
   else
   {
     context.index = s0;
   }
 
-  context.pop("DayMonthTime", parsed);
+  context.pop("ScheduledDepartureDateTime", parsed);
 
-  return (Rule_DayMonthTime*)rule;
+  return (Rule_ScheduledDepartureDateTime*)rule;
 }
 
 /* -----------------------------------------------------------------------------

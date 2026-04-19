@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Sat Apr 18 18:43:25 CDT 2026
+ * Produced : Sat Apr 18 22:09:18 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -23,7 +23,11 @@ public:
   void* visit(const Rule_FFM8* rule);
   void* visit(const Rule_MessageHeader* rule);
   void* visit(const Rule_FlightIdentificationLine* rule);
-  void* visit(const Rule_RouteLine* rule);
+  void* visit(const Rule_ArrivalInformationLine* rule);
+  void* visit(const Rule_DirectArrivalLine* rule);
+  void* visit(const Rule_TransitNILArrivalLine* rule);
+  void* visit(const Rule_TransitNILOnlyLine* rule);
+  void* visit(const Rule_DestinationOnlyLine* rule);
   void* visit(const Rule_UldSection* rule);
   void* visit(const Rule_AwbBlock* rule);
   void* visit(const Rule_SupplementLine* rule);
@@ -38,7 +42,17 @@ public:
   void* visit(const Rule_TrailerLine* rule);
   void* visit(const Rule_MessageFunctionCode* rule);
   void* visit(const Rule_CarrierFlightNumber* rule);
-  void* visit(const Rule_DayMonthTime* rule);
+  void* visit(const Rule_ScheduledDepartureDateTime* rule);
+  void* visit(const Rule_ScheduledDepartureDate* rule);
+  void* visit(const Rule_ScheduledDepartureTime* rule);
+  void* visit(const Rule_ScheduledArrivalDateTime* rule);
+  void* visit(const Rule_ScheduledArrivalDate* rule);
+  void* visit(const Rule_ScheduledArrivalTime* rule);
+  void* visit(const Rule_ScheduledOnwardDepartureDateTime* rule);
+  void* visit(const Rule_ScheduledOnwardDepartureDate* rule);
+  void* visit(const Rule_ScheduledOnwardDepartureTime* rule);
+  void* visit(const Rule_DepartureAirportCode* rule);
+  void* visit(const Rule_ArrivalAirportCode* rule);
   void* visit(const Rule_AircraftRegistration* rule);
   void* visit(const Rule_MasterAirwayBillNumber* rule);
   void* visit(const Rule_AirlinePrefix* rule);

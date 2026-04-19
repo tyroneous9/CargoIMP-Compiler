@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Sat Apr 18 18:43:25 CDT 2026
+ * Produced : Sat Apr 18 22:09:18 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -23,7 +23,7 @@ using std::vector;
 #include "Rule_MessageHeader.hpp"
 #include "Rule_FlightIdentificationLine.hpp"
 #include "Rule_TrailerLine.hpp"
-#include "Rule_RouteLine.hpp"
+#include "Rule_ArrivalInformationLine.hpp"
 #include "Rule_EOL.hpp"
 
 Rule_FFM8::Rule_FFM8(
@@ -149,7 +149,7 @@ const Rule_FFM8* Rule_FFM8::parse(ParserContext& context)
             int c2 = 0;
             for (int i2 = 0; i2 < 1 && f2; i2++)
             {
-              const Rule* rule = Rule_RouteLine::parse(context);
+              const Rule* rule = Rule_ArrivalInformationLine::parse(context);
               if ((f2 = rule != NULL))
               {
                 a2.add(*rule, context.index);
@@ -239,7 +239,7 @@ const Rule_FFM8* Rule_FFM8::parse(ParserContext& context)
             int c2 = 0;
             for (int i2 = 0; i2 < 1 && f2; i2++)
             {
-              const Rule* rule = Rule_RouteLine::parse(context);
+              const Rule* rule = Rule_ArrivalInformationLine::parse(context);
               if ((f2 = rule != NULL))
               {
                 a2.add(*rule, context.index);

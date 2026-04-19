@@ -1,15 +1,15 @@
 /* -----------------------------------------------------------------------------
- * Rule_DayMonthTime.hpp
+ * Rule_ScheduledArrivalTime.hpp
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Sat Apr 18 18:43:25 CDT 2026
+ * Produced : Sat Apr 18 22:09:18 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
 
-#ifndef Rule_DayMonthTime_hpp
-#define Rule_DayMonthTime_hpp
+#ifndef Rule_ScheduledArrivalTime_hpp
+#define Rule_ScheduledArrivalTime_hpp
 
 #include <string>
 #include <vector>
@@ -19,17 +19,17 @@
 class Visitor;
 class ParserContext;
 
-class Rule_DayMonthTime : public Rule
+class Rule_ScheduledArrivalTime : public Rule
 {
 public:
-  Rule_DayMonthTime(const std::string& spelling, const std::vector<const Rule*>& rules);
-  Rule_DayMonthTime(const Rule_DayMonthTime& rule);
+  Rule_ScheduledArrivalTime(const std::string& spelling, const std::vector<const Rule*>& rules);
+  Rule_ScheduledArrivalTime(const Rule_ScheduledArrivalTime& rule);
 
-  Rule_DayMonthTime& operator=(const Rule_DayMonthTime& rule);
+  Rule_ScheduledArrivalTime& operator=(const Rule_ScheduledArrivalTime& rule);
 
-  const Rule_DayMonthTime* clone(void) const;
+  const Rule_ScheduledArrivalTime* clone(void) const;
 
-  static const Rule_DayMonthTime* parse(ParserContext& context);
+  static const Rule_ScheduledArrivalTime* parse(ParserContext& context);
 
   void* accept(Visitor& visitor) const;
 };

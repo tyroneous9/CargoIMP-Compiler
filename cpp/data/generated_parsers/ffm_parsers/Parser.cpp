@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Sat Apr 18 18:43:25 CDT 2026
+ * Produced : Sat Apr 18 22:09:18 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -32,7 +32,11 @@ using std::transform;
 #include "Rule_FFM8.hpp"
 #include "Rule_MessageHeader.hpp"
 #include "Rule_FlightIdentificationLine.hpp"
-#include "Rule_RouteLine.hpp"
+#include "Rule_ArrivalInformationLine.hpp"
+#include "Rule_DirectArrivalLine.hpp"
+#include "Rule_TransitNILArrivalLine.hpp"
+#include "Rule_TransitNILOnlyLine.hpp"
+#include "Rule_DestinationOnlyLine.hpp"
 #include "Rule_UldSection.hpp"
 #include "Rule_AwbBlock.hpp"
 #include "Rule_SupplementLine.hpp"
@@ -47,7 +51,17 @@ using std::transform;
 #include "Rule_TrailerLine.hpp"
 #include "Rule_MessageFunctionCode.hpp"
 #include "Rule_CarrierFlightNumber.hpp"
-#include "Rule_DayMonthTime.hpp"
+#include "Rule_ScheduledDepartureDateTime.hpp"
+#include "Rule_ScheduledDepartureDate.hpp"
+#include "Rule_ScheduledDepartureTime.hpp"
+#include "Rule_ScheduledArrivalDateTime.hpp"
+#include "Rule_ScheduledArrivalDate.hpp"
+#include "Rule_ScheduledArrivalTime.hpp"
+#include "Rule_ScheduledOnwardDepartureDateTime.hpp"
+#include "Rule_ScheduledOnwardDepartureDate.hpp"
+#include "Rule_ScheduledOnwardDepartureTime.hpp"
+#include "Rule_DepartureAirportCode.hpp"
+#include "Rule_ArrivalAirportCode.hpp"
 #include "Rule_AircraftRegistration.hpp"
 #include "Rule_MasterAirwayBillNumber.hpp"
 #include "Rule_AirlinePrefix.hpp"
@@ -88,7 +102,11 @@ static map<string, pParser> buildParserMap(void)
   parsers["ffm8"] = (pParser)Rule_FFM8::parse;
   parsers["messageheader"] = (pParser)Rule_MessageHeader::parse;
   parsers["flightidentificationline"] = (pParser)Rule_FlightIdentificationLine::parse;
-  parsers["routeline"] = (pParser)Rule_RouteLine::parse;
+  parsers["arrivalinformationline"] = (pParser)Rule_ArrivalInformationLine::parse;
+  parsers["directarrivalline"] = (pParser)Rule_DirectArrivalLine::parse;
+  parsers["transitnilarrivalline"] = (pParser)Rule_TransitNILArrivalLine::parse;
+  parsers["transitnilonlyline"] = (pParser)Rule_TransitNILOnlyLine::parse;
+  parsers["destinationonlyline"] = (pParser)Rule_DestinationOnlyLine::parse;
   parsers["uldsection"] = (pParser)Rule_UldSection::parse;
   parsers["awbblock"] = (pParser)Rule_AwbBlock::parse;
   parsers["supplementline"] = (pParser)Rule_SupplementLine::parse;
@@ -103,7 +121,17 @@ static map<string, pParser> buildParserMap(void)
   parsers["trailerline"] = (pParser)Rule_TrailerLine::parse;
   parsers["messagefunctioncode"] = (pParser)Rule_MessageFunctionCode::parse;
   parsers["carrierflightnumber"] = (pParser)Rule_CarrierFlightNumber::parse;
-  parsers["daymonthtime"] = (pParser)Rule_DayMonthTime::parse;
+  parsers["scheduleddeparturedatetime"] = (pParser)Rule_ScheduledDepartureDateTime::parse;
+  parsers["scheduleddeparturedate"] = (pParser)Rule_ScheduledDepartureDate::parse;
+  parsers["scheduleddeparturetime"] = (pParser)Rule_ScheduledDepartureTime::parse;
+  parsers["scheduledarrivaldatetime"] = (pParser)Rule_ScheduledArrivalDateTime::parse;
+  parsers["scheduledarrivaldate"] = (pParser)Rule_ScheduledArrivalDate::parse;
+  parsers["scheduledarrivaltime"] = (pParser)Rule_ScheduledArrivalTime::parse;
+  parsers["scheduledonwarddeparturedatetime"] = (pParser)Rule_ScheduledOnwardDepartureDateTime::parse;
+  parsers["scheduledonwarddeparturedate"] = (pParser)Rule_ScheduledOnwardDepartureDate::parse;
+  parsers["scheduledonwarddeparturetime"] = (pParser)Rule_ScheduledOnwardDepartureTime::parse;
+  parsers["departureairportcode"] = (pParser)Rule_DepartureAirportCode::parse;
+  parsers["arrivalairportcode"] = (pParser)Rule_ArrivalAirportCode::parse;
   parsers["aircraftregistration"] = (pParser)Rule_AircraftRegistration::parse;
   parsers["masterairwaybillnumber"] = (pParser)Rule_MasterAirwayBillNumber::parse;
   parsers["airlineprefix"] = (pParser)Rule_AirlinePrefix::parse;

@@ -29,7 +29,7 @@ const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, TABLE_FILES.hawb);
 // ── CSV header (matches CFS - temp.csv column order) ─────────────────────────
 
 const HEADERS = [
-  'FLIGHT#', 'PMC#', 'MAWB#', 'HAWB#', 'STA', 'ATA', 'LFD', 'EMAIL-RCVD', 'Weight', 'POB',
+  'FLIGHT#', 'STD', 'PMC#', 'MAWB#', 'HAWB#', 'STA', 'ATA', 'LFD', 'EMAIL-RCVD', 'Weight', 'POB',
   'TTL PCS', 'SLAC', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
   'P3', 'Trucking/Skid $', 'Storage', 'ISC',
   'Tolead→NCA\nRCF MESSAGE', 'Tolead→NCA\nNFD MESSAGE', 'Tolead→NCA\nDLV MESSAGE',
@@ -222,11 +222,17 @@ for (const filename of filenames) {
     const depDate   = parseDDMON(datePart);
     const lfd       = depDate ? formatMMDD(addDays(depDate, 2)) : '';
 
-    // STA = scheduled arrival at ORD, prefer structured Routes then fall back.
+    // STD = scheduled departure time
+    // Prefer new ScheduledDepartureDateTime from refactored grammar, fall back to DayMonthTime
+    let std = flightId.ScheduledDepartureDateTime || flightId.DayMonthTime || '';
+    const formattedStd = formatStaDateTimeToChicago(std);
+
+    // STA = scheduled arrival at ORD, prefer new structured Routes with ScheduledArrivalDateTime, then fall back.
     let sta = '';
     if (Array.isArray(fields.Routes)) {
-      const ordRoute = fields.Routes.find(r => r && r.AirportCode === 'ORD' && r.ScheduledArrivalTime);
-      if (ordRoute) sta = ordRoute.ScheduledArrivalTime;
+      const ordRoute = fields.Routes.find(r => r && r.AirportCode === 'ORD' && 
+        (r.ScheduledArrivalDateTime || r.ScheduledArrivalTime));
+      if (ordRoute) sta = ordRoute.ScheduledArrivalDateTime || ordRoute.ScheduledArrivalTime || '';
     }
     if (!sta) {
       for (const seg of (fields.RouteLine || '').split('\n')) {
@@ -251,7 +257,7 @@ for (const filename of filenames) {
 
         if (!flightMap.has(flightKey)) {
           flightMap.set(flightKey, {
-            maxUid: uid, flightNum, sta: formattedSta, lfd,
+            maxUid: uid, flightNum, std: formattedStd, sta: formattedSta, lfd,
             pmcs: new Map(),
           });
         }
@@ -316,6 +322,7 @@ function resolveFfm(mawb) {
   if (!flightMap) return null;
 
   const flights = [];
+  const stds = [];
   const stas = [];
   const lfds = [];
   const pmcSet = new Set();
@@ -324,6 +331,7 @@ function resolveFfm(mawb) {
 
   for (const [, entry] of flightMap) {
     if (entry.flightNum) flights.push(entry.flightNum);
+    if (entry.std) stds.push(entry.std);
     if (entry.sta) stas.push(entry.sta);
     if (entry.lfd) lfds.push(entry.lfd);
 
@@ -340,6 +348,7 @@ function resolveFfm(mawb) {
 
   return {
     flightNum: uniqSorted(flights).join(', '),
+    std:       uniqSorted(stds).join(', '),
     sta:       uniqSorted(stas).join(', '),
     lfd:       uniqSorted(lfds).join(', '),
     pmcs:      [...pmcSet].sort().join(', '),
@@ -352,13 +361,14 @@ function resolveFfm(mawb) {
 const rows = [];
 
 const allMawbs = new Set([...fhlIndex.keys(), ...fwbIndex.keys()]);
-
 for (const mawb of [...allMawbs].sort()) {
+
   const ffm = resolveFfm(mawb);
   const fwb = fwbIndex.get(mawb);
   const fhl = fhlIndex.get(mawb);
 
   const flight     = ffm?.flightNum ?? '';
+  const std        = ffm?.std       ?? '';
   const sta        = ffm?.sta       ?? '';
   const lfd        = ffm?.lfd       ?? '';
   const pmcs       = ffm?.pmcs      ?? '';
@@ -386,7 +396,7 @@ for (const mawb of [...allMawbs].sort()) {
       const houseSlac = hb.HouseSlac || '';
 
       rows.push([
-        flight, pmcs, mawb, hawb, sta, '', lfd, emailRcvd,
+        flight, std, pmcs, mawb, hawb, sta, '', lfd, emailRcvd,
         houseWeight, pob,
         ttlPcs,      // TTL PCS from FHL HousePieceCount
         houseSlac,   // SLAC from FHL HouseSlac
@@ -397,7 +407,7 @@ for (const mawb of [...allMawbs].sort()) {
   } else {
     // MAWB-only row (no FHL received)
     rows.push([
-      flight, pmcs, mawb, '', sta, '', lfd, emailRcvd,
+      flight, std, pmcs, mawb, '', sta, '', lfd, emailRcvd,
       mawbWeight, pob,
       '',    // PCS RCVD
       '', consignee, '',
@@ -415,9 +425,7 @@ fs.writeFileSync(OUTPUT_CSV, lines.join('\n') + '\n', 'utf8');
 log('log', `Written ${rows.length} rows to ${path.basename(OUTPUT_CSV)}`);
 
 // Quick summary
-const hawbRows  = rows.filter(r => r[3] !== '').length;
-const mawbRows  = rows.length - hawbRows;
-const noFfm     = rows.filter(r => r[0] === '').length;
+const hawbRows  = rows.filter(r => r[4] !== '').length;  // rows with HAWB
+const mawbRows  = rows.length - hawbRows;  // rows with only MAWB
 log('log', `  HAWB rows: ${hawbRows}`);
 log('log', `  MAWB-only rows: ${mawbRows}`);
-log('log', `  Rows with no FFM match (no flight data): ${noFfm}`);

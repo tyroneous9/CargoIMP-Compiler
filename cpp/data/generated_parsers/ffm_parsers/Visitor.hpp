@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Sat Apr 18 18:43:25 CDT 2026
+ * Produced : Sat Apr 18 22:09:18 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -14,7 +14,11 @@
 class Rule_FFM8;
 class Rule_MessageHeader;
 class Rule_FlightIdentificationLine;
-class Rule_RouteLine;
+class Rule_ArrivalInformationLine;
+class Rule_DirectArrivalLine;
+class Rule_TransitNILArrivalLine;
+class Rule_TransitNILOnlyLine;
+class Rule_DestinationOnlyLine;
 class Rule_UldSection;
 class Rule_AwbBlock;
 class Rule_SupplementLine;
@@ -29,7 +33,17 @@ class Rule_ContinuationLine;
 class Rule_TrailerLine;
 class Rule_MessageFunctionCode;
 class Rule_CarrierFlightNumber;
-class Rule_DayMonthTime;
+class Rule_ScheduledDepartureDateTime;
+class Rule_ScheduledDepartureDate;
+class Rule_ScheduledDepartureTime;
+class Rule_ScheduledArrivalDateTime;
+class Rule_ScheduledArrivalDate;
+class Rule_ScheduledArrivalTime;
+class Rule_ScheduledOnwardDepartureDateTime;
+class Rule_ScheduledOnwardDepartureDate;
+class Rule_ScheduledOnwardDepartureTime;
+class Rule_DepartureAirportCode;
+class Rule_ArrivalAirportCode;
 class Rule_AircraftRegistration;
 class Rule_MasterAirwayBillNumber;
 class Rule_AirlinePrefix;
@@ -69,7 +83,11 @@ public:
   virtual void* visit(const Rule_FFM8* rule) = 0;
   virtual void* visit(const Rule_MessageHeader* rule) = 0;
   virtual void* visit(const Rule_FlightIdentificationLine* rule) = 0;
-  virtual void* visit(const Rule_RouteLine* rule) = 0;
+  virtual void* visit(const Rule_ArrivalInformationLine* rule) = 0;
+  virtual void* visit(const Rule_DirectArrivalLine* rule) = 0;
+  virtual void* visit(const Rule_TransitNILArrivalLine* rule) = 0;
+  virtual void* visit(const Rule_TransitNILOnlyLine* rule) = 0;
+  virtual void* visit(const Rule_DestinationOnlyLine* rule) = 0;
   virtual void* visit(const Rule_UldSection* rule) = 0;
   virtual void* visit(const Rule_AwbBlock* rule) = 0;
   virtual void* visit(const Rule_SupplementLine* rule) = 0;
@@ -84,7 +102,17 @@ public:
   virtual void* visit(const Rule_TrailerLine* rule) = 0;
   virtual void* visit(const Rule_MessageFunctionCode* rule) = 0;
   virtual void* visit(const Rule_CarrierFlightNumber* rule) = 0;
-  virtual void* visit(const Rule_DayMonthTime* rule) = 0;
+  virtual void* visit(const Rule_ScheduledDepartureDateTime* rule) = 0;
+  virtual void* visit(const Rule_ScheduledDepartureDate* rule) = 0;
+  virtual void* visit(const Rule_ScheduledDepartureTime* rule) = 0;
+  virtual void* visit(const Rule_ScheduledArrivalDateTime* rule) = 0;
+  virtual void* visit(const Rule_ScheduledArrivalDate* rule) = 0;
+  virtual void* visit(const Rule_ScheduledArrivalTime* rule) = 0;
+  virtual void* visit(const Rule_ScheduledOnwardDepartureDateTime* rule) = 0;
+  virtual void* visit(const Rule_ScheduledOnwardDepartureDate* rule) = 0;
+  virtual void* visit(const Rule_ScheduledOnwardDepartureTime* rule) = 0;
+  virtual void* visit(const Rule_DepartureAirportCode* rule) = 0;
+  virtual void* visit(const Rule_ArrivalAirportCode* rule) = 0;
   virtual void* visit(const Rule_AircraftRegistration* rule) = 0;
   virtual void* visit(const Rule_MasterAirwayBillNumber* rule) = 0;
   virtual void* visit(const Rule_AirlinePrefix* rule) = 0;

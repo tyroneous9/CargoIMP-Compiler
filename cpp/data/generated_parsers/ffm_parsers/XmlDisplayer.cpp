@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Sat Apr 18 18:43:25 CDT 2026
+ * Produced : Sat Apr 18 22:09:18 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -20,7 +20,11 @@ using std::vector;
 #include "Rule_FFM8.hpp"
 #include "Rule_MessageHeader.hpp"
 #include "Rule_FlightIdentificationLine.hpp"
-#include "Rule_RouteLine.hpp"
+#include "Rule_ArrivalInformationLine.hpp"
+#include "Rule_DirectArrivalLine.hpp"
+#include "Rule_TransitNILArrivalLine.hpp"
+#include "Rule_TransitNILOnlyLine.hpp"
+#include "Rule_DestinationOnlyLine.hpp"
 #include "Rule_UldSection.hpp"
 #include "Rule_AwbBlock.hpp"
 #include "Rule_SupplementLine.hpp"
@@ -35,7 +39,17 @@ using std::vector;
 #include "Rule_TrailerLine.hpp"
 #include "Rule_MessageFunctionCode.hpp"
 #include "Rule_CarrierFlightNumber.hpp"
-#include "Rule_DayMonthTime.hpp"
+#include "Rule_ScheduledDepartureDateTime.hpp"
+#include "Rule_ScheduledDepartureDate.hpp"
+#include "Rule_ScheduledDepartureTime.hpp"
+#include "Rule_ScheduledArrivalDateTime.hpp"
+#include "Rule_ScheduledArrivalDate.hpp"
+#include "Rule_ScheduledArrivalTime.hpp"
+#include "Rule_ScheduledOnwardDepartureDateTime.hpp"
+#include "Rule_ScheduledOnwardDepartureDate.hpp"
+#include "Rule_ScheduledOnwardDepartureTime.hpp"
+#include "Rule_DepartureAirportCode.hpp"
+#include "Rule_ArrivalAirportCode.hpp"
 #include "Rule_AircraftRegistration.hpp"
 #include "Rule_MasterAirwayBillNumber.hpp"
 #include "Rule_AirlinePrefix.hpp"
@@ -105,14 +119,62 @@ void* XmlDisplayer::visit(const Rule_FlightIdentificationLine* rule)
   return NULL;
 }
 
-void* XmlDisplayer::visit(const Rule_RouteLine* rule)
+void* XmlDisplayer::visit(const Rule_ArrivalInformationLine* rule)
 {
   if (!terminal) cout << endl;
-  cout << "<RouteLine>";
+  cout << "<ArrivalInformationLine>";
   terminal = false;
   visitRules(rule->rules);
   if (!terminal) cout << endl;
-  cout << "</RouteLine>";
+  cout << "</ArrivalInformationLine>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_DirectArrivalLine* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<DirectArrivalLine>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</DirectArrivalLine>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_TransitNILArrivalLine* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<TransitNILArrivalLine>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</TransitNILArrivalLine>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_TransitNILOnlyLine* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<TransitNILOnlyLine>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</TransitNILOnlyLine>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_DestinationOnlyLine* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<DestinationOnlyLine>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</DestinationOnlyLine>";
   terminal = false;
   return NULL;
 }
@@ -285,14 +347,134 @@ void* XmlDisplayer::visit(const Rule_CarrierFlightNumber* rule)
   return NULL;
 }
 
-void* XmlDisplayer::visit(const Rule_DayMonthTime* rule)
+void* XmlDisplayer::visit(const Rule_ScheduledDepartureDateTime* rule)
 {
   if (!terminal) cout << endl;
-  cout << "<DayMonthTime>";
+  cout << "<ScheduledDepartureDateTime>";
   terminal = false;
   visitRules(rule->rules);
   if (!terminal) cout << endl;
-  cout << "</DayMonthTime>";
+  cout << "</ScheduledDepartureDateTime>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_ScheduledDepartureDate* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<ScheduledDepartureDate>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</ScheduledDepartureDate>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_ScheduledDepartureTime* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<ScheduledDepartureTime>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</ScheduledDepartureTime>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_ScheduledArrivalDateTime* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<ScheduledArrivalDateTime>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</ScheduledArrivalDateTime>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_ScheduledArrivalDate* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<ScheduledArrivalDate>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</ScheduledArrivalDate>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_ScheduledArrivalTime* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<ScheduledArrivalTime>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</ScheduledArrivalTime>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_ScheduledOnwardDepartureDateTime* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<ScheduledOnwardDepartureDateTime>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</ScheduledOnwardDepartureDateTime>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_ScheduledOnwardDepartureDate* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<ScheduledOnwardDepartureDate>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</ScheduledOnwardDepartureDate>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_ScheduledOnwardDepartureTime* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<ScheduledOnwardDepartureTime>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</ScheduledOnwardDepartureTime>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_DepartureAirportCode* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<DepartureAirportCode>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</DepartureAirportCode>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_ArrivalAirportCode* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<ArrivalAirportCode>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</ArrivalAirportCode>";
   terminal = false;
   return NULL;
 }

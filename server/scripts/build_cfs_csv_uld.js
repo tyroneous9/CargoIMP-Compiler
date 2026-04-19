@@ -29,7 +29,7 @@ const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, TABLE_FILES.uld);
 // ── CSV header ────────────────────────────────────────────────────────────────
 
 const HEADERS = [
-  'FLIGHT#', 'STA', 'ATA', 'LFD', 'EMAIL-RCVD', 'MAWB', 'Weight', 'TTL PCS', 'POB',
+  'FLIGHT#', 'STD', 'STA', 'ATA', 'LFD', 'EMAIL-RCVD', 'MAWB', 'Weight', 'TTL PCS', 'POB',
   'PCS RCVD', 'PMC#', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
   'P3', 'Trucking/Skid $', 'Storage', 'ISC',
   'Tolead→NCA\nRCF MESSAGE', 'Tolead→NCA\nNFD MESSAGE', 'Tolead→NCA\nDLV MESSAGE',
@@ -262,11 +262,17 @@ for (const filename of filenames) {
     const flightNum = flightId.CarrierFlightNumber || parts[1] || '';
     const datePart = flightId.DayMonthTime || parts[2] || '';
 
-    // STA = scheduled arrival at ORD, prefer structured Routes then fall back.
+    // STD = scheduled departure time
+    // Prefer new ScheduledDepartureDateTime from refactored grammar, fall back to DayMonthTime
+    let std = flightId.ScheduledDepartureDateTime || flightId.DayMonthTime || '';
+    const formattedStd = formatStaDateTimeToChicago(std);
+
+    // STA = scheduled arrival at ORD, prefer new structured Routes with ScheduledArrivalDateTime, then fall back.
     let sta = '';
     if (Array.isArray(fields.Routes)) {
-      const ordRoute = fields.Routes.find(r => r && r.AirportCode === 'ORD' && r.ScheduledArrivalTime);
-      if (ordRoute) sta = ordRoute.ScheduledArrivalTime;
+      const ordRoute = fields.Routes.find(r => r && r.AirportCode === 'ORD' && 
+        (r.ScheduledArrivalDateTime || r.ScheduledArrivalTime));
+      if (ordRoute) sta = ordRoute.ScheduledArrivalDateTime || ordRoute.ScheduledArrivalTime || '';
     }
     if (!sta) {
       for (const seg of (fields.RouteLine || '').split('\n')) {
@@ -298,6 +304,7 @@ for (const filename of filenames) {
             maxUid: uid,
             flightNum,
             datePart,
+            std: formattedStd,
             sta: formattedSta,
             lfd,
             emailRcvd: emailReceivedIndex.get(uid) || '',
@@ -403,6 +410,7 @@ for (const mawb of [...allMawbs].sort()) {
   const fhl = fhlIndex.get(mawb);
 
   const flight = ffm?.flightNum ?? '';
+  const std    = ffm?.std       ?? '';
   const sta    = ffm?.sta       ?? '';
   const ata    = resolveAta(ffm?.flightNum ?? '', ffm?.datePart ?? '');
   const lfd    = ffm?.lfd       ?? '';
@@ -436,7 +444,7 @@ for (const mawb of [...allMawbs].sort()) {
         : fallbackPieces;
 
       rows.push([
-        flight, sta, ata, lfd, emailRcvd, mawb,
+        flight, std, sta, ata, lfd, emailRcvd, mawb,
         uldWeight, uldPcs, pob,
         '',         // PCS RCVD — human input
         uldKey, '', // PMC#, PMC LOCATION
@@ -447,7 +455,7 @@ for (const mawb of [...allMawbs].sort()) {
   } else {
     // No FFM or no ULD info: single fallback row with blank PMC#
     rows.push([
-      flight, sta, ata, lfd, emailRcvd, mawb,
+      flight, std, sta, ata, lfd, emailRcvd, mawb,
       fallbackWeight, fallbackPieces, '',
       '',    // PCS RCVD
       '', '', consignee, '',

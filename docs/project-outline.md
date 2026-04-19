@@ -19,55 +19,10 @@ Test inputs:
 ./build/parser_fwb_json -file data/input_tests/fwb_test.txt
 ./build/parser_fhl_json -file data/input_tests/fhl_test.txt
 
-Output shape:
-canonical parsed file shape (see docs/parsed-output-contract.md):
-{
-  "cimpType": "ffm",
-  "status": "ok",
-  "fields": {
-    "MessageHeader": "FFM/8",
-    "FlightIdentification": {
-      "MessageFunctionCode": "1",
-      "CarrierFlightNumber": "KZ7134",
-      "DayMonthTime": "30MAR2215",
-      "BoardPoint": "NRT",
-      "AircraftRegistration": "N404KZ"
-    },
-    "Routes": [
-      {
-        "AirportCode": "ORD",
-        "RouteKind": "Direct",
-        "ScheduledArrivalTime": "30MAR2240",
-        "ScheduledDepartureTime": ""
-      }
-    ]
-  },
-  "stderr": ""
-}
-
-legacy conceptual wrapper (for reference):
-{
-  "email": {
-    "uid": 6001,
-    "date": "2026-04-13T20:19:51.000Z",
-    "subject": "Example",
-    "from": "sender@example.com",
-    "body": "RAW MESSAGE TEXT..."
-  },
-  "parsing": {
-    "status": "ok",
-    "format": "fwb",
-    "fields": {
-      "awbPrefix": "123",
-      "awbNumber": "45678901"
-    },
-    "stderr": ""
-  }
-}
 
 database:
-parsed information only--similar to wms data
 
+parsed information only--similar to wms data
 temporary email storage:
 store files locally, and reference via .csv
 
@@ -84,31 +39,33 @@ support for FFM/4, FFM/5, FHL/5
 
 
 CSV CREATION:
-Columns:
-1. create scheduled arrival time - obtained from the routeline in ffm messages
-2. ATA (actual time arrival) - obtained from MVT message
-3. LFD (last free day) - departure date+2 days, e.g. KZ134/14APR -> 16APR
-4. PCS RCVD - leave empty for human input
-5. PMC LOCATION - leave empty
-6. AMS STATUS - leave empty
-7. p3, trucking, storage, isc - leave empty
-8. all message/milestones - leave empty
-Grouping:
-One row per ULD, MAWB, HAWB? ideally per HAWB. review FHL messages to see if you are able to deduce the flight context (especially the ULD identifier). This is the most crucial step, and if you are unable to deduce it, suggest other approaches to correctly create one row per HAWB.
-!!! Each MAWB can be split onto multiple PMCs, each HAWB can also be split onto multiple PMCs
 Email send order:
 FFM, FWB, FHL
 Filter out out of scope shipments (WRONG DESTINATION, NON-ORD)
 Linking House to PMC by weight/piece count deduction is fundamentally impossible because there are infinite possibilities. Consider this example: Given total weight of HAWB X = 3813 kg, distributed across 7 ULDs whose individual allocations are 4286 kg, 59 kg, 295 kg... — determine how many kg of HAWB X are in each ULD.
-OPTIONS for linking:
+IDEAS for linking:
 1. investigate working software from NCA.
 2. scan HAWB which an existing PMC mapping.
+3. probabilistic linking
 
 POLLER SCRIPT:
-create a script which completes the following steps:
 1. initializes
 2. repeats at a time interval "EMAIL_POLL_INTERVAL_MS" set in .env
 3. runs #extract_emails.js
 4. runs #parse_extracted_emails.js
 5. runs #build_cfs_csv_mawb.js and #build_cfs_csv_uld.js
 6. runs #upload_tables_to_sheets.js
+
+
+
+CURRENT PIPELINE:
+- PARSERS
+1. grammars are used to generate parsers
+2. build executables for programs which use parsers to output parsed information to json (stdout)
+3. executables can be used on input (from emails) to extract useful parsed information to json
+- EMAILS
+
+TODO:
+apply further parsing on scheduled arrival/departure info lines
+integrate scheduled+actual departure date
+pipeline:force is deleting cache?

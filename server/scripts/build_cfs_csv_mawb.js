@@ -24,7 +24,7 @@ const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, TABLE_FILES.mawb);
 // ── CSV header ────────────────────────────────────────────────────────────────
 
 const HEADERS = [
-  'FLIGHT#', 'PMC#', 'MAWB#', 'STA', 'ATA', 'LFD', 'EMAIL-RCVD', 'Weight', 'TTL PCS', 'POB',
+  'FLIGHT#', 'STD', 'PMC#', 'MAWB#', 'STA', 'ATA', 'LFD', 'EMAIL-RCVD', 'Weight', 'TTL PCS', 'POB',
   'PCS RCVD', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
   'P3', 'Trucking/Skid $', 'Storage', 'ISC',
   'Tolead→NCA\nRCF MESSAGE', 'Tolead→NCA\nNFD MESSAGE', 'Tolead→NCA\nDLV MESSAGE',
@@ -198,11 +198,17 @@ for (const filename of filenames) {
     const depDate   = parseDDMON(datePart);
     const lfd       = depDate ? formatDDMON(addDays(depDate, 2)) : '';
 
-    // STA = scheduled arrival at ORD, prefer structured Routes then fall back.
+    // STD = scheduled departure time
+    // Prefer new ScheduledDepartureDateTime from refactored grammar, fall back to DayMonthTime
+    let std = flightId.ScheduledDepartureDateTime || flightId.DayMonthTime || '';
+    const formattedStd = formatStaDateTimeToChicago(std);
+
+    // STA = scheduled arrival at ORD, prefer new structured Routes with ScheduledArrivalDateTime, then fall back.
     let sta = '';
     if (Array.isArray(fields.Routes)) {
-      const ordRoute = fields.Routes.find(r => r && r.AirportCode === 'ORD' && r.ScheduledArrivalTime);
-      if (ordRoute) sta = ordRoute.ScheduledArrivalTime;
+      const ordRoute = fields.Routes.find(r => r && r.AirportCode === 'ORD' && 
+        (r.ScheduledArrivalDateTime || r.ScheduledArrivalTime));
+      if (ordRoute) sta = ordRoute.ScheduledArrivalDateTime || ordRoute.ScheduledArrivalTime || '';
     }
     if (!sta) {
       for (const seg of (fields.RouteLine || '').split('\n')) {
@@ -229,6 +235,7 @@ for (const filename of filenames) {
           flightMap.set(flightKey, {
             maxUid: uid,
             flightNum,
+            std: formattedStd,
             sta: formattedSta,
             lfd,
             emailRcvd: emailReceivedIndex.get(uid) || '',
@@ -301,6 +308,7 @@ function resolveFfm(mawb) {
 
   return {
     flightNum: best.flightNum,
+    std:       best.std,
     sta:       best.sta,
     lfd:       best.lfd,
     emailRcvd: best.emailRcvd || '',
@@ -325,6 +333,7 @@ for (const mawb of [...allMawbs].sort()) {
   const fhl = fhlIndex.get(mawb);
 
   const flight    = ffm?.flightNum ?? '';
+  const std       = ffm?.std       ?? '';
   const sta       = ffm?.sta       ?? '';
   const lfd       = ffm?.lfd       ?? '';
   const emailRcvd = ffm?.emailRcvd ?? '';
@@ -341,7 +350,7 @@ for (const mawb of [...allMawbs].sort()) {
   const pieces = fwb?.pieces || fhl?.masterPieces || '';
 
   rows.push([
-    flight, pmcs, mawb, sta, '', lfd, emailRcvd,
+    flight, std, pmcs, mawb, sta, '', lfd, emailRcvd,
     weight, pieces, pob,
     '',  // PCS RCVD — human input
     '',  // PMC LOCATION

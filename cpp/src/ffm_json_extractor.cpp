@@ -17,7 +17,11 @@ using std::vector;
 #include "Rule_FFM8.hpp"
 #include "Rule_MessageHeader.hpp"
 #include "Rule_FlightIdentificationLine.hpp"
-#include "Rule_RouteLine.hpp"
+#include "Rule_ArrivalInformationLine.hpp"
+#include "Rule_DirectArrivalLine.hpp"
+#include "Rule_TransitNILArrivalLine.hpp"
+#include "Rule_TransitNILOnlyLine.hpp"
+#include "Rule_DestinationOnlyLine.hpp"
 #include "Rule_UldSection.hpp"
 #include "Rule_AwbBlock.hpp"
 #include "Rule_SupplementLine.hpp"
@@ -32,7 +36,17 @@ using std::vector;
 #include "Rule_TrailerLine.hpp"
 #include "Rule_MessageFunctionCode.hpp"
 #include "Rule_CarrierFlightNumber.hpp"
-#include "Rule_DayMonthTime.hpp"
+#include "Rule_ScheduledDepartureDateTime.hpp"
+#include "Rule_ScheduledDepartureDate.hpp"
+#include "Rule_ScheduledDepartureTime.hpp"
+#include "Rule_ScheduledArrivalDateTime.hpp"
+#include "Rule_ScheduledArrivalDate.hpp"
+#include "Rule_ScheduledArrivalTime.hpp"
+#include "Rule_ScheduledOnwardDepartureDateTime.hpp"
+#include "Rule_ScheduledOnwardDepartureDate.hpp"
+#include "Rule_ScheduledOnwardDepartureTime.hpp"
+#include "Rule_DepartureAirportCode.hpp"
+#include "Rule_ArrivalAirportCode.hpp"
 #include "Rule_AircraftRegistration.hpp"
 #include "Rule_MasterAirwayBillNumber.hpp"
 #include "Rule_AirlinePrefix.hpp"
@@ -80,11 +94,16 @@ void* FfmJsonExtractor::visit(const Rule_FlightIdentificationLine* rule)
   return NULL;
 }
 
-void* FfmJsonExtractor::visit(const Rule_RouteLine* rule)
+void* FfmJsonExtractor::visit(const Rule_ArrivalInformationLine* rule)
 {
-  routes.push_back(parseRouteLine(rule->spelling));
+  routes.push_back(parseArrivalInformationLine(rule->spelling));
   return NULL;
 }
+
+void* FfmJsonExtractor::visit(const Rule_DirectArrivalLine* rule) { (void)rule; return NULL; }
+void* FfmJsonExtractor::visit(const Rule_TransitNILArrivalLine* rule) { (void)rule; return NULL; }
+void* FfmJsonExtractor::visit(const Rule_TransitNILOnlyLine* rule) { (void)rule; return NULL; }
+void* FfmJsonExtractor::visit(const Rule_DestinationOnlyLine* rule) { (void)rule; return NULL; }
 
 void* FfmJsonExtractor::visit(const Rule_UldSection* rule)
 {
@@ -123,7 +142,17 @@ void* FfmJsonExtractor::visit(const Rule_FreeText* rule) { ulds.back().awbs.back
 void* FfmJsonExtractor::visit(const Rule_TrailerLine* rule) { (void)rule; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_MessageFunctionCode* rule) { (void)rule; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_CarrierFlightNumber* rule) { (void)rule; return NULL; }
-void* FfmJsonExtractor::visit(const Rule_DayMonthTime* rule) { (void)rule; return NULL; }
+void* FfmJsonExtractor::visit(const Rule_ScheduledDepartureDateTime* rule) { (void)rule; return NULL; }
+void* FfmJsonExtractor::visit(const Rule_ScheduledDepartureDate* rule) { (void)rule; return NULL; }
+void* FfmJsonExtractor::visit(const Rule_ScheduledDepartureTime* rule) { (void)rule; return NULL; }
+void* FfmJsonExtractor::visit(const Rule_ScheduledArrivalDateTime* rule) { (void)rule; return NULL; }
+void* FfmJsonExtractor::visit(const Rule_ScheduledArrivalDate* rule) { (void)rule; return NULL; }
+void* FfmJsonExtractor::visit(const Rule_ScheduledArrivalTime* rule) { (void)rule; return NULL; }
+void* FfmJsonExtractor::visit(const Rule_ScheduledOnwardDepartureDateTime* rule) { (void)rule; return NULL; }
+void* FfmJsonExtractor::visit(const Rule_ScheduledOnwardDepartureDate* rule) { (void)rule; return NULL; }
+void* FfmJsonExtractor::visit(const Rule_ScheduledOnwardDepartureTime* rule) { (void)rule; return NULL; }
+void* FfmJsonExtractor::visit(const Rule_DepartureAirportCode* rule) { (void)rule; return NULL; }
+void* FfmJsonExtractor::visit(const Rule_ArrivalAirportCode* rule) { (void)rule; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_AircraftRegistration* rule) { (void)rule; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_AirlinePrefix* rule) { (void)rule; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_AWBSerialNumber* rule) { (void)rule; return NULL; }
@@ -218,35 +247,45 @@ FfmFlightIdentificationData FfmJsonExtractor::parseFlightIdentificationLine(cons
 
   size_t p2 = line.find('/', p1 + 1);
   if (p2 == string::npos) return data;
-  data.dayMonthTime = line.substr(p1 + 1, p2 - (p1 + 1));
+  data.scheduledDepartureDateTime = line.substr(p1 + 1, p2 - (p1 + 1));
+  splitDateTime(data.scheduledDepartureDateTime, data.scheduledDepartureDate, data.scheduledDepartureTime);
 
   size_t p3 = line.find('/', p2 + 1);
   if (p3 == string::npos) return data;
-  data.boardPoint = line.substr(p2 + 1, p3 - (p2 + 1));
+  data.departureAirportCode = line.substr(p2 + 1, p3 - (p2 + 1));
 
   data.aircraftRegistration = line.substr(p3 + 1);
   return data;
 }
 
-FfmRouteData FfmJsonExtractor::parseRouteLine(const string& line) const
+void FfmJsonExtractor::splitDateTime(const string& dateTime, string& datePart, string& timePart) const
+{
+  datePart.clear();
+  timePart.clear();
+  if (dateTime.size() >= 5) datePart = dateTime.substr(0, 5);
+  if (dateTime.size() > 5) timePart = dateTime.substr(5);
+}
+
+FfmRouteData FfmJsonExtractor::parseArrivalInformationLine(const string& line) const
 {
   FfmRouteData route;
 
   size_t p0 = line.find('/');
   if (p0 == string::npos)
   {
-    route.airportCode = line;
+    route.arrivalAirportCode = line;
     route.routeKind = "DestinationOnly";
     return route;
   }
 
-  route.airportCode = line.substr(0, p0);
+  route.arrivalAirportCode = line.substr(0, p0);
 
   // ORD//30MAR2240
   if (p0 + 1 < line.size() && line[p0 + 1] == '/')
   {
     route.routeKind = "Direct";
-    route.scheduledArrivalTime = line.substr(p0 + 2);
+    route.scheduledArrivalDateTime = line.substr(p0 + 2);
+    splitDateTime(route.scheduledArrivalDateTime, route.scheduledArrivalDate, route.scheduledArrivalTime);
     return route;
   }
 
@@ -265,12 +304,15 @@ FfmRouteData FfmJsonExtractor::parseRouteLine(const string& line) const
     size_t p2 = line.find('/', p1 + 1);
     if (p2 == string::npos)
     {
-      route.scheduledArrivalTime = line.substr(p1 + 1);
       return route;
     }
 
-    route.scheduledArrivalTime = line.substr(p1 + 1, p2 - (p1 + 1));
-    route.scheduledDepartureTime = line.substr(p2 + 1);
+    const string arrivalDateTime = line.substr(p1 + 1, p2 - (p1 + 1));
+    route.scheduledArrivalDateTime = arrivalDateTime;
+    splitDateTime(route.scheduledArrivalDateTime, route.scheduledArrivalDate, route.scheduledArrivalTime);
+
+    route.scheduledOnwardDepartureDateTime = line.substr(p2 + 1);
+    splitDateTime(route.scheduledOnwardDepartureDateTime, route.scheduledOnwardDepartureDate, route.scheduledOnwardDepartureTime);
     return route;
   }
 
@@ -285,8 +327,12 @@ void FfmJsonExtractor::printJson() const
   cout << "  \"FlightIdentification\": {" << endl;
   cout << "    \"MessageFunctionCode\": \"" << escapeJson(flightIdentification.messageFunctionCode) << "\"," << endl;
   cout << "    \"CarrierFlightNumber\": \"" << escapeJson(flightIdentification.carrierFlightNumber) << "\"," << endl;
-  cout << "    \"DayMonthTime\": \"" << escapeJson(flightIdentification.dayMonthTime) << "\"," << endl;
-  cout << "    \"BoardPoint\": \"" << escapeJson(flightIdentification.boardPoint) << "\"," << endl;
+  cout << "    \"DayMonthTime\": \"" << escapeJson(flightIdentification.scheduledDepartureDateTime) << "\"," << endl;
+  cout << "    \"BoardPoint\": \"" << escapeJson(flightIdentification.departureAirportCode) << "\"," << endl;
+  cout << "    \"ScheduledDepartureDateTime\": \"" << escapeJson(flightIdentification.scheduledDepartureDateTime) << "\"," << endl;
+  cout << "    \"ScheduledDepartureDate\": \"" << escapeJson(flightIdentification.scheduledDepartureDate) << "\"," << endl;
+  cout << "    \"ScheduledDepartureTime\": \"" << escapeJson(flightIdentification.scheduledDepartureTime) << "\"," << endl;
+  cout << "    \"DepartureAirportCode\": \"" << escapeJson(flightIdentification.departureAirportCode) << "\"," << endl;
   cout << "    \"AircraftRegistration\": \"" << escapeJson(flightIdentification.aircraftRegistration) << "\"" << endl;
   cout << "  }," << endl;
   cout << "  \"Routes\": [" << endl;
@@ -295,10 +341,15 @@ void FfmJsonExtractor::printJson() const
   {
     const FfmRouteData& route = routes[i];
     cout << "    {" << endl;
-    cout << "      \"AirportCode\": \"" << escapeJson(route.airportCode) << "\"," << endl;
+    cout << "      \"AirportCode\": \"" << escapeJson(route.arrivalAirportCode) << "\"," << endl;
+    cout << "      \"ScheduledArrivalTime\": \"" << escapeJson(route.scheduledArrivalDateTime) << "\"," << endl;
+    cout << "      \"ScheduledDepartureTime\": \"" << escapeJson(route.scheduledOnwardDepartureDateTime) << "\"," << endl;
+    cout << "      \"ArrivalAirportCode\": \"" << escapeJson(route.arrivalAirportCode) << "\"," << endl;
     cout << "      \"RouteKind\": \"" << escapeJson(route.routeKind) << "\"," << endl;
-    cout << "      \"ScheduledArrivalTime\": \"" << escapeJson(route.scheduledArrivalTime) << "\"," << endl;
-    cout << "      \"ScheduledDepartureTime\": \"" << escapeJson(route.scheduledDepartureTime) << "\"" << endl;
+    cout << "      \"ScheduledArrivalDate\": \"" << escapeJson(route.scheduledArrivalDate) << "\"," << endl;
+    cout << "      \"ScheduledArrivalClockTime\": \"" << escapeJson(route.scheduledArrivalTime) << "\"," << endl;
+    cout << "      \"ScheduledOnwardDepartureDate\": \"" << escapeJson(route.scheduledOnwardDepartureDate) << "\"," << endl;
+    cout << "      \"ScheduledOnwardDepartureTime\": \"" << escapeJson(route.scheduledOnwardDepartureTime) << "\"" << endl;
     cout << "    }";
     if (i + 1 < routes.size()) cout << ",";
     cout << endl;

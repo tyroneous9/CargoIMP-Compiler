@@ -70,6 +70,8 @@ function normalizeFfmFields(fields) {
   if (!fields || typeof fields !== 'object') return {};
 
   // Canonical FlightIdentification object.
+  // Preserves both old fields (DayMonthTime, BoardPoint) for backward compat
+  // and new structured fields (ScheduledDepartureDateTime, etc.) from recent FFM grammar refactor.
   if (!fields.FlightIdentification || typeof fields.FlightIdentification !== 'object') {
     const parts = splitBySlash(fields.FlightIdentificationLine || '');
     fields.FlightIdentification = {
@@ -81,7 +83,11 @@ function normalizeFfmFields(fields) {
     };
   }
 
-  // Canonical Routes array.
+  // Preserve new datetime fields from FFM grammar refactor (if present):
+  // ScheduledDepartureDateTime, ScheduledDepartureDate, ScheduledDepartureTime, DepartureAirportCode
+  // These take precedence over parsing from raw lines above.
+
+  // Canonical Routes array with new datetime fields.
   if (!Array.isArray(fields.Routes)) {
     const lines = String(fields.RouteLine || '').split('\n').filter(Boolean);
     fields.Routes = lines.map((line) => {
@@ -91,6 +97,7 @@ function normalizeFfmFields(fields) {
           AirportCode: directMatch[1],
           RouteKind: 'Direct',
           ScheduledArrivalTime: directMatch[2],
+          ScheduledArrivalDateTime: directMatch[2],  // map legacy to new field name
           ScheduledDepartureTime: '',
         };
       }
@@ -100,16 +107,30 @@ function normalizeFfmFields(fields) {
           AirportCode: nilMatch[1],
           RouteKind: 'TransitNIL',
           ScheduledArrivalTime: nilMatch[2] || '',
+          ScheduledArrivalDateTime: nilMatch[2] || '',  // map legacy to new field name
           ScheduledDepartureTime: nilMatch[3] || '',
+          ScheduledOnwardDepartureDateTime: nilMatch[3] || '',  // map legacy to new field name
         };
       }
       return {
         AirportCode: line,
         RouteKind: 'DestinationOnly',
         ScheduledArrivalTime: '',
+        ScheduledArrivalDateTime: '',
         ScheduledDepartureTime: '',
+        ScheduledOnwardDepartureDateTime: '',
       };
     });
+  } else {
+    // Ensure new datetime fields are present even if Routes already exist
+    for (const route of fields.Routes) {
+      if (!route.ScheduledArrivalDateTime && route.ScheduledArrivalTime) {
+        route.ScheduledArrivalDateTime = route.ScheduledArrivalTime;
+      }
+      if (!route.ScheduledOnwardDepartureDateTime && route.ScheduledDepartureTime) {
+        route.ScheduledOnwardDepartureDateTime = route.ScheduledDepartureTime;
+      }
+    }
   }
 
   // Remove redundant raw line fields when decomposed fields exist.

@@ -5,7 +5,7 @@ FFM8 =
 	EOL
 	FlightIdentificationLine
 	EOL
-	1*(RouteLine EOL / UldSection)
+	1*(ArrivalInformationLine EOL / UldSection)
 	[TrailerLine [EOL]];
 
 MessageHeader = "FFM/4" / "FFM/5" / "FFM/8";
@@ -16,22 +16,33 @@ FlightIdentificationLine =
 	Slant
 	CarrierFlightNumber
 	Slant
-	DayMonthTime
+	ScheduledDepartureDateTime
 	Slant
-	AirportCode
+	DepartureAirportCode
 	Slant
 	AircraftRegistration;
 
-# Route variants seen in operations include:
-# - classic destination with double slash timestamp: ORD//14APR1235
-# - transit NIL form: ANC/NIL/14APR0200/14APR0330
-# - bare destination (FFM/4, FFM/5): ORD
-# - bare NIL transit (FFM/4, FFM/5): ANC/NIL
-RouteLine =
-	AirportCode Slant Slant *LineChar
-	/ AirportCode Slant "NIL" Slant *LineChar
-	/ AirportCode Slant "NIL"
-	/ AirportCode;
+# Arrival variants seen in operations include:
+# - direct destination with scheduled arrival datetime: ORD//14APR1235
+# - transit NIL with scheduled arrival and optional onward departure: ANC/NIL/14APR0200/14APR0330
+# - bare destination (legacy FFM/4, FFM/5): ORD
+# - bare NIL transit (legacy FFM/4, FFM/5): ANC/NIL
+ArrivalInformationLine =
+	DirectArrivalLine
+	/ TransitNILArrivalLine
+	/ TransitNILOnlyLine
+	/ DestinationOnlyLine;
+
+DirectArrivalLine = ArrivalAirportCode Slant Slant ScheduledArrivalDateTime;
+TransitNILArrivalLine =
+	ArrivalAirportCode
+	Slant
+	"NIL"
+	Slant
+	ScheduledArrivalDateTime
+	[Slant ScheduledOnwardDepartureDateTime];
+TransitNILOnlyLine = ArrivalAirportCode Slant "NIL";
+DestinationOnlyLine = ArrivalAirportCode;
 
 # Some traffic starts AWB blocks directly without an explicit ULD line.
 UldSection =
@@ -78,7 +89,17 @@ TrailerLine = "CONT" / "LAST";
 
 MessageFunctionCode = 1*2Digit;
 CarrierFlightNumber = 2*8AlphaNum;
-DayMonthTime = 2Digit Month [4Digit];
+ScheduledDepartureDateTime = ScheduledDepartureDate [ScheduledDepartureTime];
+ScheduledDepartureDate = 2Digit Month;
+ScheduledDepartureTime = 4Digit;
+ScheduledArrivalDateTime = ScheduledArrivalDate [ScheduledArrivalTime];
+ScheduledArrivalDate = 2Digit Month;
+ScheduledArrivalTime = 4Digit;
+ScheduledOnwardDepartureDateTime = ScheduledOnwardDepartureDate [ScheduledOnwardDepartureTime];
+ScheduledOnwardDepartureDate = 2Digit Month;
+ScheduledOnwardDepartureTime = 4Digit;
+DepartureAirportCode = 3Upper;
+ArrivalAirportCode = 3Upper;
 AircraftRegistration = 4*12AlphaNum;
 
 MasterAirwayBillNumber = AirlinePrefix Hyphen AWBSerialNumber;
