@@ -17,7 +17,9 @@
  *   node scripts/run_pipeline.js          # run once immediately, then poll
  *   node scripts/run_pipeline.js --once   # run exactly once and exit
  *   node scripts/run_pipeline.js --force  # run steps 3–6 even with no new data
+ *   node scripts/run_pipeline.js --REBUILD # clear cached outputs then run from fresh extraction/parsing
  *   node scripts/run_pipeline.js --once --force  # single run with forced rebuild
+ *   node scripts/run_pipeline.js --once --REBUILD --force  # clear cache + full single-shot rebuild
  *
  * Interval is controlled by EMAIL_POLL_INTERVAL_MS in .env.
  */
@@ -27,7 +29,15 @@
 const { spawnSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const { ENV_FILE, LOGS_DIR } = require('../config/paths');
+const {
+  ENV_FILE,
+  LOGS_DIR,
+  EMAILS_DIR,
+  PARSED_EMAILS_DIR,
+  PARSED_TABLES_DIR,
+  DATA_DIR,
+  INDEX_FILE,
+} = require('../config/paths');
 
 require('dotenv').config({ path: ENV_FILE });
 
@@ -36,6 +46,8 @@ const POLL_INTERVAL_MS = parseInt(process.env.EMAIL_POLL_INTERVAL_MS, 10) || 600
 const SCRIPT_TIMEOUT_MS = parseInt(process.env.PIPELINE_SCRIPT_TIMEOUT_MS, 10) || 300_000;
 const RUN_ONCE = process.argv.includes('--once');
 const FORCE = process.argv.includes('--force');
+const REBUILD = process.argv.includes('--REBUILD') || process.argv.includes('--rebuild');
+const STDERR_SUMMARY_FILE = path.join(DATA_DIR, 'stderr-summary.ndjson');
 
 // ── Logger ────────────────────────────────────────────────────────────────────
 
@@ -60,6 +72,24 @@ function log(level, text) {
   const line = `${ts} [${level.toUpperCase()}] ${text}`;
   process.stderr.write(line + '\n');
   fs.appendFileSync(todayLogPath(), line + '\n', 'utf8');
+}
+
+function clearPath(targetPath, label) {
+  if (fs.existsSync(targetPath)) {
+    fs.rmSync(targetPath, { recursive: true, force: true });
+    log('warn', `[rebuild] cleared ${label}: ${targetPath}`);
+  } else {
+    log('log', `[rebuild] skipped missing ${label}: ${targetPath}`);
+  }
+}
+
+function prepareRebuild() {
+  log('warn', '[rebuild] REBUILD mode enabled; clearing cached extraction, parse, and table outputs');
+  clearPath(EMAILS_DIR, 'emails output directory');
+  clearPath(PARSED_EMAILS_DIR, 'parsed emails output directory');
+  clearPath(PARSED_TABLES_DIR, 'parsed tables output directory');
+  clearPath(INDEX_FILE, 'email index file');
+  clearPath(STDERR_SUMMARY_FILE, 'stderr summary file');
 }
 
 // ── Step runner ───────────────────────────────────────────────────────────────
@@ -152,7 +182,7 @@ function runPipeline(runNumber) {
 
   // ── Step 2: parse new emails ───────────────────────────────────────────────
   const { exitCode: exitParse, stdout: stdoutParse } =
-    runScript('parse_extracted_emails.js');
+    runScript('parse_extracted_emails.js', FORCE ? ['--force'] : []);
 
   if (exitParse !== 0) {
     log('error', `${label} aborting: parse_extracted_emails failed`);
@@ -241,9 +271,11 @@ process.on('SIGINT', () => requestShutdown('SIGINT'));
 process.on('SIGTERM', () => requestShutdown('SIGTERM'));
 
 if (RUN_ONCE) {
+  if (REBUILD) prepareRebuild();
   tick();
 } else {
   log('log', `Pipeline polling every ${POLL_INTERVAL_MS / 1000}s. Press Ctrl+C to stop.`);
+  if (REBUILD) prepareRebuild();
   tick();  // run immediately on start
   pollTimer = setInterval(tick, POLL_INTERVAL_MS);
 }

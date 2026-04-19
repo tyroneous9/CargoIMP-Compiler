@@ -217,6 +217,7 @@ function normalizeParsedFields(messageType, fields) {
 }
 
 function main() {
+  const force = process.argv.includes('--force');
   fs.mkdirSync(EMAILS_DIR, { recursive: true });
   const files = fs.readdirSync(EMAILS_DIR).filter(f => f.endsWith('.json'));
   let parsedCount = 0;
@@ -240,7 +241,7 @@ function main() {
     }
     const parsedFilename = buildParsedFilename(mailbox, uid);
     const parsedPath = path.join(PARSED_EMAILS_DIR, parsedFilename);
-    if (fs.existsSync(parsedPath)) {
+    if (!force && fs.existsSync(parsedPath)) {
       alreadyParsedCount++;
       continue;
     }

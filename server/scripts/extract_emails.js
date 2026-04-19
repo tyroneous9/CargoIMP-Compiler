@@ -116,8 +116,8 @@ async function main() {
 
       let extractedCount = 0;
       for (const uid of uids) {
-        // Only extract up to the configured limit per run, or unlimited if not set
-        if (extractLimit != null && extractedCount >= extractLimit) {
+        // Only extract up to the configured limit per run, or unlimited if not set or set to -1.
+        if (extractLimit != null && extractLimit !== -1 && extractedCount >= extractLimit) {
           log('log', `reached EXTRACT_EMAIL_LIMIT=${extractLimit}; stopping this run`);
           break;
         }
