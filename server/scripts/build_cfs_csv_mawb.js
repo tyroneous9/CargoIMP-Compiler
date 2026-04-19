@@ -24,7 +24,7 @@ const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, TABLE_FILES.mawb);
 // ── CSV header ────────────────────────────────────────────────────────────────
 
 const HEADERS = [
-  'FLIGHT#', 'STD', 'PMC#', 'MAWB#', 'STA', 'ATA', 'LFD', 'EMAIL-RCVD', 'Weight', 'TTL PCS', 'POB',
+  'email_rcvd', 'flight', 'std', 'sta', 'ata', 'lfd', 'pmc', 'mawb', 'weight', 'TTL PCS', 'pob',
   'PCS RCVD', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
   'P3', 'Trucking/Skid $', 'Storage', 'ISC',
   'Tolead→NCA\nRCF MESSAGE', 'Tolead→NCA\nNFD MESSAGE', 'Tolead→NCA\nDLV MESSAGE',
@@ -350,7 +350,7 @@ for (const mawb of [...allMawbs].sort()) {
   const pieces = fwb?.pieces || fhl?.masterPieces || '';
 
   rows.push([
-    flight, std, pmcs, mawb, sta, '', lfd, emailRcvd,
+    emailRcvd, flight, std, sta, '', lfd, pmcs, mawb,
     weight, pieces, pob,
     '',  // PCS RCVD — human input
     '',  // PMC LOCATION
@@ -366,5 +366,5 @@ fs.mkdirSync(path.dirname(OUTPUT_CSV), { recursive: true });
 fs.writeFileSync(OUTPUT_CSV, lines.join('\n') + '\n', 'utf8');
 
 log('log', `Written ${rows.length} rows to ${path.basename(OUTPUT_CSV)}`);
-const noFfm = rows.filter(r => r[0] === '').length;
+const noFfm = rows.filter(r => r[1] === '').length;
 log('log', `  Rows with no FFM match (no flight data): ${noFfm}`);

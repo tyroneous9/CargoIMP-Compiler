@@ -29,7 +29,7 @@ const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, TABLE_FILES.hawb);
 // ── CSV header (matches CFS - temp.csv column order) ─────────────────────────
 
 const HEADERS = [
-  'FLIGHT#', 'STD', 'PMC#', 'MAWB#', 'HAWB#', 'STA', 'ATA', 'LFD', 'EMAIL-RCVD', 'Weight', 'POB',
+  'email_rcvd', 'flight', 'std', 'sta', 'ata', 'lfd', 'pmc', 'mawb', 'hawb', 'weight', 'pob',
   'TTL PCS', 'SLAC', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
   'P3', 'Trucking/Skid $', 'Storage', 'ISC',
   'Tolead→NCA\nRCF MESSAGE', 'Tolead→NCA\nNFD MESSAGE', 'Tolead→NCA\nDLV MESSAGE',
@@ -396,7 +396,7 @@ for (const mawb of [...allMawbs].sort()) {
       const houseSlac = hb.HouseSlac || '';
 
       rows.push([
-        flight, std, pmcs, mawb, hawb, sta, '', lfd, emailRcvd,
+        emailRcvd, flight, std, sta, '', lfd, pmcs, mawb, hawb,
         houseWeight, pob,
         ttlPcs,      // TTL PCS from FHL HousePieceCount
         houseSlac,   // SLAC from FHL HouseSlac
@@ -407,7 +407,7 @@ for (const mawb of [...allMawbs].sort()) {
   } else {
     // MAWB-only row (no FHL received)
     rows.push([
-      flight, std, pmcs, mawb, '', sta, '', lfd, emailRcvd,
+      emailRcvd, flight, std, sta, '', lfd, pmcs, mawb, '',
       mawbWeight, pob,
       '',    // PCS RCVD
       '', consignee, '',
@@ -425,7 +425,7 @@ fs.writeFileSync(OUTPUT_CSV, lines.join('\n') + '\n', 'utf8');
 log('log', `Written ${rows.length} rows to ${path.basename(OUTPUT_CSV)}`);
 
 // Quick summary
-const hawbRows  = rows.filter(r => r[4] !== '').length;  // rows with HAWB
+const hawbRows  = rows.filter(r => r[8] !== '').length;  // rows with HAWB
 const mawbRows  = rows.length - hawbRows;  // rows with only MAWB
 log('log', `  HAWB rows: ${hawbRows}`);
 log('log', `  MAWB-only rows: ${mawbRows}`);

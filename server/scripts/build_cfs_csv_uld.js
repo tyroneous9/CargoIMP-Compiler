@@ -29,8 +29,8 @@ const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, TABLE_FILES.uld);
 // ── CSV header ────────────────────────────────────────────────────────────────
 
 const HEADERS = [
-  'FLIGHT#', 'STD', 'STA', 'ATA', 'LFD', 'EMAIL-RCVD', 'MAWB', 'Weight', 'TTL PCS', 'POB',
-  'PCS RCVD', 'PMC#', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
+  'email_rcvd', 'flight', 'std', 'sta', 'ata', 'lfd', 'mawb', 'weight', 'TTL PCS', 'pob',
+  'PCS RCVD', 'pmc', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
   'P3', 'Trucking/Skid $', 'Storage', 'ISC',
   'Tolead→NCA\nRCF MESSAGE', 'Tolead→NCA\nNFD MESSAGE', 'Tolead→NCA\nDLV MESSAGE',
   'Tolead→Customer\nCargo Arrive Email', 'Tolead→Customer\nCargo Ready Email',
@@ -444,7 +444,7 @@ for (const mawb of [...allMawbs].sort()) {
         : fallbackPieces;
 
       rows.push([
-        flight, std, sta, ata, lfd, emailRcvd, mawb,
+        emailRcvd, flight, std, sta, ata, lfd, mawb,
         uldWeight, uldPcs, pob,
         '',         // PCS RCVD — human input
         uldKey, '', // PMC#, PMC LOCATION
@@ -455,7 +455,7 @@ for (const mawb of [...allMawbs].sort()) {
   } else {
     // No FFM or no ULD info: single fallback row with blank PMC#
     rows.push([
-      flight, std, sta, ata, lfd, emailRcvd, mawb,
+      emailRcvd, flight, std, sta, ata, lfd, mawb,
       fallbackWeight, fallbackPieces, '',
       '',    // PCS RCVD
       '', '', consignee, '',
@@ -471,7 +471,7 @@ fs.mkdirSync(path.dirname(OUTPUT_CSV), { recursive: true });
 fs.writeFileSync(OUTPUT_CSV, lines.join('\n') + '\n', 'utf8');
 
 console.log(`Written ${rows.length} rows to ${OUTPUT_CSV}`);
-const noFfm   = rows.filter(r => r[0] === '').length;
+const noFfm   = rows.filter(r => r[1] === '').length;
 const multiUld = rows.length - [...allMawbs].length;
 console.log(`  Rows with no FFM match: ${noFfm}`);
 console.log(`  Extra rows from MAWBs split across multiple ULDs: ${multiUld}`);

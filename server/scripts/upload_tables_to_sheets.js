@@ -127,69 +127,80 @@ async function getSheetId(sheetsClient, spreadsheetId, sheetName) {
   const sheet = (res.data.sheets || []).find(s => s.properties?.title === sheetName);
   return sheet?.properties?.sheetId ?? null;
 }
-function sortSpecsForKey(key) {
-  // Column indexes: A=0 FLIGHT#, B=1 PMC#, C=2 MAWB#, D=3 HAWB#
-  if (key === 'uld') {
-    return [
-      { dimensionIndex: 1, sortOrder: 'ASCENDING' }, // PMC#
-      { dimensionIndex: 0, sortOrder: 'ASCENDING' }, // FLIGHT#
-      { dimensionIndex: 2, sortOrder: 'ASCENDING' }, // MAWB#
-    ];
-  }
-  if (key === 'hawb') {
-    return [
-      { dimensionIndex: 1, sortOrder: 'ASCENDING' }, // PMC#
-      { dimensionIndex: 2, sortOrder: 'ASCENDING' }, // MAWB#
-      { dimensionIndex: 3, sortOrder: 'ASCENDING' }, // HAWB#
-    ];
-  }
-  return [
-    { dimensionIndex: 0, sortOrder: 'ASCENDING' }, // FLIGHT#
-    { dimensionIndex: 2, sortOrder: 'ASCENDING' }, // MAWB#
-  ];
+function normalizeHeaderName(value) {
+  return String(value || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '');
+}
+
+function findColumnIndex(headerRow, columnNameOrAliases) {
+  if (!Array.isArray(headerRow)) return -1;
+
+  const aliases = Array.isArray(columnNameOrAliases)
+    ? columnNameOrAliases
+    : [columnNameOrAliases];
+  const normalizedAliases = new Set(aliases.map(normalizeHeaderName));
+
+  return headerRow.findIndex((cell) => normalizedAliases.has(normalizeHeaderName(cell)));
+}
+
+function sortSpecsForKey(key, headerRow) {
+  const sortColumnsByKey = {
+    mawb: [['flight', 'FLIGHT#'], ['mawb', 'MAWB#']],
+    uld: [['mawb', 'MAWB#'], ['pmc', 'PMC#'], ['flight', 'FLIGHT#']],
+    hawb: [['mawb', 'MAWB#'], ['hawb', 'HAWB#'], ['pmc', 'PMC#'], ['flight', 'FLIGHT#']],
+  };
+
+  return (sortColumnsByKey[key] || [])
+    .map((columnName) => findColumnIndex(headerRow, columnName))
+    .filter((dimensionIndex) => dimensionIndex >= 0)
+    .map((dimensionIndex) => ({ dimensionIndex, sortOrder: 'ASCENDING' }));
 }
 
 async function applyMawbGroupingFormatting(key, config, sheetsClient, values) {
   const sheetId = await getSheetId(sheetsClient, config.spreadsheetId, config.sheetName);
   if (sheetId == null || values.length < 2) return;
 
+  const mawbColIndex = findColumnIndex(values[0], ['mawb', 'MAWB#']);
+  if (mawbColIndex < 0) {
+    log('warn', `[${key}] Could not find MAWB column; skipping grouping formatting`);
+    return;
+  }
+
   const color1 = { red: 1.0, green: 1.0, blue: 1.0 };
   const color2 = { red: 0.95, green: 0.95, blue: 0.98 };
-
   const requests = [];
-  const mawbColIndex = 3;
 
   let currentColor = color1;
   let groupStartRow = 1;
-  let currentMawb = values[1] && values[1][mawbColIndex] ? values[1][mawbColIndex] : '';
+  let currentMawb = String(values[1]?.[mawbColIndex] || '').trim();
 
   for (let i = 1; i < values.length; i++) {
-    const mawb = (values[i] && values[i][mawbColIndex]) ? values[i][mawbColIndex] : '';
-
-    if (mawb !== currentMawb && mawb !== '') {
-      requests.push({
-        repeatCell: {
-          range: {
-            sheetId,
-            startRowIndex: groupStartRow,
-            endRowIndex: i,
-            startColumnIndex: 0,
-            endColumnIndex: values[i].length,
+    const mawb = String(values[i]?.[mawbColIndex] || '').trim();
+    if (mawb !== currentMawb) {
+      if (currentMawb) {
+        requests.push({
+          repeatCell: {
+            range: {
+              sheetId,
+              startRowIndex: groupStartRow,
+              endRowIndex: i,
+              startColumnIndex: 0,
+              endColumnIndex: values[0].length,
+            },
+            cell: {
+              userEnteredFormat: { backgroundColor: currentColor },
+            },
+            fields: 'userEnteredFormat.backgroundColor',
           },
-          cell: {
-            userEnteredFormat: { backgroundColor: currentColor },
-          },
-          fields: 'userEnteredFormat.backgroundColor',
-        },
-      });
+        });
+        currentColor = currentColor === color1 ? color2 : color1;
+      }
 
-      currentColor = currentColor === color1 ? color2 : color1;
       groupStartRow = i;
       currentMawb = mawb;
     }
   }
 
-  if (currentMawb !== '') {
+  if (currentMawb) {
     requests.push({
       repeatCell: {
         range: {
@@ -197,7 +208,7 @@ async function applyMawbGroupingFormatting(key, config, sheetsClient, values) {
           startRowIndex: groupStartRow,
           endRowIndex: values.length,
           startColumnIndex: 0,
-          endColumnIndex: values[values.length - 1].length,
+          endColumnIndex: values[0].length,
         },
         cell: {
           userEnteredFormat: { backgroundColor: currentColor },
@@ -212,70 +223,12 @@ async function applyMawbGroupingFormatting(key, config, sheetsClient, values) {
       spreadsheetId: config.spreadsheetId,
       requestBody: { requests },
     });
-    log('log', `[${key}] Applied MAWB grouping formatting (${requests.length} groups)`);
+    log('log', `[${key}] Applied MAWB grouping formatting (${requests.length} MAWB blocks)`);
   }
 }
 
-  async function applyMawbGroupingFormatting(key, config, sheetsClient, values) {
-    const sheetId = await getSheetId(sheetsClient, config.spreadsheetId, config.sheetName);
-    if (sheetId == null || values.length < 2) return;
-    const color1 = { red: 1.0, green: 1.0, blue: 1.0 };
-    const color2 = { red: 0.95, green: 0.95, blue: 0.98 };
-    const requests = [];
-    const mawbColIndex = 3;
-    let currentColor = color1;
-    let groupStartRow = 1;
-    let currentMawb = values[1] && values[1][mawbColIndex] ? values[1][mawbColIndex] : '';
-    for (let i = 1; i < values.length; i++) {
-      const mawb = (values[i] && values[i][mawbColIndex]) ? values[i][mawbColIndex] : '';
-      if (mawb !== currentMawb && mawb !== '') {
-        requests.push({
-          repeatCell: {
-            range: {
-              sheetId,
-              startRowIndex: groupStartRow,
-              endRowIndex: i,
-              startColumnIndex: 0,
-              endColumnIndex: values[i].length,
-            },
-            cell: {
-              userEnteredFormat: { backgroundColor: currentColor },
-            },
-            fields: 'userEnteredFormat.backgroundColor',
-          },
-        });
-        currentColor = currentColor === color1 ? color2 : color1;
-        groupStartRow = i;
-        currentMawb = mawb;
-      }
-    }
-    if (currentMawb !== '') {
-      requests.push({
-        repeatCell: {
-          range: {
-            sheetId,
-            startRowIndex: groupStartRow,
-            endRowIndex: values.length,
-            startColumnIndex: 0,
-            endColumnIndex: values[values.length - 1].length,
-          },
-          cell: {
-            userEnteredFormat: { backgroundColor: currentColor },
-          },
-          fields: 'userEnteredFormat.backgroundColor',
-        },
-      });
-    }
-    if (requests.length > 0) {
-      await sheetsClient.spreadsheets.batchUpdate({
-        spreadsheetId: config.spreadsheetId,
-        requestBody: { requests },
-      });
-      log('log', `[${key}] Applied MAWB grouping formatting (${requests.length} groups)`);
-    }
-  }
-
-async function applySheetFormatting(key, config, sheetsClient, rowCount, colCount) {
+async function applySheetFormatting(key, config, sheetsClient, values, colCount) {
+  const rowCount = values.length;
   const sheetId = await getSheetId(sheetsClient, config.spreadsheetId, config.sheetName);
   if (sheetId == null) {
     log('warn', `[${key}] Could not resolve sheetId for tab ${config.sheetName}; skipping formatting`);
@@ -344,6 +297,7 @@ async function applySheetFormatting(key, config, sheetsClient, rowCount, colCoun
     },
   ];
   if (rowCount > 1) {
+    const sortSpecs = sortSpecsForKey(key, values[0]);
     requests.push({
       sortRange: {
         range: {
@@ -353,7 +307,7 @@ async function applySheetFormatting(key, config, sheetsClient, rowCount, colCoun
           startColumnIndex: 0,
           endColumnIndex: colCount,
         },
-        sortSpecs: sortSpecsForKey(key),
+        sortSpecs,
       },
     });
   }
@@ -386,7 +340,7 @@ async function uploadTable(key, config, sheetsClient) {
     requestBody:       { values },
   });
   const colCount = values.reduce((max, row) => Math.max(max, row.length), 0);
-  await applySheetFormatting(key, config, sheetsClient, values.length, colCount);
+  await applySheetFormatting(key, config, sheetsClient, values, colCount);
   // Apply MAWB grouping for HAWB sheet
   if (key === 'hawb') {
     await applyMawbGroupingFormatting(key, config, sheetsClient, values);

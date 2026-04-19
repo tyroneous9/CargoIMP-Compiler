@@ -66,6 +66,7 @@ CURRENT PIPELINE:
 - EMAILS
 
 TODO:
+actual departure date can be extracted from mvt
 apply further parsing on scheduled arrival/departure info lines
-integrate scheduled+actual departure date
 pipeline:force is deleting cache?
+normalize field naming across pipeline--grammar pasing names, csv header names, etc
