@@ -24,7 +24,7 @@ const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, TABLE_FILES.mawb);
 // ── CSV header ────────────────────────────────────────────────────────────────
 
 const HEADERS = [
-  'email_rcvd', 'flight', 'std', 'sta', 'ata', 'lfd', 'pmc', 'mawb', 'weight', 'TTL PCS', 'pob',
+  'email_rcvd', 'flight', 'std', 'sta', 'ata', 'lfd', 'uld', 'mawb', 'weight', 'TTL PCS', 'pob',
   'PCS RCVD', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
   'P3', 'Trucking/Skid $', 'Storage', 'ISC',
   'Tolead→NCA\nRCF MESSAGE', 'Tolead→NCA\nNFD MESSAGE', 'Tolead→NCA\nDLV MESSAGE',
@@ -321,9 +321,8 @@ function resolveFfm(mawb) {
 
 const rows = [];
 
-// col 0–7 filled, col 8 blank (PCS RCVD), col 9 blank (PMC LOC),
-// col 10 filled, col 11 blank (AMS), cols 12–32 blank (21 empty)
-const TRAILING_EMPTY = HEADERS.length - 12;
+// Fixed columns are emitted through AMS STATUS (15 columns), then remaining columns are blank.
+const TRAILING_EMPTY = HEADERS.length - 15;
 
 const allMawbs = new Set([...fwbIndex.keys()]);
 

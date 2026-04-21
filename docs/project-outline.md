@@ -70,3 +70,9 @@ actual departure date can be extracted from mvt
 apply further parsing on scheduled arrival/departure info lines
 pipeline:force is deleting cache?
 normalize field naming across pipeline--grammar pasing names, csv header names, etc
+
+"load type" in #file:build_cfs_csv_uld.js 
+1. in FFM messages, if a ULD includes ANY MAWB with no associated FWB message, then all MAWB in that ULD are considered "loose" load type. 
+2. it is also true that a ULD includes a FWB message for ALL MAWB, then all MAWB in that ULD are "uld" load type.
+3. because FWB are not sent all at once, a ULD may initially be considered loose due to a missing FWB. However, once all FWB are associated with that ULD (such that the ULD has no missing FWB for each MAWB), then its load type can be changed from "loose" to "uld"
+4. because MAWB can be split across multiple ULD, only the ULD can be considered "loose" or "uld". the MAWB itself is not considered "loose" or "uld".

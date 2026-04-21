@@ -29,8 +29,8 @@ const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, TABLE_FILES.uld);
 // ── CSV header ────────────────────────────────────────────────────────────────
 
 const HEADERS = [
-  'email_rcvd', 'flight', 'std', 'sta', 'ata', 'lfd', 'mawb', 'weight', 'TTL PCS', 'pob',
-  'PCS RCVD', 'pmc', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
+  'email_rcvd', 'flight', 'std', 'sta', 'ata', 'lfd', 'uld', 'mawb', 'weight', 'MAWB_ttl_pcs', 'ULD_ttl_pcs', 'pob',
+  'PCS RCVD', 'load_type', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
   'P3', 'Trucking/Skid $', 'Storage', 'ISC',
   'Tolead→NCA\nRCF MESSAGE', 'Tolead→NCA\nNFD MESSAGE', 'Tolead→NCA\nDLV MESSAGE',
   'Tolead→Customer\nCargo Arrive Email', 'Tolead→Customer\nCargo Ready Email',
@@ -41,7 +41,7 @@ const HEADERS = [
   'Ready for pick-up', 'Cargo delivery', 'POD', 'PTT/DO', 'Note',
 ];
 
-const TRAILING_EMPTY = HEADERS.length - 12;  // cols after Consignee+AMS STATUS
+const TRAILING_EMPTY = HEADERS.length - 17;  // cols after Consignee+AMS STATUS
 
 // ── Date helpers ──────────────────────────────────────────────────────────────
 
@@ -200,6 +200,11 @@ function csvRow(fields) {
   return fields.map(csvEscape).join(',');
 }
 
+function parseNumeric(value) {
+  const numeric = Number(value);
+  return Number.isFinite(numeric) ? numeric : null;
+}
+
 // ── Build indices ─────────────────────────────────────────────────────────────
 
 /**
@@ -216,7 +221,7 @@ const fwbIndex = new Map();
 /** fhlIndex: Map<mawb, { uid, masterPieces, masterWeight, masterWeightUnit, consignee }> */
 const fhlIndex = new Map();
 
-/** mvtIndex: Map<flightNum, { uid, ata }> */
+/** mvtIndex: Map<flightNum, Map<day, { uid, ata }>> */
 const mvtIndex = new Map();
 
 /** emailReceivedIndex: Map<uid, formattedDateTime> */
@@ -367,9 +372,15 @@ for (const filename of filenames) {
     const ata = event.ActualArrivalDateTime || '';
     if (!flightNum || !ata) continue;
 
-    const existing = mvtIndex.get(flightNum);
+    const ataDayMatch = ata.match(/^(\d{2})/);
+    const ataDay = ataDayMatch ? ataDayMatch[1] : '';
+    if (!ataDay) continue;
+
+    if (!mvtIndex.has(flightNum)) mvtIndex.set(flightNum, new Map());
+    const byDay = mvtIndex.get(flightNum);
+    const existing = byDay.get(ataDay);
     if (!existing || uid > existing.uid) {
-      mvtIndex.set(flightNum, { uid, ata });
+      byDay.set(ataDay, { uid, ata });
     }
   }
 }
@@ -391,10 +402,20 @@ function resolveFfm(mawb) {
   return best;
 }
 
-function resolveAta(flightNum, referenceDatePart) {
+function resolveAta(flightNum, referenceDatePart, referenceSta) {
   if (!flightNum) return '';
-  const match = mvtIndex.get(flightNum);
+
+  const byDay = mvtIndex.get(flightNum);
+  if (!byDay) return '';
+
+  const staDayMatch = typeof referenceSta === 'string' && referenceSta.match(/^(\d{2})([A-Z]{3})\d{4}$/);
+  const refDayMatch = typeof referenceDatePart === 'string' && referenceDatePart.match(/^(\d{2})[A-Z]{3}/);
+  const targetDay = (staDayMatch && staDayMatch[1]) || (refDayMatch && refDayMatch[1]) || '';
+  if (!targetDay) return '';
+
+  const match = byDay.get(targetDay);
   if (!match) return '';
+
   return formatUtcDateTime6ToChicago(match.ata, referenceDatePart);
 }
 
@@ -402,9 +423,66 @@ function resolveAta(flightNum, referenceDatePart) {
 
 const rows = [];
 
-const allMawbs = new Set([...fhlIndex.keys(), ...fwbIndex.keys()]);
+// Display only MAWBs that have an associated FWB.
+// load_type is still computed from full ULD membership below.
+const displayMawbs = new Set([...fwbIndex.keys()]);
 
-for (const mawb of [...allMawbs].sort()) {
+// Build ULD-level load type map:
+// - loose: at least one MAWB in that ULD has no FWB
+// - uld: all MAWBs in that ULD have FWB
+const uldMawbs = new Map(); // key: `${flightNum}/${datePart}|${uldKey}` -> Set<mawb>
+
+for (const [mawb, flightMap] of ffmIndex) {
+  for (const [, ffm] of flightMap) {
+    if (!ffm || ffm.ulds.size === 0) continue;
+
+    const flightKey = `${ffm.flightNum || ''}/${(ffm.datePart || '').slice(0, 5)}`;
+    for (const [uldKey] of ffm.ulds) {
+      if (!uldKey) continue;
+      const key = `${flightKey}|${uldKey}`;
+      if (!uldMawbs.has(key)) uldMawbs.set(key, new Set());
+      uldMawbs.get(key).add(mawb);
+    }
+  }
+}
+
+const uldLoadType = new Map(); // key -> 'uld' | 'loose'
+for (const [key, mawbSet] of uldMawbs) {
+  const hasMissingFwb = [...mawbSet].some((mawb) => !fwbIndex.has(mawb));
+  uldLoadType.set(key, hasMissingFwb ? 'loose' : 'uld');
+}
+
+// Sum displayed MAWB TTL PCS by ULD occurrence (flightKey + ULD).
+// Bare ULD IDs can be reused across flights/dates, so totals must be scoped.
+const uldTotalPcsByKey = new Map();
+
+for (const mawb of [...displayMawbs].sort()) {
+  const ffm = resolveFfm(mawb);
+  const fwb = fwbIndex.get(mawb);
+  const fhl = fhlIndex.get(mawb);
+
+  const flightKey = `${ffm?.flightNum || ''}/${(ffm?.datePart || '').slice(0, 5)}`;
+  const fallbackPieces = fwb?.pieces || fhl?.masterPieces || '';
+
+  if (!ffm || ffm.ulds.size === 0) continue;
+
+  const sortedUlds = [...ffm.ulds.entries()]
+    .filter(([key]) => key !== '')
+    .sort(([left], [right]) => left.localeCompare(right));
+
+  for (const [uldKey, uldInfo] of sortedUlds) {
+    const mawbTtlPcs = uldInfo.uldPcs != null
+      ? String(uldInfo.uldPcs)
+      : fallbackPieces;
+    const mawbTtlPcsNumeric = parseNumeric(mawbTtlPcs);
+    if (mawbTtlPcsNumeric == null) continue;
+
+    const key = `${flightKey}|${uldKey}`;
+    uldTotalPcsByKey.set(key, (uldTotalPcsByKey.get(key) || 0) + mawbTtlPcsNumeric);
+  }
+}
+
+for (const mawb of [...displayMawbs].sort()) {
   const ffm = resolveFfm(mawb);
   const fwb = fwbIndex.get(mawb);
   const fhl = fhlIndex.get(mawb);
@@ -412,9 +490,10 @@ for (const mawb of [...allMawbs].sort()) {
   const flight = ffm?.flightNum ?? '';
   const std    = ffm?.std       ?? '';
   const sta    = ffm?.sta       ?? '';
-  const ata    = resolveAta(ffm?.flightNum ?? '', ffm?.datePart ?? '');
+  const ata    = resolveAta(ffm?.flightNum ?? '', ffm?.datePart ?? '', ffm?.sta ?? '');
   const lfd    = ffm?.lfd       ?? '';
   const emailRcvd = ffm?.emailRcvd ?? '';
+  const flightKey = `${ffm?.flightNum || ''}/${(ffm?.datePart || '').slice(0, 5)}`;
 
   // Consignee: FWB preferred, FHL fallback
   const consignee = fwb?.consignee || fhl?.consignee || '';
@@ -439,15 +518,17 @@ for (const mawb of [...allMawbs].sort()) {
       const uldWeight = uldInfo.uldWt != null
         ? `${uldInfo.uldWt}${uldInfo.wtUnit}`
         : fallbackWeight;
-      const uldPcs = uldInfo.uldPcs != null
+      const mawbTtlPcs = uldInfo.uldPcs != null
         ? String(uldInfo.uldPcs)
         : fallbackPieces;
+      const loadType = uldLoadType.get(`${flightKey}|${uldKey}`) || '';
+      const uldTtlPcs = uldTotalPcsByKey.get(`${flightKey}|${uldKey}`);
 
       rows.push([
-        emailRcvd, flight, std, sta, ata, lfd, mawb,
-        uldWeight, uldPcs, pob,
+        emailRcvd, flight, std, sta, ata, lfd, uldKey, mawb,
+        uldWeight, mawbTtlPcs, uldTtlPcs != null ? String(uldTtlPcs) : '', pob,
         '',         // PCS RCVD — human input
-        uldKey, '', // PMC#, PMC LOCATION
+        loadType, '', // load_type, PMC LOCATION
         consignee, '',  // Consignee, AMS STATUS
         ...new Array(TRAILING_EMPTY).fill(''),
       ]);
@@ -455,8 +536,8 @@ for (const mawb of [...allMawbs].sort()) {
   } else {
     // No FFM or no ULD info: single fallback row with blank PMC#
     rows.push([
-      emailRcvd, flight, std, sta, ata, lfd, mawb,
-      fallbackWeight, fallbackPieces, '',
+      emailRcvd, flight, std, sta, ata, lfd, '', mawb,
+      fallbackWeight, fallbackPieces, '', '',
       '',    // PCS RCVD
       '', '', consignee, '',
       ...new Array(TRAILING_EMPTY).fill(''),
@@ -472,6 +553,6 @@ fs.writeFileSync(OUTPUT_CSV, lines.join('\n') + '\n', 'utf8');
 
 console.log(`Written ${rows.length} rows to ${OUTPUT_CSV}`);
 const noFfm   = rows.filter(r => r[1] === '').length;
-const multiUld = rows.length - [...allMawbs].length;
+const multiUld = rows.length - [...displayMawbs].length;
 console.log(`  Rows with no FFM match: ${noFfm}`);
 console.log(`  Extra rows from MAWBs split across multiple ULDs: ${multiUld}`);

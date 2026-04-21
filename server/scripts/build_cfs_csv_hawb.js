@@ -41,7 +41,7 @@ const HEADERS = [
   'Ready for pick-up', 'Cargo delivery', 'POD', 'PTT/DO', 'Note',
 ];
 
-const TRAILING_EMPTY = HEADERS.length - 15;  // cols after Consignee+AMS STATUS
+const TRAILING_EMPTY = HEADERS.length - 16;  // cols after AMS STATUS
 
 // ── Date helpers ──────────────────────────────────────────────────────────────
 
@@ -170,7 +170,7 @@ const ffmIndex  = new Map();
 /** fwbIndex: Map<mawb, { uid, weight, weightUnit, pieces, consignee }> */
 const fwbIndex  = new Map();
 
-/** fhlIndex: Map<mawb, { uid, masterPieces, masterWeight, masterWeightUnit, consignee, houseBills[] }> */
+/** fhlIndex: Map<mawb, Array<{ uid, masterPieces, masterWeight, masterWeightUnit, consignee, houseBills[] }>> */
 const fhlIndex  = new Map();
 
 /** emailReceivedIndex: Map<uid, formattedDateTime> */
@@ -294,13 +294,12 @@ for (const filename of filenames) {
   } else if (doc.messageType === 'fhl') {
     const mawb = fields.MasterAirwayBillNumber;
     if (!mawb) continue;
-    const existing = fhlIndex.get(mawb);
-    if (existing && uid <= existing.uid) continue;
 
     const rawCne   = fields.Consignee?.ConsigneeLine || '';
     const consignee = rawCne.replace(/^CNE\//, '').trim();
 
-    fhlIndex.set(mawb, {
+    if (!fhlIndex.has(mawb)) fhlIndex.set(mawb, []);
+    fhlIndex.get(mawb).push({
       uid,
       masterPieces:     fields.MasterPieceCount  || '',
       masterWeight:     fields.MasterWeight      || '',
@@ -365,7 +364,7 @@ for (const mawb of [...allMawbs].sort()) {
 
   const ffm = resolveFfm(mawb);
   const fwb = fwbIndex.get(mawb);
-  const fhl = fhlIndex.get(mawb);
+  const fhlDocs = (fhlIndex.get(mawb) || []).slice().sort((a, b) => a.uid - b.uid);
 
   const flight     = ffm?.flightNum ?? '';
   const std        = ffm?.std       ?? '';
@@ -375,42 +374,55 @@ for (const mawb of [...allMawbs].sort()) {
   const pob        = ffm?.pob       ?? '';
 
   // Consignee: prefer FWB (most complete), fall back to FHL
-  const consignee  = fwb?.consignee || fhl?.consignee || '';
+  const fallbackConsignee  = fwb?.consignee || fhlDocs[0]?.consignee || '';
 
   // Master-level weight/pieces from FWB (most authoritative), fallback to FHL
   const mawbWeight = fwb
     ? `${fwb.weight}${fwb.weightUnit}`
-    : fhl ? `${fhl.masterWeight}${fhl.masterWeightUnit}` : '';
+    : fhlDocs[0] ? `${fhlDocs[0].masterWeight}${fhlDocs[0].masterWeightUnit}` : '';
 
-  // EMAIL-RCVD: use FHL uid if available (primary HAWB source), else FWB uid
-  const emailRcvd = emailReceivedIndex.get(fhl?.uid) || emailReceivedIndex.get(fwb?.uid) || '';
+  if (fhlDocs.length > 0) {
+    for (const fhl of fhlDocs) {
+      const emailRcvd = emailReceivedIndex.get(fhl.uid) || emailReceivedIndex.get(fwb?.uid) || '';
+      const consignee = fwb?.consignee || fhl.consignee || fallbackConsignee;
 
-  if (fhl && fhl.houseBills.length > 0) {
-    // One row per HAWB
-    for (const hb of fhl.houseBills) {
-      const hawb        = hb.HouseWaybillNumber || '';
-      const houseWeight = hb.HouseWeight
-        ? `${hb.HouseWeight}${hb.HouseWeightUnit || fhl.masterWeightUnit || 'K'}`
-        : mawbWeight;
-      const ttlPcs    = hb.HousePieceCount || '';
-      const houseSlac = hb.HouseSlac || '';
+      if (fhl.houseBills.length > 0) {
+        // One row per house bill in each FHL.
+        for (const hb of fhl.houseBills) {
+          const hawb        = hb.HouseWaybillNumber || '';
+          const houseWeight = hb.HouseWeight
+            ? `${hb.HouseWeight}${hb.HouseWeightUnit || fhl.masterWeightUnit || 'K'}`
+            : mawbWeight;
+          const ttlPcs    = hb.HousePieceCount || '';
+          const houseSlac = hb.HouseSlac || '';
 
-      rows.push([
-        emailRcvd, flight, std, sta, '', lfd, pmcs, mawb, hawb,
-        houseWeight, pob,
-        ttlPcs,      // TTL PCS from FHL HousePieceCount
-        houseSlac,   // SLAC from FHL HouseSlac
-        '', consignee, '',
-        ...new Array(TRAILING_EMPTY).fill(''),
-      ]);
+          rows.push([
+            emailRcvd, flight, std, sta, '', lfd, pmcs, mawb, hawb,
+            houseWeight, pob,
+            ttlPcs,
+            houseSlac,
+            '', consignee, '',
+            ...new Array(TRAILING_EMPTY).fill(''),
+          ]);
+        }
+      } else {
+        rows.push([
+          emailRcvd, flight, std, sta, '', lfd, pmcs, mawb, '',
+          mawbWeight, pob,
+          '',
+          '',
+          '', consignee, '',
+          ...new Array(TRAILING_EMPTY).fill(''),
+        ]);
+      }
     }
   } else {
     // MAWB-only row (no FHL received)
     rows.push([
-      emailRcvd, flight, std, sta, '', lfd, pmcs, mawb, '',
+      emailReceivedIndex.get(fwb?.uid) || '', flight, std, sta, '', lfd, pmcs, mawb, '',
       mawbWeight, pob,
       '',    // PCS RCVD
-      '', consignee, '',
+      '', '', fallbackConsignee, '',
       ...new Array(TRAILING_EMPTY).fill(''),
     ]);
   }

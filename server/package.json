@@ -16,7 +16,7 @@
     "pipeline": "node scripts/run_pipeline.js",
     "pipeline:once": "node scripts/run_pipeline.js --once",
     "pipeline:force": "node scripts/run_pipeline.js --once --force",
-    "pipeline:rebuild": "node scripts/run_pipeline.js --once --REBUILD",
+    "pipeline:rebuild": "node scripts/run_pipeline.js --once --REBUILD --force",
     "poll:imap": "npm run extract:emails && npm run parse:emails && npm run build:mawb && npm run build:uld && npm run upload:sheets"
   },
   "dependencies": {

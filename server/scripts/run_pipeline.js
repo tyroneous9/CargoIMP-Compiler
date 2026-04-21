@@ -45,8 +45,8 @@ const SCRIPTS_DIR = __dirname;
 const POLL_INTERVAL_MS = parseInt(process.env.EMAIL_POLL_INTERVAL_MS, 10) || 600_000;
 const SCRIPT_TIMEOUT_MS = parseInt(process.env.PIPELINE_SCRIPT_TIMEOUT_MS, 10) || 300_000;
 const RUN_ONCE = process.argv.includes('--once');
-const FORCE = process.argv.includes('--force');
 const REBUILD = process.argv.includes('--REBUILD') || process.argv.includes('--rebuild');
+const FORCE = process.argv.includes('--force') || REBUILD;
 const STDERR_SUMMARY_FILE = path.join(DATA_DIR, 'stderr-summary.ndjson');
 
 // ── Logger ────────────────────────────────────────────────────────────────────

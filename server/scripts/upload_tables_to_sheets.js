@@ -48,21 +48,21 @@ const TABLE_MAP = {
     file:          TABLE_FILES.mawb,
     spreadsheetId: '1jzyEDGNmtubDM0Uj1HIKEiy0bkSO2ad4r2Z6N95vpzs',
     sheetName:     'CFS_by_MAWB',
-    clearRange:    'A:AH',   // supports EMAIL-RCVD expansion
+    clearRange:    'A:AZ',
     writeRange:    'A1',
   },
   uld: {
     file:          TABLE_FILES.uld,
     spreadsheetId: '1jzyEDGNmtubDM0Uj1HIKEiy0bkSO2ad4r2Z6N95vpzs',
     sheetName:     'CFS_by_ULD',
-    clearRange:    'A:AH',   // supports EMAIL-RCVD expansion
+    clearRange:    'A:AZ',
     writeRange:    'A1',
   },
   hawb: {
     file:          TABLE_FILES.hawb,
     spreadsheetId: '1jzyEDGNmtubDM0Uj1HIKEiy0bkSO2ad4r2Z6N95vpzs',
     sheetName:     'CFS_by_HAWB',
-    clearRange:    'A:AH',   // keep clear range aligned across tabs
+    clearRange:    'A:AZ',
     writeRange:    'A1',
   },
 };
@@ -145,7 +145,7 @@ function findColumnIndex(headerRow, columnNameOrAliases) {
 function sortSpecsForKey(key, headerRow) {
   const sortColumnsByKey = {
     mawb: [['flight', 'FLIGHT#'], ['mawb', 'MAWB#']],
-    uld: [['mawb', 'MAWB#'], ['pmc', 'PMC#'], ['flight', 'FLIGHT#']],
+    uld: [['uld', 'pmc', 'PMC#'], ['flight', 'FLIGHT#'], ['mawb', 'MAWB#']],
     hawb: [['mawb', 'MAWB#'], ['hawb', 'HAWB#'], ['pmc', 'PMC#'], ['flight', 'FLIGHT#']],
   };
 
@@ -155,13 +155,20 @@ function sortSpecsForKey(key, headerRow) {
     .map((dimensionIndex) => ({ dimensionIndex, sortOrder: 'ASCENDING' }));
 }
 
-async function applyMawbGroupingFormatting(key, config, sheetsClient, values) {
+async function applyGroupingFormatting(key, config, sheetsClient, values) {
   const sheetId = await getSheetId(sheetsClient, config.spreadsheetId, config.sheetName);
   if (sheetId == null || values.length < 2) return;
 
-  const mawbColIndex = findColumnIndex(values[0], ['mawb', 'MAWB#']);
-  if (mawbColIndex < 0) {
-    log('warn', `[${key}] Could not find MAWB column; skipping grouping formatting`);
+  const groupingColumnByKey = {
+    hawb: { aliases: ['mawb', 'MAWB#'], label: 'MAWB' },
+    uld: { aliases: ['uld', 'pmc', 'PMC#'], label: 'ULD' },
+  };
+  const grouping = groupingColumnByKey[key];
+  if (!grouping) return;
+
+  const groupColIndex = findColumnIndex(values[0], grouping.aliases);
+  if (groupColIndex < 0) {
+    log('warn', `[${key}] Could not find ${grouping.label} column; skipping grouping formatting`);
     return;
   }
 
@@ -171,12 +178,12 @@ async function applyMawbGroupingFormatting(key, config, sheetsClient, values) {
 
   let currentColor = color1;
   let groupStartRow = 1;
-  let currentMawb = String(values[1]?.[mawbColIndex] || '').trim();
+  let currentGroupValue = String(values[1]?.[groupColIndex] || '').trim();
 
   for (let i = 1; i < values.length; i++) {
-    const mawb = String(values[i]?.[mawbColIndex] || '').trim();
-    if (mawb !== currentMawb) {
-      if (currentMawb) {
+    const groupValue = String(values[i]?.[groupColIndex] || '').trim();
+    if (groupValue !== currentGroupValue) {
+      if (currentGroupValue) {
         requests.push({
           repeatCell: {
             range: {
@@ -196,11 +203,11 @@ async function applyMawbGroupingFormatting(key, config, sheetsClient, values) {
       }
 
       groupStartRow = i;
-      currentMawb = mawb;
+      currentGroupValue = groupValue;
     }
   }
 
-  if (currentMawb) {
+  if (currentGroupValue) {
     requests.push({
       repeatCell: {
         range: {
@@ -223,7 +230,7 @@ async function applyMawbGroupingFormatting(key, config, sheetsClient, values) {
       spreadsheetId: config.spreadsheetId,
       requestBody: { requests },
     });
-    log('log', `[${key}] Applied MAWB grouping formatting (${requests.length} MAWB blocks)`);
+    log('log', `[${key}] Applied ${grouping.label} grouping formatting (${requests.length} ${grouping.label} blocks)`);
   }
 }
 
@@ -341,9 +348,9 @@ async function uploadTable(key, config, sheetsClient) {
   });
   const colCount = values.reduce((max, row) => Math.max(max, row.length), 0);
   await applySheetFormatting(key, config, sheetsClient, values, colCount);
-  // Apply MAWB grouping for HAWB sheet
-  if (key === 'hawb') {
-    await applyMawbGroupingFormatting(key, config, sheetsClient, values);
+  // Apply alternating row groups for sheets that use a primary grouping column.
+  if (key === 'hawb' || key === 'uld') {
+    await applyGroupingFormatting(key, config, sheetsClient, values);
   }
 
   log('log', `[${key}] Done — ${values.length - 1} data rows uploaded.`);

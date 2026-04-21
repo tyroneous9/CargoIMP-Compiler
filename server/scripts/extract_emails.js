@@ -23,12 +23,15 @@ function requireEnv(key) {
   return value.trim();
 }
 
-function optionalPositiveIntEnv(key) {
+function requirePositiveIntOrUnlimitedEnv(key) {
   const raw = process.env[key];
-  if (!raw || raw.trim() === '') return null;
+  if (!raw || raw.trim() === '') {
+    throw new Error(`Missing required env var: ${key}`);
+  }
   const value = Number(raw);
+  if (value === -1) return -1; // sentinel: unlimited
   if (!Number.isInteger(value) || value <= 0) {
-    throw new Error(`Invalid ${key}: expected a positive integer`);
+    throw new Error(`Invalid ${key}: expected a positive integer or -1 for unlimited`);
   }
   return value;
 }
@@ -94,7 +97,7 @@ async function main() {
   const pass = requireEnv('ALIMAIL_NCA_PASS');
   const port = Number(requireEnv('ALIMAIL_NCA_PORT'));
   const mailbox = requireEnv('ALIMAIL_NCA_MAILBOX');
-  const extractLimit = optionalPositiveIntEnv('EXTRACT_EMAIL_LIMIT');
+  const extractLimit = requirePositiveIntOrUnlimitedEnv('EXTRACT_EMAIL_LIMIT');
 
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
@@ -117,7 +120,7 @@ async function main() {
       let extractedCount = 0;
       for (const uid of uids) {
         // Only extract up to the configured limit per run, or unlimited if not set or set to -1.
-        if (extractLimit != null && extractLimit !== -1 && extractedCount >= extractLimit) {
+        if (extractLimit !== -1 && extractedCount >= extractLimit) {
           log('log', `reached EXTRACT_EMAIL_LIMIT=${extractLimit}; stopping this run`);
           break;
         }
