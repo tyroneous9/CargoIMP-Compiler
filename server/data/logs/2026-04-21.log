@@ -12433,3 +12433,27 @@
 2026-04-21T23:21:16.199Z [LOG] [parse_extracted_emails.js] done
 2026-04-21T23:21:16.199Z [LOG] [pipeline #19] new emails parsed: 0
 2026-04-21T23:21:16.199Z [LOG] [pipeline #19] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T23:26:11.937Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T23:26:11.937Z [LOG] [pipeline #20] 2026-04-21T23:26:11.937Z
+2026-04-21T23:26:11.937Z [LOG] [extract_emails.js] starting…
+2026-04-21T23:26:16.193Z [LOG] extracted 0 email(s) this run
+2026-04-21T23:26:16.490Z [LOG] extraction finished
+2026-04-21T23:26:16.496Z [LOG] [extract_emails.js] done
+2026-04-21T23:26:16.496Z [LOG] [pipeline #20] new emails extracted: 0
+2026-04-21T23:26:16.496Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T23:26:16.537Z [LOG] parse summary: total=1961, parsed=0, alreadyParsed=1701, missingFields=260, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T23:26:16.541Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T23:26:16.541Z [LOG] [pipeline #20] new emails parsed: 0
+2026-04-21T23:26:16.541Z [LOG] [pipeline #20] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T23:31:11.939Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T23:31:11.939Z [LOG] [pipeline #21] 2026-04-21T23:31:11.939Z
+2026-04-21T23:31:11.939Z [LOG] [extract_emails.js] starting…
+2026-04-21T23:31:15.954Z [LOG] extracted 0 email(s) this run
+2026-04-21T23:31:16.251Z [LOG] extraction finished
+2026-04-21T23:31:16.258Z [LOG] [extract_emails.js] done
+2026-04-21T23:31:16.258Z [LOG] [pipeline #21] new emails extracted: 0
+2026-04-21T23:31:16.258Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T23:31:16.302Z [LOG] parse summary: total=1961, parsed=0, alreadyParsed=1701, missingFields=260, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T23:31:16.306Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T23:31:16.306Z [LOG] [pipeline #21] new emails parsed: 0
+2026-04-21T23:31:16.306Z [LOG] [pipeline #21] no new data — skipping CSV rebuild and Sheets upload
