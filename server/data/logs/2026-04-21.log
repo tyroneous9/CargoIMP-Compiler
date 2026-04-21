@@ -10640,3 +10640,1796 @@
 2026-04-21T05:06:15.665Z [LOG] [parse_extracted_emails.js] done
 2026-04-21T05:06:15.665Z [LOG] [pipeline #10] new emails parsed: 0
 2026-04-21T05:06:15.665Z [LOG] [pipeline #10] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T05:11:11.234Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T05:11:11.235Z [LOG] [pipeline #11] 2026-04-21T05:11:11.235Z
+2026-04-21T05:11:11.235Z [LOG] [extract_emails.js] starting…
+2026-04-21T05:11:14.737Z [LOG] extracted 0 email(s) this run
+2026-04-21T05:11:15.034Z [LOG] extraction finished
+2026-04-21T05:11:15.042Z [LOG] [extract_emails.js] done
+2026-04-21T05:11:15.042Z [LOG] [pipeline #11] new emails extracted: 0
+2026-04-21T05:11:15.042Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T05:11:15.084Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T05:11:15.089Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T05:11:15.089Z [LOG] [pipeline #11] new emails parsed: 0
+2026-04-21T05:11:15.089Z [LOG] [pipeline #11] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T05:16:11.237Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T05:16:11.238Z [LOG] [pipeline #12] 2026-04-21T05:16:11.238Z
+2026-04-21T05:16:11.238Z [LOG] [extract_emails.js] starting…
+2026-04-21T05:16:14.899Z [LOG] extracted 0 email(s) this run
+2026-04-21T05:16:15.169Z [LOG] extraction finished
+2026-04-21T05:16:15.177Z [LOG] [extract_emails.js] done
+2026-04-21T05:16:15.177Z [LOG] [pipeline #12] new emails extracted: 0
+2026-04-21T05:16:15.177Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T05:16:15.218Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T05:16:15.222Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T05:16:15.222Z [LOG] [pipeline #12] new emails parsed: 0
+2026-04-21T05:16:15.222Z [LOG] [pipeline #12] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T07:59:09.900Z [LOG] Pipeline polling every 300s. Press Ctrl+C to stop.
+2026-04-21T07:59:09.902Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T07:59:09.902Z [LOG] [pipeline #1] 2026-04-21T07:59:09.902Z
+2026-04-21T07:59:09.902Z [LOG] [extract_emails.js] starting…
+2026-04-21T07:59:13.756Z [LOG] extracted 0 email(s) this run
+2026-04-21T07:59:14.121Z [LOG] extraction finished
+2026-04-21T07:59:14.131Z [LOG] [extract_emails.js] done
+2026-04-21T07:59:14.132Z [LOG] [pipeline #1] new emails extracted: 0
+2026-04-21T07:59:14.132Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T07:59:14.196Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T07:59:14.203Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T07:59:14.203Z [LOG] [pipeline #1] new emails parsed: 0
+2026-04-21T07:59:14.203Z [LOG] [pipeline #1] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T08:04:14.222Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T08:04:14.222Z [LOG] [pipeline #2] 2026-04-21T08:04:14.222Z
+2026-04-21T08:04:14.222Z [LOG] [extract_emails.js] starting…
+2026-04-21T08:04:18.355Z [LOG] extracted 0 email(s) this run
+2026-04-21T08:04:18.721Z [LOG] extraction finished
+2026-04-21T08:04:18.730Z [LOG] [extract_emails.js] done
+2026-04-21T08:04:18.731Z [LOG] [pipeline #2] new emails extracted: 0
+2026-04-21T08:04:18.731Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T08:04:18.801Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T08:04:18.808Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T08:04:18.808Z [LOG] [pipeline #2] new emails parsed: 0
+2026-04-21T08:04:18.808Z [LOG] [pipeline #2] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T08:09:14.226Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T08:09:14.226Z [LOG] [pipeline #3] 2026-04-21T08:09:14.226Z
+2026-04-21T08:09:14.226Z [LOG] [extract_emails.js] starting…
+2026-04-21T08:09:18.238Z [LOG] extracted 0 email(s) this run
+2026-04-21T08:09:18.533Z [LOG] extraction finished
+2026-04-21T08:09:18.542Z [LOG] [extract_emails.js] done
+2026-04-21T08:09:18.542Z [LOG] [pipeline #3] new emails extracted: 0
+2026-04-21T08:09:18.542Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T08:09:18.606Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T08:09:18.611Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T08:09:18.611Z [LOG] [pipeline #3] new emails parsed: 0
+2026-04-21T08:09:18.611Z [LOG] [pipeline #3] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T08:14:14.230Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T08:14:14.230Z [LOG] [pipeline #4] 2026-04-21T08:14:14.230Z
+2026-04-21T08:14:14.230Z [LOG] [extract_emails.js] starting…
+2026-04-21T08:14:18.464Z [LOG] extracted 0 email(s) this run
+2026-04-21T08:14:18.749Z [LOG] extraction finished
+2026-04-21T08:14:18.758Z [LOG] [extract_emails.js] done
+2026-04-21T08:14:18.758Z [LOG] [pipeline #4] new emails extracted: 0
+2026-04-21T08:14:18.758Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T08:14:18.833Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T08:14:18.838Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T08:14:18.838Z [LOG] [pipeline #4] new emails parsed: 0
+2026-04-21T08:14:18.838Z [LOG] [pipeline #4] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T08:19:14.233Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T08:19:14.233Z [LOG] [pipeline #5] 2026-04-21T08:19:14.233Z
+2026-04-21T08:19:14.233Z [LOG] [extract_emails.js] starting…
+2026-04-21T08:19:18.485Z [LOG] extracted 0 email(s) this run
+2026-04-21T08:19:18.783Z [LOG] extraction finished
+2026-04-21T08:19:18.792Z [LOG] [extract_emails.js] done
+2026-04-21T08:19:18.792Z [LOG] [pipeline #5] new emails extracted: 0
+2026-04-21T08:19:18.792Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T08:19:18.859Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T08:19:18.866Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T08:19:18.866Z [LOG] [pipeline #5] new emails parsed: 0
+2026-04-21T08:19:18.866Z [LOG] [pipeline #5] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T08:24:14.237Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T08:24:14.237Z [LOG] [pipeline #6] 2026-04-21T08:24:14.237Z
+2026-04-21T08:24:14.237Z [LOG] [extract_emails.js] starting…
+2026-04-21T08:24:18.510Z [LOG] extracted 0 email(s) this run
+2026-04-21T08:24:18.805Z [LOG] extraction finished
+2026-04-21T08:24:18.815Z [LOG] [extract_emails.js] done
+2026-04-21T08:24:18.815Z [LOG] [pipeline #6] new emails extracted: 0
+2026-04-21T08:24:18.815Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T08:24:18.883Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T08:24:18.889Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T08:24:18.889Z [LOG] [pipeline #6] new emails parsed: 0
+2026-04-21T08:24:18.889Z [LOG] [pipeline #6] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T08:29:14.238Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T08:29:14.238Z [LOG] [pipeline #7] 2026-04-21T08:29:14.238Z
+2026-04-21T08:29:14.238Z [LOG] [extract_emails.js] starting…
+2026-04-21T08:29:18.232Z [LOG] extracted 0 email(s) this run
+2026-04-21T08:29:18.527Z [LOG] extraction finished
+2026-04-21T08:29:18.536Z [LOG] [extract_emails.js] done
+2026-04-21T08:29:18.536Z [LOG] [pipeline #7] new emails extracted: 0
+2026-04-21T08:29:18.536Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T08:29:18.606Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T08:29:18.611Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T08:29:18.611Z [LOG] [pipeline #7] new emails parsed: 0
+2026-04-21T08:29:18.611Z [LOG] [pipeline #7] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T08:34:14.241Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T08:34:14.241Z [LOG] [pipeline #8] 2026-04-21T08:34:14.241Z
+2026-04-21T08:34:14.241Z [LOG] [extract_emails.js] starting…
+2026-04-21T08:34:18.264Z [LOG] extracted 0 email(s) this run
+2026-04-21T08:34:18.557Z [LOG] extraction finished
+2026-04-21T08:34:18.566Z [LOG] [extract_emails.js] done
+2026-04-21T08:34:18.566Z [LOG] [pipeline #8] new emails extracted: 0
+2026-04-21T08:34:18.566Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T08:34:18.638Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T08:34:18.645Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T08:34:18.645Z [LOG] [pipeline #8] new emails parsed: 0
+2026-04-21T08:34:18.645Z [LOG] [pipeline #8] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T08:39:14.244Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T08:39:14.245Z [LOG] [pipeline #9] 2026-04-21T08:39:14.245Z
+2026-04-21T08:39:14.245Z [LOG] [extract_emails.js] starting…
+2026-04-21T08:39:18.319Z [LOG] extracted 0 email(s) this run
+2026-04-21T08:39:18.591Z [LOG] extraction finished
+2026-04-21T08:39:18.600Z [LOG] [extract_emails.js] done
+2026-04-21T08:39:18.600Z [LOG] [pipeline #9] new emails extracted: 0
+2026-04-21T08:39:18.600Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T08:39:18.666Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T08:39:18.671Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T08:39:18.671Z [LOG] [pipeline #9] new emails parsed: 0
+2026-04-21T08:39:18.671Z [LOG] [pipeline #9] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T08:44:14.248Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T08:44:14.248Z [LOG] [pipeline #10] 2026-04-21T08:44:14.248Z
+2026-04-21T08:44:14.248Z [LOG] [extract_emails.js] starting…
+2026-04-21T08:44:18.122Z [LOG] extracted 0 email(s) this run
+2026-04-21T08:44:18.418Z [LOG] extraction finished
+2026-04-21T08:44:18.427Z [LOG] [extract_emails.js] done
+2026-04-21T08:44:18.427Z [LOG] [pipeline #10] new emails extracted: 0
+2026-04-21T08:44:18.427Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T08:44:18.495Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T08:44:18.502Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T08:44:18.502Z [LOG] [pipeline #10] new emails parsed: 0
+2026-04-21T08:44:18.502Z [LOG] [pipeline #10] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T08:49:14.250Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T08:49:14.251Z [LOG] [pipeline #11] 2026-04-21T08:49:14.251Z
+2026-04-21T08:49:14.251Z [LOG] [extract_emails.js] starting…
+2026-04-21T08:49:18.254Z [LOG] extracted 0 email(s) this run
+2026-04-21T08:49:18.550Z [LOG] extraction finished
+2026-04-21T08:49:18.558Z [LOG] [extract_emails.js] done
+2026-04-21T08:49:18.558Z [LOG] [pipeline #11] new emails extracted: 0
+2026-04-21T08:49:18.558Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T08:49:18.627Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T08:49:18.633Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T08:49:18.633Z [LOG] [pipeline #11] new emails parsed: 0
+2026-04-21T08:49:18.633Z [LOG] [pipeline #11] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T08:54:14.255Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T08:54:14.255Z [LOG] [pipeline #12] 2026-04-21T08:54:14.255Z
+2026-04-21T08:54:14.255Z [LOG] [extract_emails.js] starting…
+2026-04-21T08:54:18.286Z [LOG] extracted 0 email(s) this run
+2026-04-21T08:54:18.581Z [LOG] extraction finished
+2026-04-21T08:54:18.590Z [LOG] [extract_emails.js] done
+2026-04-21T08:54:18.590Z [LOG] [pipeline #12] new emails extracted: 0
+2026-04-21T08:54:18.590Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T08:54:18.659Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T08:54:18.666Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T08:54:18.666Z [LOG] [pipeline #12] new emails parsed: 0
+2026-04-21T08:54:18.666Z [LOG] [pipeline #12] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T08:59:14.259Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T08:59:14.259Z [LOG] [pipeline #13] 2026-04-21T08:59:14.259Z
+2026-04-21T08:59:14.259Z [LOG] [extract_emails.js] starting…
+2026-04-21T08:59:18.522Z [LOG] extracted 0 email(s) this run
+2026-04-21T08:59:18.780Z [LOG] extraction finished
+2026-04-21T08:59:18.789Z [LOG] [extract_emails.js] done
+2026-04-21T08:59:18.789Z [LOG] [pipeline #13] new emails extracted: 0
+2026-04-21T08:59:18.789Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T08:59:18.856Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T08:59:18.864Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T08:59:18.864Z [LOG] [pipeline #13] new emails parsed: 0
+2026-04-21T08:59:18.864Z [LOG] [pipeline #13] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T09:04:14.263Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T09:04:14.263Z [LOG] [pipeline #14] 2026-04-21T09:04:14.263Z
+2026-04-21T09:04:14.263Z [LOG] [extract_emails.js] starting…
+2026-04-21T09:04:18.148Z [LOG] extracted 0 email(s) this run
+2026-04-21T09:04:18.441Z [LOG] extraction finished
+2026-04-21T09:04:18.451Z [LOG] [extract_emails.js] done
+2026-04-21T09:04:18.451Z [LOG] [pipeline #14] new emails extracted: 0
+2026-04-21T09:04:18.451Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T09:04:18.515Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T09:04:18.523Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T09:04:18.523Z [LOG] [pipeline #14] new emails parsed: 0
+2026-04-21T09:04:18.523Z [LOG] [pipeline #14] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T09:09:14.266Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T09:09:14.266Z [LOG] [pipeline #15] 2026-04-21T09:09:14.266Z
+2026-04-21T09:09:14.266Z [LOG] [extract_emails.js] starting…
+2026-04-21T09:09:18.688Z [LOG] extracted 0 email(s) this run
+2026-04-21T09:09:18.983Z [LOG] extraction finished
+2026-04-21T09:09:18.992Z [LOG] [extract_emails.js] done
+2026-04-21T09:09:18.992Z [LOG] [pipeline #15] new emails extracted: 0
+2026-04-21T09:09:18.992Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T09:09:19.056Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T09:09:19.063Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T09:09:19.063Z [LOG] [pipeline #15] new emails parsed: 0
+2026-04-21T09:09:19.063Z [LOG] [pipeline #15] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T09:14:14.269Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T09:14:14.269Z [LOG] [pipeline #16] 2026-04-21T09:14:14.269Z
+2026-04-21T09:14:14.269Z [LOG] [extract_emails.js] starting…
+2026-04-21T09:14:18.418Z [LOG] extracted 0 email(s) this run
+2026-04-21T09:14:18.710Z [LOG] extraction finished
+2026-04-21T09:14:18.719Z [LOG] [extract_emails.js] done
+2026-04-21T09:14:18.719Z [LOG] [pipeline #16] new emails extracted: 0
+2026-04-21T09:14:18.719Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T09:14:18.783Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T09:14:18.793Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T09:14:18.793Z [LOG] [pipeline #16] new emails parsed: 0
+2026-04-21T09:14:18.793Z [LOG] [pipeline #16] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T09:19:14.272Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T09:19:14.272Z [LOG] [pipeline #17] 2026-04-21T09:19:14.272Z
+2026-04-21T09:19:14.272Z [LOG] [extract_emails.js] starting…
+2026-04-21T09:19:18.167Z [LOG] extracted 0 email(s) this run
+2026-04-21T09:19:18.460Z [LOG] extraction finished
+2026-04-21T09:19:18.469Z [LOG] [extract_emails.js] done
+2026-04-21T09:19:18.469Z [LOG] [pipeline #17] new emails extracted: 0
+2026-04-21T09:19:18.469Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T09:19:18.535Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T09:19:18.541Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T09:19:18.541Z [LOG] [pipeline #17] new emails parsed: 0
+2026-04-21T09:19:18.541Z [LOG] [pipeline #17] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T09:24:14.274Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T09:24:14.274Z [LOG] [pipeline #18] 2026-04-21T09:24:14.274Z
+2026-04-21T09:24:14.280Z [LOG] [extract_emails.js] starting…
+2026-04-21T09:24:18.416Z [LOG] extracted 0 email(s) this run
+2026-04-21T09:24:18.711Z [LOG] extraction finished
+2026-04-21T09:24:18.720Z [LOG] [extract_emails.js] done
+2026-04-21T09:24:18.720Z [LOG] [pipeline #18] new emails extracted: 0
+2026-04-21T09:24:18.720Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T09:24:18.795Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T09:24:18.803Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T09:24:18.803Z [LOG] [pipeline #18] new emails parsed: 0
+2026-04-21T09:24:18.803Z [LOG] [pipeline #18] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T09:29:14.278Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T09:29:14.278Z [LOG] [pipeline #19] 2026-04-21T09:29:14.278Z
+2026-04-21T09:29:14.278Z [LOG] [extract_emails.js] starting…
+2026-04-21T09:29:18.152Z [LOG] extracted 0 email(s) this run
+2026-04-21T09:29:18.448Z [LOG] extraction finished
+2026-04-21T09:29:18.457Z [LOG] [extract_emails.js] done
+2026-04-21T09:29:18.457Z [LOG] [pipeline #19] new emails extracted: 0
+2026-04-21T09:29:18.457Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T09:29:18.522Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T09:29:18.529Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T09:29:18.529Z [LOG] [pipeline #19] new emails parsed: 0
+2026-04-21T09:29:18.529Z [LOG] [pipeline #19] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T09:34:14.279Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T09:34:14.279Z [LOG] [pipeline #20] 2026-04-21T09:34:14.279Z
+2026-04-21T09:34:14.279Z [LOG] [extract_emails.js] starting…
+2026-04-21T09:34:18.703Z [LOG] extracted 0 email(s) this run
+2026-04-21T09:34:18.998Z [LOG] extraction finished
+2026-04-21T09:34:19.007Z [LOG] [extract_emails.js] done
+2026-04-21T09:34:19.007Z [LOG] [pipeline #20] new emails extracted: 0
+2026-04-21T09:34:19.007Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T09:34:19.082Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T09:34:19.088Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T09:34:19.088Z [LOG] [pipeline #20] new emails parsed: 0
+2026-04-21T09:34:19.088Z [LOG] [pipeline #20] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T09:39:14.281Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T09:39:14.282Z [LOG] [pipeline #21] 2026-04-21T09:39:14.282Z
+2026-04-21T09:39:14.282Z [LOG] [extract_emails.js] starting…
+2026-04-21T09:39:18.433Z [LOG] extracted 0 email(s) this run
+2026-04-21T09:39:18.729Z [LOG] extraction finished
+2026-04-21T09:39:18.738Z [LOG] [extract_emails.js] done
+2026-04-21T09:39:18.738Z [LOG] [pipeline #21] new emails extracted: 0
+2026-04-21T09:39:18.738Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T09:39:18.806Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T09:39:18.812Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T09:39:18.812Z [LOG] [pipeline #21] new emails parsed: 0
+2026-04-21T09:39:18.812Z [LOG] [pipeline #21] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T09:44:14.284Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T09:44:14.285Z [LOG] [pipeline #22] 2026-04-21T09:44:14.285Z
+2026-04-21T09:44:14.285Z [LOG] [extract_emails.js] starting…
+2026-04-21T09:44:18.266Z [LOG] extracted 0 email(s) this run
+2026-04-21T09:44:18.561Z [LOG] extraction finished
+2026-04-21T09:44:18.570Z [LOG] [extract_emails.js] done
+2026-04-21T09:44:18.570Z [LOG] [pipeline #22] new emails extracted: 0
+2026-04-21T09:44:18.570Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T09:44:18.642Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T09:44:18.648Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T09:44:18.648Z [LOG] [pipeline #22] new emails parsed: 0
+2026-04-21T09:44:18.648Z [LOG] [pipeline #22] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T09:49:14.289Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T09:49:14.289Z [LOG] [pipeline #23] 2026-04-21T09:49:14.289Z
+2026-04-21T09:49:14.289Z [LOG] [extract_emails.js] starting…
+2026-04-21T09:49:18.198Z [LOG] extracted 0 email(s) this run
+2026-04-21T09:49:18.494Z [LOG] extraction finished
+2026-04-21T09:49:18.503Z [LOG] [extract_emails.js] done
+2026-04-21T09:49:18.503Z [LOG] [pipeline #23] new emails extracted: 0
+2026-04-21T09:49:18.503Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T09:49:18.569Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T09:49:18.575Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T09:49:18.575Z [LOG] [pipeline #23] new emails parsed: 0
+2026-04-21T09:49:18.575Z [LOG] [pipeline #23] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T09:54:14.292Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T09:54:14.292Z [LOG] [pipeline #24] 2026-04-21T09:54:14.292Z
+2026-04-21T09:54:14.292Z [LOG] [extract_emails.js] starting…
+2026-04-21T09:54:18.458Z [LOG] extracted 0 email(s) this run
+2026-04-21T09:54:18.730Z [LOG] extraction finished
+2026-04-21T09:54:18.739Z [LOG] [extract_emails.js] done
+2026-04-21T09:54:18.739Z [LOG] [pipeline #24] new emails extracted: 0
+2026-04-21T09:54:18.739Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T09:54:18.808Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T09:54:18.814Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T09:54:18.814Z [LOG] [pipeline #24] new emails parsed: 0
+2026-04-21T09:54:18.814Z [LOG] [pipeline #24] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T09:59:14.296Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T09:59:14.296Z [LOG] [pipeline #25] 2026-04-21T09:59:14.296Z
+2026-04-21T09:59:14.296Z [LOG] [extract_emails.js] starting…
+2026-04-21T09:59:18.181Z [LOG] extracted 0 email(s) this run
+2026-04-21T09:59:18.456Z [LOG] extraction finished
+2026-04-21T09:59:18.466Z [LOG] [extract_emails.js] done
+2026-04-21T09:59:18.466Z [LOG] [pipeline #25] new emails extracted: 0
+2026-04-21T09:59:18.466Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T09:59:18.542Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T09:59:18.549Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T09:59:18.549Z [LOG] [pipeline #25] new emails parsed: 0
+2026-04-21T09:59:18.549Z [LOG] [pipeline #25] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T10:04:14.299Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T10:04:14.299Z [LOG] [pipeline #26] 2026-04-21T10:04:14.299Z
+2026-04-21T10:04:14.305Z [LOG] [extract_emails.js] starting…
+2026-04-21T10:04:18.528Z [LOG] extracted 0 email(s) this run
+2026-04-21T10:04:18.790Z [LOG] extraction finished
+2026-04-21T10:04:18.799Z [LOG] [extract_emails.js] done
+2026-04-21T10:04:18.799Z [LOG] [pipeline #26] new emails extracted: 0
+2026-04-21T10:04:18.799Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T10:04:18.870Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T10:04:18.875Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T10:04:18.875Z [LOG] [pipeline #26] new emails parsed: 0
+2026-04-21T10:04:18.876Z [LOG] [pipeline #26] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T10:09:14.303Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T10:09:14.303Z [LOG] [pipeline #27] 2026-04-21T10:09:14.303Z
+2026-04-21T10:09:14.303Z [LOG] [extract_emails.js] starting…
+2026-04-21T10:09:18.729Z [LOG] extracted 0 email(s) this run
+2026-04-21T10:09:19.031Z [LOG] extraction finished
+2026-04-21T10:09:19.040Z [LOG] [extract_emails.js] done
+2026-04-21T10:09:19.040Z [LOG] [pipeline #27] new emails extracted: 0
+2026-04-21T10:09:19.040Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T10:09:19.115Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T10:09:19.122Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T10:09:19.122Z [LOG] [pipeline #27] new emails parsed: 0
+2026-04-21T10:09:19.122Z [LOG] [pipeline #27] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T10:14:14.304Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T10:14:14.304Z [LOG] [pipeline #28] 2026-04-21T10:14:14.304Z
+2026-04-21T10:14:14.304Z [LOG] [extract_emails.js] starting…
+2026-04-21T10:14:18.327Z [LOG] extracted 0 email(s) this run
+2026-04-21T10:14:18.640Z [LOG] extraction finished
+2026-04-21T10:14:18.649Z [LOG] [extract_emails.js] done
+2026-04-21T10:14:18.649Z [LOG] [pipeline #28] new emails extracted: 0
+2026-04-21T10:14:18.649Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T10:14:18.712Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T10:14:18.717Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T10:14:18.717Z [LOG] [pipeline #28] new emails parsed: 0
+2026-04-21T10:14:18.717Z [LOG] [pipeline #28] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T10:19:14.306Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T10:19:14.306Z [LOG] [pipeline #29] 2026-04-21T10:19:14.306Z
+2026-04-21T10:19:14.306Z [LOG] [extract_emails.js] starting…
+2026-04-21T10:19:18.598Z [LOG] extracted 0 email(s) this run
+2026-04-21T10:19:18.891Z [LOG] extraction finished
+2026-04-21T10:19:18.900Z [LOG] [extract_emails.js] done
+2026-04-21T10:19:18.900Z [LOG] [pipeline #29] new emails extracted: 0
+2026-04-21T10:19:18.900Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T10:19:18.964Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T10:19:18.971Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T10:19:18.971Z [LOG] [pipeline #29] new emails parsed: 0
+2026-04-21T10:19:18.971Z [LOG] [pipeline #29] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T10:24:14.308Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T10:24:14.308Z [LOG] [pipeline #30] 2026-04-21T10:24:14.308Z
+2026-04-21T10:24:14.308Z [LOG] [extract_emails.js] starting…
+2026-04-21T10:24:18.331Z [LOG] extracted 0 email(s) this run
+2026-04-21T10:24:18.622Z [LOG] extraction finished
+2026-04-21T10:24:18.631Z [LOG] [extract_emails.js] done
+2026-04-21T10:24:18.631Z [LOG] [pipeline #30] new emails extracted: 0
+2026-04-21T10:24:18.631Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T10:24:18.696Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T10:24:18.703Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T10:24:18.703Z [LOG] [pipeline #30] new emails parsed: 0
+2026-04-21T10:24:18.703Z [LOG] [pipeline #30] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T10:29:14.311Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T10:29:14.311Z [LOG] [pipeline #31] 2026-04-21T10:29:14.311Z
+2026-04-21T10:29:14.311Z [LOG] [extract_emails.js] starting…
+2026-04-21T10:29:18.488Z [LOG] extracted 0 email(s) this run
+2026-04-21T10:29:18.763Z [LOG] extraction finished
+2026-04-21T10:29:18.773Z [LOG] [extract_emails.js] done
+2026-04-21T10:29:18.773Z [LOG] [pipeline #31] new emails extracted: 0
+2026-04-21T10:29:18.773Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T10:29:18.835Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T10:29:18.841Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T10:29:18.842Z [LOG] [pipeline #31] new emails parsed: 0
+2026-04-21T10:29:18.842Z [LOG] [pipeline #31] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T10:34:14.313Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T10:34:14.314Z [LOG] [pipeline #32] 2026-04-21T10:34:14.314Z
+2026-04-21T10:34:14.314Z [LOG] [extract_emails.js] starting…
+2026-04-21T10:34:18.301Z [LOG] extracted 0 email(s) this run
+2026-04-21T10:34:18.596Z [LOG] extraction finished
+2026-04-21T10:34:18.605Z [LOG] [extract_emails.js] done
+2026-04-21T10:34:18.605Z [LOG] [pipeline #32] new emails extracted: 0
+2026-04-21T10:34:18.605Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T10:34:18.668Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T10:34:18.673Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T10:34:18.673Z [LOG] [pipeline #32] new emails parsed: 0
+2026-04-21T10:34:18.673Z [LOG] [pipeline #32] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T10:39:14.318Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T10:39:14.318Z [LOG] [pipeline #33] 2026-04-21T10:39:14.318Z
+2026-04-21T10:39:14.323Z [LOG] [extract_emails.js] starting…
+2026-04-21T10:39:18.441Z [LOG] extracted 0 email(s) this run
+2026-04-21T10:39:18.715Z [LOG] extraction finished
+2026-04-21T10:39:18.725Z [LOG] [extract_emails.js] done
+2026-04-21T10:39:18.725Z [LOG] [pipeline #33] new emails extracted: 0
+2026-04-21T10:39:18.725Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T10:39:18.792Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T10:39:18.799Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T10:39:18.799Z [LOG] [pipeline #33] new emails parsed: 0
+2026-04-21T10:39:18.799Z [LOG] [pipeline #33] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T10:44:14.321Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T10:44:14.321Z [LOG] [pipeline #34] 2026-04-21T10:44:14.321Z
+2026-04-21T10:44:14.321Z [LOG] [extract_emails.js] starting…
+2026-04-21T10:44:18.273Z [LOG] extracted 0 email(s) this run
+2026-04-21T10:44:18.568Z [LOG] extraction finished
+2026-04-21T10:44:18.577Z [LOG] [extract_emails.js] done
+2026-04-21T10:44:18.577Z [LOG] [pipeline #34] new emails extracted: 0
+2026-04-21T10:44:18.577Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T10:44:18.644Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T10:44:18.649Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T10:44:18.649Z [LOG] [pipeline #34] new emails parsed: 0
+2026-04-21T10:44:18.649Z [LOG] [pipeline #34] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T10:49:14.323Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T10:49:14.323Z [LOG] [pipeline #35] 2026-04-21T10:49:14.323Z
+2026-04-21T10:49:14.329Z [LOG] [extract_emails.js] starting…
+2026-04-21T10:49:18.513Z [LOG] extracted 0 email(s) this run
+2026-04-21T10:49:18.807Z [LOG] extraction finished
+2026-04-21T10:49:18.815Z [LOG] [extract_emails.js] done
+2026-04-21T10:49:18.815Z [LOG] [pipeline #35] new emails extracted: 0
+2026-04-21T10:49:18.815Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T10:49:18.887Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T10:49:18.894Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T10:49:18.894Z [LOG] [pipeline #35] new emails parsed: 0
+2026-04-21T10:49:18.894Z [LOG] [pipeline #35] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T10:54:14.325Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T10:54:14.326Z [LOG] [pipeline #36] 2026-04-21T10:54:14.326Z
+2026-04-21T10:54:14.326Z [LOG] [extract_emails.js] starting…
+2026-04-21T10:54:18.468Z [LOG] extracted 0 email(s) this run
+2026-04-21T10:54:18.740Z [LOG] extraction finished
+2026-04-21T10:54:18.749Z [LOG] [extract_emails.js] done
+2026-04-21T10:54:18.749Z [LOG] [pipeline #36] new emails extracted: 0
+2026-04-21T10:54:18.749Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T10:54:18.817Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T10:54:18.823Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T10:54:18.823Z [LOG] [pipeline #36] new emails parsed: 0
+2026-04-21T10:54:18.823Z [LOG] [pipeline #36] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T10:59:14.328Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T10:59:14.329Z [LOG] [pipeline #37] 2026-04-21T10:59:14.329Z
+2026-04-21T10:59:14.329Z [LOG] [extract_emails.js] starting…
+2026-04-21T10:59:18.468Z [LOG] extracted 0 email(s) this run
+2026-04-21T10:59:18.716Z [LOG] extraction finished
+2026-04-21T10:59:18.725Z [LOG] [extract_emails.js] done
+2026-04-21T10:59:18.725Z [LOG] [pipeline #37] new emails extracted: 0
+2026-04-21T10:59:18.725Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T10:59:18.794Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T10:59:18.801Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T10:59:18.801Z [LOG] [pipeline #37] new emails parsed: 0
+2026-04-21T10:59:18.801Z [LOG] [pipeline #37] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T11:04:14.333Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T11:04:14.333Z [LOG] [pipeline #38] 2026-04-21T11:04:14.333Z
+2026-04-21T11:04:14.333Z [LOG] [extract_emails.js] starting…
+2026-04-21T11:04:18.384Z [LOG] extracted 0 email(s) this run
+2026-04-21T11:04:18.679Z [LOG] extraction finished
+2026-04-21T11:04:18.687Z [LOG] [extract_emails.js] done
+2026-04-21T11:04:18.687Z [LOG] [pipeline #38] new emails extracted: 0
+2026-04-21T11:04:18.687Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T11:04:18.757Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T11:04:18.762Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T11:04:18.762Z [LOG] [pipeline #38] new emails parsed: 0
+2026-04-21T11:04:18.762Z [LOG] [pipeline #38] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T11:09:14.336Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T11:09:14.337Z [LOG] [pipeline #39] 2026-04-21T11:09:14.337Z
+2026-04-21T11:09:14.337Z [LOG] [extract_emails.js] starting…
+2026-04-21T11:09:18.409Z [LOG] extracted 0 email(s) this run
+2026-04-21T11:09:18.704Z [LOG] extraction finished
+2026-04-21T11:09:18.713Z [LOG] [extract_emails.js] done
+2026-04-21T11:09:18.713Z [LOG] [pipeline #39] new emails extracted: 0
+2026-04-21T11:09:18.713Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T11:09:18.777Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T11:09:18.785Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T11:09:18.785Z [LOG] [pipeline #39] new emails parsed: 0
+2026-04-21T11:09:18.785Z [LOG] [pipeline #39] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T11:14:14.340Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T11:14:14.340Z [LOG] [pipeline #40] 2026-04-21T11:14:14.340Z
+2026-04-21T11:14:14.340Z [LOG] [extract_emails.js] starting…
+2026-04-21T11:14:18.547Z [LOG] extracted 0 email(s) this run
+2026-04-21T11:14:18.832Z [LOG] extraction finished
+2026-04-21T11:14:18.841Z [LOG] [extract_emails.js] done
+2026-04-21T11:14:18.841Z [LOG] [pipeline #40] new emails extracted: 0
+2026-04-21T11:14:18.841Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T11:14:18.908Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T11:14:18.913Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T11:14:18.913Z [LOG] [pipeline #40] new emails parsed: 0
+2026-04-21T11:14:18.913Z [LOG] [pipeline #40] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T11:19:14.341Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T11:19:14.342Z [LOG] [pipeline #41] 2026-04-21T11:19:14.342Z
+2026-04-21T11:19:14.342Z [LOG] [extract_emails.js] starting…
+2026-04-21T11:19:18.576Z [LOG] extracted 0 email(s) this run
+2026-04-21T11:19:18.862Z [LOG] extraction finished
+2026-04-21T11:19:18.871Z [LOG] [extract_emails.js] done
+2026-04-21T11:19:18.871Z [LOG] [pipeline #41] new emails extracted: 0
+2026-04-21T11:19:18.871Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T11:19:18.939Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T11:19:18.946Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T11:19:18.946Z [LOG] [pipeline #41] new emails parsed: 0
+2026-04-21T11:19:18.946Z [LOG] [pipeline #41] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T11:24:14.342Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T11:24:14.342Z [LOG] [pipeline #42] 2026-04-21T11:24:14.342Z
+2026-04-21T11:24:14.343Z [LOG] [extract_emails.js] starting…
+2026-04-21T11:24:18.495Z [LOG] extracted 0 email(s) this run
+2026-04-21T11:24:18.748Z [LOG] extraction finished
+2026-04-21T11:24:18.758Z [LOG] [extract_emails.js] done
+2026-04-21T11:24:18.758Z [LOG] [pipeline #42] new emails extracted: 0
+2026-04-21T11:24:18.758Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T11:24:18.823Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T11:24:18.829Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T11:24:18.829Z [LOG] [pipeline #42] new emails parsed: 0
+2026-04-21T11:24:18.829Z [LOG] [pipeline #42] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T11:29:14.344Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T11:29:14.345Z [LOG] [pipeline #43] 2026-04-21T11:29:14.345Z
+2026-04-21T11:29:14.345Z [LOG] [extract_emails.js] starting…
+2026-04-21T11:29:18.625Z [LOG] extracted 0 email(s) this run
+2026-04-21T11:29:18.913Z [LOG] extraction finished
+2026-04-21T11:29:18.922Z [LOG] [extract_emails.js] done
+2026-04-21T11:29:18.922Z [LOG] [pipeline #43] new emails extracted: 0
+2026-04-21T11:29:18.922Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T11:29:18.994Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T11:29:19.000Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T11:29:19.000Z [LOG] [pipeline #43] new emails parsed: 0
+2026-04-21T11:29:19.000Z [LOG] [pipeline #43] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T11:34:14.348Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T11:34:14.348Z [LOG] [pipeline #44] 2026-04-21T11:34:14.348Z
+2026-04-21T11:34:14.348Z [LOG] [extract_emails.js] starting…
+2026-04-21T11:34:18.467Z [LOG] extracted 0 email(s) this run
+2026-04-21T11:34:18.750Z [LOG] extraction finished
+2026-04-21T11:34:18.759Z [LOG] [extract_emails.js] done
+2026-04-21T11:34:18.759Z [LOG] [pipeline #44] new emails extracted: 0
+2026-04-21T11:34:18.759Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T11:34:18.829Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T11:34:18.836Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T11:34:18.836Z [LOG] [pipeline #44] new emails parsed: 0
+2026-04-21T11:34:18.836Z [LOG] [pipeline #44] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T11:39:14.351Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T11:39:14.352Z [LOG] [pipeline #45] 2026-04-21T11:39:14.352Z
+2026-04-21T11:39:14.352Z [LOG] [extract_emails.js] starting…
+2026-04-21T11:39:18.535Z [LOG] extracted 0 email(s) this run
+2026-04-21T11:39:18.803Z [LOG] extraction finished
+2026-04-21T11:39:18.812Z [LOG] [extract_emails.js] done
+2026-04-21T11:39:18.812Z [LOG] [pipeline #45] new emails extracted: 0
+2026-04-21T11:39:18.812Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T11:39:18.878Z [LOG] parse summary: total=1870, parsed=0, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T11:39:18.884Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T11:39:18.884Z [LOG] [pipeline #45] new emails parsed: 0
+2026-04-21T11:39:18.884Z [LOG] [pipeline #45] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T11:44:14.352Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T11:44:14.352Z [LOG] [pipeline #46] 2026-04-21T11:44:14.352Z
+2026-04-21T11:44:14.353Z [LOG] [extract_emails.js] starting…
+2026-04-21T11:44:19.057Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7076.json
+2026-04-21T11:44:18.766Z [LOG] extracted 1 email(s) this run
+2026-04-21T11:44:19.048Z [LOG] extraction finished
+2026-04-21T11:44:19.057Z [LOG] [extract_emails.js] done
+2026-04-21T11:44:19.057Z [LOG] [pipeline #46] new emails extracted: 1
+2026-04-21T11:44:19.057Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T11:44:19.156Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7076.json
+2026-04-21T11:44:19.152Z [LOG] parse summary: total=1871, parsed=1, alreadyParsed=1621, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T11:44:19.157Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T11:44:19.157Z [LOG] [pipeline #46] new emails parsed: 1
+2026-04-21T11:44:19.157Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-21T11:44:19.493Z [LOG] Written 401 rows to CFS_mawb.csv
+2026-04-21T11:44:19.497Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-21T11:44:19.504Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-21T11:44:19.504Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-21T11:44:19.757Z [LOG] [build_cfs_csv_uld.js] Written 721 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-21T11:44:19.757Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 3
+2026-04-21T11:44:19.757Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 320
+2026-04-21T11:44:19.757Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-21T11:44:19.757Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-21T11:44:19.950Z [LOG] Written 812 rows to CFS_hawb.csv
+2026-04-21T11:44:19.953Z [LOG]   HAWB rows: 719
+2026-04-21T11:44:19.953Z [LOG]   MAWB-only rows: 93
+2026-04-21T11:44:19.958Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-21T11:44:19.958Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-21T11:44:20.019Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AZ …
+2026-04-21T11:44:21.240Z [LOG] [mawb] Writing 402 rows → 'CFS_by_MAWB'!A1 …
+2026-04-21T11:44:23.553Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-21T11:44:23.553Z [LOG] [mawb] Done — 401 data rows uploaded.
+2026-04-21T11:44:23.556Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AZ …
+2026-04-21T11:44:23.964Z [LOG] [uld] Writing 722 rows → 'CFS_by_ULD'!A1 …
+2026-04-21T11:44:27.357Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-21T11:44:28.800Z [LOG] [uld] Applied ULD grouping formatting (641 ULD blocks)
+2026-04-21T11:44:28.800Z [LOG] [uld] Done — 721 data rows uploaded.
+2026-04-21T11:44:28.805Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AZ …
+2026-04-21T11:44:29.186Z [LOG] [hawb] Writing 813 rows → 'CFS_by_HAWB'!A1 …
+2026-04-21T11:44:31.131Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-21T11:44:31.950Z [LOG] [hawb] Applied MAWB grouping formatting (402 MAWB blocks)
+2026-04-21T11:44:31.950Z [LOG] [hawb] Done — 812 data rows uploaded.
+2026-04-21T11:44:31.960Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-21T11:44:31.960Z [LOG] [pipeline #46] pipeline complete
+2026-04-21T11:49:14.358Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T11:49:14.359Z [LOG] [pipeline #47] 2026-04-21T11:49:14.359Z
+2026-04-21T11:49:14.359Z [LOG] [extract_emails.js] starting…
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7103.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7102.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7101.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7100.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7099.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7098.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7097.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7096.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7095.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7094.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7093.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7092.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7091.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7090.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7089.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7088.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7087.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7086.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7085.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7084.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7083.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7082.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7081.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7080.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7079.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7078.json
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7077.json
+2026-04-21T11:49:26.771Z [LOG] extracted 27 email(s) this run
+2026-04-21T11:49:27.072Z [LOG] extraction finished
+2026-04-21T11:49:27.083Z [LOG] [extract_emails.js] done
+2026-04-21T11:49:27.083Z [LOG] [pipeline #47] new emails extracted: 27
+2026-04-21T11:49:27.083Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7077.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7078.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7079.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7080.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7081.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7082.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7083.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7084.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7085.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7086.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7087.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7088.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7089.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7090.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7091.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7092.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7093.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7094.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7095.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7096.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7097.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7098.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7099.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7100.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7101.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7102.json
+2026-04-21T11:49:27.942Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7103.json
+2026-04-21T11:49:27.937Z [LOG] parse summary: total=1898, parsed=27, alreadyParsed=1622, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T11:49:27.943Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T11:49:27.943Z [LOG] [pipeline #47] new emails parsed: 27
+2026-04-21T11:49:27.943Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-21T11:49:28.142Z [LOG] Written 401 rows to CFS_mawb.csv
+2026-04-21T11:49:28.144Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-21T11:49:28.150Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-21T11:49:28.150Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-21T11:49:28.355Z [LOG] [build_cfs_csv_uld.js] Written 730 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-21T11:49:28.356Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 3
+2026-04-21T11:49:28.356Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 329
+2026-04-21T11:49:28.356Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-21T11:49:28.356Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-21T11:49:28.553Z [LOG] Written 814 rows to CFS_hawb.csv
+2026-04-21T11:49:28.555Z [LOG]   HAWB rows: 721
+2026-04-21T11:49:28.555Z [LOG]   MAWB-only rows: 93
+2026-04-21T11:49:28.560Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-21T11:49:28.560Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-21T11:49:28.624Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AZ …
+2026-04-21T11:49:29.326Z [LOG] [mawb] Writing 402 rows → 'CFS_by_MAWB'!A1 …
+2026-04-21T11:49:30.967Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-21T11:49:30.967Z [LOG] [mawb] Done — 401 data rows uploaded.
+2026-04-21T11:49:30.969Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AZ …
+2026-04-21T11:49:31.373Z [LOG] [uld] Writing 731 rows → 'CFS_by_ULD'!A1 …
+2026-04-21T11:49:34.956Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-21T11:49:36.390Z [LOG] [uld] Applied ULD grouping formatting (650 ULD blocks)
+2026-04-21T11:49:36.390Z [LOG] [uld] Done — 730 data rows uploaded.
+2026-04-21T11:49:36.394Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AZ …
+2026-04-21T11:49:36.765Z [LOG] [hawb] Writing 815 rows → 'CFS_by_HAWB'!A1 …
+2026-04-21T11:49:38.846Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-21T11:49:39.626Z [LOG] [hawb] Applied MAWB grouping formatting (402 MAWB blocks)
+2026-04-21T11:49:39.626Z [LOG] [hawb] Done — 814 data rows uploaded.
+2026-04-21T11:49:39.635Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-21T11:49:39.636Z [LOG] [pipeline #47] pipeline complete
+2026-04-21T11:54:14.364Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T11:54:14.365Z [LOG] [pipeline #48] 2026-04-21T11:54:14.365Z
+2026-04-21T11:54:14.365Z [LOG] [extract_emails.js] starting…
+2026-04-21T11:54:18.823Z [LOG] extracted 0 email(s) this run
+2026-04-21T11:54:19.118Z [LOG] extraction finished
+2026-04-21T11:54:19.126Z [LOG] [extract_emails.js] done
+2026-04-21T11:54:19.126Z [LOG] [pipeline #48] new emails extracted: 0
+2026-04-21T11:54:19.126Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T11:54:19.202Z [LOG] parse summary: total=1898, parsed=0, alreadyParsed=1649, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T11:54:19.208Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T11:54:19.208Z [LOG] [pipeline #48] new emails parsed: 0
+2026-04-21T11:54:19.208Z [LOG] [pipeline #48] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T11:59:14.370Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T11:59:14.370Z [LOG] [pipeline #49] 2026-04-21T11:59:14.370Z
+2026-04-21T11:59:14.370Z [LOG] [extract_emails.js] starting…
+2026-04-21T11:59:18.246Z [LOG] extracted 0 email(s) this run
+2026-04-21T11:59:18.537Z [LOG] extraction finished
+2026-04-21T11:59:18.546Z [LOG] [extract_emails.js] done
+2026-04-21T11:59:18.546Z [LOG] [pipeline #49] new emails extracted: 0
+2026-04-21T11:59:18.546Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T11:59:18.613Z [LOG] parse summary: total=1898, parsed=0, alreadyParsed=1649, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T11:59:18.619Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T11:59:18.619Z [LOG] [pipeline #49] new emails parsed: 0
+2026-04-21T11:59:18.619Z [LOG] [pipeline #49] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T12:04:14.374Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T12:04:14.374Z [LOG] [pipeline #50] 2026-04-21T12:04:14.374Z
+2026-04-21T12:04:14.374Z [LOG] [extract_emails.js] starting…
+2026-04-21T12:04:18.585Z [LOG] extracted 0 email(s) this run
+2026-04-21T12:04:18.879Z [LOG] extraction finished
+2026-04-21T12:04:18.888Z [LOG] [extract_emails.js] done
+2026-04-21T12:04:18.889Z [LOG] [pipeline #50] new emails extracted: 0
+2026-04-21T12:04:18.889Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T12:04:18.965Z [LOG] parse summary: total=1898, parsed=0, alreadyParsed=1649, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T12:04:18.972Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T12:04:18.972Z [LOG] [pipeline #50] new emails parsed: 0
+2026-04-21T12:04:18.972Z [LOG] [pipeline #50] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T12:09:14.376Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T12:09:14.377Z [LOG] [pipeline #51] 2026-04-21T12:09:14.377Z
+2026-04-21T12:09:14.377Z [LOG] [extract_emails.js] starting…
+2026-04-21T12:09:18.317Z [LOG] extracted 0 email(s) this run
+2026-04-21T12:09:18.616Z [LOG] extraction finished
+2026-04-21T12:09:18.625Z [LOG] [extract_emails.js] done
+2026-04-21T12:09:18.625Z [LOG] [pipeline #51] new emails extracted: 0
+2026-04-21T12:09:18.625Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T12:09:18.689Z [LOG] parse summary: total=1898, parsed=0, alreadyParsed=1649, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T12:09:18.695Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T12:09:18.695Z [LOG] [pipeline #51] new emails parsed: 0
+2026-04-21T12:09:18.695Z [LOG] [pipeline #51] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T12:14:14.380Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T12:14:14.380Z [LOG] [pipeline #52] 2026-04-21T12:14:14.380Z
+2026-04-21T12:14:14.380Z [LOG] [extract_emails.js] starting…
+2026-04-21T12:14:18.760Z [LOG] extracted 0 email(s) this run
+2026-04-21T12:14:19.058Z [LOG] extraction finished
+2026-04-21T12:14:19.067Z [LOG] [extract_emails.js] done
+2026-04-21T12:14:19.067Z [LOG] [pipeline #52] new emails extracted: 0
+2026-04-21T12:14:19.067Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T12:14:19.140Z [LOG] parse summary: total=1898, parsed=0, alreadyParsed=1649, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T12:14:19.146Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T12:14:19.146Z [LOG] [pipeline #52] new emails parsed: 0
+2026-04-21T12:14:19.146Z [LOG] [pipeline #52] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T12:19:14.381Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T12:19:14.381Z [LOG] [pipeline #53] 2026-04-21T12:19:14.381Z
+2026-04-21T12:19:14.381Z [LOG] [extract_emails.js] starting…
+2026-04-21T12:19:18.492Z [LOG] extracted 0 email(s) this run
+2026-04-21T12:19:18.780Z [LOG] extraction finished
+2026-04-21T12:19:18.789Z [LOG] [extract_emails.js] done
+2026-04-21T12:19:18.789Z [LOG] [pipeline #53] new emails extracted: 0
+2026-04-21T12:19:18.789Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T12:19:18.856Z [LOG] parse summary: total=1898, parsed=0, alreadyParsed=1649, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T12:19:18.862Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T12:19:18.862Z [LOG] [pipeline #53] new emails parsed: 0
+2026-04-21T12:19:18.862Z [LOG] [pipeline #53] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T12:24:14.384Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T12:24:14.384Z [LOG] [pipeline #54] 2026-04-21T12:24:14.384Z
+2026-04-21T12:24:14.384Z [LOG] [extract_emails.js] starting…
+2026-04-21T12:24:18.527Z [LOG] extracted 0 email(s) this run
+2026-04-21T12:24:18.822Z [LOG] extraction finished
+2026-04-21T12:24:18.832Z [LOG] [extract_emails.js] done
+2026-04-21T12:24:18.832Z [LOG] [pipeline #54] new emails extracted: 0
+2026-04-21T12:24:18.832Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T12:24:18.897Z [LOG] parse summary: total=1898, parsed=0, alreadyParsed=1649, missingFields=249, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T12:24:18.902Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T12:24:18.903Z [LOG] [pipeline #54] new emails parsed: 0
+2026-04-21T12:24:18.903Z [LOG] [pipeline #54] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T12:29:14.387Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T12:29:14.388Z [LOG] [pipeline #55] 2026-04-21T12:29:14.388Z
+2026-04-21T12:29:14.388Z [LOG] [extract_emails.js] starting…
+2026-04-21T12:29:19.891Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7104.json
+2026-04-21T12:29:19.548Z [LOG] extracted 1 email(s) this run
+2026-04-21T12:29:19.881Z [LOG] extraction finished
+2026-04-21T12:29:19.891Z [LOG] [extract_emails.js] done
+2026-04-21T12:29:19.891Z [LOG] [pipeline #55] new emails extracted: 1
+2026-04-21T12:29:19.891Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T12:29:19.958Z [LOG] parse summary: total=1899, parsed=0, alreadyParsed=1649, missingFields=250, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T12:29:19.964Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T12:29:19.964Z [LOG] [pipeline #55] new emails parsed: 0
+2026-04-21T12:29:19.964Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-21T12:29:20.280Z [LOG] Written 401 rows to CFS_mawb.csv
+2026-04-21T12:29:20.284Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-21T12:29:20.293Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-21T12:29:20.293Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-21T12:29:20.588Z [LOG] [build_cfs_csv_uld.js] Written 730 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-21T12:29:20.588Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 3
+2026-04-21T12:29:20.588Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 329
+2026-04-21T12:29:20.588Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-21T12:29:20.588Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-21T12:29:20.784Z [LOG] Written 814 rows to CFS_hawb.csv
+2026-04-21T12:29:20.786Z [LOG]   HAWB rows: 721
+2026-04-21T12:29:20.786Z [LOG]   MAWB-only rows: 93
+2026-04-21T12:29:20.792Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-21T12:29:20.792Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-21T12:29:20.867Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AZ …
+2026-04-21T12:29:22.291Z [LOG] [mawb] Writing 402 rows → 'CFS_by_MAWB'!A1 …
+2026-04-21T12:29:24.897Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-21T12:29:24.897Z [LOG] [mawb] Done — 401 data rows uploaded.
+2026-04-21T12:29:24.900Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AZ …
+2026-04-21T12:29:25.411Z [LOG] [uld] Writing 731 rows → 'CFS_by_ULD'!A1 …
+2026-04-21T12:29:28.995Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-21T12:29:30.433Z [LOG] [uld] Applied ULD grouping formatting (650 ULD blocks)
+2026-04-21T12:29:30.433Z [LOG] [uld] Done — 730 data rows uploaded.
+2026-04-21T12:29:30.437Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AZ …
+2026-04-21T12:29:30.940Z [LOG] [hawb] Writing 815 rows → 'CFS_by_HAWB'!A1 …
+2026-04-21T12:29:32.886Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-21T12:29:33.704Z [LOG] [hawb] Applied MAWB grouping formatting (402 MAWB blocks)
+2026-04-21T12:29:33.704Z [LOG] [hawb] Done — 814 data rows uploaded.
+2026-04-21T12:29:33.714Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-21T12:29:33.714Z [LOG] [pipeline #55] pipeline complete
+2026-04-21T12:34:14.393Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T12:34:14.393Z [LOG] [pipeline #56] 2026-04-21T12:34:14.393Z
+2026-04-21T12:34:14.393Z [LOG] [extract_emails.js] starting…
+2026-04-21T12:34:18.493Z [LOG] extracted 0 email(s) this run
+2026-04-21T12:34:18.748Z [LOG] extraction finished
+2026-04-21T12:34:18.756Z [LOG] [extract_emails.js] done
+2026-04-21T12:34:18.756Z [LOG] [pipeline #56] new emails extracted: 0
+2026-04-21T12:34:18.756Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T12:34:18.826Z [LOG] parse summary: total=1899, parsed=0, alreadyParsed=1649, missingFields=250, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T12:34:18.832Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T12:34:18.832Z [LOG] [pipeline #56] new emails parsed: 0
+2026-04-21T12:34:18.833Z [LOG] [pipeline #56] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T12:39:14.397Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T12:39:14.397Z [LOG] [pipeline #57] 2026-04-21T12:39:14.397Z
+2026-04-21T12:39:14.397Z [LOG] [extract_emails.js] starting…
+2026-04-21T12:39:18.532Z [LOG] extracted 0 email(s) this run
+2026-04-21T12:39:18.780Z [LOG] extraction finished
+2026-04-21T12:39:18.789Z [LOG] [extract_emails.js] done
+2026-04-21T12:39:18.789Z [LOG] [pipeline #57] new emails extracted: 0
+2026-04-21T12:39:18.789Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T12:39:18.853Z [LOG] parse summary: total=1899, parsed=0, alreadyParsed=1649, missingFields=250, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T12:39:18.859Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T12:39:18.859Z [LOG] [pipeline #57] new emails parsed: 0
+2026-04-21T12:39:18.859Z [LOG] [pipeline #57] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T12:44:14.400Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T12:44:14.400Z [LOG] [pipeline #58] 2026-04-21T12:44:14.400Z
+2026-04-21T12:44:14.400Z [LOG] [extract_emails.js] starting…
+2026-04-21T12:44:18.279Z [LOG] extracted 0 email(s) this run
+2026-04-21T12:44:18.573Z [LOG] extraction finished
+2026-04-21T12:44:18.583Z [LOG] [extract_emails.js] done
+2026-04-21T12:44:18.583Z [LOG] [pipeline #58] new emails extracted: 0
+2026-04-21T12:44:18.583Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T12:44:18.647Z [LOG] parse summary: total=1899, parsed=0, alreadyParsed=1649, missingFields=250, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T12:44:18.653Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T12:44:18.653Z [LOG] [pipeline #58] new emails parsed: 0
+2026-04-21T12:44:18.653Z [LOG] [pipeline #58] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T12:49:14.403Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T12:49:14.403Z [LOG] [pipeline #59] 2026-04-21T12:49:14.403Z
+2026-04-21T12:49:14.403Z [LOG] [extract_emails.js] starting…
+2026-04-21T12:49:18.632Z [LOG] extracted 0 email(s) this run
+2026-04-21T12:49:18.932Z [LOG] extraction finished
+2026-04-21T12:49:18.940Z [LOG] [extract_emails.js] done
+2026-04-21T12:49:18.940Z [LOG] [pipeline #59] new emails extracted: 0
+2026-04-21T12:49:18.940Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T12:49:19.004Z [LOG] parse summary: total=1899, parsed=0, alreadyParsed=1649, missingFields=250, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T12:49:19.011Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T12:49:19.011Z [LOG] [pipeline #59] new emails parsed: 0
+2026-04-21T12:49:19.011Z [LOG] [pipeline #59] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T12:54:14.404Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T12:54:14.405Z [LOG] [pipeline #60] 2026-04-21T12:54:14.405Z
+2026-04-21T12:54:14.405Z [LOG] [extract_emails.js] starting…
+2026-04-21T12:54:18.573Z [LOG] extracted 0 email(s) this run
+2026-04-21T12:54:18.868Z [LOG] extraction finished
+2026-04-21T12:54:18.877Z [LOG] [extract_emails.js] done
+2026-04-21T12:54:18.877Z [LOG] [pipeline #60] new emails extracted: 0
+2026-04-21T12:54:18.877Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T12:54:18.944Z [LOG] parse summary: total=1899, parsed=0, alreadyParsed=1649, missingFields=250, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T12:54:18.950Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T12:54:18.950Z [LOG] [pipeline #60] new emails parsed: 0
+2026-04-21T12:54:18.950Z [LOG] [pipeline #60] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T12:59:14.405Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T12:59:14.405Z [LOG] [pipeline #61] 2026-04-21T12:59:14.405Z
+2026-04-21T12:59:14.405Z [LOG] [extract_emails.js] starting…
+2026-04-21T12:59:18.397Z [LOG] extracted 0 email(s) this run
+2026-04-21T12:59:18.709Z [LOG] extraction finished
+2026-04-21T12:59:18.718Z [LOG] [extract_emails.js] done
+2026-04-21T12:59:18.718Z [LOG] [pipeline #61] new emails extracted: 0
+2026-04-21T12:59:18.718Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T12:59:18.786Z [LOG] parse summary: total=1899, parsed=0, alreadyParsed=1649, missingFields=250, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T12:59:18.793Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T12:59:18.793Z [LOG] [pipeline #61] new emails parsed: 0
+2026-04-21T12:59:18.793Z [LOG] [pipeline #61] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T13:04:14.408Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T13:04:14.409Z [LOG] [pipeline #62] 2026-04-21T13:04:14.409Z
+2026-04-21T13:04:14.409Z [LOG] [extract_emails.js] starting…
+2026-04-21T13:04:18.963Z [LOG] extracted 0 email(s) this run
+2026-04-21T13:04:19.359Z [LOG] extraction finished
+2026-04-21T13:04:19.367Z [LOG] [extract_emails.js] done
+2026-04-21T13:04:19.367Z [LOG] [pipeline #62] new emails extracted: 0
+2026-04-21T13:04:19.367Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T13:04:19.435Z [LOG] parse summary: total=1899, parsed=0, alreadyParsed=1649, missingFields=250, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T13:04:19.441Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T13:04:19.441Z [LOG] [pipeline #62] new emails parsed: 0
+2026-04-21T13:04:19.441Z [LOG] [pipeline #62] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T13:09:14.411Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T13:09:14.411Z [LOG] [pipeline #63] 2026-04-21T13:09:14.411Z
+2026-04-21T13:09:14.411Z [LOG] [extract_emails.js] starting…
+2026-04-21T13:09:18.591Z [LOG] extracted 0 email(s) this run
+2026-04-21T13:09:18.885Z [LOG] extraction finished
+2026-04-21T13:09:18.894Z [LOG] [extract_emails.js] done
+2026-04-21T13:09:18.894Z [LOG] [pipeline #63] new emails extracted: 0
+2026-04-21T13:09:18.894Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T13:09:18.970Z [LOG] parse summary: total=1899, parsed=0, alreadyParsed=1649, missingFields=250, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T13:09:18.976Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T13:09:18.976Z [LOG] [pipeline #63] new emails parsed: 0
+2026-04-21T13:09:18.976Z [LOG] [pipeline #63] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T13:14:14.414Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T13:14:14.414Z [LOG] [pipeline #64] 2026-04-21T13:14:14.414Z
+2026-04-21T13:14:14.414Z [LOG] [extract_emails.js] starting…
+2026-04-21T13:14:18.529Z [LOG] extracted 0 email(s) this run
+2026-04-21T13:14:18.824Z [LOG] extraction finished
+2026-04-21T13:14:18.833Z [LOG] [extract_emails.js] done
+2026-04-21T13:14:18.833Z [LOG] [pipeline #64] new emails extracted: 0
+2026-04-21T13:14:18.833Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T13:14:18.904Z [LOG] parse summary: total=1899, parsed=0, alreadyParsed=1649, missingFields=250, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T13:14:18.912Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T13:14:18.912Z [LOG] [pipeline #64] new emails parsed: 0
+2026-04-21T13:14:18.912Z [LOG] [pipeline #64] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T13:19:14.418Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T13:19:14.418Z [LOG] [pipeline #65] 2026-04-21T13:19:14.418Z
+2026-04-21T13:19:14.418Z [LOG] [extract_emails.js] starting…
+2026-04-21T13:19:18.575Z [LOG] extracted 0 email(s) this run
+2026-04-21T13:19:18.869Z [LOG] extraction finished
+2026-04-21T13:19:18.877Z [LOG] [extract_emails.js] done
+2026-04-21T13:19:18.877Z [LOG] [pipeline #65] new emails extracted: 0
+2026-04-21T13:19:18.877Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T13:19:18.946Z [LOG] parse summary: total=1899, parsed=0, alreadyParsed=1649, missingFields=250, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T13:19:18.952Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T13:19:18.952Z [LOG] [pipeline #65] new emails parsed: 0
+2026-04-21T13:19:18.952Z [LOG] [pipeline #65] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T13:24:14.421Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T13:24:14.421Z [LOG] [pipeline #66] 2026-04-21T13:24:14.421Z
+2026-04-21T13:24:14.421Z [LOG] [extract_emails.js] starting…
+2026-04-21T13:24:18.621Z [LOG] extracted 0 email(s) this run
+2026-04-21T13:24:18.913Z [LOG] extraction finished
+2026-04-21T13:24:18.923Z [LOG] [extract_emails.js] done
+2026-04-21T13:24:18.923Z [LOG] [pipeline #66] new emails extracted: 0
+2026-04-21T13:24:18.923Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T13:24:19.009Z [LOG] parse summary: total=1899, parsed=0, alreadyParsed=1649, missingFields=250, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T13:24:19.017Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T13:24:19.017Z [LOG] [pipeline #66] new emails parsed: 0
+2026-04-21T13:24:19.017Z [LOG] [pipeline #66] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T13:29:14.425Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T13:29:14.425Z [LOG] [pipeline #67] 2026-04-21T13:29:14.425Z
+2026-04-21T13:29:14.425Z [LOG] [extract_emails.js] starting…
+2026-04-21T13:29:18.662Z [LOG] extracted 0 email(s) this run
+2026-04-21T13:29:18.955Z [LOG] extraction finished
+2026-04-21T13:29:18.965Z [LOG] [extract_emails.js] done
+2026-04-21T13:29:18.965Z [LOG] [pipeline #67] new emails extracted: 0
+2026-04-21T13:29:18.965Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T13:29:19.048Z [LOG] parse summary: total=1899, parsed=0, alreadyParsed=1649, missingFields=250, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T13:29:19.056Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T13:29:19.056Z [LOG] [pipeline #67] new emails parsed: 0
+2026-04-21T13:29:19.056Z [LOG] [pipeline #67] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T13:34:14.427Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T13:34:14.427Z [LOG] [pipeline #68] 2026-04-21T13:34:14.427Z
+2026-04-21T13:34:14.427Z [LOG] [extract_emails.js] starting…
+2026-04-21T13:34:19.824Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7105.json
+2026-04-21T13:34:19.423Z [LOG] extracted 1 email(s) this run
+2026-04-21T13:34:19.814Z [LOG] extraction finished
+2026-04-21T13:34:19.824Z [LOG] [extract_emails.js] done
+2026-04-21T13:34:19.824Z [LOG] [pipeline #68] new emails extracted: 1
+2026-04-21T13:34:19.824Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T13:34:19.917Z [LOG] parse summary: total=1900, parsed=0, alreadyParsed=1649, missingFields=251, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T13:34:19.924Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T13:34:19.924Z [LOG] [pipeline #68] new emails parsed: 0
+2026-04-21T13:34:19.924Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-21T13:34:20.327Z [LOG] Written 401 rows to CFS_mawb.csv
+2026-04-21T13:34:20.332Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-21T13:34:20.342Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-21T13:34:20.342Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-21T13:34:20.655Z [LOG] [build_cfs_csv_uld.js] Written 730 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-21T13:34:20.656Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 3
+2026-04-21T13:34:20.656Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 329
+2026-04-21T13:34:20.656Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-21T13:34:20.656Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-21T13:34:20.866Z [LOG] Written 814 rows to CFS_hawb.csv
+2026-04-21T13:34:20.869Z [LOG]   HAWB rows: 721
+2026-04-21T13:34:20.869Z [LOG]   MAWB-only rows: 93
+2026-04-21T13:34:20.874Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-21T13:34:20.874Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-21T13:34:20.961Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AZ …
+2026-04-21T13:34:22.581Z [LOG] [mawb] Writing 402 rows → 'CFS_by_MAWB'!A1 …
+2026-04-21T13:34:25.345Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-21T13:34:25.345Z [LOG] [mawb] Done — 401 data rows uploaded.
+2026-04-21T13:34:25.350Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AZ …
+2026-04-21T13:34:26.061Z [LOG] [uld] Writing 731 rows → 'CFS_by_ULD'!A1 …
+2026-04-21T13:34:30.978Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-21T13:34:33.127Z [LOG] [uld] Applied ULD grouping formatting (650 ULD blocks)
+2026-04-21T13:34:33.127Z [LOG] [uld] Done — 730 data rows uploaded.
+2026-04-21T13:34:33.133Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AZ …
+2026-04-21T13:34:33.741Z [LOG] [hawb] Writing 815 rows → 'CFS_by_HAWB'!A1 …
+2026-04-21T13:34:36.199Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-21T13:34:37.427Z [LOG] [hawb] Applied MAWB grouping formatting (402 MAWB blocks)
+2026-04-21T13:34:37.427Z [LOG] [hawb] Done — 814 data rows uploaded.
+2026-04-21T13:34:37.437Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-21T13:34:37.437Z [LOG] [pipeline #68] pipeline complete
+2026-04-21T13:39:14.428Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T13:39:14.428Z [LOG] [pipeline #69] 2026-04-21T13:39:14.428Z
+2026-04-21T13:39:14.428Z [LOG] [extract_emails.js] starting…
+2026-04-21T13:39:18.797Z [LOG] extracted 0 email(s) this run
+2026-04-21T13:39:19.137Z [LOG] extraction finished
+2026-04-21T13:39:19.147Z [LOG] [extract_emails.js] done
+2026-04-21T13:39:19.147Z [LOG] [pipeline #69] new emails extracted: 0
+2026-04-21T13:39:19.147Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T13:39:19.246Z [LOG] parse summary: total=1900, parsed=0, alreadyParsed=1649, missingFields=251, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T13:39:19.254Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T13:39:19.254Z [LOG] [pipeline #69] new emails parsed: 0
+2026-04-21T13:39:19.254Z [LOG] [pipeline #69] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T13:44:14.430Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T13:44:14.430Z [LOG] [pipeline #70] 2026-04-21T13:44:14.430Z
+2026-04-21T13:44:14.430Z [LOG] [extract_emails.js] starting…
+2026-04-21T13:44:18.683Z [LOG] extracted 0 email(s) this run
+2026-04-21T13:44:18.973Z [LOG] extraction finished
+2026-04-21T13:44:18.983Z [LOG] [extract_emails.js] done
+2026-04-21T13:44:18.983Z [LOG] [pipeline #70] new emails extracted: 0
+2026-04-21T13:44:18.983Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T13:44:19.071Z [LOG] parse summary: total=1900, parsed=0, alreadyParsed=1649, missingFields=251, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T13:44:19.079Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T13:44:19.079Z [LOG] [pipeline #70] new emails parsed: 0
+2026-04-21T13:44:19.079Z [LOG] [pipeline #70] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T13:49:14.431Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T13:49:14.431Z [LOG] [pipeline #71] 2026-04-21T13:49:14.431Z
+2026-04-21T13:49:14.431Z [LOG] [extract_emails.js] starting…
+2026-04-21T13:49:18.413Z [LOG] extracted 0 email(s) this run
+2026-04-21T13:49:18.705Z [LOG] extraction finished
+2026-04-21T13:49:18.714Z [LOG] [extract_emails.js] done
+2026-04-21T13:49:18.715Z [LOG] [pipeline #71] new emails extracted: 0
+2026-04-21T13:49:18.715Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T13:49:18.804Z [LOG] parse summary: total=1900, parsed=0, alreadyParsed=1649, missingFields=251, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T13:49:18.812Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T13:49:18.812Z [LOG] [pipeline #71] new emails parsed: 0
+2026-04-21T13:49:18.812Z [LOG] [pipeline #71] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T13:54:14.432Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T13:54:14.433Z [LOG] [pipeline #72] 2026-04-21T13:54:14.433Z
+2026-04-21T13:54:14.433Z [LOG] [extract_emails.js] starting…
+2026-04-21T13:54:18.651Z [LOG] extracted 0 email(s) this run
+2026-04-21T13:54:18.960Z [LOG] extraction finished
+2026-04-21T13:54:18.971Z [LOG] [extract_emails.js] done
+2026-04-21T13:54:18.971Z [LOG] [pipeline #72] new emails extracted: 0
+2026-04-21T13:54:18.971Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T13:54:19.063Z [LOG] parse summary: total=1900, parsed=0, alreadyParsed=1649, missingFields=251, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T13:54:19.071Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T13:54:19.071Z [LOG] [pipeline #72] new emails parsed: 0
+2026-04-21T13:54:19.071Z [LOG] [pipeline #72] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T13:59:14.434Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T13:59:14.434Z [LOG] [pipeline #73] 2026-04-21T13:59:14.434Z
+2026-04-21T13:59:14.434Z [LOG] [extract_emails.js] starting…
+2026-04-21T13:59:18.497Z [LOG] extracted 0 email(s) this run
+2026-04-21T13:59:18.787Z [LOG] extraction finished
+2026-04-21T13:59:18.797Z [LOG] [extract_emails.js] done
+2026-04-21T13:59:18.797Z [LOG] [pipeline #73] new emails extracted: 0
+2026-04-21T13:59:18.797Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T13:59:18.891Z [LOG] parse summary: total=1900, parsed=0, alreadyParsed=1649, missingFields=251, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T13:59:18.898Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T13:59:18.898Z [LOG] [pipeline #73] new emails parsed: 0
+2026-04-21T13:59:18.898Z [LOG] [pipeline #73] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T14:04:14.436Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T14:04:14.436Z [LOG] [pipeline #74] 2026-04-21T14:04:14.436Z
+2026-04-21T14:04:14.436Z [LOG] [extract_emails.js] starting…
+2026-04-21T14:04:18.634Z [LOG] extracted 0 email(s) this run
+2026-04-21T14:04:18.922Z [LOG] extraction finished
+2026-04-21T14:04:18.934Z [LOG] [extract_emails.js] done
+2026-04-21T14:04:18.934Z [LOG] [pipeline #74] new emails extracted: 0
+2026-04-21T14:04:18.934Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T14:04:19.029Z [LOG] parse summary: total=1900, parsed=0, alreadyParsed=1649, missingFields=251, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T14:04:19.036Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T14:04:19.036Z [LOG] [pipeline #74] new emails parsed: 0
+2026-04-21T14:04:19.036Z [LOG] [pipeline #74] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T14:09:14.437Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T14:09:14.437Z [LOG] [pipeline #75] 2026-04-21T14:09:14.437Z
+2026-04-21T14:09:14.438Z [LOG] [extract_emails.js] starting…
+2026-04-21T14:09:19.782Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7106.json
+2026-04-21T14:09:19.429Z [LOG] extracted 1 email(s) this run
+2026-04-21T14:09:19.771Z [LOG] extraction finished
+2026-04-21T14:09:19.782Z [LOG] [extract_emails.js] done
+2026-04-21T14:09:19.782Z [LOG] [pipeline #75] new emails extracted: 1
+2026-04-21T14:09:19.782Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T14:09:19.876Z [LOG] parse summary: total=1901, parsed=0, alreadyParsed=1649, missingFields=252, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T14:09:19.884Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T14:09:19.884Z [LOG] [pipeline #75] new emails parsed: 0
+2026-04-21T14:09:19.884Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-21T14:09:20.301Z [LOG] Written 401 rows to CFS_mawb.csv
+2026-04-21T14:09:20.306Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-21T14:09:20.316Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-21T14:09:20.316Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-21T14:09:20.629Z [LOG] [build_cfs_csv_uld.js] Written 730 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-21T14:09:20.629Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 3
+2026-04-21T14:09:20.629Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 329
+2026-04-21T14:09:20.629Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-21T14:09:20.629Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-21T14:09:20.863Z [LOG] Written 814 rows to CFS_hawb.csv
+2026-04-21T14:09:20.865Z [LOG]   HAWB rows: 721
+2026-04-21T14:09:20.865Z [LOG]   MAWB-only rows: 93
+2026-04-21T14:09:20.873Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-21T14:09:20.873Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-21T14:09:20.949Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AZ …
+2026-04-21T14:09:22.333Z [LOG] [mawb] Writing 402 rows → 'CFS_by_MAWB'!A1 …
+2026-04-21T14:09:25.301Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-21T14:09:25.301Z [LOG] [mawb] Done — 401 data rows uploaded.
+2026-04-21T14:09:25.304Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AZ …
+2026-04-21T14:09:25.915Z [LOG] [uld] Writing 731 rows → 'CFS_by_ULD'!A1 …
+2026-04-21T14:09:30.522Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-21T14:09:32.160Z [LOG] [uld] Applied ULD grouping formatting (650 ULD blocks)
+2026-04-21T14:09:32.160Z [LOG] [uld] Done — 730 data rows uploaded.
+2026-04-21T14:09:32.165Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AZ …
+2026-04-21T14:09:32.569Z [LOG] [hawb] Writing 815 rows → 'CFS_by_HAWB'!A1 …
+2026-04-21T14:09:35.744Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-21T14:09:36.766Z [LOG] [hawb] Applied MAWB grouping formatting (402 MAWB blocks)
+2026-04-21T14:09:36.766Z [LOG] [hawb] Done — 814 data rows uploaded.
+2026-04-21T14:09:36.777Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-21T14:09:36.777Z [LOG] [pipeline #75] pipeline complete
+2026-04-21T14:14:14.439Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T14:14:14.439Z [LOG] [pipeline #76] 2026-04-21T14:14:14.439Z
+2026-04-21T14:14:14.439Z [LOG] [extract_emails.js] starting…
+2026-04-21T14:14:18.653Z [LOG] extracted 0 email(s) this run
+2026-04-21T14:14:18.946Z [LOG] extraction finished
+2026-04-21T14:14:18.956Z [LOG] [extract_emails.js] done
+2026-04-21T14:14:18.956Z [LOG] [pipeline #76] new emails extracted: 0
+2026-04-21T14:14:18.956Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T14:14:19.042Z [LOG] parse summary: total=1901, parsed=0, alreadyParsed=1649, missingFields=252, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T14:14:19.050Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T14:14:19.050Z [LOG] [pipeline #76] new emails parsed: 0
+2026-04-21T14:14:19.050Z [LOG] [pipeline #76] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T14:19:14.440Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T14:19:14.440Z [LOG] [pipeline #77] 2026-04-21T14:19:14.440Z
+2026-04-21T14:19:14.440Z [LOG] [extract_emails.js] starting…
+2026-04-21T14:19:20.296Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7107.json
+2026-04-21T14:19:19.969Z [LOG] extracted 1 email(s) this run
+2026-04-21T14:19:20.286Z [LOG] extraction finished
+2026-04-21T14:19:20.297Z [LOG] [extract_emails.js] done
+2026-04-21T14:19:20.297Z [LOG] [pipeline #77] new emails extracted: 1
+2026-04-21T14:19:20.297Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T14:19:20.387Z [LOG] parse summary: total=1902, parsed=0, alreadyParsed=1649, missingFields=253, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T14:19:20.395Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T14:19:20.395Z [LOG] [pipeline #77] new emails parsed: 0
+2026-04-21T14:19:20.395Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-21T14:19:20.816Z [LOG] Written 401 rows to CFS_mawb.csv
+2026-04-21T14:19:20.821Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-21T14:19:20.831Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-21T14:19:20.831Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-21T14:19:21.140Z [LOG] [build_cfs_csv_uld.js] Written 730 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-21T14:19:21.140Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 3
+2026-04-21T14:19:21.140Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 329
+2026-04-21T14:19:21.140Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-21T14:19:21.140Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-21T14:19:21.359Z [LOG] Written 814 rows to CFS_hawb.csv
+2026-04-21T14:19:21.361Z [LOG]   HAWB rows: 721
+2026-04-21T14:19:21.361Z [LOG]   MAWB-only rows: 93
+2026-04-21T14:19:21.366Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-21T14:19:21.366Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-21T14:19:21.455Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AZ …
+2026-04-21T14:19:22.843Z [LOG] [mawb] Writing 402 rows → 'CFS_by_MAWB'!A1 …
+2026-04-21T14:19:26.019Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-21T14:19:26.019Z [LOG] [mawb] Done — 401 data rows uploaded.
+2026-04-21T14:19:26.023Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AZ …
+2026-04-21T14:19:26.530Z [LOG] [uld] Writing 731 rows → 'CFS_by_ULD'!A1 …
+2026-04-21T14:19:30.637Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-21T14:19:32.881Z [LOG] [uld] Applied ULD grouping formatting (650 ULD blocks)
+2026-04-21T14:19:32.881Z [LOG] [uld] Done — 730 data rows uploaded.
+2026-04-21T14:19:32.886Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AZ …
+2026-04-21T14:19:33.392Z [LOG] [hawb] Writing 815 rows → 'CFS_by_HAWB'!A1 …
+2026-04-21T14:19:36.051Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-21T14:19:36.973Z [LOG] [hawb] Applied MAWB grouping formatting (402 MAWB blocks)
+2026-04-21T14:19:36.973Z [LOG] [hawb] Done — 814 data rows uploaded.
+2026-04-21T14:19:36.983Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-21T14:19:36.983Z [LOG] [pipeline #77] pipeline complete
+2026-04-21T14:24:14.442Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T14:24:14.442Z [LOG] [pipeline #78] 2026-04-21T14:24:14.442Z
+2026-04-21T14:24:14.442Z [LOG] [extract_emails.js] starting…
+2026-04-21T14:24:19.742Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7108.json
+2026-04-21T14:24:19.372Z [LOG] extracted 1 email(s) this run
+2026-04-21T14:24:19.732Z [LOG] extraction finished
+2026-04-21T14:24:19.742Z [LOG] [extract_emails.js] done
+2026-04-21T14:24:19.742Z [LOG] [pipeline #78] new emails extracted: 1
+2026-04-21T14:24:19.743Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T14:24:19.828Z [LOG] parse summary: total=1903, parsed=0, alreadyParsed=1649, missingFields=254, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T14:24:19.835Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T14:24:19.835Z [LOG] [pipeline #78] new emails parsed: 0
+2026-04-21T14:24:19.835Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-21T14:24:20.270Z [LOG] Written 401 rows to CFS_mawb.csv
+2026-04-21T14:24:20.275Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-21T14:24:20.285Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-21T14:24:20.285Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-21T14:24:20.620Z [LOG] [build_cfs_csv_uld.js] Written 730 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-21T14:24:20.620Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 3
+2026-04-21T14:24:20.620Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 329
+2026-04-21T14:24:20.620Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-21T14:24:20.620Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-21T14:24:20.820Z [LOG] Written 814 rows to CFS_hawb.csv
+2026-04-21T14:24:20.823Z [LOG]   HAWB rows: 721
+2026-04-21T14:24:20.823Z [LOG]   MAWB-only rows: 93
+2026-04-21T14:24:20.828Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-21T14:24:20.829Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-21T14:24:20.922Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AZ …
+2026-04-21T14:24:21.683Z [LOG] [mawb] Writing 402 rows → 'CFS_by_MAWB'!A1 …
+2026-04-21T14:24:23.933Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-21T14:24:23.934Z [LOG] [mawb] Done — 401 data rows uploaded.
+2026-04-21T14:24:23.937Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AZ …
+2026-04-21T14:24:24.448Z [LOG] [uld] Writing 731 rows → 'CFS_by_ULD'!A1 …
+2026-04-21T14:24:31.104Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-21T14:24:33.050Z [LOG] [uld] Applied ULD grouping formatting (650 ULD blocks)
+2026-04-21T14:24:33.050Z [LOG] [uld] Done — 730 data rows uploaded.
+2026-04-21T14:24:33.055Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AZ …
+2026-04-21T14:24:33.559Z [LOG] [hawb] Writing 815 rows → 'CFS_by_HAWB'!A1 …
+2026-04-21T14:24:36.432Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-21T14:24:37.557Z [LOG] [hawb] Applied MAWB grouping formatting (402 MAWB blocks)
+2026-04-21T14:24:37.557Z [LOG] [hawb] Done — 814 data rows uploaded.
+2026-04-21T14:24:37.567Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-21T14:24:37.567Z [LOG] [pipeline #78] pipeline complete
+2026-04-21T14:29:14.442Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T14:29:14.442Z [LOG] [pipeline #79] 2026-04-21T14:29:14.442Z
+2026-04-21T14:29:14.448Z [LOG] [extract_emails.js] starting…
+2026-04-21T14:29:18.989Z [LOG] extracted 0 email(s) this run
+2026-04-21T14:29:19.282Z [LOG] extraction finished
+2026-04-21T14:29:19.293Z [LOG] [extract_emails.js] done
+2026-04-21T14:29:19.293Z [LOG] [pipeline #79] new emails extracted: 0
+2026-04-21T14:29:19.293Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T14:29:19.386Z [LOG] parse summary: total=1903, parsed=0, alreadyParsed=1649, missingFields=254, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T14:29:19.394Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T14:29:19.394Z [LOG] [pipeline #79] new emails parsed: 0
+2026-04-21T14:29:19.394Z [LOG] [pipeline #79] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T14:34:14.443Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T14:34:14.443Z [LOG] [pipeline #80] 2026-04-21T14:34:14.443Z
+2026-04-21T14:34:14.443Z [LOG] [extract_emails.js] starting…
+2026-04-21T14:34:18.615Z [LOG] extracted 0 email(s) this run
+2026-04-21T14:34:18.907Z [LOG] extraction finished
+2026-04-21T14:34:18.917Z [LOG] [extract_emails.js] done
+2026-04-21T14:34:18.917Z [LOG] [pipeline #80] new emails extracted: 0
+2026-04-21T14:34:18.917Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T14:34:19.009Z [LOG] parse summary: total=1903, parsed=0, alreadyParsed=1649, missingFields=254, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T14:34:19.016Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T14:34:19.016Z [LOG] [pipeline #80] new emails parsed: 0
+2026-04-21T14:34:19.016Z [LOG] [pipeline #80] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T14:39:14.444Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T14:39:14.444Z [LOG] [pipeline #81] 2026-04-21T14:39:14.444Z
+2026-04-21T14:39:14.444Z [LOG] [extract_emails.js] starting…
+2026-04-21T14:39:18.545Z [LOG] extracted 0 email(s) this run
+2026-04-21T14:39:18.836Z [LOG] extraction finished
+2026-04-21T14:39:18.848Z [LOG] [extract_emails.js] done
+2026-04-21T14:39:18.848Z [LOG] [pipeline #81] new emails extracted: 0
+2026-04-21T14:39:18.848Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T14:39:18.946Z [LOG] parse summary: total=1903, parsed=0, alreadyParsed=1649, missingFields=254, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T14:39:18.953Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T14:39:18.953Z [LOG] [pipeline #81] new emails parsed: 0
+2026-04-21T14:39:18.953Z [LOG] [pipeline #81] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T14:44:14.445Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T14:44:14.445Z [LOG] [pipeline #82] 2026-04-21T14:44:14.445Z
+2026-04-21T14:44:14.445Z [LOG] [extract_emails.js] starting…
+2026-04-21T14:44:18.280Z [LOG] extracted 0 email(s) this run
+2026-04-21T14:44:18.567Z [LOG] extraction finished
+2026-04-21T14:44:18.577Z [LOG] [extract_emails.js] done
+2026-04-21T14:44:18.577Z [LOG] [pipeline #82] new emails extracted: 0
+2026-04-21T14:44:18.577Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T14:44:18.665Z [LOG] parse summary: total=1903, parsed=0, alreadyParsed=1649, missingFields=254, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T14:44:18.672Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T14:44:18.672Z [LOG] [pipeline #82] new emails parsed: 0
+2026-04-21T14:44:18.672Z [LOG] [pipeline #82] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T14:49:14.447Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T14:49:14.447Z [LOG] [pipeline #83] 2026-04-21T14:49:14.447Z
+2026-04-21T14:49:14.447Z [LOG] [extract_emails.js] starting…
+2026-04-21T14:49:18.721Z [LOG] extracted 0 email(s) this run
+2026-04-21T14:49:19.015Z [LOG] extraction finished
+2026-04-21T14:49:19.025Z [LOG] [extract_emails.js] done
+2026-04-21T14:49:19.025Z [LOG] [pipeline #83] new emails extracted: 0
+2026-04-21T14:49:19.025Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T14:49:19.113Z [LOG] parse summary: total=1903, parsed=0, alreadyParsed=1649, missingFields=254, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T14:49:19.121Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T14:49:19.121Z [LOG] [pipeline #83] new emails parsed: 0
+2026-04-21T14:49:19.121Z [LOG] [pipeline #83] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T14:54:14.448Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T14:54:14.448Z [LOG] [pipeline #84] 2026-04-21T14:54:14.448Z
+2026-04-21T14:54:14.448Z [LOG] [extract_emails.js] starting…
+2026-04-21T14:54:18.964Z [LOG] extracted 0 email(s) this run
+2026-04-21T14:54:19.251Z [LOG] extraction finished
+2026-04-21T14:54:19.261Z [LOG] [extract_emails.js] done
+2026-04-21T14:54:19.261Z [LOG] [pipeline #84] new emails extracted: 0
+2026-04-21T14:54:19.261Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T14:54:19.341Z [LOG] parse summary: total=1903, parsed=0, alreadyParsed=1649, missingFields=254, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T14:54:19.349Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T14:54:19.349Z [LOG] [pipeline #84] new emails parsed: 0
+2026-04-21T14:54:19.349Z [LOG] [pipeline #84] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T14:59:14.449Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T14:59:14.450Z [LOG] [pipeline #85] 2026-04-21T14:59:14.450Z
+2026-04-21T14:59:14.450Z [LOG] [extract_emails.js] starting…
+2026-04-21T14:59:18.173Z [LOG] extracted 0 email(s) this run
+2026-04-21T14:59:18.464Z [LOG] extraction finished
+2026-04-21T14:59:18.474Z [LOG] [extract_emails.js] done
+2026-04-21T14:59:18.474Z [LOG] [pipeline #85] new emails extracted: 0
+2026-04-21T14:59:18.474Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T14:59:18.558Z [LOG] parse summary: total=1903, parsed=0, alreadyParsed=1649, missingFields=254, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T14:59:18.566Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T14:59:18.566Z [LOG] [pipeline #85] new emails parsed: 0
+2026-04-21T14:59:18.566Z [LOG] [pipeline #85] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T15:04:14.452Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T15:04:14.452Z [LOG] [pipeline #86] 2026-04-21T15:04:14.452Z
+2026-04-21T15:04:14.452Z [LOG] [extract_emails.js] starting…
+2026-04-21T15:04:18.713Z [LOG] extracted 0 email(s) this run
+2026-04-21T15:04:19.006Z [LOG] extraction finished
+2026-04-21T15:04:19.017Z [LOG] [extract_emails.js] done
+2026-04-21T15:04:19.017Z [LOG] [pipeline #86] new emails extracted: 0
+2026-04-21T15:04:19.017Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T15:04:19.101Z [LOG] parse summary: total=1903, parsed=0, alreadyParsed=1649, missingFields=254, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T15:04:19.109Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T15:04:19.109Z [LOG] [pipeline #86] new emails parsed: 0
+2026-04-21T15:04:19.109Z [LOG] [pipeline #86] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T15:09:14.453Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T15:09:14.454Z [LOG] [pipeline #87] 2026-04-21T15:09:14.454Z
+2026-04-21T15:09:14.454Z [LOG] [extract_emails.js] starting…
+2026-04-21T15:09:18.777Z [LOG] extracted 0 email(s) this run
+2026-04-21T15:09:19.036Z [LOG] extraction finished
+2026-04-21T15:09:19.046Z [LOG] [extract_emails.js] done
+2026-04-21T15:09:19.046Z [LOG] [pipeline #87] new emails extracted: 0
+2026-04-21T15:09:19.046Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T15:09:19.129Z [LOG] parse summary: total=1903, parsed=0, alreadyParsed=1649, missingFields=254, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T15:09:19.137Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T15:09:19.137Z [LOG] [pipeline #87] new emails parsed: 0
+2026-04-21T15:09:19.137Z [LOG] [pipeline #87] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T15:14:14.454Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T15:14:14.455Z [LOG] [pipeline #88] 2026-04-21T15:14:14.455Z
+2026-04-21T15:14:14.455Z [LOG] [extract_emails.js] starting…
+2026-04-21T15:14:18.580Z [LOG] extracted 0 email(s) this run
+2026-04-21T15:14:18.871Z [LOG] extraction finished
+2026-04-21T15:14:18.881Z [LOG] [extract_emails.js] done
+2026-04-21T15:14:18.881Z [LOG] [pipeline #88] new emails extracted: 0
+2026-04-21T15:14:18.881Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T15:14:18.969Z [LOG] parse summary: total=1903, parsed=0, alreadyParsed=1649, missingFields=254, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T15:14:18.977Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T15:14:18.977Z [LOG] [pipeline #88] new emails parsed: 0
+2026-04-21T15:14:18.977Z [LOG] [pipeline #88] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T15:19:14.455Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T15:19:14.456Z [LOG] [pipeline #89] 2026-04-21T15:19:14.456Z
+2026-04-21T15:19:14.456Z [LOG] [extract_emails.js] starting…
+2026-04-21T15:19:18.525Z [LOG] extracted 0 email(s) this run
+2026-04-21T15:19:18.922Z [LOG] extraction finished
+2026-04-21T15:19:18.932Z [LOG] [extract_emails.js] done
+2026-04-21T15:19:18.932Z [LOG] [pipeline #89] new emails extracted: 0
+2026-04-21T15:19:18.932Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T15:19:19.016Z [LOG] parse summary: total=1903, parsed=0, alreadyParsed=1649, missingFields=254, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T15:19:19.023Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T15:19:19.023Z [LOG] [pipeline #89] new emails parsed: 0
+2026-04-21T15:19:19.023Z [LOG] [pipeline #89] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T21:50:39.060Z [LOG] Pipeline polling every 300s. Press Ctrl+C to stop.
+2026-04-21T21:50:39.062Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T21:50:39.062Z [LOG] [pipeline #1] 2026-04-21T21:50:39.062Z
+2026-04-21T21:50:39.062Z [LOG] [extract_emails.js] starting…
+2026-04-21T21:50:57.438Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7164.json
+2026-04-21T21:50:57.438Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7163.json
+2026-04-21T21:50:57.438Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7162.json
+2026-04-21T21:50:57.438Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7161.json
+2026-04-21T21:50:57.438Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7160.json
+2026-04-21T21:50:57.438Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7159.json
+2026-04-21T21:50:57.438Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7158.json
+2026-04-21T21:50:57.438Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7157.json
+2026-04-21T21:50:57.438Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7156.json
+2026-04-21T21:50:57.438Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7155.json
+2026-04-21T21:50:57.438Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7154.json
+2026-04-21T21:50:57.438Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7153.json
+2026-04-21T21:50:57.438Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7152.json
+2026-04-21T21:50:57.439Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7151.json
+2026-04-21T21:50:57.439Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7150.json
+2026-04-21T21:50:57.439Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7149.json
+2026-04-21T21:50:57.439Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7148.json
+2026-04-21T21:50:57.439Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7147.json
+2026-04-21T21:50:57.439Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7146.json
+2026-04-21T21:50:57.439Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7145.json
+2026-04-21T21:50:57.439Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7144.json
+2026-04-21T21:50:57.439Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7143.json
+2026-04-21T21:50:57.439Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7142.json
+2026-04-21T21:50:57.439Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7141.json
+2026-04-21T21:50:57.439Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7140.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7139.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7138.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7137.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7136.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7135.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7134.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7133.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7132.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7131.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7130.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7129.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7128.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7127.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7126.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7125.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7124.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7123.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7122.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7121.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7120.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7119.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7118.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7117.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7116.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7115.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7114.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7113.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7112.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7111.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7110.json
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7109.json
+2026-04-21T21:50:57.202Z [LOG] extracted 56 email(s) this run
+2026-04-21T21:50:57.424Z [LOG] extraction finished
+2026-04-21T21:50:57.440Z [LOG] [extract_emails.js] done
+2026-04-21T21:50:57.440Z [LOG] [pipeline #1] new emails extracted: 56
+2026-04-21T21:50:57.440Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7113.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7114.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7115.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7116.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7117.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7118.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7119.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7120.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7121.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7122.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7123.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7124.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7125.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7126.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7127.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7128.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7129.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7130.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7131.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7132.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7133.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7134.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7135.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7136.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7137.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7138.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7139.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7140.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7141.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7142.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7143.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7144.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7145.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7146.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7147.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7148.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7149.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7150.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7151.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7152.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7153.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7154.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7155.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7156.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7157.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7158.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7159.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7160.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7161.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7162.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7163.json
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] Parsed: parsed-INBOX-uid-7164.json
+2026-04-21T21:50:58.317Z [LOG] parse summary: total=1959, parsed=52, alreadyParsed=1649, missingFields=258, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T21:50:58.320Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T21:50:58.320Z [LOG] [pipeline #1] new emails parsed: 52
+2026-04-21T21:50:58.320Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-21T21:50:58.620Z [LOG] Written 409 rows to CFS_mawb.csv
+2026-04-21T21:50:58.623Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-21T21:50:58.628Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-21T21:50:58.628Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-21T21:50:58.869Z [LOG] [build_cfs_csv_uld.js] Written 742 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-21T21:50:58.869Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 3
+2026-04-21T21:50:58.869Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 333
+2026-04-21T21:50:58.869Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-21T21:50:58.870Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-21T21:50:59.070Z [LOG] Written 845 rows to CFS_hawb.csv
+2026-04-21T21:50:59.072Z [LOG]   HAWB rows: 749
+2026-04-21T21:50:59.072Z [LOG]   MAWB-only rows: 96
+2026-04-21T21:50:59.076Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-21T21:50:59.076Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-21T21:50:59.169Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AZ …
+2026-04-21T21:51:00.870Z [LOG] [mawb] Writing 410 rows → 'CFS_by_MAWB'!A1 …
+2026-04-21T21:51:03.558Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-21T21:51:03.558Z [LOG] [mawb] Done — 409 data rows uploaded.
+2026-04-21T21:51:03.560Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AZ …
+2026-04-21T21:51:04.009Z [LOG] [uld] Writing 743 rows → 'CFS_by_ULD'!A1 …
+2026-04-21T21:51:07.454Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-21T21:51:09.004Z [LOG] [uld] Applied ULD grouping formatting (660 ULD blocks)
+2026-04-21T21:51:09.004Z [LOG] [uld] Done — 742 data rows uploaded.
+2026-04-21T21:51:09.010Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AZ …
+2026-04-21T21:51:09.393Z [LOG] [hawb] Writing 846 rows → 'CFS_by_HAWB'!A1 …
+2026-04-21T21:51:11.139Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-21T21:51:11.881Z [LOG] [hawb] Applied MAWB grouping formatting (410 MAWB blocks)
+2026-04-21T21:51:11.881Z [LOG] [hawb] Done — 845 data rows uploaded.
+2026-04-21T21:51:11.889Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-21T21:51:11.889Z [LOG] [pipeline #1] pipeline complete
+2026-04-21T21:56:11.890Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T21:56:11.891Z [LOG] [pipeline #2] 2026-04-21T21:56:11.891Z
+2026-04-21T21:56:11.891Z [LOG] [extract_emails.js] starting…
+2026-04-21T21:56:16.159Z [LOG] extracted 0 email(s) this run
+2026-04-21T21:56:16.457Z [LOG] extraction finished
+2026-04-21T21:56:16.465Z [LOG] [extract_emails.js] done
+2026-04-21T21:56:16.465Z [LOG] [pipeline #2] new emails extracted: 0
+2026-04-21T21:56:16.465Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T21:56:16.519Z [LOG] parse summary: total=1959, parsed=0, alreadyParsed=1701, missingFields=258, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T21:56:16.523Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T21:56:16.523Z [LOG] [pipeline #2] new emails parsed: 0
+2026-04-21T21:56:16.523Z [LOG] [pipeline #2] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T22:01:11.890Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T22:01:11.890Z [LOG] [pipeline #3] 2026-04-21T22:01:11.890Z
+2026-04-21T22:01:11.890Z [LOG] [extract_emails.js] starting…
+2026-04-21T22:01:15.908Z [LOG] extracted 0 email(s) this run
+2026-04-21T22:01:16.210Z [LOG] extraction finished
+2026-04-21T22:01:16.218Z [LOG] [extract_emails.js] done
+2026-04-21T22:01:16.218Z [LOG] [pipeline #3] new emails extracted: 0
+2026-04-21T22:01:16.218Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T22:01:16.268Z [LOG] parse summary: total=1959, parsed=0, alreadyParsed=1701, missingFields=258, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T22:01:16.273Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T22:01:16.273Z [LOG] [pipeline #3] new emails parsed: 0
+2026-04-21T22:01:16.273Z [LOG] [pipeline #3] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T22:06:11.891Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T22:06:11.892Z [LOG] [pipeline #4] 2026-04-21T22:06:11.892Z
+2026-04-21T22:06:11.892Z [LOG] [extract_emails.js] starting…
+2026-04-21T22:06:16.261Z [LOG] extracted 0 email(s) this run
+2026-04-21T22:06:16.557Z [LOG] extraction finished
+2026-04-21T22:06:16.564Z [LOG] [extract_emails.js] done
+2026-04-21T22:06:16.564Z [LOG] [pipeline #4] new emails extracted: 0
+2026-04-21T22:06:16.564Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T22:06:16.618Z [LOG] parse summary: total=1959, parsed=0, alreadyParsed=1701, missingFields=258, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T22:06:16.622Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T22:06:16.622Z [LOG] [pipeline #4] new emails parsed: 0
+2026-04-21T22:06:16.622Z [LOG] [pipeline #4] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T22:11:11.892Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T22:11:11.892Z [LOG] [pipeline #5] 2026-04-21T22:11:11.892Z
+2026-04-21T22:11:11.892Z [LOG] [extract_emails.js] starting…
+2026-04-21T22:11:15.962Z [LOG] extracted 0 email(s) this run
+2026-04-21T22:11:16.258Z [LOG] extraction finished
+2026-04-21T22:11:16.266Z [LOG] [extract_emails.js] done
+2026-04-21T22:11:16.266Z [LOG] [pipeline #5] new emails extracted: 0
+2026-04-21T22:11:16.266Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T22:11:16.317Z [LOG] parse summary: total=1959, parsed=0, alreadyParsed=1701, missingFields=258, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T22:11:16.321Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T22:11:16.321Z [LOG] [pipeline #5] new emails parsed: 0
+2026-04-21T22:11:16.321Z [LOG] [pipeline #5] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T22:16:11.892Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T22:16:11.893Z [LOG] [pipeline #6] 2026-04-21T22:16:11.893Z
+2026-04-21T22:16:11.893Z [LOG] [extract_emails.js] starting…
+2026-04-21T22:16:15.984Z [LOG] extracted 0 email(s) this run
+2026-04-21T22:16:16.280Z [LOG] extraction finished
+2026-04-21T22:16:16.288Z [LOG] [extract_emails.js] done
+2026-04-21T22:16:16.288Z [LOG] [pipeline #6] new emails extracted: 0
+2026-04-21T22:16:16.288Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T22:16:16.335Z [LOG] parse summary: total=1959, parsed=0, alreadyParsed=1701, missingFields=258, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T22:16:16.339Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T22:16:16.340Z [LOG] [pipeline #6] new emails parsed: 0
+2026-04-21T22:16:16.340Z [LOG] [pipeline #6] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T22:21:11.894Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T22:21:11.895Z [LOG] [pipeline #7] 2026-04-21T22:21:11.895Z
+2026-04-21T22:21:11.895Z [LOG] [extract_emails.js] starting…
+2026-04-21T22:21:16.112Z [LOG] extracted 0 email(s) this run
+2026-04-21T22:21:16.410Z [LOG] extraction finished
+2026-04-21T22:21:16.418Z [LOG] [extract_emails.js] done
+2026-04-21T22:21:16.418Z [LOG] [pipeline #7] new emails extracted: 0
+2026-04-21T22:21:16.418Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T22:21:16.470Z [LOG] parse summary: total=1959, parsed=0, alreadyParsed=1701, missingFields=258, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T22:21:16.473Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T22:21:16.474Z [LOG] [pipeline #7] new emails parsed: 0
+2026-04-21T22:21:16.474Z [LOG] [pipeline #7] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T22:26:11.895Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T22:26:11.895Z [LOG] [pipeline #8] 2026-04-21T22:26:11.895Z
+2026-04-21T22:26:11.895Z [LOG] [extract_emails.js] starting…
+2026-04-21T22:26:16.909Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7165.json
+2026-04-21T22:26:16.585Z [LOG] extracted 1 email(s) this run
+2026-04-21T22:26:16.901Z [LOG] extraction finished
+2026-04-21T22:26:16.909Z [LOG] [extract_emails.js] done
+2026-04-21T22:26:16.909Z [LOG] [pipeline #8] new emails extracted: 1
+2026-04-21T22:26:16.909Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T22:26:16.961Z [LOG] parse summary: total=1960, parsed=0, alreadyParsed=1701, missingFields=259, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T22:26:16.966Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T22:26:16.966Z [LOG] [pipeline #8] new emails parsed: 0
+2026-04-21T22:26:16.966Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-21T22:26:17.205Z [LOG] Written 409 rows to CFS_mawb.csv
+2026-04-21T22:26:17.208Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-21T22:26:17.214Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-21T22:26:17.214Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-21T22:26:17.447Z [LOG] [build_cfs_csv_uld.js] Written 742 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-21T22:26:17.447Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 3
+2026-04-21T22:26:17.447Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 333
+2026-04-21T22:26:17.447Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-21T22:26:17.447Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-21T22:26:17.634Z [LOG] Written 845 rows to CFS_hawb.csv
+2026-04-21T22:26:17.637Z [LOG]   HAWB rows: 749
+2026-04-21T22:26:17.637Z [LOG]   MAWB-only rows: 96
+2026-04-21T22:26:17.642Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-21T22:26:17.642Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-21T22:26:17.706Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AZ …
+2026-04-21T22:26:18.600Z [LOG] [mawb] Writing 410 rows → 'CFS_by_MAWB'!A1 …
+2026-04-21T22:26:21.359Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-21T22:26:21.359Z [LOG] [mawb] Done — 409 data rows uploaded.
+2026-04-21T22:26:21.362Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AZ …
+2026-04-21T22:26:21.871Z [LOG] [uld] Writing 743 rows → 'CFS_by_ULD'!A1 …
+2026-04-21T22:26:25.354Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-21T22:26:26.808Z [LOG] [uld] Applied ULD grouping formatting (660 ULD blocks)
+2026-04-21T22:26:26.809Z [LOG] [uld] Done — 742 data rows uploaded.
+2026-04-21T22:26:26.812Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AZ …
+2026-04-21T22:26:27.402Z [LOG] [hawb] Writing 846 rows → 'CFS_by_HAWB'!A1 …
+2026-04-21T22:26:29.552Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-21T22:26:30.474Z [LOG] [hawb] Applied MAWB grouping formatting (410 MAWB blocks)
+2026-04-21T22:26:30.474Z [LOG] [hawb] Done — 845 data rows uploaded.
+2026-04-21T22:26:30.482Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-21T22:26:30.482Z [LOG] [pipeline #8] pipeline complete
+2026-04-21T22:31:11.902Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T22:31:11.902Z [LOG] [pipeline #9] 2026-04-21T22:31:11.902Z
+2026-04-21T22:31:11.902Z [LOG] [extract_emails.js] starting…
+2026-04-21T22:31:16.798Z [LOG] [extract_emails.js] Extracted: INBOX-uid-7166.json
+2026-04-21T22:31:16.419Z [LOG] extracted 1 email(s) this run
+2026-04-21T22:31:16.790Z [LOG] extraction finished
+2026-04-21T22:31:16.798Z [LOG] [extract_emails.js] done
+2026-04-21T22:31:16.798Z [LOG] [pipeline #9] new emails extracted: 1
+2026-04-21T22:31:16.798Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T22:31:16.860Z [LOG] parse summary: total=1961, parsed=0, alreadyParsed=1701, missingFields=260, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T22:31:16.865Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T22:31:16.865Z [LOG] [pipeline #9] new emails parsed: 0
+2026-04-21T22:31:16.865Z [LOG] [build_cfs_csv_mawb.js] starting…
+2026-04-21T22:31:17.122Z [LOG] Written 409 rows to CFS_mawb.csv
+2026-04-21T22:31:17.125Z [LOG]   Rows with no FFM match (no flight data): 3
+2026-04-21T22:31:17.131Z [LOG] [build_cfs_csv_mawb.js] done
+2026-04-21T22:31:17.131Z [LOG] [build_cfs_csv_uld.js] starting…
+2026-04-21T22:31:17.355Z [LOG] [build_cfs_csv_uld.js] Written 742 rows to /home/wesleywu9/tolead/NCAParser/server/data/outputs/parsed_tables/CFS_uld.csv
+2026-04-21T22:31:17.355Z [LOG] [build_cfs_csv_uld.js]   Rows with no FFM match: 3
+2026-04-21T22:31:17.355Z [LOG] [build_cfs_csv_uld.js]   Extra rows from MAWBs split across multiple ULDs: 333
+2026-04-21T22:31:17.355Z [LOG] [build_cfs_csv_uld.js] done
+2026-04-21T22:31:17.355Z [LOG] [build_cfs_csv_hawb.js] starting…
+2026-04-21T22:31:17.543Z [LOG] Written 845 rows to CFS_hawb.csv
+2026-04-21T22:31:17.546Z [LOG]   HAWB rows: 749
+2026-04-21T22:31:17.546Z [LOG]   MAWB-only rows: 96
+2026-04-21T22:31:17.550Z [LOG] [build_cfs_csv_hawb.js] done
+2026-04-21T22:31:17.550Z [LOG] [upload_tables_to_sheets.js] starting…
+2026-04-21T22:31:17.612Z [LOG] [mawb] Clearing 'CFS_by_MAWB'!A:AZ …
+2026-04-21T22:31:18.534Z [LOG] [mawb] Writing 410 rows → 'CFS_by_MAWB'!A1 …
+2026-04-21T22:31:20.272Z [LOG] [mawb] Applied sheet formatting and sorting
+2026-04-21T22:31:20.272Z [LOG] [mawb] Done — 409 data rows uploaded.
+2026-04-21T22:31:20.274Z [LOG] [uld] Clearing 'CFS_by_ULD'!A:AZ …
+2026-04-21T22:31:20.785Z [LOG] [uld] Writing 743 rows → 'CFS_by_ULD'!A1 …
+2026-04-21T22:31:23.957Z [LOG] [uld] Applied sheet formatting and sorting
+2026-04-21T22:31:25.291Z [LOG] [uld] Applied ULD grouping formatting (660 ULD blocks)
+2026-04-21T22:31:25.291Z [LOG] [uld] Done — 742 data rows uploaded.
+2026-04-21T22:31:25.295Z [LOG] [hawb] Clearing 'CFS_by_HAWB'!A:AZ …
+2026-04-21T22:31:25.801Z [LOG] [hawb] Writing 846 rows → 'CFS_by_HAWB'!A1 …
+2026-04-21T22:31:27.851Z [LOG] [hawb] Applied sheet formatting and sorting
+2026-04-21T22:31:28.772Z [LOG] [hawb] Applied MAWB grouping formatting (410 MAWB blocks)
+2026-04-21T22:31:28.772Z [LOG] [hawb] Done — 845 data rows uploaded.
+2026-04-21T22:31:28.780Z [LOG] [upload_tables_to_sheets.js] done
+2026-04-21T22:31:28.780Z [LOG] [pipeline #9] pipeline complete
+2026-04-21T22:36:11.902Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T22:36:11.902Z [LOG] [pipeline #10] 2026-04-21T22:36:11.902Z
+2026-04-21T22:36:11.902Z [LOG] [extract_emails.js] starting…
+2026-04-21T22:36:16.119Z [LOG] extracted 0 email(s) this run
+2026-04-21T22:36:16.418Z [LOG] extraction finished
+2026-04-21T22:36:16.425Z [LOG] [extract_emails.js] done
+2026-04-21T22:36:16.425Z [LOG] [pipeline #10] new emails extracted: 0
+2026-04-21T22:36:16.425Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T22:36:16.477Z [LOG] parse summary: total=1961, parsed=0, alreadyParsed=1701, missingFields=260, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T22:36:16.481Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T22:36:16.481Z [LOG] [pipeline #10] new emails parsed: 0
+2026-04-21T22:36:16.481Z [LOG] [pipeline #10] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T22:41:11.905Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T22:41:11.906Z [LOG] [pipeline #11] 2026-04-21T22:41:11.906Z
+2026-04-21T22:41:11.906Z [LOG] [extract_emails.js] starting…
+2026-04-21T22:41:16.154Z [LOG] extracted 0 email(s) this run
+2026-04-21T22:41:16.451Z [LOG] extraction finished
+2026-04-21T22:41:16.458Z [LOG] [extract_emails.js] done
+2026-04-21T22:41:16.458Z [LOG] [pipeline #11] new emails extracted: 0
+2026-04-21T22:41:16.458Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T22:41:16.507Z [LOG] parse summary: total=1961, parsed=0, alreadyParsed=1701, missingFields=260, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T22:41:16.511Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T22:41:16.511Z [LOG] [pipeline #11] new emails parsed: 0
+2026-04-21T22:41:16.511Z [LOG] [pipeline #11] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T22:46:11.910Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T22:46:11.910Z [LOG] [pipeline #12] 2026-04-21T22:46:11.910Z
+2026-04-21T22:46:11.910Z [LOG] [extract_emails.js] starting…
+2026-04-21T22:46:15.879Z [LOG] extracted 0 email(s) this run
+2026-04-21T22:46:16.177Z [LOG] extraction finished
+2026-04-21T22:46:16.185Z [LOG] [extract_emails.js] done
+2026-04-21T22:46:16.185Z [LOG] [pipeline #12] new emails extracted: 0
+2026-04-21T22:46:16.185Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T22:46:16.240Z [LOG] parse summary: total=1961, parsed=0, alreadyParsed=1701, missingFields=260, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T22:46:16.244Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T22:46:16.244Z [LOG] [pipeline #12] new emails parsed: 0
+2026-04-21T22:46:16.244Z [LOG] [pipeline #12] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T22:51:11.911Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T22:51:11.911Z [LOG] [pipeline #13] 2026-04-21T22:51:11.911Z
+2026-04-21T22:51:11.911Z [LOG] [extract_emails.js] starting…
+2026-04-21T22:51:16.220Z [LOG] extracted 0 email(s) this run
+2026-04-21T22:51:16.517Z [LOG] extraction finished
+2026-04-21T22:51:16.524Z [LOG] [extract_emails.js] done
+2026-04-21T22:51:16.525Z [LOG] [pipeline #13] new emails extracted: 0
+2026-04-21T22:51:16.525Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T22:51:16.571Z [LOG] parse summary: total=1961, parsed=0, alreadyParsed=1701, missingFields=260, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T22:51:16.575Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T22:51:16.575Z [LOG] [pipeline #13] new emails parsed: 0
+2026-04-21T22:51:16.575Z [LOG] [pipeline #13] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T22:56:11.912Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T22:56:11.912Z [LOG] [pipeline #14] 2026-04-21T22:56:11.912Z
+2026-04-21T22:56:11.912Z [LOG] [extract_emails.js] starting…
+2026-04-21T22:56:15.946Z [LOG] extracted 0 email(s) this run
+2026-04-21T22:56:16.243Z [LOG] extraction finished
+2026-04-21T22:56:16.251Z [LOG] [extract_emails.js] done
+2026-04-21T22:56:16.251Z [LOG] [pipeline #14] new emails extracted: 0
+2026-04-21T22:56:16.251Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T22:56:16.301Z [LOG] parse summary: total=1961, parsed=0, alreadyParsed=1701, missingFields=260, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T22:56:16.305Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T22:56:16.305Z [LOG] [pipeline #14] new emails parsed: 0
+2026-04-21T22:56:16.305Z [LOG] [pipeline #14] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T23:01:11.917Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T23:01:11.918Z [LOG] [pipeline #15] 2026-04-21T23:01:11.918Z
+2026-04-21T23:01:11.918Z [LOG] [extract_emails.js] starting…
+2026-04-21T23:01:16.092Z [LOG] extracted 0 email(s) this run
+2026-04-21T23:01:16.389Z [LOG] extraction finished
+2026-04-21T23:01:16.396Z [LOG] [extract_emails.js] done
+2026-04-21T23:01:16.396Z [LOG] [pipeline #15] new emails extracted: 0
+2026-04-21T23:01:16.396Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T23:01:16.449Z [LOG] parse summary: total=1961, parsed=0, alreadyParsed=1701, missingFields=260, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T23:01:16.453Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T23:01:16.453Z [LOG] [pipeline #15] new emails parsed: 0
+2026-04-21T23:01:16.453Z [LOG] [pipeline #15] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T23:06:11.922Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T23:06:11.922Z [LOG] [pipeline #16] 2026-04-21T23:06:11.922Z
+2026-04-21T23:06:11.922Z [LOG] [extract_emails.js] starting…
+2026-04-21T23:06:16.036Z [LOG] extracted 0 email(s) this run
+2026-04-21T23:06:16.334Z [LOG] extraction finished
+2026-04-21T23:06:16.341Z [LOG] [extract_emails.js] done
+2026-04-21T23:06:16.341Z [LOG] [pipeline #16] new emails extracted: 0
+2026-04-21T23:06:16.341Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T23:06:16.398Z [LOG] parse summary: total=1961, parsed=0, alreadyParsed=1701, missingFields=260, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T23:06:16.402Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T23:06:16.402Z [LOG] [pipeline #16] new emails parsed: 0
+2026-04-21T23:06:16.402Z [LOG] [pipeline #16] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T23:11:11.926Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T23:11:11.927Z [LOG] [pipeline #17] 2026-04-21T23:11:11.927Z
+2026-04-21T23:11:11.927Z [LOG] [extract_emails.js] starting…
+2026-04-21T23:11:16.079Z [LOG] extracted 0 email(s) this run
+2026-04-21T23:11:16.376Z [LOG] extraction finished
+2026-04-21T23:11:16.383Z [LOG] [extract_emails.js] done
+2026-04-21T23:11:16.383Z [LOG] [pipeline #17] new emails extracted: 0
+2026-04-21T23:11:16.383Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T23:11:16.437Z [LOG] parse summary: total=1961, parsed=0, alreadyParsed=1701, missingFields=260, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T23:11:16.442Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T23:11:16.442Z [LOG] [pipeline #17] new emails parsed: 0
+2026-04-21T23:11:16.442Z [LOG] [pipeline #17] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T23:16:11.931Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T23:16:11.931Z [LOG] [pipeline #18] 2026-04-21T23:16:11.931Z
+2026-04-21T23:16:11.931Z [LOG] [extract_emails.js] starting…
+2026-04-21T23:16:16.323Z [LOG] extracted 0 email(s) this run
+2026-04-21T23:16:16.621Z [LOG] extraction finished
+2026-04-21T23:16:16.629Z [LOG] [extract_emails.js] done
+2026-04-21T23:16:16.629Z [LOG] [pipeline #18] new emails extracted: 0
+2026-04-21T23:16:16.629Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T23:16:16.682Z [LOG] parse summary: total=1961, parsed=0, alreadyParsed=1701, missingFields=260, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T23:16:16.686Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T23:16:16.686Z [LOG] [pipeline #18] new emails parsed: 0
+2026-04-21T23:16:16.686Z [LOG] [pipeline #18] no new data — skipping CSV rebuild and Sheets upload
+2026-04-21T23:21:11.933Z [LOG] ────────────────────────────────────────────────────────────
+2026-04-21T23:21:11.933Z [LOG] [pipeline #19] 2026-04-21T23:21:11.933Z
+2026-04-21T23:21:11.933Z [LOG] [extract_emails.js] starting…
+2026-04-21T23:21:15.863Z [LOG] extracted 0 email(s) this run
+2026-04-21T23:21:16.149Z [LOG] extraction finished
+2026-04-21T23:21:16.154Z [LOG] [extract_emails.js] done
+2026-04-21T23:21:16.154Z [LOG] [pipeline #19] new emails extracted: 0
+2026-04-21T23:21:16.154Z [LOG] [parse_extracted_emails.js] starting…
+2026-04-21T23:21:16.195Z [LOG] parse summary: total=1961, parsed=0, alreadyParsed=1701, missingFields=260, invalidMessageType=0, missingParser=0, parseErrors=0
+2026-04-21T23:21:16.199Z [LOG] [parse_extracted_emails.js] done
+2026-04-21T23:21:16.199Z [LOG] [pipeline #19] new emails parsed: 0
+2026-04-21T23:21:16.199Z [LOG] [pipeline #19] no new data — skipping CSV rebuild and Sheets upload

@@ -158,6 +158,10 @@ function csvRow(fields) {
   return fields.map(csvEscape).join(',');
 }
 
+function normalizeKey(value) {
+  return String(value || '').trim();
+}
+
 // ── Build indices ─────────────────────────────────────────────────────────────
 
 /**
@@ -382,39 +386,56 @@ for (const mawb of [...allMawbs].sort()) {
     : fhlDocs[0] ? `${fhlDocs[0].masterWeight}${fhlDocs[0].masterWeightUnit}` : '';
 
   if (fhlDocs.length > 0) {
+    // One row per unique HAWB per MAWB, keeping the latest FHL UID when repeated.
+    const latestByHawb = new Map();
     for (const fhl of fhlDocs) {
-      const emailRcvd = emailReceivedIndex.get(fhl.uid) || emailReceivedIndex.get(fwb?.uid) || '';
-      const consignee = fwb?.consignee || fhl.consignee || fallbackConsignee;
-
-      if (fhl.houseBills.length > 0) {
-        // One row per house bill in each FHL.
-        for (const hb of fhl.houseBills) {
-          const hawb        = hb.HouseWaybillNumber || '';
-          const houseWeight = hb.HouseWeight
-            ? `${hb.HouseWeight}${hb.HouseWeightUnit || fhl.masterWeightUnit || 'K'}`
-            : mawbWeight;
-          const ttlPcs    = hb.HousePieceCount || '';
-          const houseSlac = hb.HouseSlac || '';
-
-          rows.push([
-            emailRcvd, flight, std, sta, '', lfd, pmcs, mawb, hawb,
-            houseWeight, pob,
-            ttlPcs,
-            houseSlac,
-            '', consignee, '',
-            ...new Array(TRAILING_EMPTY).fill(''),
-          ]);
+      const bills = Array.isArray(fhl.houseBills) ? fhl.houseBills : [];
+      for (const hb of bills) {
+        const hawb = normalizeKey(hb.HouseWaybillNumber);
+        if (!hawb) continue;
+        const existing = latestByHawb.get(hawb);
+        if (!existing || fhl.uid > existing.uid) {
+          latestByHawb.set(hawb, { uid: fhl.uid, fhl, hb });
         }
-      } else {
+      }
+    }
+
+    if (latestByHawb.size > 0) {
+      const dedupedHouseRows = [...latestByHawb.entries()]
+        .sort(([leftHawb], [rightHawb]) => leftHawb.localeCompare(rightHawb));
+
+      for (const [hawb, payload] of dedupedHouseRows) {
+        const fhl = payload.fhl;
+        const hb = payload.hb;
+        const emailRcvd = emailReceivedIndex.get(payload.uid) || emailReceivedIndex.get(fwb?.uid) || '';
+        const consignee = fwb?.consignee || fhl.consignee || fallbackConsignee;
+        const houseWeight = hb.HouseWeight
+          ? `${hb.HouseWeight}${hb.HouseWeightUnit || fhl.masterWeightUnit || 'K'}`
+          : mawbWeight;
+        const ttlPcs = hb.HousePieceCount || '';
+        const houseSlac = hb.HouseSlac || '';
+
         rows.push([
-          emailRcvd, flight, std, sta, '', lfd, pmcs, mawb, '',
-          mawbWeight, pob,
-          '',
-          '',
+          emailRcvd, flight, std, sta, '', lfd, pmcs, mawb, hawb,
+          houseWeight, pob,
+          ttlPcs,
+          houseSlac,
           '', consignee, '',
           ...new Array(TRAILING_EMPTY).fill(''),
         ]);
       }
+    } else {
+      const latestFhl = fhlDocs[fhlDocs.length - 1];
+      const emailRcvd = emailReceivedIndex.get(latestFhl.uid) || emailReceivedIndex.get(fwb?.uid) || '';
+      const consignee = fwb?.consignee || latestFhl.consignee || fallbackConsignee;
+      rows.push([
+        emailRcvd, flight, std, sta, '', lfd, pmcs, mawb, '',
+        mawbWeight, pob,
+        '',
+        '',
+        '', consignee, '',
+        ...new Array(TRAILING_EMPTY).fill(''),
+      ]);
     }
   } else {
     // MAWB-only row (no FHL received)
