@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Sat Apr 18 22:09:18 CDT 2026
+ * Produced : Wed Apr 22 18:15:05 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -40,7 +40,7 @@ public:
   void* visit(const Rule_SlashQualifierLine* rule);
   void* visit(const Rule_ContinuationLine* rule);
   void* visit(const Rule_TrailerLine* rule);
-  void* visit(const Rule_MessageFunctionCode* rule);
+  void* visit(const Rule_MessagePageNumber* rule);
   void* visit(const Rule_CarrierFlightNumber* rule);
   void* visit(const Rule_ScheduledDepartureDateTime* rule);
   void* visit(const Rule_ScheduledDepartureDate* rule);

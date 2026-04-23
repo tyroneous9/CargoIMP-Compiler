@@ -37,7 +37,7 @@ For `status: "error"`, `fields` may be absent and `stdout` may be present.
 
 - `MessageHeader`
 - `FlightIdentification`:
-  - `MessageFunctionCode`
+  - `MessagePageNumber`
   - `CarrierFlightNumber`
   - `DayMonthTime`
   - `BoardPoint`

@@ -30,7 +30,7 @@ struct FfmUldData
 
 struct FfmFlightIdentificationData
 {
-  std::string messageFunctionCode;
+  std::string messagePageNumber;
   std::string carrierFlightNumber;
   std::string scheduledDepartureDateTime;
   std::string scheduledDepartureDate;
@@ -74,7 +74,7 @@ public:
   void* visit(const Rule_SlashQualifierLine* rule);
   void* visit(const Rule_ContinuationLine* rule);
   void* visit(const Rule_TrailerLine* rule);
-  void* visit(const Rule_MessageFunctionCode* rule);
+  void* visit(const Rule_MessagePageNumber* rule);
   void* visit(const Rule_CarrierFlightNumber* rule);
   void* visit(const Rule_ScheduledDepartureDateTime* rule);
   void* visit(const Rule_ScheduledDepartureDate* rule);

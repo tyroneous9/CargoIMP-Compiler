@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Sat Apr 18 22:09:18 CDT 2026
+ * Produced : Wed Apr 22 18:15:05 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -20,8 +20,8 @@ using std::vector;
 #include "ParserContext.hpp"
 
 #include "Rule_CarrierFlightNumber.hpp"
+#include "Rule_MessagePageNumber.hpp"
 #include "Rule_AircraftRegistration.hpp"
-#include "Rule_MessageFunctionCode.hpp"
 #include "Rule_DepartureAirportCode.hpp"
 #include "Rule_Slant.hpp"
 #include "Rule_ScheduledDepartureDateTime.hpp"
@@ -72,7 +72,7 @@ const Rule_FlightIdentificationLine* Rule_FlightIdentificationLine::parse(Parser
       int c1 = 0;
       for (int i1 = 0; i1 < 1 && f1; i1++)
       {
-        const Rule* rule = Rule_MessageFunctionCode::parse(context);
+        const Rule* rule = Rule_MessagePageNumber::parse(context);
         if ((f1 = rule != NULL))
         {
           a1.add(*rule, context.index);

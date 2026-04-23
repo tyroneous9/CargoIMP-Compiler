@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Sat Apr 18 22:09:18 CDT 2026
+ * Produced : Wed Apr 22 18:15:05 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -37,7 +37,7 @@ using std::vector;
 #include "Rule_SlashQualifierLine.hpp"
 #include "Rule_ContinuationLine.hpp"
 #include "Rule_TrailerLine.hpp"
-#include "Rule_MessageFunctionCode.hpp"
+#include "Rule_MessagePageNumber.hpp"
 #include "Rule_CarrierFlightNumber.hpp"
 #include "Rule_ScheduledDepartureDateTime.hpp"
 #include "Rule_ScheduledDepartureDate.hpp"
@@ -323,14 +323,14 @@ void* XmlDisplayer::visit(const Rule_TrailerLine* rule)
   return NULL;
 }
 
-void* XmlDisplayer::visit(const Rule_MessageFunctionCode* rule)
+void* XmlDisplayer::visit(const Rule_MessagePageNumber* rule)
 {
   if (!terminal) cout << endl;
-  cout << "<MessageFunctionCode>";
+  cout << "<MessagePageNumber>";
   terminal = false;
   visitRules(rule->rules);
   if (!terminal) cout << endl;
-  cout << "</MessageFunctionCode>";
+  cout << "</MessagePageNumber>";
   terminal = false;
   return NULL;
 }

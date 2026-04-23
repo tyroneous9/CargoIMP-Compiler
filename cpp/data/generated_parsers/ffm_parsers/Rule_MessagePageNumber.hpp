@@ -1,15 +1,15 @@
 /* -----------------------------------------------------------------------------
- * Rule_MessageFunctionCode.hpp
+ * Rule_MessagePageNumber.hpp
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Sat Apr 18 22:09:18 CDT 2026
+ * Produced : Wed Apr 22 18:15:05 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
 
-#ifndef Rule_MessageFunctionCode_hpp
-#define Rule_MessageFunctionCode_hpp
+#ifndef Rule_MessagePageNumber_hpp
+#define Rule_MessagePageNumber_hpp
 
 #include <string>
 #include <vector>
@@ -19,17 +19,17 @@
 class Visitor;
 class ParserContext;
 
-class Rule_MessageFunctionCode : public Rule
+class Rule_MessagePageNumber : public Rule
 {
 public:
-  Rule_MessageFunctionCode(const std::string& spelling, const std::vector<const Rule*>& rules);
-  Rule_MessageFunctionCode(const Rule_MessageFunctionCode& rule);
+  Rule_MessagePageNumber(const std::string& spelling, const std::vector<const Rule*>& rules);
+  Rule_MessagePageNumber(const Rule_MessagePageNumber& rule);
 
-  Rule_MessageFunctionCode& operator=(const Rule_MessageFunctionCode& rule);
+  Rule_MessagePageNumber& operator=(const Rule_MessagePageNumber& rule);
 
-  const Rule_MessageFunctionCode* clone(void) const;
+  const Rule_MessagePageNumber* clone(void) const;
 
-  static const Rule_MessageFunctionCode* parse(ParserContext& context);
+  static const Rule_MessagePageNumber* parse(ParserContext& context);
 
   void* accept(Visitor& visitor) const;
 };

@@ -75,12 +75,16 @@ function normalizeFfmFields(fields) {
   if (!fields.FlightIdentification || typeof fields.FlightIdentification !== 'object') {
     const parts = splitBySlash(fields.FlightIdentificationLine || '');
     fields.FlightIdentification = {
-      MessageFunctionCode: parts[0] || '',
+      MessagePageNumber: parts[0] || '',
       CarrierFlightNumber: parts[1] || '',
       DayMonthTime: parts[2] || '',
       BoardPoint: parts[3] || '',
       AircraftRegistration: parts[4] || '',
     };
+  } else if (!fields.FlightIdentification.MessagePageNumber && fields.FlightIdentification.MessageFunctionCode) {
+    // Backward-compatibility bridge for older parser outputs.
+    fields.FlightIdentification.MessagePageNumber = fields.FlightIdentification.MessageFunctionCode;
+    delete fields.FlightIdentification.MessageFunctionCode;
   }
 
   // Preserve new datetime fields from FFM grammar refactor (if present):

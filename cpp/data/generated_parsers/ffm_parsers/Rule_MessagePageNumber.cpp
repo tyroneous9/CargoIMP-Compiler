@@ -1,9 +1,9 @@
 /* -----------------------------------------------------------------------------
- * Rule_MessageFunctionCode.cpp
+ * Rule_MessagePageNumber.cpp
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Sat Apr 18 22:09:18 CDT 2026
+ * Produced : Wed Apr 22 18:15:05 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -14,42 +14,42 @@ using std::string;
 #include <vector>
 using std::vector;
 
-#include "Rule_MessageFunctionCode.hpp"
+#include "Rule_MessagePageNumber.hpp"
 #include "Visitor.hpp"
 #include "ParserAlternative.hpp"
 #include "ParserContext.hpp"
 
 #include "Rule_Digit.hpp"
 
-Rule_MessageFunctionCode::Rule_MessageFunctionCode(
+Rule_MessagePageNumber::Rule_MessagePageNumber(
   const string& spelling, 
   const vector<const Rule*>& rules) : Rule(spelling, rules)
 {
 }
 
-Rule_MessageFunctionCode::Rule_MessageFunctionCode(const Rule_MessageFunctionCode& rule) : Rule(rule)
+Rule_MessagePageNumber::Rule_MessagePageNumber(const Rule_MessagePageNumber& rule) : Rule(rule)
 {
 }
 
-Rule_MessageFunctionCode& Rule_MessageFunctionCode::operator=(const Rule_MessageFunctionCode& rule)
+Rule_MessagePageNumber& Rule_MessagePageNumber::operator=(const Rule_MessagePageNumber& rule)
 {
   Rule::operator=(rule);
   return *this;
 }
 
-const Rule_MessageFunctionCode* Rule_MessageFunctionCode::clone() const
+const Rule_MessagePageNumber* Rule_MessagePageNumber::clone() const
 {
-  return new Rule_MessageFunctionCode(this->spelling, this->rules);
+  return new Rule_MessagePageNumber(this->spelling, this->rules);
 }
 
-void* Rule_MessageFunctionCode::accept(Visitor& visitor) const
+void* Rule_MessagePageNumber::accept(Visitor& visitor) const
 {
   return visitor.visit(this);
 }
 
-const Rule_MessageFunctionCode* Rule_MessageFunctionCode::parse(ParserContext& context)
+const Rule_MessagePageNumber* Rule_MessagePageNumber::parse(ParserContext& context)
 {
-  context.push("MessageFunctionCode");
+  context.push("MessagePageNumber");
 
   bool parsed = true;
   int s0 = context.index;
@@ -110,16 +110,16 @@ const Rule_MessageFunctionCode* Rule_MessageFunctionCode::parse(ParserContext& c
   const Rule* rule = NULL;
   if (parsed)
   {
-    rule = new Rule_MessageFunctionCode(context.text.substr(a0.start, a0.end - a0.start), a0.rules);
+    rule = new Rule_MessagePageNumber(context.text.substr(a0.start, a0.end - a0.start), a0.rules);
   }
   else
   {
     context.index = s0;
   }
 
-  context.pop("MessageFunctionCode", parsed);
+  context.pop("MessagePageNumber", parsed);
 
-  return (Rule_MessageFunctionCode*)rule;
+  return (Rule_MessagePageNumber*)rule;
 }
 
 /* -----------------------------------------------------------------------------

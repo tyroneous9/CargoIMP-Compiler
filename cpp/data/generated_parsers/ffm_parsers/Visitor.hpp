@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Sat Apr 18 22:09:18 CDT 2026
+ * Produced : Wed Apr 22 18:15:05 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -31,7 +31,7 @@ class Rule_CorLine;
 class Rule_SlashQualifierLine;
 class Rule_ContinuationLine;
 class Rule_TrailerLine;
-class Rule_MessageFunctionCode;
+class Rule_MessagePageNumber;
 class Rule_CarrierFlightNumber;
 class Rule_ScheduledDepartureDateTime;
 class Rule_ScheduledDepartureDate;
@@ -100,7 +100,7 @@ public:
   virtual void* visit(const Rule_SlashQualifierLine* rule) = 0;
   virtual void* visit(const Rule_ContinuationLine* rule) = 0;
   virtual void* visit(const Rule_TrailerLine* rule) = 0;
-  virtual void* visit(const Rule_MessageFunctionCode* rule) = 0;
+  virtual void* visit(const Rule_MessagePageNumber* rule) = 0;
   virtual void* visit(const Rule_CarrierFlightNumber* rule) = 0;
   virtual void* visit(const Rule_ScheduledDepartureDateTime* rule) = 0;
   virtual void* visit(const Rule_ScheduledDepartureDate* rule) = 0;

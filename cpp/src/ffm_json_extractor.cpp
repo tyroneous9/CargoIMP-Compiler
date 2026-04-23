@@ -34,7 +34,7 @@ using std::vector;
 #include "Rule_SlashQualifierLine.hpp"
 #include "Rule_ContinuationLine.hpp"
 #include "Rule_TrailerLine.hpp"
-#include "Rule_MessageFunctionCode.hpp"
+#include "Rule_MessagePageNumber.hpp"
 #include "Rule_CarrierFlightNumber.hpp"
 #include "Rule_ScheduledDepartureDateTime.hpp"
 #include "Rule_ScheduledDepartureDate.hpp"
@@ -140,7 +140,7 @@ void* FfmJsonExtractor::visit(const Rule_ShipmentSummary* rule) { ulds.back().aw
 void* FfmJsonExtractor::visit(const Rule_FreeText* rule) { ulds.back().awbs.back().freeText = rule->spelling; return NULL; }
 
 void* FfmJsonExtractor::visit(const Rule_TrailerLine* rule) { (void)rule; return NULL; }
-void* FfmJsonExtractor::visit(const Rule_MessageFunctionCode* rule) { (void)rule; return NULL; }
+void* FfmJsonExtractor::visit(const Rule_MessagePageNumber* rule) { (void)rule; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_CarrierFlightNumber* rule) { (void)rule; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_ScheduledDepartureDateTime* rule) { (void)rule; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_ScheduledDepartureDate* rule) { (void)rule; return NULL; }
@@ -239,7 +239,7 @@ FfmFlightIdentificationData FfmJsonExtractor::parseFlightIdentificationLine(cons
 
   size_t p0 = line.find('/');
   if (p0 == string::npos) return data;
-  data.messageFunctionCode = line.substr(0, p0);
+  data.messagePageNumber = line.substr(0, p0);
 
   size_t p1 = line.find('/', p0 + 1);
   if (p1 == string::npos) return data;
@@ -325,7 +325,7 @@ void FfmJsonExtractor::printJson() const
   cout << "{" << endl;
   cout << "  \"MessageHeader\": \"" << escapeJson(messageHeader) << "\"," << endl;
   cout << "  \"FlightIdentification\": {" << endl;
-  cout << "    \"MessageFunctionCode\": \"" << escapeJson(flightIdentification.messageFunctionCode) << "\"," << endl;
+  cout << "    \"MessagePageNumber\": \"" << escapeJson(flightIdentification.messagePageNumber) << "\"," << endl;
   cout << "    \"CarrierFlightNumber\": \"" << escapeJson(flightIdentification.carrierFlightNumber) << "\"," << endl;
   cout << "    \"DayMonthTime\": \"" << escapeJson(flightIdentification.scheduledDepartureDateTime) << "\"," << endl;
   cout << "    \"BoardPoint\": \"" << escapeJson(flightIdentification.departureAirportCode) << "\"," << endl;

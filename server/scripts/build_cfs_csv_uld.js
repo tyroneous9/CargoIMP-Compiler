@@ -221,6 +221,9 @@ const fwbIndex = new Map();
 /** fhlIndex: Map<mawb, { uid, masterPieces, masterWeight, masterWeightUnit, consignee }> */
 const fhlIndex = new Map();
 
+/** ffmNoUldIndex: Map<mawb, { uid, flightNum, datePart, std, sta, lfd, emailRcvd, messagePageNumber, uldPcs, uldWt, wtUnit, totalPcs }> */
+const ffmNoUldIndex = new Map();
+
 /** mvtIndex: Map<flightNum, Map<day, { uid, ata }>> */
 const mvtIndex = new Map();
 
@@ -309,6 +312,7 @@ for (const filename of filenames) {
             maxUid: uid,
             flightNum,
             datePart,
+            messagePageNumber: String(flightId.MessagePageNumber || flightId.MessageFunctionCode || parts[0] || ''),
             std: formattedStd,
             sta: formattedSta,
             lfd,
@@ -319,6 +323,7 @@ for (const filename of filenames) {
         const entry = flightMap.get(flightKey);
         if (uid > entry.maxUid) {
           entry.maxUid = uid;
+          entry.messagePageNumber = String(flightId.MessagePageNumber || flightId.MessageFunctionCode || parts[0] || '');
           entry.emailRcvd = emailReceivedIndex.get(uid) || entry.emailRcvd || '';
         }
 
@@ -326,6 +331,23 @@ for (const filename of filenames) {
         const existing = entry.ulds.get(uldKey);
         if (!existing || uid > existing.uid) {
           entry.ulds.set(uldKey, { uid, ...summary });
+        }
+
+        if (uldKey === '') {
+          const existingNoUld = ffmNoUldIndex.get(mawb);
+          if (!existingNoUld || uid > existingNoUld.uid) {
+            ffmNoUldIndex.set(mawb, {
+              uid,
+              flightNum,
+              datePart,
+              std: formattedStd,
+              sta: formattedSta,
+              lfd,
+              emailRcvd: emailReceivedIndex.get(uid) || '',
+              messagePageNumber: String(flightId.MessagePageNumber || flightId.MessageFunctionCode || parts[0] || ''),
+              ...summary,
+            });
+          }
         }
       }
     }
@@ -423,9 +445,9 @@ function resolveAta(flightNum, referenceDatePart, referenceSta) {
 
 const rows = [];
 
-// Display only MAWBs that have an associated FWB.
+// Display MAWBs that have an associated FWB, plus MAWBs seen in no-ULD FFM outputs.
 // load_type is still computed from full ULD membership below.
-const displayMawbs = new Set([...fwbIndex.keys()]);
+const displayMawbs = new Set([...fwbIndex.keys(), ...ffmNoUldIndex.keys()]);
 
 // Build ULD-level load type map:
 // - loose: at least one MAWB in that ULD has no FWB
@@ -509,6 +531,7 @@ for (const mawb of [...displayMawbs].sort()) {
     const sortedUlds = [...ffm.ulds.entries()]
       .filter(([k]) => k !== '')
       .sort(([a], [b]) => a.localeCompare(b));
+    const blankUldEntry = ffm.ulds.get('');
 
     // Determine POB (MAWB total) from any ULD entry that has it
     const pobEntry    = [...ffm.ulds.values()].find(v => v.totalPcs != null);
@@ -530,6 +553,63 @@ for (const mawb of [...displayMawbs].sort()) {
         '',         // PCS RCVD — human input
         loadType, '', // load_type, PMC LOCATION
         consignee, '',  // Consignee, AMS STATUS
+        ...new Array(TRAILING_EMPTY).fill(''),
+      ]);
+    }
+
+    if (blankUldEntry) {
+      const noUldMeta = ffmNoUldIndex.get(mawb);
+      const noUldWeight = blankUldEntry.uldWt != null
+        ? `${blankUldEntry.uldWt}${blankUldEntry.wtUnit}`
+        : fallbackWeight;
+      const noUldMawbTtlPcs = blankUldEntry.uldPcs != null
+        ? String(blankUldEntry.uldPcs)
+        : fallbackPieces;
+      const noUldLoadType = (
+        String(ffm.messagePageNumber || '') === '1'
+        || String(noUldMeta?.messagePageNumber || '') === '1'
+      ) ? 'loose' : '';
+
+      rows.push([
+        emailRcvd, flight, std, sta, ata, lfd, '', mawb,
+        noUldWeight, noUldMawbTtlPcs, '', pob,
+        '',             // PCS RCVD — human input
+        noUldLoadType, '', // load_type, PMC LOCATION
+        consignee, '',     // Consignee, AMS STATUS
+        ...new Array(TRAILING_EMPTY).fill(''),
+      ]);
+    }
+
+    const noUldMeta = ffmNoUldIndex.get(mawb);
+    if (!blankUldEntry && noUldMeta) {
+      const noUldAta = resolveAta(noUldMeta.flightNum || '', noUldMeta.datePart || '', noUldMeta.sta || '');
+      const noUldWeight = noUldMeta.uldWt != null
+        ? `${noUldMeta.uldWt}${noUldMeta.wtUnit}`
+        : fallbackWeight;
+      const noUldMawbTtlPcs = noUldMeta.uldPcs != null
+        ? String(noUldMeta.uldPcs)
+        : fallbackPieces;
+      const noUldPob = noUldMeta.totalPcs != null ? String(noUldMeta.totalPcs) : '';
+      const noUldLoadType = String(noUldMeta.messagePageNumber || '') === '1' ? 'loose' : '';
+
+      rows.push([
+        noUldMeta.emailRcvd || emailRcvd,
+        noUldMeta.flightNum || flight,
+        noUldMeta.std || std,
+        noUldMeta.sta || sta,
+        noUldAta,
+        noUldMeta.lfd || lfd,
+        '',
+        mawb,
+        noUldWeight,
+        noUldMawbTtlPcs,
+        '',
+        noUldPob,
+        '',
+        noUldLoadType,
+        '',
+        consignee,
+        '',
         ...new Array(TRAILING_EMPTY).fill(''),
       ]);
     }
