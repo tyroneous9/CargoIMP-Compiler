@@ -1,15 +1,15 @@
 /* -----------------------------------------------------------------------------
- * Rule_AirWaybillLine.hpp
+ * Rule_HouseWaybillNumber.hpp
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Sat Apr 18 18:43:25 CDT 2026
+ * Produced : Wed Apr 22 20:33:48 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
 
-#ifndef Rule_AirWaybillLine_hpp
-#define Rule_AirWaybillLine_hpp
+#ifndef Rule_HouseWaybillNumber_hpp
+#define Rule_HouseWaybillNumber_hpp
 
 #include <string>
 #include <vector>
@@ -19,17 +19,17 @@
 class Visitor;
 class ParserContext;
 
-class Rule_AirWaybillLine : public Rule
+class Rule_HouseWaybillNumber : public Rule
 {
 public:
-  Rule_AirWaybillLine(const std::string& spelling, const std::vector<const Rule*>& rules);
-  Rule_AirWaybillLine(const Rule_AirWaybillLine& rule);
+  Rule_HouseWaybillNumber(const std::string& spelling, const std::vector<const Rule*>& rules);
+  Rule_HouseWaybillNumber(const Rule_HouseWaybillNumber& rule);
 
-  Rule_AirWaybillLine& operator=(const Rule_AirWaybillLine& rule);
+  Rule_HouseWaybillNumber& operator=(const Rule_HouseWaybillNumber& rule);
 
-  const Rule_AirWaybillLine* clone(void) const;
+  const Rule_HouseWaybillNumber* clone(void) const;
 
-  static const Rule_AirWaybillLine* parse(ParserContext& context);
+  static const Rule_HouseWaybillNumber* parse(ParserContext& context);
 
   void* accept(Visitor& visitor) const;
 };

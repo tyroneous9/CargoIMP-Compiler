@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Sat Apr 18 18:43:25 CDT 2026
+ * Produced : Wed Apr 22 20:33:48 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -22,7 +22,7 @@ class Displayer : public Visitor
 public:
   void* visit(const Rule_FWB17* rule);
   void* visit(const Rule_MessageHeader* rule);
-  void* visit(const Rule_AirWaybillLine* rule);
+  void* visit(const Rule_MasterAirwayBillLine* rule);
   void* visit(const Rule_MasterAirwayBillNumber* rule);
   void* visit(const Rule_AirlinePrefix* rule);
   void* visit(const Rule_AWBSerialNumber* rule);

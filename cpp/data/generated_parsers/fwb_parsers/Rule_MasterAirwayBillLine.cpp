@@ -1,9 +1,9 @@
 /* -----------------------------------------------------------------------------
- * Rule_AirWaybillLine.cpp
+ * Rule_MasterAirwayBillLine.cpp
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Sat Apr 18 18:43:25 CDT 2026
+ * Produced : Wed Apr 22 20:33:48 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -14,7 +14,7 @@ using std::string;
 #include <vector>
 using std::vector;
 
-#include "Rule_AirWaybillLine.hpp"
+#include "Rule_MasterAirwayBillLine.hpp"
 #include "Visitor.hpp"
 #include "ParserAlternative.hpp"
 #include "ParserContext.hpp"
@@ -25,35 +25,35 @@ using std::vector;
 #include "Rule_Slant.hpp"
 #include "Rule_OriginAndDestination.hpp"
 
-Rule_AirWaybillLine::Rule_AirWaybillLine(
+Rule_MasterAirwayBillLine::Rule_MasterAirwayBillLine(
   const string& spelling, 
   const vector<const Rule*>& rules) : Rule(spelling, rules)
 {
 }
 
-Rule_AirWaybillLine::Rule_AirWaybillLine(const Rule_AirWaybillLine& rule) : Rule(rule)
+Rule_MasterAirwayBillLine::Rule_MasterAirwayBillLine(const Rule_MasterAirwayBillLine& rule) : Rule(rule)
 {
 }
 
-Rule_AirWaybillLine& Rule_AirWaybillLine::operator=(const Rule_AirWaybillLine& rule)
+Rule_MasterAirwayBillLine& Rule_MasterAirwayBillLine::operator=(const Rule_MasterAirwayBillLine& rule)
 {
   Rule::operator=(rule);
   return *this;
 }
 
-const Rule_AirWaybillLine* Rule_AirWaybillLine::clone() const
+const Rule_MasterAirwayBillLine* Rule_MasterAirwayBillLine::clone() const
 {
-  return new Rule_AirWaybillLine(this->spelling, this->rules);
+  return new Rule_MasterAirwayBillLine(this->spelling, this->rules);
 }
 
-void* Rule_AirWaybillLine::accept(Visitor& visitor) const
+void* Rule_MasterAirwayBillLine::accept(Visitor& visitor) const
 {
   return visitor.visit(this);
 }
 
-const Rule_AirWaybillLine* Rule_AirWaybillLine::parse(ParserContext& context)
+const Rule_MasterAirwayBillLine* Rule_MasterAirwayBillLine::parse(ParserContext& context)
 {
-  context.push("AirWaybillLine");
+  context.push("MasterAirwayBillLine");
 
   bool parsed = true;
   int s0 = context.index;
@@ -206,16 +206,16 @@ const Rule_AirWaybillLine* Rule_AirWaybillLine::parse(ParserContext& context)
   const Rule* rule = NULL;
   if (parsed)
   {
-    rule = new Rule_AirWaybillLine(context.text.substr(a0.start, a0.end - a0.start), a0.rules);
+    rule = new Rule_MasterAirwayBillLine(context.text.substr(a0.start, a0.end - a0.start), a0.rules);
   }
   else
   {
     context.index = s0;
   }
 
-  context.pop("AirWaybillLine", parsed);
+  context.pop("MasterAirwayBillLine", parsed);
 
-  return (Rule_AirWaybillLine*)rule;
+  return (Rule_MasterAirwayBillLine*)rule;
 }
 
 /* -----------------------------------------------------------------------------

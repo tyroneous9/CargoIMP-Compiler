@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Sat Apr 18 18:43:25 CDT 2026
+ * Produced : Wed Apr 22 20:33:48 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -13,7 +13,7 @@
 
 class Rule_FWB17;
 class Rule_MessageHeader;
-class Rule_AirWaybillLine;
+class Rule_MasterAirwayBillLine;
 class Rule_MasterAirwayBillNumber;
 class Rule_AirlinePrefix;
 class Rule_AWBSerialNumber;
@@ -90,7 +90,7 @@ class Visitor
 public:
   virtual void* visit(const Rule_FWB17* rule) = 0;
   virtual void* visit(const Rule_MessageHeader* rule) = 0;
-  virtual void* visit(const Rule_AirWaybillLine* rule) = 0;
+  virtual void* visit(const Rule_MasterAirwayBillLine* rule) = 0;
   virtual void* visit(const Rule_MasterAirwayBillNumber* rule) = 0;
   virtual void* visit(const Rule_AirlinePrefix* rule) = 0;
   virtual void* visit(const Rule_AWBSerialNumber* rule) = 0;

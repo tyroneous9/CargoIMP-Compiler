@@ -1,4 +1,18 @@
 # FHL/4 CIMP 34th edition grammar (structure-first with operational relaxations)
+#
+# FHL (Freight House Bill List) is sent by carriers to consolidate house bills (HAWBs)
+# under one master waybill (MAWB). Used for multi-consignment shipments, freight
+# forwarding consolidations, and when house bills exceed FWB capacity.
+#
+# Message structure:
+# - Header + Master Bill Information (MBI line with MAWB and summary)
+# - One or more House Bill Groups, each containing:
+#   - House Bill Summary (HBS line with HAWB/piece count/weight)
+#   - Optional description, HTS codes, and other charges (OCI)
+# - Optional shipper/consignee party blocks and charges declaration
+#
+# Per CIMP 34: FHL messages may update existing consolidations; subsequent messages
+# with the same MAWB supersede earlier ones.
 
 FHL4 =
     MessageHeader EOL
@@ -8,8 +22,10 @@ FHL4 =
     [ConsigneeBlock]
     [CvdLine [EOL]];
 
-# Per CIMP 34 §3: "Ref. 3 can be repeated." and
-# "Refs. 3 thru 6 can be repeated if there is no occurrence of Ref. 7, 8 or 9."
+# Per CIMP 34 §3: "Ref. 3 can be repeated." (HouseBillGroup repeat)
+# and "Refs. 3 thru 6 can be repeated if there is no occurrence of Ref. 7, 8 or 9."
+# (i.e., HouseBillGroup repeats unless followed by party blocks like Ref 7 = SHP)
+
 HouseBillGroup =
     HouseBillLine [EOL]
     [DescriptionBlock]
@@ -18,28 +34,41 @@ HouseBillGroup =
 
 MessageHeader = "FHL/4" / "FHL/5";
 
-# --- Master Bill Information (MBI) ---
+# ==================== MASTER BILL INFORMATION (MBI) ====================
+# Header line identifying the master consolidation.
+# Format: MBI/airline-prefix-serial/origin/destination/total_pieces/weight_unit/weight
+# Example: MBI/933-12345678/NRT/JFK/T5000K50000
+# Contains total piece count and weight for ALL house bills in this consolidation.
+
 MasterBillLine =
     "MBI"
     Slant
     MasterAirwayBillNumber
     MasterOriginAndDestination
     MasterBillSummary
-    [Slant *LineChar];
+    [Slant *LineChar];  # Optional free text
 
-MasterAirwayBillNumber = AirlinePrefix Hyphen AWBSerialNumber;
+MasterAirwayBillNumber = AirlinePrefix Hyphen AWBSerialNumber;  # E.g., '933-12345678'
 AirlinePrefix = 3Digit;
 AWBSerialNumber = 8Digit;
 
-MasterOriginAndDestination = AirportCode AirportCode;
-AirportCode = 3Upper;
+MasterOriginAndDestination = AirportCode AirportCode;  # Shipment route
+AirportCode = 3Upper;  # IATA three-letter code
 
+# Master Bill Summary: total consolidated piece count, weight unit, and total weight.
 MasterBillSummary = Slant "T" MasterPieceCount MasterWeightUnit MasterWeight;
-MasterPieceCount = 1*4Digit;
-MasterWeightUnit = "K" / "L";
-MasterWeight = 1*10Digit ["." 1*3Digit];
+MasterPieceCount = 1*4Digit;  # Total outer pieces (consolidated)
+MasterWeightUnit = "K" / "L";  # 'K' = kilograms, 'L' = pounds
+MasterWeight = 1*10Digit ["." 1*3Digit];  # Total weight with optional decimal
 
-# --- House Bill Summary (HBS) ---
+# ==================== HOUSE BILL SUMMARY (HBS) ====================
+# Each house bill line within the consolidation.
+# Format: HBS/hawb/origin/destination/pieces/weight_unit/weight
+# Example: HBS/HBKK26040533/NRT/NYC/100K500
+# - HouseWaybillNumber: shipper's or forwarder's reference for this shipment
+# - HousePieceCount: outer container count as loaded by carrier
+# - HouseSlac: (optional) Shipper's Load and Count (declared inner count)
+
 HouseBillLine =
     "HBS"
     Slant
@@ -53,35 +82,49 @@ HouseBillLine =
     HouseWeight
     [Slant HouseSlac]
     [Slant *LineChar]
-    *(EOL Slant *LineChar);
+    *(EOL Slant *LineChar);  # Continuation lines
 
-HouseOriginAndDestination = AirportCode AirportCode;
-HouseWaybillNumber = 1*20AlphaNum;
-# pieces of this HAWB as counted by the carrier (outer pieces loaded)
+HouseOriginAndDestination = AirportCode AirportCode;  # Shipment route
+HouseWaybillNumber = 1*20AlphaNum;  # House bill identifier (shipper reference)
+# Pieces of this HAWB as counted by the carrier (outer pieces loaded)
 HousePieceCount = 1*4Digit;
-# SLAC: Shipper's Load and Count (declared count inside sealed unit, optional)
+# SLAC: Shipper's Load and Count (declared inner pieces in sealed unit, optional)
 HouseSlac = 1*4Digit;
 HouseWeightUnit = "K" / "L";
 HouseWeight = 1*10Digit ["." 1*3Digit];
 
-# --- Description text (TXT) ---
+# ==================== DESCRIPTION TEXT (TXT) ====================
+# Optional commodity/item description for this house bill.
+# Format: TXT/description_text
+# Can repeat or continue on subsequent lines with Slant prefix.
+
 DescriptionBlock = DescriptionTagLine *DescriptionContLine;
 DescriptionTagLine = "TXT" Slant *LineChar [EOL];
 DescriptionContLine = Slant *LineChar [EOL];
 
-# --- Harmonized Tariff Schedule (HTS) ---
+# ==================== HARMONIZED TARIFF SCHEDULE (HTS) ====================
+# Tariff codes, HS codes, or commodity classification for customs.
 # Per CIMP 34 §5: "Elements 5.2 to 5.4 can be repeated. Can occur a maximum of nine times."
-# Each additional HS code appears on a continuation line starting with Slant.
+# Each additional HS code appears on a separate line or continuation starting with Slant.
+# Format: HTS/code_or_description
+
 HtsBlock = 1*(HtsLine *HtsContLine);
 HtsLine = "HTS" Slant *LineChar [EOL];
 HtsContLine = Slant *LineChar [EOL];
 
-# --- OCI block ---
+# ==================== OTHER CHARGES INFORMATION (OCI) ====================
+# Optional charges or fees applicable to this house bill.
+# Format: OCI/charge_code/amount or OCI/remarks
+# Continuation lines may follow with 1-3 leading slashes for embedded data.
+
 OciBlock = OciLine *OciContLine;
 OciLine = "OCI" Slant *LineChar [EOL];
-OciContLine = Slant [Slant [Slant]] *LineChar [EOL];
+OciContLine = Slant [Slant [Slant]] *LineChar [EOL];  # 1-3 leading slashes
 
-# --- Party blocks ---
+# ==================== PARTY BLOCKS ====================
+# Shipper and Consignee information repeated for manifested shipments.
+# Structure: tag line (SHP/CNE) optionally followed by NAM, ADR, LOC sub-lines.
+
 ShipperBlock = ShipperTagLine *ShipperContLine;
 ShipperTagLine = "SHP" Slant *LineChar [EOL];
 ShipperContLine = Slant *LineChar [EOL];
@@ -90,7 +133,11 @@ ConsigneeBlock = ConsigneeTagLine *ConsigneeContLine;
 ConsigneeTagLine = "CNE" Slant *LineChar [EOL];
 ConsigneeContLine = Slant *LineChar [EOL];
 
-# --- Charges Value Declaration (CVD) ---
+# ==================== CHARGES VALUE DECLARATION (CVD) ====================
+# Currency, duty/taxes, and insurance/value information for the consolidation.
+# Format: CVD/currency_code/charge_code/insurance_code/charges/value/insurance_markups
+# Example: CVD/USD/PP/YY/100/5000/500
+
 CvdLine =
     "CVD"
     Slant
@@ -104,10 +151,12 @@ CvdLine =
     Slant
     ("XXX" / 1*10Digit ["." 1*3Digit]);
 
-LineChar = %x20-7E;
-EOL = [%x0D] %x0A;
-Slant = "/";
-Hyphen = "-";
-Digit = %x30-39;
-Upper = %x41-5A;
-AlphaNum = Upper / Digit;
+# ==================== CHARACTER SETS & PRIMITIVES ====================
+
+LineChar = %x20-7E;  # Any printable ASCII character
+EOL = [%x0D] %x0A;  # Optional CR + LF
+Slant = "/";  # Forward slash delimiter
+Hyphen = "-";  # Hyphen separator
+Digit = %x30-39;  # '0' to '9'
+Upper = %x41-5A;  # 'A' to 'Z'
+AlphaNum = Upper / Digit;  # Uppercase letter or digit

@@ -1,9 +1,9 @@
 /* -----------------------------------------------------------------------------
- * Rule_AwbBlock.cpp
+ * Rule_HouseBillBlock.cpp
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Wed Apr 22 18:15:05 CDT 2026
+ * Produced : Wed Apr 22 20:33:48 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -14,44 +14,44 @@ using std::string;
 #include <vector>
 using std::vector;
 
-#include "Rule_AwbBlock.hpp"
+#include "Rule_HouseBillBlock.hpp"
 #include "Visitor.hpp"
 #include "ParserAlternative.hpp"
 #include "ParserContext.hpp"
 
-#include "Rule_AirWaybillLine.hpp"
 #include "Rule_SupplementLine.hpp"
+#include "Rule_HouseBillLine.hpp"
 #include "Rule_EOL.hpp"
 
-Rule_AwbBlock::Rule_AwbBlock(
+Rule_HouseBillBlock::Rule_HouseBillBlock(
   const string& spelling, 
   const vector<const Rule*>& rules) : Rule(spelling, rules)
 {
 }
 
-Rule_AwbBlock::Rule_AwbBlock(const Rule_AwbBlock& rule) : Rule(rule)
+Rule_HouseBillBlock::Rule_HouseBillBlock(const Rule_HouseBillBlock& rule) : Rule(rule)
 {
 }
 
-Rule_AwbBlock& Rule_AwbBlock::operator=(const Rule_AwbBlock& rule)
+Rule_HouseBillBlock& Rule_HouseBillBlock::operator=(const Rule_HouseBillBlock& rule)
 {
   Rule::operator=(rule);
   return *this;
 }
 
-const Rule_AwbBlock* Rule_AwbBlock::clone() const
+const Rule_HouseBillBlock* Rule_HouseBillBlock::clone() const
 {
-  return new Rule_AwbBlock(this->spelling, this->rules);
+  return new Rule_HouseBillBlock(this->spelling, this->rules);
 }
 
-void* Rule_AwbBlock::accept(Visitor& visitor) const
+void* Rule_HouseBillBlock::accept(Visitor& visitor) const
 {
   return visitor.visit(this);
 }
 
-const Rule_AwbBlock* Rule_AwbBlock::parse(ParserContext& context)
+const Rule_HouseBillBlock* Rule_HouseBillBlock::parse(ParserContext& context)
 {
-  context.push("AwbBlock");
+  context.push("HouseBillBlock");
 
   bool parsed = true;
   int s0 = context.index;
@@ -69,7 +69,7 @@ const Rule_AwbBlock* Rule_AwbBlock::parse(ParserContext& context)
       int c1 = 0;
       for (int i1 = 0; i1 < 1 && f1; i1++)
       {
-        const Rule* rule = Rule_AirWaybillLine::parse(context);
+        const Rule* rule = Rule_HouseBillLine::parse(context);
         if ((f1 = rule != NULL))
         {
           a1.add(*rule, context.index);
@@ -134,16 +134,16 @@ const Rule_AwbBlock* Rule_AwbBlock::parse(ParserContext& context)
   const Rule* rule = NULL;
   if (parsed)
   {
-    rule = new Rule_AwbBlock(context.text.substr(a0.start, a0.end - a0.start), a0.rules);
+    rule = new Rule_HouseBillBlock(context.text.substr(a0.start, a0.end - a0.start), a0.rules);
   }
   else
   {
     context.index = s0;
   }
 
-  context.pop("AwbBlock", parsed);
+  context.pop("HouseBillBlock", parsed);
 
-  return (Rule_AwbBlock*)rule;
+  return (Rule_HouseBillBlock*)rule;
 }
 
 /* -----------------------------------------------------------------------------

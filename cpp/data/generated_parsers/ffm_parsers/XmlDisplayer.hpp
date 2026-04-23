@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Wed Apr 22 18:15:05 CDT 2026
+ * Produced : Wed Apr 22 20:33:48 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -31,10 +31,10 @@ public:
   void* visit(const Rule_TransitNILOnlyLine* rule);
   void* visit(const Rule_DestinationOnlyLine* rule);
   void* visit(const Rule_UldSection* rule);
-  void* visit(const Rule_AwbBlock* rule);
+  void* visit(const Rule_HouseBillBlock* rule);
   void* visit(const Rule_SupplementLine* rule);
   void* visit(const Rule_ULDLine* rule);
-  void* visit(const Rule_AirWaybillLine* rule);
+  void* visit(const Rule_HouseBillLine* rule);
   void* visit(const Rule_OsiLine* rule);
   void* visit(const Rule_OciLine* rule);
   void* visit(const Rule_SciLine* rule);
@@ -44,6 +44,14 @@ public:
   void* visit(const Rule_TrailerLine* rule);
   void* visit(const Rule_MessagePageNumber* rule);
   void* visit(const Rule_CarrierFlightNumber* rule);
+  void* visit(const Rule_DepartureAirportCode* rule);
+  void* visit(const Rule_ArrivalAirportCode* rule);
+  void* visit(const Rule_AircraftRegistration* rule);
+  void* visit(const Rule_AirportCode* rule);
+  void* visit(const Rule_HouseWaybillNumber* rule);
+  void* visit(const Rule_MasterAirwayBillNumber* rule);
+  void* visit(const Rule_AirlinePrefix* rule);
+  void* visit(const Rule_AWBSerialNumber* rule);
   void* visit(const Rule_ScheduledDepartureDateTime* rule);
   void* visit(const Rule_ScheduledDepartureDate* rule);
   void* visit(const Rule_ScheduledDepartureTime* rule);
@@ -53,14 +61,7 @@ public:
   void* visit(const Rule_ScheduledOnwardDepartureDateTime* rule);
   void* visit(const Rule_ScheduledOnwardDepartureDate* rule);
   void* visit(const Rule_ScheduledOnwardDepartureTime* rule);
-  void* visit(const Rule_DepartureAirportCode* rule);
-  void* visit(const Rule_ArrivalAirportCode* rule);
-  void* visit(const Rule_AircraftRegistration* rule);
-  void* visit(const Rule_MasterAirwayBillNumber* rule);
-  void* visit(const Rule_AirlinePrefix* rule);
-  void* visit(const Rule_AWBSerialNumber* rule);
   void* visit(const Rule_OriginAndDestination* rule);
-  void* visit(const Rule_AirportCode* rule);
   void* visit(const Rule_ULDIdentifier* rule);
   void* visit(const Rule_ULDDetailText* rule);
   void* visit(const Rule_ShipmentSummary* rule);

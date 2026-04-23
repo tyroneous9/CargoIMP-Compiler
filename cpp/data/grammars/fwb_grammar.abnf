@@ -1,10 +1,17 @@
 # FWB/17 CIMP 34th edition grammar (full message model)
-# This grammar is intentionally structure-first: each line identifier has
-# a dedicated production with typed data elements and controlled continuations.
+# This grammar is intentionally structure-first: each line identifier
+# explicitly maps to CIMP line tags (e.g., 'MWB' = Master Waybill Line).
+#
+# FWB (Freight Waybill) is the shipper's bill of lading; sent for consolidations,
+# shipments, or forwarded house bills. The message carries one MASTER bill
+# with one or more flight bookings, routing instructions, and party information.
+#
+# Per CIMP 34 Edition: FWB messages may be sent repeatedly as shipments evolve,
+# and subsequent FWB messages (with same AWB number) supersede earlier ones.
 
 FWB17 =
     MessageHeader EOL
-    AirWaybillLine EOL
+    MasterAirwayBillLine EOL
     *FlightBookingsLine
     [RoutingLine]
     [ShipperBlock]
@@ -23,8 +30,11 @@ FWB17 =
 
 MessageHeader = "FWB/17";
 
-# --- Core AWB line ---
-AirWaybillLine =
+# ==================== MASTER AIRWAYBILL (MWB) ====================
+# Parsed from input line starting with airline-code + dash + serial (e.g., '933-12345678').
+# Contains total counts and weight for the entire consolidated shipment.
+
+MasterAirwayBillLine =
     MasterAirwayBillNumber
     OriginAndDestination
     TotalConsignmentSummary
@@ -51,7 +61,12 @@ TotalWeight = 1*10Digit ["." 1*3Digit];
 VolumeUnit = "MC" / "CF" / 2Upper;
 VolumeAmount = 1*10Digit ["." 1*3Digit];
 
-# --- Flight bookings (FLT) ---
+# ==================== FLIGHT BOOKINGS (FLT) ====================
+# One or more flight bookings for this consolidated shipment.
+# Each booking specifies airline code, flight number, and priority (days integer).
+# Example: FLT/KZ0143/01/KZ0142/02  => two flights booked, first by day 1, second by day 2.
+# Per CIMP 34: FLT can repeat; continuation lines extend with additional flights.
+
 FlightBookingsLine =
     "FLT"
     Slant
@@ -60,7 +75,11 @@ FlightBookingsLine =
     EOL
     *ContinuationLine;
 
-# --- Routing (RTG) ---
+# ==================== ROUTING (RTG) ====================
+# Optional. Specifies intermediate/transfer airports for the shipment.
+# Format: three-letter airport code, optionally followed by country/region code.
+# Example: RTG/ORD/ANC/NRT  => route through Chicago, Anchorage, Narita.
+
 RoutingLine =
     "RTG"
     Slant
@@ -68,15 +87,23 @@ RoutingLine =
     *(Slant AirportCode [2Upper])
     EOL;
 
-# --- Shipper party block (SHP + NAM/ADR/LOC and continuations) ---
+# ==================== SHIPPER PARTY BLOCK (SHP) ====================
+# Shipper name, address, and location details.
+# Structure: SHP [optional info] EOL followed by NAM, ADR, LOC sub-lines.
+# Continuation lines (starting with Slant only) extend address/location text.
+
 ShipperBlock = "SHP" [Slant *LineChar] EOL *ShipperSubLine;
 ShipperSubLine = ShipperNameLine / ShipperAddressLine / ShipperLocationLine / ShipperContLine;
 ShipperNameLine = "NAM" Slant *LineChar EOL;
 ShipperAddressLine = "ADR" Slant *LineChar EOL;
-ShipperLocationLine = "LOC" Slant *LineChar EOL;
+ShipperLocationLine = "LOC" Slant *LineChar EOL;  # Location code or airport
 ShipperContLine = Slant *LineChar EOL;
 
-# --- Consignee party block (CNE + NAM/ADR/LOC and continuations) ---
+# ==================== CONSIGNEE PARTY BLOCK (CNE) ====================
+# Consignee/receiver name, address, and location details.
+# Structure: CNE [optional info] EOL followed by NAM, ADR, LOC sub-lines.
+# Continuation lines extend address/location text.
+
 ConsigneeBlock = "CNE" [Slant *LineChar] EOL *ConsigneeSubLine;
 ConsigneeSubLine = ConsigneeNameLine / ConsigneeAddressLine / ConsigneeLocationLine / ConsigneeContLine;
 ConsigneeNameLine = "NAM" Slant *LineChar EOL;
@@ -84,7 +111,9 @@ ConsigneeAddressLine = "ADR" Slant *LineChar EOL;
 ConsigneeLocationLine = "LOC" Slant *LineChar EOL;
 ConsigneeContLine = Slant *LineChar EOL;
 
-# --- Agent (AGT) ---
+# ==================== AGENT (AGT) ====================
+# Freight forwarder or handling agent information.
+
 AgentLine = AgentTagLine *AgentContLine;
 AgentTagLine =
     "AGT"
@@ -97,12 +126,17 @@ AgentTagLine =
     EOL;
 AgentContLine = Slant *LineChar EOL;
 
-# --- Accounting Information (ACC) ---
+# ==================== ACCOUNTING INFORMATION (ACC) ====================
+# Carrier or shipper accounting details.
+
 AccountingLine = AccountingTagLine *AccountingContLine;
 AccountingTagLine = "ACC" Slant *LineChar EOL;
 AccountingContLine = Slant *LineChar EOL;
 
-# --- Charges Declaration (CVD) ---
+# ==================== CHARGES VALUE DECLARATION (CVD) ====================
+# Currency, charges, and insurance/value information.
+# Format: CVD/currency/charge-code/insurance-code/charges/value/insurance-markup
+
 CvdLine =
     "CVD"
     Slant
@@ -119,17 +153,23 @@ CvdLine =
     ("XXX" / 1*10Digit ["." 1*3Digit])
     EOL;
 
-# --- Rate Description (RTD) ---
+# ==================== RATING DESCRIPTION (RTD) ====================
+# Rating and freight rate details.
+
 RatingLine = RatingTagLine *RatingContLine;
 RatingTagLine = "RTD" Slant *LineChar EOL;
 RatingContLine = Slant *LineChar EOL;
 
-# --- Other Charges (OTH) ---
+# ==================== OTHER CHARGES (OTH) ====================
+# Freight, handling, or additional charges (prefix 'P' = prepaid, 'C' = collect).
+
 OtherChargesLine = OtherChargesTagLine *OtherChargesContLine;
 OtherChargesTagLine = "OTH" Slant ("P" / "C") Slant *LineChar EOL;
 OtherChargesContLine = Slant *LineChar EOL;
 
-# --- Prepaid/Collect charges summary (PPD) ---
+# ==================== PREPAID/COLLECT CHARGES SUMMARY (PPD) ====================
+# Summary of weight charges (WT), valuation charges (VC), and taxes (TX).
+
 PrepaidLine = PrepaidTagLine *PrepaidContLine;
 PrepaidTagLine =
     "PPD"
@@ -146,7 +186,9 @@ PrepaidTagLine =
     EOL;
 PrepaidContLine = Slant *LineChar EOL;
 
-# --- Certification and issuance ---
+# ==================== CERTIFICATION & ISSUANCE ====================
+# Certification (CER) and issuance date/agent information (ISU).
+
 CertificationLine = "CER" Slant *LineChar EOL;
 IssuanceLine =
     "ISU"
@@ -162,29 +204,38 @@ IssuanceLine =
     *(Slant 1*(%x20-2E / %x30-7E))
     [EOL];
 
-# --- Supplemental lines ---
+# ==================== SUPPLEMENTAL LINES ====================
+# Optional operational/administrative notes and requests.
+
 SupplementalLine = OsiBlock / OciBlock / RefLine / SphLine / ArdLine / SriLine;
 
+# OSI = Operational Service Information (airline remarks)
 OsiBlock = OsiLine *ContinuationLine;
 OsiLine = "OSI" Slant *LineChar EOL;
 
+# OCI = Other Charges Information
 OciBlock = OciLine *ContinuationLine;
 OciLine = "OCI" Slant *LineChar [EOL];
 
-# FWB supplemental continuation lines may appear with 1 to 3 leading slashes.
+# FWB continuation lines may appear with 1 to 3 leading slashes (for alignment/embedding).
 ContinuationLine = Slant [Slant [Slant]] *LineChar [EOL];
 
+# REF = Reference number or identifier  
 RefLine = "REF" Slant *LineChar [EOL];
 
-# COR appears in operational feeds as a SPH-family supplemental line.
+# SPH = Special Handling / COR = Correction indicator
 SphLine = ("SPH" / "COR") Slant *LineChar [EOL];
 
-# --- Special Service Request ---
+# ==================== SPECIAL SERVICE REQUEST (SSR) ====================
+# Special handling requirements, insurance requests, or service instructions.
+
 SsrLine = SsrTagLine *SsrContLine;
 SsrTagLine = "SSR" Slant *LineChar EOL;
 SsrContLine = Slant *LineChar EOL;
 
-# --- Notify party block ---
+# ==================== NOTIFY PARTY BLOCK (NFY) ====================
+# Delivery notification recipient details.
+
 NotifyBlock = "NFY" [Slant *LineChar] EOL *NotifySubLine;
 NotifySubLine = NotifyNameLine / NotifyAddressLine / NotifyLocationLine / NotifyContLine;
 NotifyNameLine = "NAM" Slant *LineChar [EOL];
@@ -192,13 +243,15 @@ NotifyAddressLine = "ADR" Slant *LineChar [EOL];
 NotifyLocationLine = "LOC" Slant *LineChar [EOL];
 NotifyContLine = Slant *LineChar [EOL];
 
-# --- Account and shipment reference identifiers ---
+# ==================== REFERENCE IDENTIFIERS ====================
+# ARD = Account reference / document ID; SRI = Shipment reference ID
+
 ArdLine = "ARD" Slant *LineChar [EOL];
 SriLine = "SRI" Slant *LineChar [EOL];
 
-# ------------------------ Character sets ------------------------
+# ==================== AUXILIARY ELEMENTS ====================
 
-LineChar = %x20-7E;
+LineChar = %x20-7E;  # Any visible ASCII character
 
 EOL = [%x0D] %x0A;
 Slant = "/";

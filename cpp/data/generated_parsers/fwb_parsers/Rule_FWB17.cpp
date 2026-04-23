@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Sat Apr 18 18:43:25 CDT 2026
+ * Produced : Wed Apr 22 20:33:48 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -23,12 +23,12 @@ using std::vector;
 #include "Rule_ShipperBlock.hpp"
 #include "Rule_RatingLine.hpp"
 #include "Rule_MessageHeader.hpp"
+#include "Rule_MasterAirwayBillLine.hpp"
 #include "Rule_SupplementalLine.hpp"
 #include "Rule_SsrLine.hpp"
 #include "Rule_FlightBookingsLine.hpp"
 #include "Rule_ConsigneeBlock.hpp"
 #include "Rule_PrepaidLine.hpp"
-#include "Rule_AirWaybillLine.hpp"
 #include "Rule_AgentLine.hpp"
 #include "Rule_CvdLine.hpp"
 #include "Rule_OtherChargesLine.hpp"
@@ -116,7 +116,7 @@ const Rule_FWB17* Rule_FWB17::parse(ParserContext& context)
       int c1 = 0;
       for (int i1 = 0; i1 < 1 && f1; i1++)
       {
-        const Rule* rule = Rule_AirWaybillLine::parse(context);
+        const Rule* rule = Rule_MasterAirwayBillLine::parse(context);
         if ((f1 = rule != NULL))
         {
           a1.add(*rule, context.index);

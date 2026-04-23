@@ -21,7 +21,7 @@ class Fwb17JsonExtractor : public Visitor
 public:
   void* visit(const Rule_FWB17* rule);
   void* visit(const Rule_MessageHeader* rule);
-  void* visit(const Rule_AirWaybillLine* rule);
+  void* visit(const Rule_MasterAirwayBillLine* rule);
   void* visit(const Rule_MasterAirwayBillNumber* rule);
   void* visit(const Rule_AirlinePrefix* rule);
   void* visit(const Rule_AWBSerialNumber* rule);

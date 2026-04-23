@@ -1,78 +1,121 @@
 # FFM/8 CIMP 34th edition grammar (structure-first with operational relaxations)
+#
+# FFM (Freight Manifest Message) is sent by carriers for actual shipments,
+# split across ULDs/containers. Each FFM specifies one flight, its departure/arrival
+# airports, one or more cargo containers/ULDs, and house bills (HAWBs) within each.
+#
+# Message structure:
+# - Message header + flight identification line (e.g., page number, flight, departure)
+# - One or more arrival routes
+# - For each ULD: optional ULD info line, then one or more house bills
+#
+# Per CIMP 34: UldSection is a sequence of one or more contiguous AwbBlock entries.
+# Some FFM messages have no explicit ULD identifier (implicit bulk/loose shipment).
+# In such cases, ULDLine is omitted and AwbBlocks follow directly.
 
 FFM8 =
-	MessageHeader
-	EOL
-	FlightIdentificationLine
-	EOL
-	1*(ArrivalInformationLine EOL / UldSection)
-	[TrailerLine [EOL]];
+    MessageHeader
+    EOL
+    FlightIdentificationLine
+    EOL
+    1*(ArrivalInformationLine EOL / UldSection)
+    [TrailerLine [EOL]];
 
 MessageHeader = "FFM/4" / "FFM/5" / "FFM/8";
 
-# --- Flight identification ---
-FlightIdentificationLine =
-	MessagePageNumber
-	Slant
-	CarrierFlightNumber
-	Slant
-	ScheduledDepartureDateTime
-	Slant
-	DepartureAirportCode
-	Slant
-	AircraftRegistration;
+# ==================== FLIGHT IDENTIFICATION ====================
+# First substantive line after header; identifies the flight and departure schedules.
+# Format: page_number/flight_carrier+number/dep_date+time/dep_airport/aircraft_registration
+# Example: 1/KZ7134/30MAR2215/ICN/B744
+# The MessagePageNumber is a sequence indicator for multi-page or reissued manifests.
 
-# Arrival variants seen in operations include:
-# - direct destination with scheduled arrival datetime: ORD//14APR1235
-# - transit NIL with scheduled arrival and optional onward departure: ANC/NIL/14APR0200/14APR0330
-# - bare destination (legacy FFM/4, FFM/5): ORD
-# - bare NIL transit (legacy FFM/4, FFM/5): ANC/NIL
+FlightIdentificationLine =
+    MessagePageNumber
+    Slant
+    CarrierFlightNumber
+    Slant
+    ScheduledDepartureDateTime
+    Slant
+    DepartureAirportCode
+    Slant
+    AircraftRegistration;
+
+# ==================== ARRIVAL INFORMATION ====================
+# One or more arrival route/stop entries.
+# Variants:
+# - Direct:       ORD//14APR1235       => destination + scheduled arrival
+# - Transit NIL:  ANC/NIL/14APR0200/14APR0330 => transit stop, nil-manifest-tag, arrival, onward departure
+# - Transit only: ANC/NIL              => transit stop, nil-manifest-tag
+# - Destination only: ORD              => bare destination code (FFM/4 and FFM/5 legacy)
+# Per CIMP 34: some flights have no explicit arrival lines (legacy FFM/4, FFM/5).
+
 ArrivalInformationLine =
-	DirectArrivalLine
-	/ TransitNILArrivalLine
-	/ TransitNILOnlyLine
-	/ DestinationOnlyLine;
+    DirectArrivalLine
+    / TransitNILArrivalLine
+    / TransitNILOnlyLine
+    / DestinationOnlyLine;
 
 DirectArrivalLine = ArrivalAirportCode Slant Slant ScheduledArrivalDateTime;
 TransitNILArrivalLine =
-	ArrivalAirportCode
-	Slant
-	"NIL"
-	Slant
-	ScheduledArrivalDateTime
-	[Slant ScheduledOnwardDepartureDateTime];
+    ArrivalAirportCode
+    Slant
+    "NIL"
+    Slant
+    ScheduledArrivalDateTime
+    [Slant ScheduledOnwardDepartureDateTime];
 TransitNILOnlyLine = ArrivalAirportCode Slant "NIL";
-DestinationOnlyLine = ArrivalAirportCode;
+DestinationOnlyLine = AirportCode;
 
-# Some traffic starts AWB blocks directly without an explicit ULD line.
+# ==================== ULD (CARGO CONTAINER/UNIT LOAD DEVICE) SECTIONS ====================
+# One ULD entry contains: optional ULD identifier line, then one or more house bills.
+# Structure: [ULD/identifier/detail] followed by AWB lines for all bills loaded in this ULD.
+# If ULD line is omitted, bills are treated as loose/uncontainerized cargo.
+
 UldSection =
-	[ULDLine EOL]
-	1*AwbBlock;
+    [ULDLine EOL]
+    1*HouseBillBlock;
 
-AwbBlock =
-	AirWaybillLine
-	EOL
-	*SupplementLine;
+# ==================== HOUSE BILL (AWB LINE) ====================
+# Cargo shipment (house waybill) details within a ULD.
+# Format: house_bill_number/origin/destination/pieces/weight/volume/free_text
+# Example: HBKK26040533/NRT/NY/100K500MC1000/remarks
+# Contains shipment piece count, weight, and optional carrier notes.
+
+HouseBillBlock =
+    HouseBillLine
+    EOL
+    *SupplementLine;
+
+# ==================== SUPPLEMENTS & ULD DETAILS ====================
+# Optional operational/administrative notes attached to house bills or ULD entries.
+# - OSI: Operational Service Information
+# - OCI: Other Charges Information
+# - SCI: Shipper's Certification of Interest
+# - COR: Correction line
+# - QualifierToken: OCI data patterns (may be empty)
+# - ContinuationLine: continuation rows with embedded slashes (for double-slash patterns)
 
 SupplementLine =
-	OsiLine EOL
-	/ OciLine EOL
-	/ SciLine EOL
-	/ ContinuationLine EOL
-	/ SlashQualifierLine EOL
-	/ CorLine EOL;
+    OsiLine EOL
+    / OciLine EOL
+    / SciLine EOL
+    / ContinuationLine EOL
+    / SlashQualifierLine EOL
+    / CorLine EOL;
 
-# --- ULD and AWB lines ---
+# ==================== ULD IDENTIFIER & DETAIL ====================
+
 ULDLine = "ULD" Slant ULDIdentifier [Slant ULDDetailText];
 
-AirWaybillLine =
-	MasterAirwayBillNumber
-	OriginAndDestination
-	Slant
-	ShipmentSummary
-	[Slant FreeText];
+HouseBillLine =
+    HouseWaybillNumber
+    OriginAndDestination
+    Slant
+    ShipmentSummary
+    [Slant FreeText];
 
-# --- Supplement lines ---
+# ==================== OPERATIONAL SUPPLEMENTS ====================
+
 OsiLine = "OSI" Slant *LineChar;
 OciLine = "OCI" Slant *LineChar;
 SciLine = "SCI" Slant *LineChar;
@@ -80,78 +123,101 @@ CorLine = "COR" Slant *LineChar;
 
 SlashQualifierLine = Slant QualifierToken *(Slant QualifierToken);
 
-# Explicit OCI-style continuation rows.
+# Explicit OCI-style continuation rows with embedded double-slashes (per CIMP 34 §8.8.1).
+# Format: /// followed by optional text.
 ContinuationLine = Slant Slant Slant *LineChar;
 
 TrailerLine = "CONT" / "LAST";
 
 # -------------------------- Elements --------------------------
 
-MessagePageNumber = 1*2Digit;
-CarrierFlightNumber = 2*8AlphaNum;
+# ==================== ELEMENTS: IDENTIFIERS & CODES ====================
+
+MessagePageNumber = 1*2Digit;  # Manifest page sequence indicator
+CarrierFlightNumber = 2*8AlphaNum;  # E.g., 'KZ7134'
+DepartureAirportCode = 3Upper;  # Three-letter IATA code
+ArrivalAirportCode = 3Upper;  # Three-letter IATA code
+AircraftRegistration = 4*12AlphaNum;  # Tail number
+AirportCode = 3Upper;  # Generic airport identifier
+HouseWaybillNumber = MasterAirwayBillNumber;  # House bill carries same format as master
+MasterAirwayBillNumber = AirlinePrefix Hyphen AWBSerialNumber;
+AirlinePrefix = 3Digit;
+AWBSerialNumber = 8Digit;
+# ==================== ELEMENTS: DATETIME ====================
+
 ScheduledDepartureDateTime = ScheduledDepartureDate [ScheduledDepartureTime];
-ScheduledDepartureDate = 2Digit Month;
-ScheduledDepartureTime = 4Digit;
+ScheduledDepartureDate = 2Digit Month;  # E.g., '30MAR'
+ScheduledDepartureTime = 4Digit;  # E.g., '2215' (UTC or local per context)
 ScheduledArrivalDateTime = ScheduledArrivalDate [ScheduledArrivalTime];
 ScheduledArrivalDate = 2Digit Month;
 ScheduledArrivalTime = 4Digit;
 ScheduledOnwardDepartureDateTime = ScheduledOnwardDepartureDate [ScheduledOnwardDepartureTime];
 ScheduledOnwardDepartureDate = 2Digit Month;
 ScheduledOnwardDepartureTime = 4Digit;
-DepartureAirportCode = 3Upper;
-ArrivalAirportCode = 3Upper;
-AircraftRegistration = 4*12AlphaNum;
-
-MasterAirwayBillNumber = AirlinePrefix Hyphen AWBSerialNumber;
-AirlinePrefix = 3Digit;
-AWBSerialNumber = 8Digit;
 
 OriginAndDestination = AirportCode AirportCode;
-AirportCode = 3Upper;
 
-ULDIdentifier = 5*20ULDChar;
-ULDDetailText = 1*LineChar;
+# ==================== ELEMENTS: ULD & SHIPMENT ====================
+
+ULDIdentifier = 5*20ULDChar;  # Containerized unit ID (e.g., 'AKE12345KJ')
+ULDDetailText = 1*LineChar;  # Optional detail or position info
+
+# Shipment Summary: piece count, weight, volume, and total manifest pieces.
+# Formats handled:
+#   - No ULD split: T<total_pcs><unit><weight>M<size>  => loose/bulk cargo
+#   - ULD split: [SPD]<uld_pcs><unit><weight>M<size>T<total> => containerized
+# Per CIMP 34: Codes S(tandard), P(latform), D(evice) indicate container type.
+
+# Shipment Summary: piece count, weight, volume, and total manifest pieces.
+# Formats handled:
+#   - No ULD split: T<total_pcs><unit><weight>M<size>  => loose/bulk cargo
+#   - ULD split: [SPD]<uld_pcs><unit><weight>M<size>T<total> => containerized
+# Per CIMP 34: Codes S(tandard), P(latform), D(evice) indicate container type.
 
 ShipmentSummary =
-	SummaryType
-	PieceCount
-	WeightUnit
-	WeightValue
-	["M" VolumeUnit VolumeAmount]
-	["T" TotalPieceCount];
+    SummaryType
+    PieceCount
+    WeightUnit
+    WeightValue
+    ["M" VolumeUnit VolumeAmount]
+    ["T" TotalPieceCount];
 
-SummaryType = "S" / "T" / "D" / "P";
-PieceCount = 1*4Digit;
-TotalPieceCount = 1*4Digit;
-WeightUnit = "K" / "L";
-WeightValue = 1*7Digit [Dot 1*3Digit];
-VolumeUnit = 1*2Upper;
-VolumeAmount = 1*6Digit [Dot 1*3Digit];
+SummaryType = "S" / "T" / "D" / "P";  # Container type code (S=Standard, T=Total prefix, D=Device, P=Platform)
+PieceCount = 1*4Digit;  # Pieces in this ULD or shipment segment
+TotalPieceCount = 1*4Digit;  # Total manifest piece count
+WeightUnit = "K" / "L";  # 'K' = kilograms, 'L' = pounds
+WeightValue = 1*7Digit [Dot 1*3Digit];  # Weight with optional decimal
+VolumeUnit = 1*2Upper;  # E.g., 'MC' (cubic meters), 'CF' (cubic feet)
+VolumeAmount = 1*6Digit [Dot 1*3Digit];  # Volume with optional decimal
+
+# ==================== ELEMENTS: MISCELLANEOUS ====================
+
+# ==================== ELEMENTS: MISCELLANEOUS ====================
 
 Month =
-	"JAN" / "FEB" / "MAR" / "APR" / "MAY" / "JUN" /
-	"JUL" / "AUG" / "SEP" / "OCT" / "NOV" / "DEC";
+    "JAN" / "FEB" / "MAR" / "APR" / "MAY" / "JUN" /
+    "JUL" / "AUG" / "SEP" / "OCT" / "NOV" / "DEC";
 FreeText = 1*LineChar;
 
-# ------------------------ Character sets ------------------------
+# ==================== CHARACTER SETS & PRIMITIVES ====================
 
-ULDChar = AlphaNum / Hyphen;
-SummaryChar = AlphaNum / Dot / Hyphen;
+ULDChar = AlphaNum / Hyphen;  # Alphanumeric or dash
+SummaryChar = AlphaNum / Dot / Hyphen;  # Alphanumeric, dot, or dash
+
 # Per CIMP 34 §8.8.1 OCI composition rules:
-# - /CC//CRI/data form (empty information identifier) is valid
-# - //DNR/data form is a CIMP-valid DNR overflow continuation
-# QualifierToken allows empty (zero-or-more) so that embedded double-slashes
-# are accepted.  ContinuationLine (///) must remain ordered before this rule.
-QualifierToken = *NoSlashChar;
-NoSlashChar = %x20-2E / %x30-7E;
+# - Empty information identifiers (/CC//) and double-slash patterns (//DNR/) are CIMP-valid.
+# - QualifierToken allows zero or more characters so embedded double-slashes are accepted.
+# - ContinuationLine (///) must remain ordered before QualifierToken rule to parse correctly.
+QualifierToken = *NoSlashChar;  # Zero or more non-slash characters (allows empty tokens between slashes)
+NoSlashChar = %x20-2E / %x30-7E;  # Any printable ASCII except forward slash (/)
 
-LineChar = %x20-7E;
+LineChar = %x20-7E;  # Any printable ASCII character
 
-Slant = "/";
-Hyphen = "-";
-Dot = ".";
+Slant = "/";  # Forward slash delimiter
+Hyphen = "-";  # Hyphen separator
+Dot = ".";  # Decimal point
 
-Digit = %x30-39;
-Upper = %x41-5A;
-AlphaNum = Upper / Digit;
-EOL = [%x0D] %x0A;
+Digit = %x30-39;  # '0' to '9'
+Upper = %x41-5A;  # 'A' to 'Z'
+AlphaNum = Upper / Digit;  # Uppercase letter or digit
+EOL = [%x0D] %x0A;  # Optional CR + LF (line terminator)

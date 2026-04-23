@@ -13,7 +13,7 @@ using std::vector;
 #include "Rule.hpp"
 #include "Rule_FWB17.hpp"
 #include "Rule_MessageHeader.hpp"
-#include "Rule_AirWaybillLine.hpp"
+#include "Rule_MasterAirwayBillLine.hpp"
 #include "Rule_MasterAirwayBillNumber.hpp"
 #include "Rule_AirlinePrefix.hpp"
 #include "Rule_AWBSerialNumber.hpp"
@@ -95,7 +95,7 @@ void* Fwb17JsonExtractor::visit(const Rule_FWB17* rule)
 
 // --- AWB identification ---
 void* Fwb17JsonExtractor::visit(const Rule_MessageHeader* rule)       { (void)rule; return NULL; }
-void* Fwb17JsonExtractor::visit(const Rule_AirWaybillLine* rule)       { return visitRules(rule->rules); }
+void* Fwb17JsonExtractor::visit(const Rule_MasterAirwayBillLine* rule)       { return visitRules(rule->rules); }
 void* Fwb17JsonExtractor::visit(const Rule_MasterAirwayBillNumber* rule) { masterAWB = rule->spelling; return NULL; }
 void* Fwb17JsonExtractor::visit(const Rule_AirlinePrefix* rule)        { (void)rule; return NULL; }
 void* Fwb17JsonExtractor::visit(const Rule_AWBSerialNumber* rule)      { (void)rule; return NULL; }

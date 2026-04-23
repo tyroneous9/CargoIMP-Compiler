@@ -63,10 +63,10 @@ public:
   void* visit(const Rule_TransitNILOnlyLine* rule);
   void* visit(const Rule_DestinationOnlyLine* rule);
   void* visit(const Rule_UldSection* rule);
-  void* visit(const Rule_AwbBlock* rule);
+  void* visit(const Rule_HouseBillBlock* rule);
   void* visit(const Rule_SupplementLine* rule);
   void* visit(const Rule_ULDLine* rule);
-  void* visit(const Rule_AirWaybillLine* rule);
+  void* visit(const Rule_HouseBillLine* rule);
   void* visit(const Rule_OsiLine* rule);
   void* visit(const Rule_OciLine* rule);
   void* visit(const Rule_SciLine* rule);
@@ -88,6 +88,7 @@ public:
   void* visit(const Rule_DepartureAirportCode* rule);
   void* visit(const Rule_ArrivalAirportCode* rule);
   void* visit(const Rule_AircraftRegistration* rule);
+  void* visit(const Rule_HouseWaybillNumber* rule);
   void* visit(const Rule_MasterAirwayBillNumber* rule);
   void* visit(const Rule_AirlinePrefix* rule);
   void* visit(const Rule_AWBSerialNumber* rule);

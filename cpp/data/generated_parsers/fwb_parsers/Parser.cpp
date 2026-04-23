@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Sat Apr 18 18:43:25 CDT 2026
+ * Produced : Wed Apr 22 20:33:48 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -31,7 +31,7 @@ using std::transform;
 #include "Rule.hpp"
 #include "Rule_FWB17.hpp"
 #include "Rule_MessageHeader.hpp"
-#include "Rule_AirWaybillLine.hpp"
+#include "Rule_MasterAirwayBillLine.hpp"
 #include "Rule_MasterAirwayBillNumber.hpp"
 #include "Rule_AirlinePrefix.hpp"
 #include "Rule_AWBSerialNumber.hpp"
@@ -109,7 +109,7 @@ static map<string, pParser> buildParserMap(void)
 
   parsers["fwb17"] = (pParser)Rule_FWB17::parse;
   parsers["messageheader"] = (pParser)Rule_MessageHeader::parse;
-  parsers["airwaybillline"] = (pParser)Rule_AirWaybillLine::parse;
+  parsers["masterairwaybillline"] = (pParser)Rule_MasterAirwayBillLine::parse;
   parsers["masterairwaybillnumber"] = (pParser)Rule_MasterAirwayBillNumber::parse;
   parsers["airlineprefix"] = (pParser)Rule_AirlinePrefix::parse;
   parsers["awbserialnumber"] = (pParser)Rule_AWBSerialNumber::parse;

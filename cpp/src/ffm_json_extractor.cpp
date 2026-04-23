@@ -23,10 +23,12 @@ using std::vector;
 #include "Rule_TransitNILOnlyLine.hpp"
 #include "Rule_DestinationOnlyLine.hpp"
 #include "Rule_UldSection.hpp"
-#include "Rule_AwbBlock.hpp"
+#include "Rule_HouseBillBlock.hpp"
+#include "Rule_HouseWaybillNumber.hpp"
 #include "Rule_SupplementLine.hpp"
 #include "Rule_ULDLine.hpp"
-#include "Rule_AirWaybillLine.hpp"
+#include "Rule_HouseBillLine.hpp"
+#include "Rule_HouseBillBlock.hpp"
 #include "Rule_OsiLine.hpp"
 #include "Rule_OciLine.hpp"
 #include "Rule_SciLine.hpp"
@@ -111,7 +113,7 @@ void* FfmJsonExtractor::visit(const Rule_UldSection* rule)
   return visitRules(rule->rules);
 }
 
-void* FfmJsonExtractor::visit(const Rule_AwbBlock* rule)
+void* FfmJsonExtractor::visit(const Rule_HouseBillBlock* rule)
 {
   ulds.back().awbs.emplace_back();
   return visitRules(rule->rules);
@@ -120,7 +122,7 @@ void* FfmJsonExtractor::visit(const Rule_AwbBlock* rule)
 void* FfmJsonExtractor::visit(const Rule_SupplementLine* rule) { return visitRules(rule->rules); }
 void* FfmJsonExtractor::visit(const Rule_ULDLine* rule) { return visitRules(rule->rules); }
 
-void* FfmJsonExtractor::visit(const Rule_AirWaybillLine* rule)
+void* FfmJsonExtractor::visit(const Rule_HouseBillLine* rule)
 {
   (void)rule;
   return visitRules(rule->rules);
@@ -154,6 +156,7 @@ void* FfmJsonExtractor::visit(const Rule_ScheduledOnwardDepartureTime* rule) { (
 void* FfmJsonExtractor::visit(const Rule_DepartureAirportCode* rule) { (void)rule; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_ArrivalAirportCode* rule) { (void)rule; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_AircraftRegistration* rule) { (void)rule; return NULL; }
+void* FfmJsonExtractor::visit(const Rule_HouseWaybillNumber* rule) { return visitRules(rule->rules); }
 void* FfmJsonExtractor::visit(const Rule_AirlinePrefix* rule) { (void)rule; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_AWBSerialNumber* rule) { (void)rule; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_AirportCode* rule) { (void)rule; return NULL; }

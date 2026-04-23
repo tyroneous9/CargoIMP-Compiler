@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Wed Apr 22 18:15:05 CDT 2026
+ * Produced : Wed Apr 22 20:33:48 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -26,10 +26,10 @@ using std::vector;
 #include "Rule_TransitNILOnlyLine.hpp"
 #include "Rule_DestinationOnlyLine.hpp"
 #include "Rule_UldSection.hpp"
-#include "Rule_AwbBlock.hpp"
+#include "Rule_HouseBillBlock.hpp"
 #include "Rule_SupplementLine.hpp"
 #include "Rule_ULDLine.hpp"
-#include "Rule_AirWaybillLine.hpp"
+#include "Rule_HouseBillLine.hpp"
 #include "Rule_OsiLine.hpp"
 #include "Rule_OciLine.hpp"
 #include "Rule_SciLine.hpp"
@@ -39,6 +39,14 @@ using std::vector;
 #include "Rule_TrailerLine.hpp"
 #include "Rule_MessagePageNumber.hpp"
 #include "Rule_CarrierFlightNumber.hpp"
+#include "Rule_DepartureAirportCode.hpp"
+#include "Rule_ArrivalAirportCode.hpp"
+#include "Rule_AircraftRegistration.hpp"
+#include "Rule_AirportCode.hpp"
+#include "Rule_HouseWaybillNumber.hpp"
+#include "Rule_MasterAirwayBillNumber.hpp"
+#include "Rule_AirlinePrefix.hpp"
+#include "Rule_AWBSerialNumber.hpp"
 #include "Rule_ScheduledDepartureDateTime.hpp"
 #include "Rule_ScheduledDepartureDate.hpp"
 #include "Rule_ScheduledDepartureTime.hpp"
@@ -48,14 +56,7 @@ using std::vector;
 #include "Rule_ScheduledOnwardDepartureDateTime.hpp"
 #include "Rule_ScheduledOnwardDepartureDate.hpp"
 #include "Rule_ScheduledOnwardDepartureTime.hpp"
-#include "Rule_DepartureAirportCode.hpp"
-#include "Rule_ArrivalAirportCode.hpp"
-#include "Rule_AircraftRegistration.hpp"
-#include "Rule_MasterAirwayBillNumber.hpp"
-#include "Rule_AirlinePrefix.hpp"
-#include "Rule_AWBSerialNumber.hpp"
 #include "Rule_OriginAndDestination.hpp"
-#include "Rule_AirportCode.hpp"
 #include "Rule_ULDIdentifier.hpp"
 #include "Rule_ULDDetailText.hpp"
 #include "Rule_ShipmentSummary.hpp"
@@ -191,14 +192,14 @@ void* XmlDisplayer::visit(const Rule_UldSection* rule)
   return NULL;
 }
 
-void* XmlDisplayer::visit(const Rule_AwbBlock* rule)
+void* XmlDisplayer::visit(const Rule_HouseBillBlock* rule)
 {
   if (!terminal) cout << endl;
-  cout << "<AwbBlock>";
+  cout << "<HouseBillBlock>";
   terminal = false;
   visitRules(rule->rules);
   if (!terminal) cout << endl;
-  cout << "</AwbBlock>";
+  cout << "</HouseBillBlock>";
   terminal = false;
   return NULL;
 }
@@ -227,14 +228,14 @@ void* XmlDisplayer::visit(const Rule_ULDLine* rule)
   return NULL;
 }
 
-void* XmlDisplayer::visit(const Rule_AirWaybillLine* rule)
+void* XmlDisplayer::visit(const Rule_HouseBillLine* rule)
 {
   if (!terminal) cout << endl;
-  cout << "<AirWaybillLine>";
+  cout << "<HouseBillLine>";
   terminal = false;
   visitRules(rule->rules);
   if (!terminal) cout << endl;
-  cout << "</AirWaybillLine>";
+  cout << "</HouseBillLine>";
   terminal = false;
   return NULL;
 }
@@ -347,6 +348,102 @@ void* XmlDisplayer::visit(const Rule_CarrierFlightNumber* rule)
   return NULL;
 }
 
+void* XmlDisplayer::visit(const Rule_DepartureAirportCode* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<DepartureAirportCode>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</DepartureAirportCode>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_ArrivalAirportCode* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<ArrivalAirportCode>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</ArrivalAirportCode>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_AircraftRegistration* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<AircraftRegistration>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</AircraftRegistration>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_AirportCode* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<AirportCode>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</AirportCode>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_HouseWaybillNumber* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<HouseWaybillNumber>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</HouseWaybillNumber>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_MasterAirwayBillNumber* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<MasterAirwayBillNumber>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</MasterAirwayBillNumber>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_AirlinePrefix* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<AirlinePrefix>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</AirlinePrefix>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_AWBSerialNumber* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<AWBSerialNumber>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</AWBSerialNumber>";
+  terminal = false;
+  return NULL;
+}
+
 void* XmlDisplayer::visit(const Rule_ScheduledDepartureDateTime* rule)
 {
   if (!terminal) cout << endl;
@@ -455,78 +552,6 @@ void* XmlDisplayer::visit(const Rule_ScheduledOnwardDepartureTime* rule)
   return NULL;
 }
 
-void* XmlDisplayer::visit(const Rule_DepartureAirportCode* rule)
-{
-  if (!terminal) cout << endl;
-  cout << "<DepartureAirportCode>";
-  terminal = false;
-  visitRules(rule->rules);
-  if (!terminal) cout << endl;
-  cout << "</DepartureAirportCode>";
-  terminal = false;
-  return NULL;
-}
-
-void* XmlDisplayer::visit(const Rule_ArrivalAirportCode* rule)
-{
-  if (!terminal) cout << endl;
-  cout << "<ArrivalAirportCode>";
-  terminal = false;
-  visitRules(rule->rules);
-  if (!terminal) cout << endl;
-  cout << "</ArrivalAirportCode>";
-  terminal = false;
-  return NULL;
-}
-
-void* XmlDisplayer::visit(const Rule_AircraftRegistration* rule)
-{
-  if (!terminal) cout << endl;
-  cout << "<AircraftRegistration>";
-  terminal = false;
-  visitRules(rule->rules);
-  if (!terminal) cout << endl;
-  cout << "</AircraftRegistration>";
-  terminal = false;
-  return NULL;
-}
-
-void* XmlDisplayer::visit(const Rule_MasterAirwayBillNumber* rule)
-{
-  if (!terminal) cout << endl;
-  cout << "<MasterAirwayBillNumber>";
-  terminal = false;
-  visitRules(rule->rules);
-  if (!terminal) cout << endl;
-  cout << "</MasterAirwayBillNumber>";
-  terminal = false;
-  return NULL;
-}
-
-void* XmlDisplayer::visit(const Rule_AirlinePrefix* rule)
-{
-  if (!terminal) cout << endl;
-  cout << "<AirlinePrefix>";
-  terminal = false;
-  visitRules(rule->rules);
-  if (!terminal) cout << endl;
-  cout << "</AirlinePrefix>";
-  terminal = false;
-  return NULL;
-}
-
-void* XmlDisplayer::visit(const Rule_AWBSerialNumber* rule)
-{
-  if (!terminal) cout << endl;
-  cout << "<AWBSerialNumber>";
-  terminal = false;
-  visitRules(rule->rules);
-  if (!terminal) cout << endl;
-  cout << "</AWBSerialNumber>";
-  terminal = false;
-  return NULL;
-}
-
 void* XmlDisplayer::visit(const Rule_OriginAndDestination* rule)
 {
   if (!terminal) cout << endl;
@@ -535,18 +560,6 @@ void* XmlDisplayer::visit(const Rule_OriginAndDestination* rule)
   visitRules(rule->rules);
   if (!terminal) cout << endl;
   cout << "</OriginAndDestination>";
-  terminal = false;
-  return NULL;
-}
-
-void* XmlDisplayer::visit(const Rule_AirportCode* rule)
-{
-  if (!terminal) cout << endl;
-  cout << "<AirportCode>";
-  terminal = false;
-  visitRules(rule->rules);
-  if (!terminal) cout << endl;
-  cout << "</AirportCode>";
   terminal = false;
   return NULL;
 }

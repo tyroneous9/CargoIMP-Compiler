@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Wed Apr 22 18:15:05 CDT 2026
+ * Produced : Wed Apr 22 20:33:48 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -20,10 +20,10 @@ class Rule_TransitNILArrivalLine;
 class Rule_TransitNILOnlyLine;
 class Rule_DestinationOnlyLine;
 class Rule_UldSection;
-class Rule_AwbBlock;
+class Rule_HouseBillBlock;
 class Rule_SupplementLine;
 class Rule_ULDLine;
-class Rule_AirWaybillLine;
+class Rule_HouseBillLine;
 class Rule_OsiLine;
 class Rule_OciLine;
 class Rule_SciLine;
@@ -33,6 +33,14 @@ class Rule_ContinuationLine;
 class Rule_TrailerLine;
 class Rule_MessagePageNumber;
 class Rule_CarrierFlightNumber;
+class Rule_DepartureAirportCode;
+class Rule_ArrivalAirportCode;
+class Rule_AircraftRegistration;
+class Rule_AirportCode;
+class Rule_HouseWaybillNumber;
+class Rule_MasterAirwayBillNumber;
+class Rule_AirlinePrefix;
+class Rule_AWBSerialNumber;
 class Rule_ScheduledDepartureDateTime;
 class Rule_ScheduledDepartureDate;
 class Rule_ScheduledDepartureTime;
@@ -42,14 +50,7 @@ class Rule_ScheduledArrivalTime;
 class Rule_ScheduledOnwardDepartureDateTime;
 class Rule_ScheduledOnwardDepartureDate;
 class Rule_ScheduledOnwardDepartureTime;
-class Rule_DepartureAirportCode;
-class Rule_ArrivalAirportCode;
-class Rule_AircraftRegistration;
-class Rule_MasterAirwayBillNumber;
-class Rule_AirlinePrefix;
-class Rule_AWBSerialNumber;
 class Rule_OriginAndDestination;
-class Rule_AirportCode;
 class Rule_ULDIdentifier;
 class Rule_ULDDetailText;
 class Rule_ShipmentSummary;
@@ -89,10 +90,10 @@ public:
   virtual void* visit(const Rule_TransitNILOnlyLine* rule) = 0;
   virtual void* visit(const Rule_DestinationOnlyLine* rule) = 0;
   virtual void* visit(const Rule_UldSection* rule) = 0;
-  virtual void* visit(const Rule_AwbBlock* rule) = 0;
+  virtual void* visit(const Rule_HouseBillBlock* rule) = 0;
   virtual void* visit(const Rule_SupplementLine* rule) = 0;
   virtual void* visit(const Rule_ULDLine* rule) = 0;
-  virtual void* visit(const Rule_AirWaybillLine* rule) = 0;
+  virtual void* visit(const Rule_HouseBillLine* rule) = 0;
   virtual void* visit(const Rule_OsiLine* rule) = 0;
   virtual void* visit(const Rule_OciLine* rule) = 0;
   virtual void* visit(const Rule_SciLine* rule) = 0;
@@ -102,6 +103,14 @@ public:
   virtual void* visit(const Rule_TrailerLine* rule) = 0;
   virtual void* visit(const Rule_MessagePageNumber* rule) = 0;
   virtual void* visit(const Rule_CarrierFlightNumber* rule) = 0;
+  virtual void* visit(const Rule_DepartureAirportCode* rule) = 0;
+  virtual void* visit(const Rule_ArrivalAirportCode* rule) = 0;
+  virtual void* visit(const Rule_AircraftRegistration* rule) = 0;
+  virtual void* visit(const Rule_AirportCode* rule) = 0;
+  virtual void* visit(const Rule_HouseWaybillNumber* rule) = 0;
+  virtual void* visit(const Rule_MasterAirwayBillNumber* rule) = 0;
+  virtual void* visit(const Rule_AirlinePrefix* rule) = 0;
+  virtual void* visit(const Rule_AWBSerialNumber* rule) = 0;
   virtual void* visit(const Rule_ScheduledDepartureDateTime* rule) = 0;
   virtual void* visit(const Rule_ScheduledDepartureDate* rule) = 0;
   virtual void* visit(const Rule_ScheduledDepartureTime* rule) = 0;
@@ -111,14 +120,7 @@ public:
   virtual void* visit(const Rule_ScheduledOnwardDepartureDateTime* rule) = 0;
   virtual void* visit(const Rule_ScheduledOnwardDepartureDate* rule) = 0;
   virtual void* visit(const Rule_ScheduledOnwardDepartureTime* rule) = 0;
-  virtual void* visit(const Rule_DepartureAirportCode* rule) = 0;
-  virtual void* visit(const Rule_ArrivalAirportCode* rule) = 0;
-  virtual void* visit(const Rule_AircraftRegistration* rule) = 0;
-  virtual void* visit(const Rule_MasterAirwayBillNumber* rule) = 0;
-  virtual void* visit(const Rule_AirlinePrefix* rule) = 0;
-  virtual void* visit(const Rule_AWBSerialNumber* rule) = 0;
   virtual void* visit(const Rule_OriginAndDestination* rule) = 0;
-  virtual void* visit(const Rule_AirportCode* rule) = 0;
   virtual void* visit(const Rule_ULDIdentifier* rule) = 0;
   virtual void* visit(const Rule_ULDDetailText* rule) = 0;
   virtual void* visit(const Rule_ShipmentSummary* rule) = 0;

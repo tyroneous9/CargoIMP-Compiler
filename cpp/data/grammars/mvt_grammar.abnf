@@ -1,16 +1,19 @@
-# Induced MVT grammar from observed mailbox corpus (no official CIMP MVT spec available)
-# Corpus basis: server/data/outputs/emails bodies with first line "MVT".
-# This grammar is intentionally permissive and structure-first.
+# MVT (Movement / Manifest Status Message) grammar
 #
-# Important: all semantics below are provisional and were inferred from observed
-# messages plus operator guidance. In particular, for AA lines:
-# - the required timestamp is treated as actual departure time
-# - the optional second timestamp is treated as actual arrival time
+# Induced from observed mailbox corpus (no official CIMP MVT specification exists).
+# This grammar is intentionally permissive and structure-first, suitable for
+# carrier status updates, cargo movement tracking, and operational notifications.
 #
-# Timestamp shape is currently inferred as DDHHMM (day-of-month + time).
-# Time zone is not encoded in the message text itself. Based on operator mapping
-# of "172115" -> "April 17, 16:15 CDT", the encoded value is most consistent
-# with UTC time (often written UTC; sometimes informally mistyped as UCT).
+# Message structure:
+# - Header (MVT)
+# - Flight identification
+# - Event status line (departure, arrival, or other operational event)
+# - Optional supplemental lines (delays, PAX count, field status, etc.)
+#
+# IMPORTANT: Semantics below are provisional and inferred from observed messages
+# plus operator guidance. No authoritative CIMP reference exists for MVT format.
+# Timestamp encoding is inferred as DDHHMM (day-of-month + time in UTC when cross-
+# referenced with business logic).
 
 MVTMessage =
     MessageHeader EOL
@@ -21,14 +24,18 @@ MVTMessage =
 
 MessageHeader = "MVT";
 
-# Observed examples:
-# - KZ7132/15.N407KZ.ANC
-# - KZ143/16.JA13KZ.NRT
+# ==================== FLIGHT IDENTIFICATION ====================
+# First substantive line after header; identifies the flight and equipment.
+# Format: carrier_flight/day.tail_registration.airport
+# Examples:
+# - KZ7132/15.N407KZ.ANC  => KZ flight 7132, day 15, aircraft registration N407KZ at ANC
+# - KZ143/16.JA13KZ.NRT   => KZ flight 143, day 16, aircraft JA13KZ at NRT
 # Useful fields:
 # - CarrierFlightNumber: airline + numeric flight identifier
 # - Day: operational day number carried on the flight identification line
-# - AircraftRegistration: aircraft tail / registration
-# - AirportCode: three-letter airport code carried on the identification line
+# - AircraftRegistration: aircraft tail / registration number
+# - AirportCode: three-letter airport code
+
 FlightIdentificationLine =
     CarrierFlightNumber
     Slant
@@ -38,55 +45,67 @@ FlightIdentificationLine =
     Dot
     AirportCode;
 
-CarrierFlightNumber = 2Upper 3*4Digit;
-Day = 2Digit;
-AircraftRegistration = 5*10AlphaNum;
-AirportCode = 3Upper;
+CarrierFlightNumber = 2Upper 3*4Digit;  # E.g., 'KZ7134'
+Day = 2Digit;  # Day of month or operation
+AircraftRegistration = 5*10AlphaNum;  # Tail number
+AirportCode = 3Upper;  # IATA three-letter code
 
-# Observed event families in line 3:
-# - AA142229
-# - AA142229/142253
-# - AD151424 EA1954 ORD
-# - AD151424/151435 EA1955 ORD
-# - EA2220
-# - ED150930
+# ==================== EVENT LINE ====================
+# Third line after header; the primary operational event or status update.
+# Observed event families and formats:
+# - AA142229          => Actual movement (departure only)
+# - AA142229/142253   => Actual movement with arrival
+# - AD151424 EA1954 ORD => Actual departure with estimated arrival time/airport
+# - AD151424/151435 EA1955 ORD => Actual departure/arrival with estimated arrival
+# - EA2220            => Estimated arrival only
+# - ED150930          => Estimated departure
+#
+# Provisional semantics from operators:
+# - AA lines: first DateTime6 = ActualDepartureDateTime, optional second = ActualArrivalDateTime
+# - AD lines: similar to AA, but may include estimated arrival (EA) component
+# - EA/ED: estimated arrival/departure (less common as primary event)
+
 EventLine =
     ActualMovementLine
     / ActualDepartureEstimatedArrivalLine
     / EstimatedArrivalOnlyLine
     / EventDepartureLine;
 
-# Provisional semantics from observed messages and operator guidance:
+# Format: AA {DDHHMM} [{/DDHHMM}]
+# Provisional semantics from observed and operator-guided interpretation:
 # - first DateTime6  = ActualDepartureDateTime
-# - second DateTime6 = ActualArrivalDateTime
-# Example: AA172109/172115 => departure 17 21:09, arrival 17 21:15
+# - second DateTime6 = ActualArrivalDateTime (if present)
+# Example: AA172109/172115 => departure day 17 21:09, arrival day 17 21:15
 ActualMovementLine =
     "AA"
     ActualDepartureDateTime
     [Slant ActualArrivalDateTime];
 
-# AD lines are still less certain semantically than AA lines.
+# Format: AD {DDHHMM} [{/DDHHMM}] [{SP EA}time[ airport]]
+# AD lines are less certain semantically than AA lines.
 # Current provisional reading:
-# - required DateTime6       = actual departure datetime
-# - optional second DateTime6 = additional actual movement datetime, often
-#   likely arrival-related, but not yet firmly confirmed
-# - optional EA time/airport = estimated arrival time at the named airport
+# - required DateTime6       = ActualDepartureDateTime
+# - optional second DateTime6 = AdditionalActualDateTime (often arrival-related)
+# - optional EA time/airport = EstimatedArrivalTime and optional EstimatedArrivalAirport
 ActualDepartureEstimatedArrivalLine =
     "AD"
     ActualDepartureDateTime
     [Slant AdditionalActualDateTime]
     [SP "EA" EstimatedArrivalTime SP EstimatedArrivalAirport];
 
-EstimatedArrivalOnlyLine = "EA" Time4;
-EventDepartureLine = "ED" DateTime6;
+EstimatedArrivalOnlyLine = "EA" Time4;  # Estimated arrival time only
+EventDepartureLine = "ED" DateTime6;  # Event departure (semantics less clear)
 
-# Supplemental operational lines observed after EventLine:
-# - DLRA/TD/2255/0200, DLWT/0130, DLRA, DLFS/0025
-# - PX0
-# - EB0415
-# - FLD14
-# - EDLAT/0005
-# - SI FMOC26-077 080 090 098 099 100
+# ==================== SUPPLEMENTAL OPERATIONAL LINES ====================
+# Optional operational/administrative updates that may follow the EventLine.
+# Observed supplemental line types and formats:
+# - DLRA/TD/2255/0200, DLWT/0130, DLFS/0025  => Delay lines (reason, times)
+# - PX0, PX100                                => Passenger count
+# - EB0415                                    => Event block code
+# - FLD14                                     => Field state number
+# - EDLAT/0005                                => Equipment/landing info
+# - SI FMOC26-077 080 090 098 099 100         => Service item / remarks
+
 SupplementLine =
     DelayLine
     / PaxLine
@@ -95,32 +114,48 @@ SupplementLine =
     / EdlatLine
     / SiLine;
 
+# DL = Delay family (DLRA/DLWT/DLFS): delay code, reason, and optional time fields
 DelayLine = DelayCode [Slant DelayReason] [Slant Time4] [Slant Time4];
-DelayCode = "DLRA" / "DLWT" / "DLFS";
-DelayReason = 1*4Upper;
+DelayCode = "DLRA" / "DLWT" / "DLFS";  # Delay Reason/Weight/Fuel
+DelayReason = 1*4Upper;  # Reason code
 
+# PX = Passenger/Payload count
 PaxLine = "PX" 1*3Digit;
+
+# EB = Event Block status
 EventBlockLine = "EB" Time4;
+
+# FLD = Field status number
 FieldStateLine = "FLD" 2Digit;
+
+# EDLAT = Equipment data/landing info
 EdlatLine = "EDLAT" Slant Time4;
+
+# SI = Service Item / system instruction
 SiLine = "SI" SP 1*LineChar;
 
-# DDHHMM, provisionally interpreted as UTC-based when external business logic
-# maps values like 172115 -> April 17 16:15 CDT.
-ActualDepartureDateTime = DateTime6;
-ActualArrivalDateTime = DateTime6;
-AdditionalActualDateTime = DateTime6;
-EstimatedArrivalTime = Time4;
-EstimatedArrivalAirport = AirportCode;
+# ==================== DATETIME & TIME ELEMENTS ====================
+# All timestamps are provisional interpretations from observed data.
+# Timestamp interpretation as UTC is inferred from operator mapping examples.
 
-DateTime6 = 6Digit;
-Time4 = 4Digit;
+# DDHHMM: provisional interpretation as UTC-based when cross-referenced
+# with business logic (e.g., "172115" maps to "April 17 16:15 CDT")
+ActualDepartureDateTime = DateTime6;  # Actual departure date/time
+ActualArrivalDateTime = DateTime6;    # Actual arrival date/time
+AdditionalActualDateTime = DateTime6;  # Additional operational datetime
+EstimatedArrivalTime = Time4;          # Estimated arrival time
+EstimatedArrivalAirport = AirportCode;  # Estimated arrival destination
 
-LineChar = %x20-7E;
-SP = %x20;
-EOL = [%x0D] %x0A;
-Slant = "/";
-Dot = ".";
-Digit = %x30-39;
-Upper = %x41-5A;
-AlphaNum = Upper / Digit;
+DateTime6 = 6Digit;  # DDHHMM format
+Time4 = 4Digit;     # HHMM format
+
+# ==================== CHARACTER SETS & PRIMITIVES ====================
+
+LineChar = %x20-7E;  # Any printable ASCII character
+SP = %x20;           # Space character (used in parsing)
+EOL = [%x0D] %x0A;  # Optional CR + LF
+Slant = "/";        # Forward slash delimiter
+Dot = ".";          # Decimal point / field separator
+Digit = %x30-39;    # '0' to '9'
+Upper = %x41-5A;    # 'A' to 'Z'
+AlphaNum = Upper / Digit;  # Uppercase letter or digit

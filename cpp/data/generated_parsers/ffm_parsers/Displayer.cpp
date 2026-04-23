@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Wed Apr 22 18:15:05 CDT 2026
+ * Produced : Wed Apr 22 20:33:48 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -25,10 +25,10 @@ using std::vector;
 #include "Rule_TransitNILOnlyLine.hpp"
 #include "Rule_DestinationOnlyLine.hpp"
 #include "Rule_UldSection.hpp"
-#include "Rule_AwbBlock.hpp"
+#include "Rule_HouseBillBlock.hpp"
 #include "Rule_SupplementLine.hpp"
 #include "Rule_ULDLine.hpp"
-#include "Rule_AirWaybillLine.hpp"
+#include "Rule_HouseBillLine.hpp"
 #include "Rule_OsiLine.hpp"
 #include "Rule_OciLine.hpp"
 #include "Rule_SciLine.hpp"
@@ -38,6 +38,14 @@ using std::vector;
 #include "Rule_TrailerLine.hpp"
 #include "Rule_MessagePageNumber.hpp"
 #include "Rule_CarrierFlightNumber.hpp"
+#include "Rule_DepartureAirportCode.hpp"
+#include "Rule_ArrivalAirportCode.hpp"
+#include "Rule_AircraftRegistration.hpp"
+#include "Rule_AirportCode.hpp"
+#include "Rule_HouseWaybillNumber.hpp"
+#include "Rule_MasterAirwayBillNumber.hpp"
+#include "Rule_AirlinePrefix.hpp"
+#include "Rule_AWBSerialNumber.hpp"
 #include "Rule_ScheduledDepartureDateTime.hpp"
 #include "Rule_ScheduledDepartureDate.hpp"
 #include "Rule_ScheduledDepartureTime.hpp"
@@ -47,14 +55,7 @@ using std::vector;
 #include "Rule_ScheduledOnwardDepartureDateTime.hpp"
 #include "Rule_ScheduledOnwardDepartureDate.hpp"
 #include "Rule_ScheduledOnwardDepartureTime.hpp"
-#include "Rule_DepartureAirportCode.hpp"
-#include "Rule_ArrivalAirportCode.hpp"
-#include "Rule_AircraftRegistration.hpp"
-#include "Rule_MasterAirwayBillNumber.hpp"
-#include "Rule_AirlinePrefix.hpp"
-#include "Rule_AWBSerialNumber.hpp"
 #include "Rule_OriginAndDestination.hpp"
-#include "Rule_AirportCode.hpp"
 #include "Rule_ULDIdentifier.hpp"
 #include "Rule_ULDDetailText.hpp"
 #include "Rule_ShipmentSummary.hpp"
@@ -127,7 +128,7 @@ void* Displayer::visit(const Rule_UldSection* rule)
   return visitRules(rule->rules);
 }
 
-void* Displayer::visit(const Rule_AwbBlock* rule)
+void* Displayer::visit(const Rule_HouseBillBlock* rule)
 {
   return visitRules(rule->rules);
 }
@@ -142,7 +143,7 @@ void* Displayer::visit(const Rule_ULDLine* rule)
   return visitRules(rule->rules);
 }
 
-void* Displayer::visit(const Rule_AirWaybillLine* rule)
+void* Displayer::visit(const Rule_HouseBillLine* rule)
 {
   return visitRules(rule->rules);
 }
@@ -192,6 +193,46 @@ void* Displayer::visit(const Rule_CarrierFlightNumber* rule)
   return visitRules(rule->rules);
 }
 
+void* Displayer::visit(const Rule_DepartureAirportCode* rule)
+{
+  return visitRules(rule->rules);
+}
+
+void* Displayer::visit(const Rule_ArrivalAirportCode* rule)
+{
+  return visitRules(rule->rules);
+}
+
+void* Displayer::visit(const Rule_AircraftRegistration* rule)
+{
+  return visitRules(rule->rules);
+}
+
+void* Displayer::visit(const Rule_AirportCode* rule)
+{
+  return visitRules(rule->rules);
+}
+
+void* Displayer::visit(const Rule_HouseWaybillNumber* rule)
+{
+  return visitRules(rule->rules);
+}
+
+void* Displayer::visit(const Rule_MasterAirwayBillNumber* rule)
+{
+  return visitRules(rule->rules);
+}
+
+void* Displayer::visit(const Rule_AirlinePrefix* rule)
+{
+  return visitRules(rule->rules);
+}
+
+void* Displayer::visit(const Rule_AWBSerialNumber* rule)
+{
+  return visitRules(rule->rules);
+}
+
 void* Displayer::visit(const Rule_ScheduledDepartureDateTime* rule)
 {
   return visitRules(rule->rules);
@@ -237,42 +278,7 @@ void* Displayer::visit(const Rule_ScheduledOnwardDepartureTime* rule)
   return visitRules(rule->rules);
 }
 
-void* Displayer::visit(const Rule_DepartureAirportCode* rule)
-{
-  return visitRules(rule->rules);
-}
-
-void* Displayer::visit(const Rule_ArrivalAirportCode* rule)
-{
-  return visitRules(rule->rules);
-}
-
-void* Displayer::visit(const Rule_AircraftRegistration* rule)
-{
-  return visitRules(rule->rules);
-}
-
-void* Displayer::visit(const Rule_MasterAirwayBillNumber* rule)
-{
-  return visitRules(rule->rules);
-}
-
-void* Displayer::visit(const Rule_AirlinePrefix* rule)
-{
-  return visitRules(rule->rules);
-}
-
-void* Displayer::visit(const Rule_AWBSerialNumber* rule)
-{
-  return visitRules(rule->rules);
-}
-
 void* Displayer::visit(const Rule_OriginAndDestination* rule)
-{
-  return visitRules(rule->rules);
-}
-
-void* Displayer::visit(const Rule_AirportCode* rule)
 {
   return visitRules(rule->rules);
 }

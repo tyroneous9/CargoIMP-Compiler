@@ -1,15 +1,15 @@
 /* -----------------------------------------------------------------------------
- * Rule_AwbBlock.hpp
+ * Rule_HouseBillBlock.hpp
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Wed Apr 22 18:15:05 CDT 2026
+ * Produced : Wed Apr 22 20:33:48 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
 
-#ifndef Rule_AwbBlock_hpp
-#define Rule_AwbBlock_hpp
+#ifndef Rule_HouseBillBlock_hpp
+#define Rule_HouseBillBlock_hpp
 
 #include <string>
 #include <vector>
@@ -19,17 +19,17 @@
 class Visitor;
 class ParserContext;
 
-class Rule_AwbBlock : public Rule
+class Rule_HouseBillBlock : public Rule
 {
 public:
-  Rule_AwbBlock(const std::string& spelling, const std::vector<const Rule*>& rules);
-  Rule_AwbBlock(const Rule_AwbBlock& rule);
+  Rule_HouseBillBlock(const std::string& spelling, const std::vector<const Rule*>& rules);
+  Rule_HouseBillBlock(const Rule_HouseBillBlock& rule);
 
-  Rule_AwbBlock& operator=(const Rule_AwbBlock& rule);
+  Rule_HouseBillBlock& operator=(const Rule_HouseBillBlock& rule);
 
-  const Rule_AwbBlock* clone(void) const;
+  const Rule_HouseBillBlock* clone(void) const;
 
-  static const Rule_AwbBlock* parse(ParserContext& context);
+  static const Rule_HouseBillBlock* parse(ParserContext& context);
 
   void* accept(Visitor& visitor) const;
 };

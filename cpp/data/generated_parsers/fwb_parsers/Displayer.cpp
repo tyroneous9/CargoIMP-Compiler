@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Sat Apr 18 18:43:25 CDT 2026
+ * Produced : Wed Apr 22 20:33:48 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -18,7 +18,7 @@ using std::vector;
 
 #include "Rule_FWB17.hpp"
 #include "Rule_MessageHeader.hpp"
-#include "Rule_AirWaybillLine.hpp"
+#include "Rule_MasterAirwayBillLine.hpp"
 #include "Rule_MasterAirwayBillNumber.hpp"
 #include "Rule_AirlinePrefix.hpp"
 #include "Rule_AWBSerialNumber.hpp"
@@ -100,7 +100,7 @@ void* Displayer::visit(const Rule_MessageHeader* rule)
   return visitRules(rule->rules);
 }
 
-void* Displayer::visit(const Rule_AirWaybillLine* rule)
+void* Displayer::visit(const Rule_MasterAirwayBillLine* rule)
 {
   return visitRules(rule->rules);
 }
