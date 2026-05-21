@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Wed Apr 22 20:33:48 CDT 2026
+ * Produced : Thu May 21 16:34:36 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -20,6 +20,7 @@ using std::vector;
 #include "ParserContext.hpp"
 
 #include "Rule_TransitNILArrivalLine.hpp"
+#include "Rule_TransitArrivalLineNoNIL.hpp"
 #include "Rule_DirectArrivalLine.hpp"
 #include "Rule_TransitNILOnlyLine.hpp"
 #include "Rule_DestinationOnlyLine.hpp"
@@ -71,6 +72,32 @@ const Rule_ArrivalInformationLine* Rule_ArrivalInformationLine::parse(ParserCont
       for (int i1 = 0; i1 < 1 && f1; i1++)
       {
         const Rule* rule = Rule_DirectArrivalLine::parse(context);
+        if ((f1 = rule != NULL))
+        {
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
+        }
+      }
+      parsed = c1 == 1;
+    }
+    if (parsed)
+    {
+      as1.push_back(new ParserAlternative(a1));
+    }
+    context.index = s1;
+  }
+  {
+    int s1 = context.index;
+    ParserAlternative a1(s1);
+    parsed = true;
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
+      for (int i1 = 0; i1 < 1 && f1; i1++)
+      {
+        const Rule* rule = Rule_TransitArrivalLineNoNIL::parse(context);
         if ((f1 = rule != NULL))
         {
           a1.add(*rule, context.index);

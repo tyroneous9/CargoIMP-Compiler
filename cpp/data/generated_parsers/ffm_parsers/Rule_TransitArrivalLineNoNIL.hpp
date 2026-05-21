@@ -1,5 +1,5 @@
 /* -----------------------------------------------------------------------------
- * Rule_Slant.hpp
+ * Rule_TransitArrivalLineNoNIL.hpp
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
@@ -8,8 +8,8 @@
  * -----------------------------------------------------------------------------
  */
 
-#ifndef Rule_Slant_hpp
-#define Rule_Slant_hpp
+#ifndef Rule_TransitArrivalLineNoNIL_hpp
+#define Rule_TransitArrivalLineNoNIL_hpp
 
 #include <string>
 #include <vector>
@@ -19,17 +19,17 @@
 class Visitor;
 class ParserContext;
 
-class Rule_Slant : public Rule
+class Rule_TransitArrivalLineNoNIL : public Rule
 {
 public:
-  Rule_Slant(const std::string& spelling, const std::vector<const Rule*>& rules);
-  Rule_Slant(const Rule_Slant& rule);
+  Rule_TransitArrivalLineNoNIL(const std::string& spelling, const std::vector<const Rule*>& rules);
+  Rule_TransitArrivalLineNoNIL(const Rule_TransitArrivalLineNoNIL& rule);
 
-  Rule_Slant& operator=(const Rule_Slant& rule);
+  Rule_TransitArrivalLineNoNIL& operator=(const Rule_TransitArrivalLineNoNIL& rule);
 
-  const Rule_Slant* clone(void) const;
+  const Rule_TransitArrivalLineNoNIL* clone(void) const;
 
-  static const Rule_Slant* parse(ParserContext& context);
+  static const Rule_TransitArrivalLineNoNIL* parse(ParserContext& context);
 
   void* accept(Visitor& visitor) const;
 };

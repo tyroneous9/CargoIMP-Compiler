@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Wed Apr 22 20:33:48 CDT 2026
+ * Produced : Thu May 21 16:34:36 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -16,6 +16,7 @@ class Rule_MessageHeader;
 class Rule_FlightIdentificationLine;
 class Rule_ArrivalInformationLine;
 class Rule_DirectArrivalLine;
+class Rule_TransitArrivalLineNoNIL;
 class Rule_TransitNILArrivalLine;
 class Rule_TransitNILOnlyLine;
 class Rule_DestinationOnlyLine;
@@ -86,6 +87,7 @@ public:
   virtual void* visit(const Rule_FlightIdentificationLine* rule) = 0;
   virtual void* visit(const Rule_ArrivalInformationLine* rule) = 0;
   virtual void* visit(const Rule_DirectArrivalLine* rule) = 0;
+  virtual void* visit(const Rule_TransitArrivalLineNoNIL* rule) = 0;
   virtual void* visit(const Rule_TransitNILArrivalLine* rule) = 0;
   virtual void* visit(const Rule_TransitNILOnlyLine* rule) = 0;
   virtual void* visit(const Rule_DestinationOnlyLine* rule) = 0;

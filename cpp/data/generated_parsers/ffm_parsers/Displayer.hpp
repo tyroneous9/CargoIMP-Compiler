@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Wed Apr 22 20:33:48 CDT 2026
+ * Produced : Thu May 21 16:34:36 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -25,6 +25,7 @@ public:
   void* visit(const Rule_FlightIdentificationLine* rule);
   void* visit(const Rule_ArrivalInformationLine* rule);
   void* visit(const Rule_DirectArrivalLine* rule);
+  void* visit(const Rule_TransitArrivalLineNoNIL* rule);
   void* visit(const Rule_TransitNILArrivalLine* rule);
   void* visit(const Rule_TransitNILOnlyLine* rule);
   void* visit(const Rule_DestinationOnlyLine* rule);

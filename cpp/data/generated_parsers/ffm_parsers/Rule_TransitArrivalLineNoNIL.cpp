@@ -1,5 +1,5 @@
 /* -----------------------------------------------------------------------------
- * Rule_CorLine.cpp
+ * Rule_TransitArrivalLineNoNIL.cpp
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
@@ -14,44 +14,45 @@ using std::string;
 #include <vector>
 using std::vector;
 
-#include "Rule_CorLine.hpp"
+#include "Rule_TransitArrivalLineNoNIL.hpp"
 #include "Visitor.hpp"
 #include "ParserAlternative.hpp"
 #include "ParserContext.hpp"
 
-#include "Rule_LineChar.hpp"
+#include "Rule_ScheduledArrivalDateTime.hpp"
 #include "Rule_Slant.hpp"
-#include "Terminal_StringValue.hpp"
+#include "Rule_ArrivalAirportCode.hpp"
+#include "Rule_ScheduledOnwardDepartureDateTime.hpp"
 
-Rule_CorLine::Rule_CorLine(
+Rule_TransitArrivalLineNoNIL::Rule_TransitArrivalLineNoNIL(
   const string& spelling, 
   const vector<const Rule*>& rules) : Rule(spelling, rules)
 {
 }
 
-Rule_CorLine::Rule_CorLine(const Rule_CorLine& rule) : Rule(rule)
+Rule_TransitArrivalLineNoNIL::Rule_TransitArrivalLineNoNIL(const Rule_TransitArrivalLineNoNIL& rule) : Rule(rule)
 {
 }
 
-Rule_CorLine& Rule_CorLine::operator=(const Rule_CorLine& rule)
+Rule_TransitArrivalLineNoNIL& Rule_TransitArrivalLineNoNIL::operator=(const Rule_TransitArrivalLineNoNIL& rule)
 {
   Rule::operator=(rule);
   return *this;
 }
 
-const Rule_CorLine* Rule_CorLine::clone() const
+const Rule_TransitArrivalLineNoNIL* Rule_TransitArrivalLineNoNIL::clone() const
 {
-  return new Rule_CorLine(this->spelling, this->rules);
+  return new Rule_TransitArrivalLineNoNIL(this->spelling, this->rules);
 }
 
-void* Rule_CorLine::accept(Visitor& visitor) const
+void* Rule_TransitArrivalLineNoNIL::accept(Visitor& visitor) const
 {
   return visitor.visit(this);
 }
 
-const Rule_CorLine* Rule_CorLine::parse(ParserContext& context)
+const Rule_TransitArrivalLineNoNIL* Rule_TransitArrivalLineNoNIL::parse(ParserContext& context)
 {
-  context.push("CorLine");
+  context.push("TransitArrivalLineNoNIL");
 
   bool parsed = true;
   int s0 = context.index;
@@ -69,7 +70,7 @@ const Rule_CorLine* Rule_CorLine::parse(ParserContext& context)
       int c1 = 0;
       for (int i1 = 0; i1 < 1 && f1; i1++)
       {
-        const Rule* rule = Terminal_StringValue::parse(context, "COR");
+        const Rule* rule = Rule_ArrivalAirportCode::parse(context);
         if ((f1 = rule != NULL))
         {
           a1.add(*rule, context.index);
@@ -99,9 +100,9 @@ const Rule_CorLine* Rule_CorLine::parse(ParserContext& context)
     {
       bool f1 = true;
       int c1 = 0;
-      while (f1)
+      for (int i1 = 0; i1 < 1 && f1; i1++)
       {
-        const Rule* rule = Rule_LineChar::parse(context);
+        const Rule* rule = Rule_Slant::parse(context);
         if ((f1 = rule != NULL))
         {
           a1.add(*rule, context.index);
@@ -109,7 +110,55 @@ const Rule_CorLine* Rule_CorLine::parse(ParserContext& context)
           delete rule;
         }
       }
-      parsed = true;
+      parsed = c1 == 1;
+    }
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
+      for (int i1 = 0; i1 < 1 && f1; i1++)
+      {
+        const Rule* rule = Rule_ScheduledArrivalDateTime::parse(context);
+        if ((f1 = rule != NULL))
+        {
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
+        }
+      }
+      parsed = c1 == 1;
+    }
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
+      for (int i1 = 0; i1 < 1 && f1; i1++)
+      {
+        const Rule* rule = Rule_Slant::parse(context);
+        if ((f1 = rule != NULL))
+        {
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
+        }
+      }
+      parsed = c1 == 1;
+    }
+    if (parsed)
+    {
+      bool f1 = true;
+      int c1 = 0;
+      for (int i1 = 0; i1 < 1 && f1; i1++)
+      {
+        const Rule* rule = Rule_ScheduledOnwardDepartureDateTime::parse(context);
+        if ((f1 = rule != NULL))
+        {
+          a1.add(*rule, context.index);
+          c1++;
+          delete rule;
+        }
+      }
+      parsed = c1 == 1;
     }
     if (parsed)
     {
@@ -134,16 +183,16 @@ const Rule_CorLine* Rule_CorLine::parse(ParserContext& context)
   const Rule* rule = NULL;
   if (parsed)
   {
-    rule = new Rule_CorLine(context.text.substr(a0.start, a0.end - a0.start), a0.rules);
+    rule = new Rule_TransitArrivalLineNoNIL(context.text.substr(a0.start, a0.end - a0.start), a0.rules);
   }
   else
   {
     context.index = s0;
   }
 
-  context.pop("CorLine", parsed);
+  context.pop("TransitArrivalLineNoNIL", parsed);
 
-  return (Rule_CorLine*)rule;
+  return (Rule_TransitArrivalLineNoNIL*)rule;
 }
 
 /* -----------------------------------------------------------------------------

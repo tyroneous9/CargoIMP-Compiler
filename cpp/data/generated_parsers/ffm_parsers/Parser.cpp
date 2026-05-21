@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Wed Apr 22 20:33:48 CDT 2026
+ * Produced : Thu May 21 16:34:36 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -34,6 +34,7 @@ using std::transform;
 #include "Rule_FlightIdentificationLine.hpp"
 #include "Rule_ArrivalInformationLine.hpp"
 #include "Rule_DirectArrivalLine.hpp"
+#include "Rule_TransitArrivalLineNoNIL.hpp"
 #include "Rule_TransitNILArrivalLine.hpp"
 #include "Rule_TransitNILOnlyLine.hpp"
 #include "Rule_DestinationOnlyLine.hpp"
@@ -105,6 +106,7 @@ static map<string, pParser> buildParserMap(void)
   parsers["flightidentificationline"] = (pParser)Rule_FlightIdentificationLine::parse;
   parsers["arrivalinformationline"] = (pParser)Rule_ArrivalInformationLine::parse;
   parsers["directarrivalline"] = (pParser)Rule_DirectArrivalLine::parse;
+  parsers["transitarrivallinenonil"] = (pParser)Rule_TransitArrivalLineNoNIL::parse;
   parsers["transitnilarrivalline"] = (pParser)Rule_TransitNILArrivalLine::parse;
   parsers["transitnilonlyline"] = (pParser)Rule_TransitNILOnlyLine::parse;
   parsers["destinationonlyline"] = (pParser)Rule_DestinationOnlyLine::parse;

@@ -19,6 +19,7 @@ using std::vector;
 #include "Rule_FlightIdentificationLine.hpp"
 #include "Rule_ArrivalInformationLine.hpp"
 #include "Rule_DirectArrivalLine.hpp"
+#include "Rule_TransitArrivalLineNoNIL.hpp"
 #include "Rule_TransitNILArrivalLine.hpp"
 #include "Rule_TransitNILOnlyLine.hpp"
 #include "Rule_DestinationOnlyLine.hpp"
@@ -103,6 +104,7 @@ void* FfmJsonExtractor::visit(const Rule_ArrivalInformationLine* rule)
 }
 
 void* FfmJsonExtractor::visit(const Rule_DirectArrivalLine* rule) { (void)rule; return NULL; }
+void* FfmJsonExtractor::visit(const Rule_TransitArrivalLineNoNIL* rule) { (void)rule; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_TransitNILArrivalLine* rule) { (void)rule; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_TransitNILOnlyLine* rule) { (void)rule; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_DestinationOnlyLine* rule) { (void)rule; return NULL; }
@@ -286,9 +288,23 @@ FfmRouteData FfmJsonExtractor::parseArrivalInformationLine(const string& line) c
   // ORD//30MAR2240
   if (p0 + 1 < line.size() && line[p0 + 1] == '/')
   {
-    route.routeKind = "Direct";
-    route.scheduledArrivalDateTime = line.substr(p0 + 2);
+    const string remainder = line.substr(p0 + 2);
+    const size_t slashInRemainder = remainder.find('/');
+
+    if (slashInRemainder == string::npos)
+    {
+      route.routeKind = "Direct";
+      route.scheduledArrivalDateTime = remainder;
+      splitDateTime(route.scheduledArrivalDateTime, route.scheduledArrivalDate, route.scheduledArrivalTime);
+      return route;
+    }
+
+    // Non-standard but observed in production: ANC//07APR1305/07APR1420
+    route.routeKind = "TransitNoNIL";
+    route.scheduledArrivalDateTime = remainder.substr(0, slashInRemainder);
     splitDateTime(route.scheduledArrivalDateTime, route.scheduledArrivalDate, route.scheduledArrivalTime);
+    route.scheduledOnwardDepartureDateTime = remainder.substr(slashInRemainder + 1);
+    splitDateTime(route.scheduledOnwardDepartureDateTime, route.scheduledOnwardDepartureDate, route.scheduledOnwardDepartureTime);
     return route;
   }
 

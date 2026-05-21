@@ -37,8 +37,7 @@ FlightIdentificationLine =
     ScheduledDepartureDateTime
     Slant
     DepartureAirportCode
-    Slant
-    AircraftRegistration;
+    [Slant AircraftRegistration];
 
 # ==================== ARRIVAL INFORMATION ====================
 # One or more arrival route/stop entries.
@@ -51,11 +50,19 @@ FlightIdentificationLine =
 
 ArrivalInformationLine =
     DirectArrivalLine
+    / TransitArrivalLineNoNIL
     / TransitNILArrivalLine
     / TransitNILOnlyLine
     / DestinationOnlyLine;
 
 DirectArrivalLine = ArrivalAirportCode Slant Slant ScheduledArrivalDateTime;
+TransitArrivalLineNoNIL =
+    ArrivalAirportCode
+    Slant
+    Slant
+    ScheduledArrivalDateTime
+    Slant
+    ScheduledOnwardDepartureDateTime;
 TransitNILArrivalLine =
     ArrivalAirportCode
     Slant

@@ -59,6 +59,7 @@ public:
   void* visit(const Rule_FlightIdentificationLine* rule);
   void* visit(const Rule_ArrivalInformationLine* rule);
   void* visit(const Rule_DirectArrivalLine* rule);
+  void* visit(const Rule_TransitArrivalLineNoNIL* rule);
   void* visit(const Rule_TransitNILArrivalLine* rule);
   void* visit(const Rule_TransitNILOnlyLine* rule);
   void* visit(const Rule_DestinationOnlyLine* rule);

@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------------
  *
  * Producer : com.parse2.aparse.Parser 2.5
- * Produced : Wed Apr 22 20:33:48 CDT 2026
+ * Produced : Thu May 21 16:34:36 CDT 2026
  *
  * -----------------------------------------------------------------------------
  */
@@ -22,6 +22,7 @@ using std::vector;
 #include "Rule_FlightIdentificationLine.hpp"
 #include "Rule_ArrivalInformationLine.hpp"
 #include "Rule_DirectArrivalLine.hpp"
+#include "Rule_TransitArrivalLineNoNIL.hpp"
 #include "Rule_TransitNILArrivalLine.hpp"
 #include "Rule_TransitNILOnlyLine.hpp"
 #include "Rule_DestinationOnlyLine.hpp"
@@ -140,6 +141,18 @@ void* XmlDisplayer::visit(const Rule_DirectArrivalLine* rule)
   visitRules(rule->rules);
   if (!terminal) cout << endl;
   cout << "</DirectArrivalLine>";
+  terminal = false;
+  return NULL;
+}
+
+void* XmlDisplayer::visit(const Rule_TransitArrivalLineNoNIL* rule)
+{
+  if (!terminal) cout << endl;
+  cout << "<TransitArrivalLineNoNIL>";
+  terminal = false;
+  visitRules(rule->rules);
+  if (!terminal) cout << endl;
+  cout << "</TransitArrivalLineNoNIL>";
   terminal = false;
   return NULL;
 }
