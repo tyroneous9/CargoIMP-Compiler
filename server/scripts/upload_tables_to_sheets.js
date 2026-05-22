@@ -22,15 +22,10 @@
 const fs   = require('fs');
 const path = require('path');
 const { auth: googleAuth, sheets: sheetsFactory } = require('@googleapis/sheets');
-const { PARSED_TABLES_DIR, ENV_FILE, TABLE_FILES } = require('../config/paths');
+const { PARSED_TABLES_DIR, GOOGLE_SERVICE_ACCOUNT_FILE, TABLE_FILES } = require('../config/paths');
 const { log } = require('../config/logger');
-// ── Load environment ──────────────────────────────────────────────────────────
-require('dotenv').config({ path: ENV_FILE });
-const CREDENTIALS_FILE = process.env.GOOGLE_SERVICE_ACCOUNT_FILE;
-if (!CREDENTIALS_FILE) {
-  log('error', 'GOOGLE_SERVICE_ACCOUNT_FILE is not set in .env');
-  process.exit(1);
-}
+// ── Credentials ───────────────────────────────────────────────────────────────────
+const CREDENTIALS_FILE = GOOGLE_SERVICE_ACCOUNT_FILE;
 // ── Table → Sheet map ─────────────────────────────────────────────────────────
 /**
  * Each entry defines one CSV-to-sheet upload target.
@@ -68,11 +63,8 @@ const TABLE_MAP = {
 };
 // ── Auth ──────────────────────────────────────────────────────────────────────
 async function getAuthClient() {
-  const keyFile = path.isAbsolute(CREDENTIALS_FILE)
-    ? CREDENTIALS_FILE
-    : path.resolve(path.dirname(ENV_FILE), CREDENTIALS_FILE);
   const auth = new googleAuth.GoogleAuth({
-    keyFile,
+    keyFile: CREDENTIALS_FILE,
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
   });
   return auth.getClient();

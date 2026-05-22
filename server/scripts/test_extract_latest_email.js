@@ -3,33 +3,14 @@
 const path = require('path');
 const { ImapFlow } = require('imapflow');
 const { simpleParser } = require('mailparser');
-const paths = require('../config/paths');
-require('dotenv').config({ path: paths.ENV_FILE });
-
-function getEnv(keys, fallback) {
-  for (const key of keys) {
-    const value = process.env[key];
-    if (typeof value === 'string' && value.trim() !== '') {
-      return value.trim();
-    }
-  }
-  return fallback;
-}
-
-function requireEnv(key) {
-  const value = process.env[key];
-  if (!value) {
-    throw new Error(`Missing required env var: ${key}`);
-  }
-  return value.trim();
-}
+const imapConfig = require('../config/imap');
 
 async function main() {
-  const host = requireEnv('ALIMAIL_NCA_HOST');
-  const user = requireEnv('ALIMAIL_NCA_USER');
-  const pass = requireEnv('ALIMAIL_NCA_PASS');
-  const port = Number(requireEnv('ALIMAIL_NCA_PORT'));
-  const mailbox = requireEnv('ALIMAIL_NCA_MAILBOX');
+  const host = imapConfig.host;
+  const user = imapConfig.user;
+  const pass = imapConfig.pass;
+  const port = imapConfig.port;
+  const mailbox = imapConfig.mailbox;
 
   if (!Number.isFinite(port) || port <= 0) {
     throw new Error('ALIMAIL_NCA_PORT must be a positive number');

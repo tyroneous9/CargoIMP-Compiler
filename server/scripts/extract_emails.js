@@ -10,31 +10,9 @@ const { simpleParser } = require('mailparser');
 const paths = require('../config/paths');
 const { SUPPORTED_MESSAGE_TYPES, SUPPORTED_CIMP_MESSAGE_TYPES } = require('../config/messageTypes');
 const { log } = require('../config/logger');
-
-require('dotenv').config({ path: paths.ENV_FILE });
+const imapConfig = require('../config/imap');
 
 const OUTPUT_DIR = path.join(paths.SERVER_ROOT, 'data', 'outputs', 'emails');
-
-function requireEnv(key) {
-  const value = process.env[key];
-  if (!value || value.trim() === '') {
-    throw new Error(`Missing required env var: ${key}`);
-  }
-  return value.trim();
-}
-
-function requirePositiveIntOrUnlimitedEnv(key) {
-  const raw = process.env[key];
-  if (!raw || raw.trim() === '') {
-    throw new Error(`Missing required env var: ${key}`);
-  }
-  const value = Number(raw);
-  if (value === -1) return -1; // sentinel: unlimited
-  if (!Number.isInteger(value) || value <= 0) {
-    throw new Error(`Invalid ${key}: expected a positive integer or -1 for unlimited`);
-  }
-  return value;
-}
 
 function normalizeAddress(raw) {
   return String(raw || '').trim().toLowerCase();
@@ -92,12 +70,12 @@ function buildEmailFilename(mailbox, uid) {
 }
 
 async function main() {
-  const host = requireEnv('ALIMAIL_NCA_HOST');
-  const user = requireEnv('ALIMAIL_NCA_USER');
-  const pass = requireEnv('ALIMAIL_NCA_PASS');
-  const port = Number(requireEnv('ALIMAIL_NCA_PORT'));
-  const mailbox = requireEnv('ALIMAIL_NCA_MAILBOX');
-  const extractLimit = requirePositiveIntOrUnlimitedEnv('EXTRACT_EMAIL_LIMIT');
+  const host = imapConfig.host;
+  const user = imapConfig.user;
+  const pass = imapConfig.pass;
+  const port = imapConfig.port;
+  const mailbox = imapConfig.mailbox;
+  const extractLimit = imapConfig.extractLimit;
 
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 

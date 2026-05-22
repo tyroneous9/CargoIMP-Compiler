@@ -17,6 +17,7 @@ const TABLE_FILES = {
 };
 const INDEX_FILE = path.join(DATA_DIR, 'index.ndjson');
 const ENV_FILE = path.join(SERVER_ROOT, '.env');
+const GOOGLE_SERVICE_ACCOUNT_FILE = path.join(SERVER_ROOT, 'config', 'google_service_account.json');
 
 const CPP_DIR = path.join(REPO_ROOT, 'cpp');
 
@@ -46,6 +47,7 @@ module.exports = {
   TABLE_FILES,
   INDEX_FILE,
   ENV_FILE,
+  GOOGLE_SERVICE_ACCOUNT_FILE,
   CPP_DIR,
   PARSER_BINARIES,
   SAMPLE_INPUTS,

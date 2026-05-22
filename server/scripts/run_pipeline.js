@@ -12,7 +12,6 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 const {
-  ENV_FILE,
   LOGS_DIR,
   EMAILS_DIR,
   PARSED_EMAILS_DIR,
@@ -21,16 +20,14 @@ const {
   INDEX_FILE,
 } = require('../config/paths');
 
-require('dotenv').config({ path: ENV_FILE });
-
 const SCRIPTS_DIR = __dirname;
 const PIPELINE_RUNS_DIR = path.join(LOGS_DIR, 'pipeline-runs');
 const PIPELINE_LOCK_FILE = path.join(LOGS_DIR, 'pipeline.lock.json');
 const STDERR_SUMMARY_FILE = path.join(DATA_DIR, 'stderr-summary.ndjson');
 
-const POLL_INTERVAL_MS = parseInt(process.env.EMAIL_POLL_INTERVAL_MS, 10) || 600_000;
-const SCRIPT_TIMEOUT_MS = parseInt(process.env.PIPELINE_SCRIPT_TIMEOUT_MS, 10) || 300_000;
-const STEP_MAX_RETRIES = parseInt(process.env.PIPELINE_STEP_MAX_RETRIES, 10) || 1;
+const POLL_INTERVAL_MS  = 600_000;   // 10 minutes
+const SCRIPT_TIMEOUT_MS = 300_000;   // 5 minutes per step
+const STEP_MAX_RETRIES  = 1;
 
 const RUN_ONCE = process.argv.includes('--once');
 const REBUILD = process.argv.includes('--REBUILD') || process.argv.includes('--rebuild');

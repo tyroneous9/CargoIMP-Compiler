@@ -20,7 +20,7 @@
     "poll:imap": "npm run extract:emails && npm run parse:emails && npm run build:mawb && npm run build:uld && npm run upload:sheets"
   },
   "dependencies": {
-    "@googleapis/sheets": "^13.0.1",
+    "@googleapis/sheets": "^13.0.2",
     "dotenv": "^16.6.1",
     "express": "^4.21.2",
     "imapflow": "^1.1.0",
