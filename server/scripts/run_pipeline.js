@@ -1,34 +1,16 @@
 #!/usr/bin/env node
-/**
- * run_pipeline.js
- *
- * Full polling pipeline:
- *   1. extract_emails.js         — fetch new emails from IMAP
- *   2. parse_extracted_emails.js — run C++ parsers on new email files
- *   3. build_cfs_csv_mawb.js     — rebuild MAWB CSV from all parsed data
- *   4. build_cfs_csv_uld.js      — rebuild ULD CSV from all parsed data
- *   5. build_cfs_csv_hawb.js     — rebuild HAWB CSV from all parsed data
- *   6. upload_tables_to_sheets.js — push all CSVs to Google Sheets
- *
- * Steps 3–6 are skipped when steps 1–2 produced no new output, avoiding
- * unnecessary Sheets API calls and rate-limit consumption.
- *
- * Usage:
- *   node scripts/run_pipeline.js          # run once immediately, then poll
- *   node scripts/run_pipeline.js --once   # run exactly once and exit
- *   node scripts/run_pipeline.js --force  # run steps 3–6 even with no new data
- *   node scripts/run_pipeline.js --REBUILD # clear cached outputs then run from fresh extraction/parsing
- *   node scripts/run_pipeline.js --once --force  # single run with forced rebuild
- *   node scripts/run_pipeline.js --once --REBUILD --force  # clear cache + full single-shot rebuild
- *
- * Interval is controlled by EMAIL_POLL_INTERVAL_MS in .env.
- */
-
 'use strict';
 
-const { spawnSync } = require('child_process');
+/**
+ * pipeline orchestrator for NCAParser.
+ *
+ * - Structured JSON report per run in server/data/logs/pipeline-runs/
+ * - Polling mode and one-shot mode
+ */
+
 const fs = require('fs');
 const path = require('path');
+const { spawnSync } = require('child_process');
 const {
   ENV_FILE,
   LOGS_DIR,
@@ -42,31 +24,26 @@ const {
 require('dotenv').config({ path: ENV_FILE });
 
 const SCRIPTS_DIR = __dirname;
+const PIPELINE_RUNS_DIR = path.join(LOGS_DIR, 'pipeline-runs');
+const PIPELINE_LOCK_FILE = path.join(LOGS_DIR, 'pipeline.lock.json');
+const STDERR_SUMMARY_FILE = path.join(DATA_DIR, 'stderr-summary.ndjson');
+
 const POLL_INTERVAL_MS = parseInt(process.env.EMAIL_POLL_INTERVAL_MS, 10) || 600_000;
 const SCRIPT_TIMEOUT_MS = parseInt(process.env.PIPELINE_SCRIPT_TIMEOUT_MS, 10) || 300_000;
+const STEP_MAX_RETRIES = parseInt(process.env.PIPELINE_STEP_MAX_RETRIES, 10) || 1;
+
 const RUN_ONCE = process.argv.includes('--once');
 const REBUILD = process.argv.includes('--REBUILD') || process.argv.includes('--rebuild');
 const FORCE = process.argv.includes('--force') || REBUILD;
-const STDERR_SUMMARY_FILE = path.join(DATA_DIR, 'stderr-summary.ndjson');
-
-// ── Logger ────────────────────────────────────────────────────────────────────
 
 fs.mkdirSync(LOGS_DIR, { recursive: true });
+fs.mkdirSync(PIPELINE_RUNS_DIR, { recursive: true });
 
-/**
- * Returns a path like server/data/logs/2026-04-17.log (UTC date).
- * As midnight rolls over the pipeline naturally rotates to a new file.
- */
 function todayLogPath() {
-  const date = new Date().toISOString().slice(0, 10);  // YYYY-MM-DD
+  const date = new Date().toISOString().slice(0, 10);
   return path.join(LOGS_DIR, `${date}.log`);
 }
 
-/**
- * Write a line to the current daily log file AND to stderr.
- * @param {'log'|'warn'|'error'} level
- * @param {string} text
- */
 function log(level, text) {
   const ts = new Date().toISOString();
   const line = `${ts} [${level.toUpperCase()}] ${text}`;
@@ -78,9 +55,9 @@ function clearPath(targetPath, label) {
   if (fs.existsSync(targetPath)) {
     fs.rmSync(targetPath, { recursive: true, force: true });
     log('warn', `[rebuild] cleared ${label}: ${targetPath}`);
-  } else {
-    log('log', `[rebuild] skipped missing ${label}: ${targetPath}`);
+    return;
   }
+  log('log', `[rebuild] skipped missing ${label}: ${targetPath}`);
 }
 
 function prepareRebuild() {
@@ -92,190 +69,330 @@ function prepareRebuild() {
   clearPath(STDERR_SUMMARY_FILE, 'stderr summary file');
 }
 
-// ── Step runner ───────────────────────────────────────────────────────────────
+function countSignals(stdout, marker) {
+  return (stdout.match(new RegExp(`^${marker}`, 'gm')) || []).length;
+}
 
-/**
- * Run a script as a child process, capturing both stdout and stderr.
- * stdout is returned for signal counting (Extracted:/Parsed: lines).
- * stderr is the script's own diagnostic log — written to the log file and
- * forwarded to our stderr so it appears in the terminal.
- * Throws on spawn failure (e.g. file not found).
- */
-function runScript(scriptName, args = []) {
+function safeIsoNow() {
+  return new Date().toISOString();
+}
+
+function runScriptStep(scriptName, args = []) {
   const scriptPath = path.join(SCRIPTS_DIR, scriptName);
   const label = `[${scriptName}]`;
 
-  log('log', `${label} starting…`);
+  log('log', `${label} starting`);
 
   const result = spawnSync(process.execPath, [scriptPath, ...args], {
-    stdio: ['ignore', 'pipe', 'pipe'],  // capture both stdout and stderr
+    stdio: ['ignore', 'pipe', 'pipe'],
     encoding: 'utf8',
     timeout: SCRIPT_TIMEOUT_MS,
     killSignal: 'SIGTERM',
   });
 
   if (result.error) {
-    // Timeout should not crash the whole poller process.
     if (result.error.code === 'ETIMEDOUT') {
       log('error', `${label} timed out after ${SCRIPT_TIMEOUT_MS}ms`);
-      return { exitCode: 1, stdout: '' };
+      return {
+        ok: false,
+        exitCode: 1,
+        stdout: '',
+        stderr: `timeout after ${SCRIPT_TIMEOUT_MS}ms`,
+      };
     }
-    throw new Error(`${label} failed to spawn: ${result.error.message}`);
+
+    return {
+      ok: false,
+      exitCode: 1,
+      stdout: '',
+      stderr: `spawn failed: ${result.error.message}`,
+    };
   }
 
   const stdout = result.stdout || '';
   const stderr = (result.stderr || '').trim();
 
-  // Echo stdout signals (Extracted:/Parsed: lines) to our stderr and log file
   if (stdout) {
     for (const line of stdout.split('\n')) {
       if (line) log('log', `${label} ${line}`);
     }
   }
 
-  // Child scripts use logger.js which writes pre-formatted timestamped lines to
-  // stderr. Append them directly to the log file and forward to our stderr.
   if (stderr) {
     process.stderr.write(stderr + '\n');
     fs.appendFileSync(todayLogPath(), stderr + '\n', 'utf8');
   }
 
-  if (result.status !== 0) {
-    log('error', `${label} exited with code ${result.status}`);
-  } else {
+  const exitCode = result.status ?? 1;
+  const ok = exitCode === 0;
+
+  if (ok) {
     log('log', `${label} done`);
-  }
-
-  return { exitCode: result.status ?? 1, stdout };
-}
-
-// ── New-data detection ────────────────────────────────────────────────────────
-
-/**
- * Count lines in stdout that start with "Extracted:" or "Parsed:" —
- * these are emitted by extract_emails.js and parse_extracted_emails.js
- * respectively for each new file written.
- */
-function countNewFiles(stdout, marker) {
-  return (stdout.match(new RegExp(`^${marker}`, 'gm')) || []).length;
-}
-
-// ── Single pipeline run ───────────────────────────────────────────────────────
-
-function runPipeline(runNumber) {
-  const label = `[pipeline #${runNumber}]`;
-  log('log', `${'─'.repeat(60)}`);
-  log('log', `${label} ${new Date().toISOString()}`);
-
-  // ── Step 1: extract emails ─────────────────────────────────────────────────
-  const { exitCode: exitExtract, stdout: stdoutExtract } =
-    runScript('extract_emails.js');
-
-  let newEmails = 0;
-  if (exitExtract !== 0) {
-    // IMAP connectivity can fail transiently (e.g. DNS EAI_AGAIN); keep pipeline alive.
-    log('warn', `${label} extract_emails failed; continuing to parse existing extracted files`);
   } else {
-    newEmails = countNewFiles(stdoutExtract, 'Extracted:');
-    log('log', `${label} new emails extracted: ${newEmails}`);
+    log('error', `${label} exited with code ${exitCode}`);
   }
 
-  // ── Step 2: parse new emails ───────────────────────────────────────────────
-  const { exitCode: exitParse, stdout: stdoutParse } =
-    runScript('parse_extracted_emails.js', FORCE ? ['--force'] : []);
-
-  if (exitParse !== 0) {
-    log('error', `${label} aborting: parse_extracted_emails failed`);
-    return;
-  }
-
-  const newParsed = countNewFiles(stdoutParse, 'Parsed:');
-  log('log', `${label} new emails parsed: ${newParsed}`);
-
-  // ── Skip downstream steps if nothing changed (unless --force is set) ──────
-  if (newEmails === 0 && newParsed === 0 && !FORCE) {
-    log('log', `${label} no new data — skipping CSV rebuild and Sheets upload`);
-    return;
-  }
-
-  if (FORCE && newEmails === 0 && newParsed === 0) {
-    log('log', `${label} --force flag set; forcing CSV rebuild and Sheets upload`);
-  }
-
-  // ── Step 3: rebuild MAWB CSV ───────────────────────────────────────────────
-  const { exitCode: exitMawb } = runScript('build_cfs_csv_mawb.js');
-  if (exitMawb !== 0) {
-    log('error', `${label} aborting: build_cfs_csv_mawb failed`);
-    return;
-  }
-
-  // ── Step 4: rebuild ULD CSV ────────────────────────────────────────────────
-  const { exitCode: exitUld } = runScript('build_cfs_csv_uld.js');
-  if (exitUld !== 0) {
-    log('error', `${label} aborting: build_cfs_csv_uld failed`);
-    return;
-  }
-
-  // ── Step 5: rebuild HAWB CSV ───────────────────────────────────────────────
-  const { exitCode: exitHawb } = runScript('build_cfs_csv_hawb.js');
-  if (exitHawb !== 0) {
-    log('error', `${label} aborting: build_cfs_csv_hawb failed`);
-    return;
-  }
-
-  // ── Step 6: upload to Google Sheets ───────────────────────────────────────
-  const { exitCode: exitUpload } = runScript('upload_tables_to_sheets.js');
-  if (exitUpload !== 0) {
-    log('error', `${label} upload_tables_to_sheets failed (CSVs are still up to date locally)`);
-    return;
-  }
-
-  log('log', `${label} pipeline complete`);
+  return { ok, exitCode, stdout, stderr };
 }
 
-// ── Polling loop ──────────────────────────────────────────────────────────────
+function executeWithRetry(stepName, executeFn, maxRetries) {
+  let attempt = 0;
+  let finalResult = null;
+
+  while (attempt <= maxRetries) {
+    attempt += 1;
+    const startedAt = Date.now();
+    const result = executeFn();
+    const durationMs = Date.now() - startedAt;
+
+    finalResult = {
+      stepName,
+      attempt,
+      ok: result.ok,
+      exitCode: result.exitCode,
+      durationMs,
+      stdout: result.stdout,
+      stderr: result.stderr,
+    };
+
+    if (result.ok) return finalResult;
+
+    if (attempt <= maxRetries) {
+      log('warn', `[${stepName}] failed attempt ${attempt}; retrying (${attempt}/${maxRetries + 1})`);
+    }
+  }
+
+  return finalResult;
+}
+
+function createRunContext(runNumber) {
+  const startedAtIso = safeIsoNow();
+  const runId = `${startedAtIso.replace(/[:.]/g, '-')}-#${runNumber}`;
+
+  return {
+    runId,
+    runNumber,
+    startedAtIso,
+    finishedAtIso: null,
+    status: 'running',
+    force: FORCE,
+    rebuild: REBUILD,
+    steps: [],
+    metrics: {
+      newEmails: 0,
+      newParsed: 0,
+      downstreamExecuted: false,
+    },
+  };
+}
+
+function writeRunReport(report) {
+  const safeRunId = report.runId.replace(/[^a-zA-Z0-9-_]/g, '_');
+  const reportPath = path.join(PIPELINE_RUNS_DIR, `${safeRunId}.json`);
+  fs.writeFileSync(reportPath, JSON.stringify(report, null, 2) + '\n', 'utf8');
+  return reportPath;
+}
+
+function acquireLockOrExit() {
+  const currentPid = process.pid;
+  const nowIso = safeIsoNow();
+
+  if (fs.existsSync(PIPELINE_LOCK_FILE)) {
+    try {
+      const payload = JSON.parse(fs.readFileSync(PIPELINE_LOCK_FILE, 'utf8'));
+      const pid = payload && payload.pid;
+      if (pid && Number.isInteger(pid)) {
+        try {
+          process.kill(pid, 0);
+          log('error', `[pipeline] another pipeline runner is active (pid=${pid}); exiting`);
+          process.exit(1);
+        } catch (_err) {
+          log('warn', `[pipeline] found stale lock for dead pid=${pid}; replacing lock`);
+        }
+      }
+    } catch (_err) {
+      log('warn', '[pipeline] lock file unreadable; replacing lock');
+    }
+  }
+
+  const lockPayload = {
+    pid: currentPid,
+    startedAt: nowIso,
+    cwd: process.cwd(),
+    mode: RUN_ONCE ? 'once' : 'polling',
+  };
+
+  fs.writeFileSync(PIPELINE_LOCK_FILE, JSON.stringify(lockPayload, null, 2) + '\n', 'utf8');
+}
+
+function releaseLock() {
+  try {
+    if (fs.existsSync(PIPELINE_LOCK_FILE)) {
+      const payload = JSON.parse(fs.readFileSync(PIPELINE_LOCK_FILE, 'utf8'));
+      if (payload && payload.pid === process.pid) {
+        fs.rmSync(PIPELINE_LOCK_FILE, { force: true });
+      }
+    }
+  } catch (_err) {
+    fs.rmSync(PIPELINE_LOCK_FILE, { force: true });
+  }
+}
+
+function stepDescriptor(name, scriptName, args) {
+  return {
+    name,
+    scriptName,
+    args,
+    retries: STEP_MAX_RETRIES,
+  };
+}
+
+function executePipelineRun(runNumber) {
+  const report = createRunContext(runNumber);
+  const label = `[pipeline #${runNumber}]`;
+
+  log('log', `${'='.repeat(72)}`);
+  log('log', `${label} started at ${report.startedAtIso}`);
+
+  const extractStep = stepDescriptor('extract_emails', 'extract_emails.js', []);
+  const extractResult = executeWithRetry(
+    extractStep.name,
+    () => runScriptStep(extractStep.scriptName, extractStep.args),
+    extractStep.retries
+  );
+  report.steps.push(extractResult);
+
+  if (extractResult.ok) {
+    report.metrics.newEmails = countSignals(extractResult.stdout, 'Extracted:');
+    log('log', `${label} new emails extracted: ${report.metrics.newEmails}`);
+  } else {
+    log('warn', `${label} extract failed; continuing to parse existing extracted files`);
+  }
+
+  const parseArgs = FORCE ? ['--force'] : [];
+  const parseStep = stepDescriptor('parse_extracted_emails', 'parse_extracted_emails.js', parseArgs);
+  const parseResult = executeWithRetry(
+    parseStep.name,
+    () => runScriptStep(parseStep.scriptName, parseStep.args),
+    parseStep.retries
+  );
+  report.steps.push(parseResult);
+
+  if (!parseResult.ok) {
+    report.status = 'failed';
+    report.finishedAtIso = safeIsoNow();
+    const reportPath = writeRunReport(report);
+    log('error', `${label} aborted: parse_extracted_emails failed`);
+    log('error', `${label} report: ${reportPath}`);
+    return;
+  }
+
+  report.metrics.newParsed = countSignals(parseResult.stdout, 'Parsed:');
+  log('log', `${label} new emails parsed: ${report.metrics.newParsed}`);
+
+  const shouldRunDownstream = FORCE || report.metrics.newEmails > 0 || report.metrics.newParsed > 0;
+
+  if (!shouldRunDownstream) {
+    report.status = 'success';
+    report.finishedAtIso = safeIsoNow();
+    const reportPath = writeRunReport(report);
+    log('log', `${label} no new data; skipping build/upload steps`);
+    log('log', `${label} report: ${reportPath}`);
+    return;
+  }
+
+  if (FORCE && report.metrics.newEmails === 0 && report.metrics.newParsed === 0) {
+    log('log', `${label} force mode enabled; running downstream steps`);
+  }
+
+  report.metrics.downstreamExecuted = true;
+
+  const downstreamSteps = [
+    stepDescriptor('build_mawb_csv', 'build_cfs_csv_mawb.js', []),
+    stepDescriptor('build_uld_csv', 'build_cfs_csv_uld.js', []),
+    stepDescriptor('build_hawb_csv', 'build_cfs_csv_hawb.js', []),
+    stepDescriptor('upload_tables_to_sheets', 'upload_tables_to_sheets.js', []),
+  ];
+
+  for (const step of downstreamSteps) {
+    const result = executeWithRetry(
+      step.name,
+      () => runScriptStep(step.scriptName, step.args),
+      step.retries
+    );
+
+    report.steps.push(result);
+
+    if (!result.ok) {
+      report.status = 'failed';
+      report.finishedAtIso = safeIsoNow();
+      const reportPath = writeRunReport(report);
+      log('error', `${label} failed at step ${step.name}`);
+      log('error', `${label} report: ${reportPath}`);
+      return;
+    }
+  }
+
+  report.status = 'success';
+  report.finishedAtIso = safeIsoNow();
+  const reportPath = writeRunReport(report);
+  log('log', `${label} complete`);
+  log('log', `${label} report: ${reportPath}`);
+}
 
 let runNumber = 0;
 let isRunning = false;
 let isShuttingDown = false;
-let pollTimer = null;
+let timer = null;
 
-async function tick() {
+function tick() {
   if (isRunning) {
-    log('warn', '[pipeline] previous run is still active; skipping this tick');
+    log('warn', '[pipeline] previous run still active; skipping this tick');
     return;
   }
   if (isShuttingDown) return;
 
-  runNumber++;
+  runNumber += 1;
   isRunning = true;
+
   try {
-    runPipeline(runNumber);
+    executePipelineRun(runNumber);
   } catch (err) {
     log('error', `[pipeline #${runNumber}] unexpected error: ${err.message}`);
   } finally {
     isRunning = false;
-    if (isShuttingDown) process.exit(0);
+    if (isShuttingDown) {
+      releaseLock();
+      process.exit(0);
+    }
   }
 }
 
 function requestShutdown(signal) {
   if (isShuttingDown) return;
   isShuttingDown = true;
-  if (pollTimer) clearInterval(pollTimer);
-  log('warn', `Received ${signal}; shutting down pipeline...`);
-  if (!isRunning) process.exit(0);
+  if (timer) clearInterval(timer);
+  log('warn', `[pipeline] received ${signal}; shutting down`);
+  if (!isRunning) {
+    releaseLock();
+    process.exit(0);
+  }
 }
 
 process.on('SIGINT', () => requestShutdown('SIGINT'));
 process.on('SIGTERM', () => requestShutdown('SIGTERM'));
+process.on('exit', () => releaseLock());
+
+acquireLockOrExit();
+
+if (REBUILD) {
+  prepareRebuild();
+}
 
 if (RUN_ONCE) {
-  if (REBUILD) prepareRebuild();
   tick();
 } else {
-  log('log', `Pipeline polling every ${POLL_INTERVAL_MS / 1000}s. Press Ctrl+C to stop.`);
-  if (REBUILD) prepareRebuild();
-  tick();  // run immediately on start
-  pollTimer = setInterval(tick, POLL_INTERVAL_MS);
+  log('log', `[pipeline] polling every ${Math.floor(POLL_INTERVAL_MS / 1000)}s`);
+  tick();
+  timer = setInterval(tick, POLL_INTERVAL_MS);
 }
