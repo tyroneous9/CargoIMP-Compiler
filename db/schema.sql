@@ -352,3 +352,33 @@ SELECT DISTINCT u.uld_code
 FROM ffm_uld u
 WHERE u.uld_code IS NOT NULL AND u.uld_code <> ''
 ORDER BY u.uld_code;
+
+-- 9) Pipeline runtime tracking for Option A single-service scheduler/worker.
+CREATE TABLE IF NOT EXISTS pipeline_runs (
+	id BIGSERIAL PRIMARY KEY,
+	run_id TEXT NOT NULL UNIQUE,
+	run_number BIGINT NOT NULL,
+	status TEXT NOT NULL,
+	force_run BOOLEAN NOT NULL DEFAULT FALSE,
+	metrics_json JSONB,
+	started_at TIMESTAMPTZ NOT NULL,
+	finished_at TIMESTAMPTZ,
+	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+	CONSTRAINT ck_pipeline_runs_status CHECK (status IN ('running', 'success', 'failed'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_pipeline_runs_started_at ON pipeline_runs (started_at DESC);
+
+CREATE TABLE IF NOT EXISTS pipeline_run_steps (
+	id BIGSERIAL PRIMARY KEY,
+	pipeline_run_id BIGINT NOT NULL REFERENCES pipeline_runs(id) ON DELETE CASCADE,
+	step_name TEXT NOT NULL,
+	status TEXT NOT NULL,
+	detail_json JSONB,
+	started_at TIMESTAMPTZ NOT NULL,
+	finished_at TIMESTAMPTZ,
+	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+	CONSTRAINT ck_pipeline_run_steps_status CHECK (status IN ('success', 'failed'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_pipeline_run_steps_run_id ON pipeline_run_steps (pipeline_run_id);

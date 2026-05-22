@@ -6,24 +6,15 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "test:imap": "node scripts/test_extract_latest_email.js",
-    "extract:emails": "node scripts/extract_emails.js",
-    "parse:emails": "node scripts/parse_extracted_emails.js",
-    "build:mawb": "node scripts/build_cfs_csv_mawb.js",
-    "build:uld": "node scripts/build_cfs_csv_uld.js",
-    "build:hawb": "node scripts/build_cfs_csv_hawb.js",
-    "upload:sheets": "node scripts/upload_tables_to_sheets.js",
     "pipeline": "node scripts/run_pipeline.js",
     "pipeline:once": "node scripts/run_pipeline.js --once",
-    "pipeline:force": "node scripts/run_pipeline.js --once --force",
-    "pipeline:rebuild": "node scripts/run_pipeline.js --once --REBUILD --force",
-    "poll:imap": "npm run extract:emails && npm run parse:emails && npm run build:mawb && npm run build:uld && npm run upload:sheets"
+    "pipeline:force": "node scripts/run_pipeline.js --once --force"
   },
   "dependencies": {
-    "@googleapis/sheets": "^13.0.1",
     "dotenv": "^16.6.1",
     "express": "^4.21.2",
     "imapflow": "^1.1.0",
-    "mailparser": "^3.7.5"
+    "mailparser": "^3.7.5",
+    "pg": "^8.21.0"
   }
 }
