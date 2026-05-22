@@ -30,8 +30,14 @@ async function listHawbs(query) {
   return reportRepository.listHawbs(limit, offset);
 }
 
+async function listUldTableRows(query) {
+  const { limit, offset } = parsePagination(query || {});
+  return reportRepository.listUldTableRows(limit, offset);
+}
+
 module.exports = {
   listMawbs,
   listUlds,
   listHawbs,
+  listUldTableRows,
 };

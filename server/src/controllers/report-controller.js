@@ -29,8 +29,18 @@ async function listHawbs(req, res, next) {
   }
 }
 
+async function listUldTableRows(req, res, next) {
+  try {
+    const items = await reportService.listUldTableRows(req.query || {});
+    res.json({ items });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   listMawbs,
   listUlds,
   listHawbs,
+  listUldTableRows,
 };

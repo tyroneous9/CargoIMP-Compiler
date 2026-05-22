@@ -1,33 +1,35 @@
-import { useEffect, useMemo, useState } from 'react';
-
-const dashboardCards = [
-  {
-    title: 'Backend health',
-    description: 'Checks the live API and database connection through /api/health.',
-  },
-  {
-    title: 'Pipeline runs',
-    description: 'Shows the latest ingestion run history from the backend.',
-  },
-  {
-    title: 'Cargo reports',
-    description: 'Exposes MAWB, ULD, and HAWB list endpoints for the UI.',
-  },
-];
+import { useEffect, useState } from 'react';
 
 async function readJson(response) {
   const text = await response.text();
+
+  if (!text) {
+    return null;
+  }
+
   try {
-    return text ? JSON.parse(text) : null;
+    return JSON.parse(text);
   } catch {
     return { raw: text };
   }
 }
 
 function App() {
-  const [health, setHealth] = useState({ state: 'loading', data: null, error: '' });
-  const [runs, setRuns] = useState({ state: 'loading', data: [], error: '' });
-  const [reports, setReports] = useState({ state: 'loading', data: {}, error: '' });
+  const isTestPage = window.location.pathname === '/test';
+
+  if (isTestPage) {
+    return <UldTestPage />;
+  }
+
+  return <HealthPage />;
+}
+
+function HealthPage() {
+  const [backend, setBackend] = useState({
+    state: 'loading',
+    data: null,
+    error: '',
+  });
 
   useEffect(() => {
     let cancelled = false;
@@ -36,171 +38,211 @@ function App() {
       try {
         const response = await fetch('/api/health');
         const data = await readJson(response);
-        if (!cancelled) {
-          setHealth({ state: response.ok ? 'ready' : 'error', data, error: response.ok ? '' : data?.message || 'Health check failed' });
-        }
-      } catch (error) {
-        if (!cancelled) {
-          setHealth({ state: 'error', data: null, error: error.message });
-        }
-      }
-    }
 
-    async function loadRuns() {
-      try {
-        const response = await fetch('/api/pipeline/runs?limit=5&offset=0');
-        const data = await readJson(response);
-        if (!cancelled) {
-          setRuns({ state: response.ok ? 'ready' : 'error', data: Array.isArray(data?.items) ? data.items : [], error: response.ok ? '' : data?.message || 'Unable to load runs' });
+        if (cancelled) {
+          return;
         }
-      } catch (error) {
-        if (!cancelled) {
-          setRuns({ state: 'error', data: [], error: error.message });
-        }
-      }
-    }
 
-    async function loadReports() {
-      try {
-        const [mawbsResponse, uldsResponse, hawbsResponse] = await Promise.all([
-          fetch('/api/reports/mawbs?limit=5&offset=0'),
-          fetch('/api/reports/ulds?limit=5&offset=0'),
-          fetch('/api/reports/hawbs?limit=5&offset=0'),
-        ]);
-        const [mawbs, ulds, hawbs] = await Promise.all([
-          readJson(mawbsResponse),
-          readJson(uldsResponse),
-          readJson(hawbsResponse),
-        ]);
-        if (!cancelled) {
-          setReports({
-            state: mawbsResponse.ok && uldsResponse.ok && hawbsResponse.ok ? 'ready' : 'error',
-            data: {
-              mawbs: Array.isArray(mawbs?.items) ? mawbs.items : [],
-              ulds: Array.isArray(ulds?.items) ? ulds.items : [],
-              hawbs: Array.isArray(hawbs?.items) ? hawbs.items : [],
-            },
-            error: mawbsResponse.ok && uldsResponse.ok && hawbsResponse.ok ? '' : 'One or more report endpoints failed',
+        if (!response.ok) {
+          setBackend({
+            state: 'error',
+            data,
+            error: data?.message || 'Health check failed',
           });
+          return;
         }
+
+        setBackend({
+          state: 'ready',
+          data,
+          error: '',
+        });
       } catch (error) {
         if (!cancelled) {
-          setReports({ state: 'error', data: { mawbs: [], ulds: [], hawbs: [] }, error: error.message });
+          setBackend({
+            state: 'error',
+            data: null,
+            error: error.message,
+          });
         }
       }
     }
 
     loadHealth();
-    loadRuns();
-    loadReports();
 
     return () => {
       cancelled = true;
     };
   }, []);
 
-  const statusLabel = useMemo(() => {
-    if (health.state === 'loading') return 'Checking backend';
-    if (health.state === 'ready') return 'Backend connected';
-    return 'Backend unavailable';
-  }, [health.state]);
+  const statusText =
+    backend.state === 'loading'
+      ? 'Checking backend'
+      : backend.state === 'ready'
+        ? 'Backend online'
+        : 'Backend unavailable';
 
   return (
-    <main className="shell">
-      <section className="hero">
-        <div className="hero-copy">
-          <p className="eyebrow">NCAParser client</p>
-          <h1>Operational dashboard for parser output and pipeline status.</h1>
-          <p className="lede">
-            This Vite React frontend connects directly to the backend API and displays live health, recent pipeline runs, and core cargo reference lists.
-          </p>
-          <div className={`status-pill status-${health.state}`}>
-            <span className="status-dot" />
-            {statusLabel}
-          </div>
+    <main className="page">
+      <section className="hero-card">
+        <a className="page-link" href="/test">Go to ULD test table</a>
+        <p className="eyebrow">NCAParser frontend</p>
+        <h1>Frontend is live.</h1>
+        <p className="lede">
+          This page proves the Vite React app is running and shows the live backend health status.
+        </p>
+
+        <div className={`status-badge status-${backend.state}`}>
+          <span className="status-dot" />
+          {statusText}
         </div>
-        <div className="hero-panel">
-          <div className="panel-card accent">
-            <span>API base</span>
-            <strong>/api</strong>
+
+        <div className="info-grid">
+          <div className="info-box">
+            <span>Frontend</span>
+            <strong>Vite + React</strong>
           </div>
-          <div className="panel-card">
+          <div className="info-box">
+            <span>API target</span>
+            <strong>/api/health</strong>
+          </div>
+          <div className="info-box">
             <span>Backend</span>
-            <strong>{health.data?.database || 'unknown'}</strong>
-          </div>
-          <div className="panel-card">
-            <span>Latest run</span>
-            <strong>{runs.data?.[0]?.run_id || 'none yet'}</strong>
+            <strong>{backend.data?.database || 'loading'}</strong>
           </div>
         </div>
-      </section>
 
-      <section className="grid three-up">
-        {dashboardCards.map((card) => (
-          <article className="info-card" key={card.title}>
-            <h2>{card.title}</h2>
-            <p>{card.description}</p>
-          </article>
-        ))}
-      </section>
-
-      <section className="grid two-up">
-        <article className="data-card">
-          <div className="section-head">
-            <h2>Health</h2>
-            <span className={`chip chip-${health.state}`}>{health.state}</span>
+        <div className="panel">
+          <div className="panel-head">
+            <h2>Health response</h2>
+            <span className={`chip chip-${backend.state}`}>{backend.state}</span>
           </div>
-          {health.state === 'error' ? (
-            <p className="error-text">{health.error}</p>
-          ) : (
-            <pre>{JSON.stringify(health.data, null, 2)}</pre>
-          )}
-        </article>
 
-        <article className="data-card">
-          <div className="section-head">
-            <h2>Latest runs</h2>
-            <span className={`chip chip-${runs.state}`}>{runs.state}</span>
-          </div>
-          {runs.state === 'error' ? (
-            <p className="error-text">{runs.error}</p>
+          {backend.state === 'error' ? (
+            <p className="error-text">{backend.error}</p>
+          ) : backend.state === 'loading' ? (
+            <p className="muted-text">Loading backend status...</p>
           ) : (
-            <ul className="list">
-              {runs.data.map((run) => (
-                <li key={run.id}>
-                  <strong>{run.run_id}</strong>
-                  <span>{run.status} · {run.started_at}</span>
-                </li>
-              ))}
-            </ul>
+            <pre>{JSON.stringify(backend.data, null, 2)}</pre>
           )}
-        </article>
+        </div>
       </section>
+    </main>
+  );
+}
 
-      <section className="grid three-up">
-        {[
-          ['MAWB', reports.data.mawbs],
-          ['ULD', reports.data.ulds],
-          ['HAWB', reports.data.hawbs],
-        ].map(([label, items]) => (
-          <article className="data-card mini" key={label}>
-            <div className="section-head">
-              <h2>{label}</h2>
-              <span className={`chip chip-${reports.state}`}>{reports.state}</span>
-            </div>
-            {reports.state === 'error' ? (
-              <p className="error-text">{reports.error}</p>
-            ) : (
-              <ul className="tag-list">
-                {items.map((item) => (
-                  <li key={item.mawb_number || item.uld_code || item.hawb_number}>
-                    {item.mawb_number || item.uld_code || item.hawb_number}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </article>
-        ))}
+function UldTestPage() {
+  const [state, setState] = useState({
+    status: 'loading',
+    items: [],
+    error: '',
+  });
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadRows() {
+      try {
+        const response = await fetch('/api/reports/ulds-table?limit=1000&offset=0');
+        const data = await readJson(response);
+
+        if (cancelled) {
+          return;
+        }
+
+        if (!response.ok) {
+          setState({
+            status: 'error',
+            items: [],
+            error: data?.message || 'Unable to load ULD rows',
+          });
+          return;
+        }
+
+        setState({
+          status: 'ready',
+          items: Array.isArray(data?.items) ? data.items : [],
+          error: '',
+        });
+      } catch (error) {
+        if (!cancelled) {
+          setState({
+            status: 'error',
+            items: [],
+            error: error.message,
+          });
+        }
+      }
+    }
+
+    loadRows();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const columns = [
+    'uld_code',
+    'uld_detail_text',
+    'carrier_flight_number',
+    'scheduled_departure_date',
+    'scheduled_departure_time',
+    'departure_airport_code',
+    'mawb_numbers',
+    'awb_count',
+    'mailbox',
+    'source_uid',
+    'source_parsed_message_id',
+    'source_parsed_at',
+  ];
+
+  return (
+    <main className="page page-wide">
+      <section className="hero-card">
+        <a className="page-link" href="/">Back to health page</a>
+        <p className="eyebrow">Test page</p>
+        <h1>ULD spreadsheet test</h1>
+        <p className="lede">
+          One row per unique ULD code. Columns include all ULD-related fields from the backend report dataset.
+        </p>
+
+        <div className="panel">
+          <div className="panel-head">
+            <h2>Rows</h2>
+            <span className={`chip chip-${state.status}`}>{state.status}</span>
+          </div>
+
+          {state.status === 'error' ? (
+            <p className="error-text">{state.error}</p>
+          ) : state.status === 'loading' ? (
+            <p className="muted-text">Loading ULD rows...</p>
+          ) : (
+            <>
+              <p className="muted-text">Total unique ULD rows: {state.items.length}</p>
+              <div className="table-wrap">
+                <table className="sheet-table">
+                  <thead>
+                    <tr>
+                      {columns.map((column) => (
+                        <th key={column}>{column}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {state.items.map((row) => (
+                      <tr key={row.uld_code}>
+                        {columns.map((column) => (
+                          <td key={`${row.uld_code}-${column}`}>{row[column] ?? ''}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+        </div>
       </section>
     </main>
   );
