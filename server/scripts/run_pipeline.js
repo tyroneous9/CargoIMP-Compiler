@@ -34,16 +34,10 @@ const FORCE = process.argv.includes('--force');
 fs.mkdirSync(LOGS_DIR, { recursive: true });
 fs.mkdirSync(PIPELINE_RUNS_DIR, { recursive: true });
 
-function todayLogPath() {
-  const date = new Date().toISOString().slice(0, 10);
-  return path.join(LOGS_DIR, `${date}.log`);
-}
-
 function log(level, text) {
   const ts = new Date().toISOString();
   const line = `${ts} [${level.toUpperCase()}] ${text}`;
   process.stderr.write(line + '\n');
-  fs.appendFileSync(todayLogPath(), line + '\n', 'utf8');
 }
 
 function safeIsoNow() {
