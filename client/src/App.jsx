@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 async function readJson(response) {
   const text = await response.text();
@@ -137,6 +137,8 @@ function UldTestPage() {
     items: [],
     error: '',
   });
+  const [filters, setFilters] = useState({});
+  const [sort, setSort] = useState({ column: '', direction: '' });
 
   useEffect(() => {
     let cancelled = false;
@@ -197,6 +199,61 @@ function UldTestPage() {
     'source_parsed_at',
   ];
 
+  const rows = useMemo(() => {
+    const filtered = state.items.filter((row) => {
+      return columns.every((column) => {
+        const query = (filters[column] || '').trim().toLowerCase();
+        if (!query) {
+          return true;
+        }
+        const value = String(row[column] ?? '').toLowerCase();
+        return value.includes(query);
+      });
+    });
+
+    if (!sort.column || !sort.direction) {
+      return filtered;
+    }
+
+    const direction = sort.direction === 'asc' ? 1 : -1;
+    const sorted = [...filtered].sort((a, b) => {
+      const aValue = String(a[sort.column] ?? '');
+      const bValue = String(b[sort.column] ?? '');
+
+      if (!aValue && !bValue) return 0;
+      if (!aValue) return 1;
+      if (!bValue) return -1;
+
+      return aValue.localeCompare(bValue, undefined, { numeric: true }) * direction;
+    });
+
+    return sorted;
+  }, [state.items, filters, sort, columns]);
+
+  function onFilterChange(column, value) {
+    setFilters((current) => ({
+      ...current,
+      [column]: value,
+    }));
+  }
+
+  function onSortToggle(column) {
+    setSort((current) => {
+      if (current.column !== column) {
+        return { column, direction: 'asc' };
+      }
+      if (current.direction === 'asc') {
+        return { column, direction: 'desc' };
+      }
+      return { column: '', direction: '' };
+    });
+  }
+
+  function clearAllControls() {
+    setFilters({});
+    setSort({ column: '', direction: '' });
+  }
+
   return (
     <main className="page page-wide">
       <section className="hero-card">
@@ -219,24 +276,57 @@ function UldTestPage() {
             <p className="muted-text">Loading ULD rows...</p>
           ) : (
             <>
-              <p className="muted-text">Total unique ULD rows: {state.items.length}</p>
+              <div className="table-tools">
+                <p className="muted-text">Showing {rows.length} of {state.items.length} unique ULD rows</p>
+                <button type="button" className="clear-button" onClick={clearAllControls}>Clear filters and sort</button>
+              </div>
               <div className="table-wrap">
                 <table className="sheet-table">
                   <thead>
                     <tr>
                       {columns.map((column) => (
-                        <th key={column}>{column}</th>
+                        <th key={column}>
+                          <button
+                            type="button"
+                            className={`sort-button ${sort.column === column ? 'active' : ''}`}
+                            onClick={() => onSortToggle(column)}
+                          >
+                            {column}
+                            <span className="sort-indicator">
+                              {sort.column === column ? (sort.direction === 'asc' ? '↑' : '↓') : '↕'}
+                            </span>
+                          </button>
+                        </th>
+                      ))}
+                    </tr>
+                    <tr>
+                      {columns.map((column) => (
+                        <th key={`${column}-filter`}>
+                          <input
+                            className="filter-input"
+                            type="text"
+                            value={filters[column] || ''}
+                            onChange={(event) => onFilterChange(column, event.target.value)}
+                            placeholder="filter"
+                            aria-label={`Filter ${column}`}
+                          />
+                        </th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
-                    {state.items.map((row) => (
+                    {rows.map((row) => (
                       <tr key={row.uld_code}>
                         {columns.map((column) => (
                           <td key={`${row.uld_code}-${column}`}>{row[column] ?? ''}</td>
                         ))}
                       </tr>
                     ))}
+                    {rows.length === 0 ? (
+                      <tr>
+                        <td className="empty-cell" colSpan={columns.length}>No rows match current filters.</td>
+                      </tr>
+                    ) : null}
                   </tbody>
                 </table>
               </div>
