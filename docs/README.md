@@ -1,12 +1,13 @@
-# NCAParser Client
+# NCAParser Documentation
 
-Vite + React frontend for the NCAParser backend.
+This directory contains technical documents and reference material.
 
-## Development
+## Contents
 
-```bash
-npm install
-npm run dev
-```
+- `project-outline.md` - early project scope and notes
+- `parsed-output-contract.md` - parsed output contract details
+- `cimp-input-differences.md` - input format differences and observations
+- `CIMP-34thEdition2014.txt` / `CIMP-34thEdition2014.pdf` - CIMP references
+- `.env.example` - environment variable example keys
 
-The dev server proxies `/api` requests to `http://127.0.0.1:3000`.
+For run instructions and repository layout, see the root `README.md`.

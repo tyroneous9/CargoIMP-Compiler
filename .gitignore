@@ -1,0 +1,28 @@
+# Node
+node_modules/
+npm-debug.log*
+client/vite.svg
+
+# Python
+__pycache__/
+
+# Local env files
+.env
+.env.*
+!.env.example
+
+# Client build output
+client/dist/
+
+# Server runtime artifacts
+server/data/outputs/
+server/data/logs/
+
+# C++ build artifacts
+cpp/build/
+cpp/output/
+
+# OS/editor
+.DS_Store
+.idea/
+.vscode/settings.json

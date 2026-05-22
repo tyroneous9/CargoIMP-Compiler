@@ -1,0 +1,19 @@
+{
+  "name": "ncaparser",
+  "private": true,
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "start": "npm run server:start",
+    "dev": "npm run client:dev",
+    "server:start": "npm run -w server start",
+    "server:pipeline": "npm run -w server pipeline",
+    "server:pipeline:once": "npm run -w server pipeline:once",
+    "server:pipeline:force": "npm run -w server pipeline:force",
+    "client:dev": "npm run -w client dev",
+    "client:build": "npm run -w client build",
+    "client:preview": "npm run -w client preview"
+  }
+}
