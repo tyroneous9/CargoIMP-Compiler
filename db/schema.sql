@@ -265,14 +265,9 @@ SELECT
 	f.destination_airport_code,
 	f.piece_count,
 	f.weight_kg,
-	f.nature_of_goods,
-	e.mailbox,
-	e.uid AS source_uid,
-	mp.id AS source_parsed_message_id,
-	mp.parsed_at AS source_parsed_at
+	f.nature_of_goods
 FROM fwb_master f
 JOIN messages_parsed mp ON mp.id = f.parsed_message_id
-JOIN emails_raw e ON e.id = mp.email_id
 WHERE mp.status = 'ok';
 
 CREATE OR REPLACE VIEW report_hawb AS
@@ -284,15 +279,10 @@ SELECT
 	h.goods_description,
 	fm.mawb_number,
 	fm.origin_airport_code,
-	fm.destination_airport_code,
-	e.mailbox,
-	e.uid AS source_uid,
-	mp.id AS source_parsed_message_id,
-	mp.parsed_at AS source_parsed_at
+	fm.destination_airport_code
 FROM fhl_house h
 JOIN fhl_master fm ON fm.id = h.fhl_master_id
 JOIN messages_parsed mp ON mp.id = fm.parsed_message_id
-JOIN emails_raw e ON e.id = mp.email_id
 WHERE mp.status = 'ok';
 
 CREATE OR REPLACE VIEW report_uld AS
@@ -305,15 +295,10 @@ SELECT
 	ff.scheduled_departure_time,
 	ff.departure_airport_code,
 	STRING_AGG(DISTINCT fa.master_awb_number, ',' ORDER BY fa.master_awb_number) AS mawb_numbers,
-	COUNT(fa.id) AS awb_count,
-	e.mailbox,
-	e.uid AS source_uid,
-	mp.id AS source_parsed_message_id,
-	mp.parsed_at AS source_parsed_at
+	COUNT(fa.id) AS awb_count
 FROM ffm_uld u
 JOIN ffm_flight ff ON ff.id = u.ffm_flight_id
 JOIN messages_parsed mp ON mp.id = ff.parsed_message_id
-JOIN emails_raw e ON e.id = mp.email_id
 LEFT JOIN ffm_awb fa ON fa.ffm_uld_id = u.id
 WHERE mp.status = 'ok'
 GROUP BY
@@ -323,11 +308,7 @@ GROUP BY
 	ff.carrier_flight_number,
 	ff.scheduled_departure_date,
 	ff.scheduled_departure_time,
-	ff.departure_airport_code,
-	e.mailbox,
-	e.uid,
-	mp.id,
-	mp.parsed_at;
+	ff.departure_airport_code;
 
 -- 8) Simple list views for direct querying requirements.
 CREATE OR REPLACE VIEW mawb_list AS
