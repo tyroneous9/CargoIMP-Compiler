@@ -7,7 +7,7 @@ async function listMawbs(limit, offset) {
     `
       SELECT *
       FROM mawb_list
-      ORDER BY created_at DESC, mawb_number ASC
+      ORDER BY mawb_number ASC
       LIMIT $1 OFFSET $2
     `,
     [limit, offset]
@@ -20,7 +20,7 @@ async function listUlds(limit, offset) {
     `
       SELECT *
       FROM uld_list
-      ORDER BY created_at DESC, uld_code ASC
+      ORDER BY uld_code ASC
       LIMIT $1 OFFSET $2
     `,
     [limit, offset]
@@ -33,7 +33,7 @@ async function listHawbs(limit, offset) {
     `
       SELECT *
       FROM hawb_list
-      ORDER BY created_at DESC, hawb_number ASC
+      ORDER BY hawb_number ASC
       LIMIT $1 OFFSET $2
     `,
     [limit, offset]
