@@ -12,7 +12,7 @@ const PROCESSING_STATUS_OPTIONS = ['new', 'complete'];
 
 function HawbTablePage() {
   const [state, setState] = useState({
-    status: 'loading',
+    isLoading: true,
     items: [],
     error: '',
   });
@@ -105,7 +105,7 @@ function HawbTablePage() {
 
         if (!response.ok) {
           setState({
-            status: 'error',
+            isLoading: false,
             items: [],
             error: data?.message || 'Unable to load HAWB rows',
           });
@@ -113,14 +113,14 @@ function HawbTablePage() {
         }
 
         setState({
-          status: 'ready',
+          isLoading: false,
           items: Array.isArray(data?.items) ? data.items : [],
           error: '',
         });
       } catch (error) {
         if (!cancelled) {
           setState({
-            status: 'error',
+            isLoading: false,
             items: [],
             error: error.message,
           });
@@ -303,12 +303,11 @@ function HawbTablePage() {
         <div className="page-config">
           <div className="panel-head">
             <h2>Configuration</h2>
-            <span className={`chip chip-${state.status}`}>{state.status}</span>
           </div>
 
-          {state.status === 'error' ? (
+          {state.error ? (
             <p className="error-text">{state.error}</p>
-          ) : state.status === 'loading' ? (
+          ) : state.isLoading ? (
             <p className="muted-text">Loading HAWB rows...</p>
           ) : (
             <>
@@ -362,7 +361,7 @@ function HawbTablePage() {
           )}
         </div>
 
-        {state.status === 'ready' ? (
+        {!state.isLoading && !state.error ? (
           <table className="sheet-table">
             <thead>
               <tr>

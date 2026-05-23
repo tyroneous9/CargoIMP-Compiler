@@ -4,7 +4,7 @@ const reportService = require('../services/report-service');
 
 async function listMawbs(req, res, next) {
   try {
-    const items = await reportService.listMawbs(req.query || {});
+    const items = await reportService.listMawbs(req.query);
     res.json({ items });
   } catch (error) {
     next(error);
@@ -13,7 +13,7 @@ async function listMawbs(req, res, next) {
 
 async function listUlds(req, res, next) {
   try {
-    const items = await reportService.listUlds(req.query || {});
+    const items = await reportService.listUlds(req.query);
     res.json({ items });
   } catch (error) {
     next(error);
@@ -22,7 +22,7 @@ async function listUlds(req, res, next) {
 
 async function listHawbs(req, res, next) {
   try {
-    const items = await reportService.listHawbs(req.query || {});
+    const items = await reportService.listHawbs(req.query);
     res.json({ items });
   } catch (error) {
     next(error);
@@ -31,7 +31,7 @@ async function listHawbs(req, res, next) {
 
 async function listUldTableRows(req, res, next) {
   try {
-    const items = await reportService.listUldTableRows(req.query || {});
+    const items = await reportService.listUldTableRows(req.query);
     res.json({ items });
   } catch (error) {
     next(error);
@@ -40,7 +40,7 @@ async function listUldTableRows(req, res, next) {
 
 async function listMawbTableRows(req, res, next) {
   try {
-    const items = await reportService.listMawbTableRows(req.query || {});
+    const items = await reportService.listMawbTableRows(req.query);
     res.json({ items });
   } catch (error) {
     next(error);
@@ -49,7 +49,7 @@ async function listMawbTableRows(req, res, next) {
 
 async function listHawbTableRows(req, res, next) {
   try {
-    const items = await reportService.listHawbTableRows(req.query || {});
+    const items = await reportService.listHawbTableRows(req.query);
     res.json({ items });
   } catch (error) {
     next(error);
@@ -60,7 +60,7 @@ async function updateUldProcessingStatus(req, res, next) {
   try {
     const updated = await reportService.updateUldProcessingStatus(
       req.params.ffmUldId,
-      req.body?.processingStatus
+      req.body.processingStatus
     );
     res.json(updated);
   } catch (error) {
@@ -72,7 +72,7 @@ async function updateMawbProcessingStatus(req, res, next) {
   try {
     const updated = await reportService.updateMawbProcessingStatus(
       req.params.fwbMasterId,
-      req.body?.processingStatus
+      req.body.processingStatus
     );
     res.json(updated);
   } catch (error) {
@@ -84,7 +84,7 @@ async function updateHawbProcessingStatus(req, res, next) {
   try {
     const updated = await reportService.updateHawbProcessingStatus(
       req.params.fhlHouseId,
-      req.body?.processingStatus
+      req.body.processingStatus
     );
     res.json(updated);
   } catch (error) {
@@ -94,7 +94,7 @@ async function updateHawbProcessingStatus(req, res, next) {
 
 async function listNewMessages(req, res, next) {
   try {
-    const items = await reportService.listNewMessages(req.query || {});
+    const items = await reportService.listNewMessages(req.query);
     res.json({ items });
   } catch (error) {
     next(error);
@@ -103,7 +103,7 @@ async function listNewMessages(req, res, next) {
 
 async function archiveNewMessages(req, res, next) {
   try {
-    const result = await reportService.archiveNewMessages(req.body?.records);
+    const result = await reportService.archiveNewMessages(req.body.records);
     res.json(result);
   } catch (error) {
     next(error);

@@ -1,29 +1,30 @@
-import HealthPage from './pages/HealthPage';
 import HawbTablePage from './pages/HawbTablePage';
 import IndexPage from './pages/IndexPage';
 import MawbTablePage from './pages/MawbTablePage';
 import NewMessagesPage from './pages/NewMessagesPage';
+import NotFoundPage from './pages/NotFoundPage';
+import ParseErrorsPage from './pages/ParseErrorsPage';
 import UldTablePage from './pages/UldTablePage';
 
 function App() {
   const path = window.location.pathname;
   const isIndexPage = path === '/' || path === '/index';
-  const isHealthPage = path === '/health';
   const isHawbTablePage = path === '/hawb-table';
   const isMawbTablePage = window.location.pathname === '/mawb-table';
   const isNewMessagesPage = path === '/new-messages';
+  const isParseErrorsPage = path === '/parse-errors';
   const isUldTablePage = window.location.pathname === '/uld-table';
 
   if (isIndexPage) {
     return <IndexPage />;
   }
 
-  if (isHealthPage) {
-    return <HealthPage />;
-  }
-
   if (isNewMessagesPage) {
     return <NewMessagesPage />;
+  }
+
+  if (isParseErrorsPage) {
+    return <ParseErrorsPage />;
   }
 
   if (isHawbTablePage) {
@@ -38,6 +39,6 @@ function App() {
     return <UldTablePage />;
   }
 
-  return <IndexPage />;
+  return <NotFoundPage />;
 }
 export default App;

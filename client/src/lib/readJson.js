@@ -2,12 +2,12 @@ export async function readJson(response) {
   const text = await response.text();
 
   if (!text) {
-    return null;
+    throw new Error('Expected JSON response body but received empty content');
   }
 
   try {
     return JSON.parse(text);
   } catch {
-    return { raw: text };
+    throw new Error('Expected valid JSON response body');
   }
 }

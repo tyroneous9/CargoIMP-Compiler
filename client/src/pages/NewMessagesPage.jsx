@@ -17,7 +17,7 @@ const NEW_MESSAGES_PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 
 function NewMessagesPage() {
   const [state, setState] = useState({
-    status: 'loading',
+    isLoading: true,
     items: [],
     error: '',
   });
@@ -112,7 +112,7 @@ function NewMessagesPage() {
 
         if (!response.ok) {
           setState({
-            status: 'error',
+            isLoading: false,
             items: [],
             error: data?.message || 'Unable to load new messages',
           });
@@ -120,14 +120,14 @@ function NewMessagesPage() {
         }
 
         setState({
-          status: 'ready',
+          isLoading: false,
           items: Array.isArray(data?.items) ? data.items : [],
           error: '',
         });
       } catch (error) {
         if (!cancelled) {
           setState({
-            status: 'error',
+            isLoading: false,
             items: [],
             error: error.message,
           });
@@ -339,12 +339,11 @@ function NewMessagesPage() {
         <div className="page-config">
           <div className="panel-head">
             <h2>Unprocessed records</h2>
-            <span className={`chip chip-${state.status}`}>{state.status}</span>
           </div>
 
-          {state.status === 'error' ? (
+          {state.error ? (
             <p className="error-text">{state.error}</p>
-          ) : state.status === 'loading' ? (
+          ) : state.isLoading ? (
             <p className="muted-text">Loading new messages...</p>
           ) : (
             <>
@@ -407,7 +406,7 @@ function NewMessagesPage() {
           )}
         </div>
 
-        {state.status === 'ready' ? (
+        {!state.isLoading && !state.error ? (
           <table className="sheet-table">
             <thead>
               <tr>

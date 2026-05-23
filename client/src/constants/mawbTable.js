@@ -5,7 +5,6 @@ export const MAWB_TABLE_COLUMNS = [
   'destination_airport_code',
   'piece_count',
   'weight_kg',
-  'nature_of_goods',
 ];
 
 export const MAWB_TABLE_SETTINGS_STORAGE_KEY = 'ncaparser.mawbTable.settings';

@@ -5,16 +5,35 @@ const reportRepository = require('../repositories/report-repository');
 const PROCESSING_STATUS_VALUES = new Set(['new', 'complete']);
 const NEW_MESSAGE_RECORD_TYPES = new Set(['uld', 'mawb', 'hawb']);
 
-function toPositiveInt(value, fallback) {
+function toPositiveInt(value, label) {
   const parsed = Number(value);
-  if (!Number.isInteger(parsed) || parsed <= 0) return fallback;
+  if (!Number.isInteger(parsed) || parsed <= 0) {
+    const error = new Error(`${label} must be a positive integer`);
+    error.statusCode = 400;
+    throw error;
+  }
   return parsed;
 }
 
 function parsePagination(query) {
+  if (!query || typeof query !== 'object') {
+    const error = new Error('query parameters are required');
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const limit = toPositiveInt(query.limit, 'limit');
+  const offset = Number(query.offset);
+
+  if (!Number.isInteger(offset) || offset < 0) {
+    const error = new Error('offset must be a non-negative integer');
+    error.statusCode = 400;
+    throw error;
+  }
+
   return {
-    limit: Math.min(toPositiveInt(query.limit, 25), 200),
-    offset: toPositiveInt(query.offset, 0),
+    limit: Math.min(limit, 200),
+    offset,
   };
 }
 
@@ -65,32 +84,32 @@ function parseNewMessageRecords(records) {
 }
 
 async function listMawbs(query) {
-  const { limit, offset } = parsePagination(query || {});
+  const { limit, offset } = parsePagination(query);
   return reportRepository.listMawbs(limit, offset);
 }
 
 async function listUlds(query) {
-  const { limit, offset } = parsePagination(query || {});
+  const { limit, offset } = parsePagination(query);
   return reportRepository.listUlds(limit, offset);
 }
 
 async function listHawbs(query) {
-  const { limit, offset } = parsePagination(query || {});
+  const { limit, offset } = parsePagination(query);
   return reportRepository.listHawbs(limit, offset);
 }
 
 async function listUldTableRows(query) {
-  const { limit, offset } = parsePagination(query || {});
+  const { limit, offset } = parsePagination(query);
   return reportRepository.listUldTableRows(limit, offset);
 }
 
 async function listMawbTableRows(query) {
-  const { limit, offset } = parsePagination(query || {});
+  const { limit, offset } = parsePagination(query);
   return reportRepository.listMawbTableRows(limit, offset);
 }
 
 async function listHawbTableRows(query) {
-  const { limit, offset } = parsePagination(query || {});
+  const { limit, offset } = parsePagination(query);
   return reportRepository.listHawbTableRows(limit, offset);
 }
 
@@ -131,7 +150,7 @@ async function updateHawbProcessingStatus(fhlHouseId, processingStatus) {
 }
 
 async function listNewMessages(query) {
-  const { limit, offset } = parsePagination(query || {});
+  const { limit, offset } = parsePagination(query);
   return reportRepository.listNewMessages(limit, offset);
 }
 

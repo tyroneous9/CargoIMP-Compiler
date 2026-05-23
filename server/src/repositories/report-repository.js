@@ -49,11 +49,8 @@ async function listUldTableRows(limit, offset) {
         r.uld_code,
         r.uld_detail_text,
         r.processing_status,
-        COALESCE(mawb_piece_totals.total_piece_count, 0) AS mawb_piece_count,
-        CASE
-          WHEN COALESCE(load_type_calc.has_loose, 0) = 1 THEN 'loose'
-          ELSE 'uld'
-        END AS load_type,
+        r.mawb_piece_count,
+        r.load_type,
         r.carrier_flight_number,
         r.scheduled_departure_date,
         r.scheduled_departure_time,
@@ -61,34 +58,6 @@ async function listUldTableRows(limit, offset) {
         r.mawb_numbers,
         r.awb_count
       FROM report_uld r
-      LEFT JOIN LATERAL (
-        SELECT COALESCE(SUM(latest_fwb.piece_count), 0) AS total_piece_count
-        FROM (
-          SELECT DISTINCT ON (fm.mawb_number)
-            fm.mawb_number,
-            fm.piece_count
-          FROM ffm_awb fa2
-          JOIN fwb_master fm ON fm.mawb_number = fa2.master_awb_number
-          WHERE fa2.ffm_uld_id = r.ffm_uld_id
-          ORDER BY fm.mawb_number, fm.id DESC
-        ) latest_fwb
-      ) mawb_piece_totals ON TRUE
-      LEFT JOIN LATERAL (
-        SELECT MAX(
-          CASE
-            WHEN fa3.id IS NOT NULL
-              AND NOT EXISTS (
-                SELECT 1
-                FROM fwb_master fm_match
-                WHERE fm_match.mawb_number = fa3.master_awb_number
-              )
-            THEN 1
-            ELSE 0
-          END
-        ) AS has_loose
-        FROM ffm_awb fa3
-        WHERE fa3.ffm_uld_id = r.ffm_uld_id
-      ) load_type_calc ON TRUE
       WHERE r.uld_code IS NOT NULL
         AND r.uld_code <> ''
       ORDER BY r.uld_code ASC, r.ffm_uld_id DESC

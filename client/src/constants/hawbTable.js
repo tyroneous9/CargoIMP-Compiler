@@ -3,7 +3,6 @@ export const HAWB_TABLE_COLUMNS = [
   'processing_status',
   'piece_count',
   'weight_kg',
-  'goods_description',
   'mawb_number',
   'origin_airport_code',
   'destination_airport_code',

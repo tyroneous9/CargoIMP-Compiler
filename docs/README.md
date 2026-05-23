@@ -28,11 +28,6 @@ Run DB migrations:
 npm run db:migrate
 ```
 
-If your database already has the schema (legacy setup), mark the initial migration once before running `db:migrate`:
-```bash
-npm run db:migrate:baseline
-```
-
 Create a new migration:
 ```bash
 npm run db:migrate:create -- add_descriptive_name

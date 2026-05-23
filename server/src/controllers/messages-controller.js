@@ -4,7 +4,7 @@ const messageService = require('../services/message-service');
 
 async function listMessages(req, res, next) {
   try {
-    const items = await messageService.listMessages(req.query || {});
+    const items = await messageService.listMessages(req.query);
     res.json({ items });
   } catch (error) {
     next(error);

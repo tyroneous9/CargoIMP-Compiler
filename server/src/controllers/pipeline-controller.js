@@ -4,7 +4,7 @@ const pipelineService = require('../services/pipeline-service');
 
 async function listRuns(req, res, next) {
   try {
-    const runs = await pipelineService.listRuns(req.query || {});
+    const runs = await pipelineService.listRuns(req.query);
     res.json({ items: runs });
   } catch (error) {
     next(error);

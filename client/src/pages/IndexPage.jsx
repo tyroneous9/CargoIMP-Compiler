@@ -4,28 +4,21 @@ function IndexPage() {
       <section className="hero-card">
         <p className="eyebrow">NCAParser frontend</p>
         <h1>Page Index</h1>
-        <p className="lede">Use this page as the single entry point to navigate all available views.</p>
-
         <div className="index-grid">
-          <a className="index-card" href="/health">
-            <h2>Health</h2>
-            <p>Backend status and health response payload.</p>
-          </a>
           <a className="index-card" href="/new-messages">
             <h2>New Messages</h2>
-            <p>Queue of unprocessed ULD, MAWB, and HAWB records with bulk archive actions.</p>
+          </a>
+          <a className="index-card" href="/parse-errors">
+            <h2>Parse Errors</h2>
           </a>
           <a className="index-card" href="/hawb-table">
             <h2>HAWB Table</h2>
-            <p>Interactive HAWB table with filters, sort, paging, and column controls.</p>
           </a>
           <a className="index-card" href="/mawb-table">
             <h2>MAWB Table</h2>
-            <p>Interactive MAWB table with filters, sort, paging, and column controls.</p>
           </a>
           <a className="index-card" href="/uld-table">
             <h2>ULD Table</h2>
-            <p>Interactive ULD table with filters, sort, paging, and column controls.</p>
           </a>
         </div>
       </section>

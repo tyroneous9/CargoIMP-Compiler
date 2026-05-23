@@ -204,29 +204,6 @@ pre {
   margin-bottom: 10px;
 }
 
-.chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 8px;
-  border-radius: 999px;
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  border: 1px solid var(--panel-border);
-}
-
-.chip-ready {
-  color: var(--accent-2);
-}
-
-.chip-loading {
-  color: var(--accent);
-}
-
-.chip-error {
-  color: var(--danger);
-}
-
 pre {
   margin: 0;
   overflow: auto;

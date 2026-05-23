@@ -1,102 +1,41 @@
 import { useEffect, useMemo, useState } from 'react';
 import { readJson } from '../lib/readJson';
-import {
-  ULD_COLUMN_TYPES,
-  ULD_DEFAULT_PAGE_SIZE,
-  ULD_PAGE_SIZE_OPTIONS,
-  ULD_TABLE_COLUMNS,
-  ULD_TABLE_SETTINGS_STORAGE_KEY,
-} from '../constants/uldTable';
 
-const PROCESSING_STATUS_OPTIONS = ['new', 'complete'];
+const PARSE_ERRORS_COLUMNS = [
+  'id',
+  'message_type',
+  'parsed_at',
+  'subject',
+  'sender',
+  'stderr',
+];
 
-function UldTablePage() {
+const DEFAULT_PAGE_SIZE = 25;
+const PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
+
+function ParseErrorsPage() {
   const [state, setState] = useState({
     isLoading: true,
     items: [],
     error: '',
   });
   const [filters, setFilters] = useState({});
-  const [sort, setSort] = useState({ column: '', direction: '' });
-  const [visibleColumns, setVisibleColumns] = useState(ULD_TABLE_COLUMNS);
+  const [sort, setSort] = useState({ column: 'parsed_at', direction: 'desc' });
+  const [visibleColumns, setVisibleColumns] = useState(PARSE_ERRORS_COLUMNS);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(ULD_DEFAULT_PAGE_SIZE);
-
-  useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem(ULD_TABLE_SETTINGS_STORAGE_KEY);
-      if (!raw) {
-        const legacyColumns = window.localStorage.getItem('ncaparser.uldTable.visibleColumns');
-        if (legacyColumns) {
-          const parsedLegacyColumns = JSON.parse(legacyColumns);
-          if (Array.isArray(parsedLegacyColumns)) {
-            const normalizedLegacyColumns = ULD_TABLE_COLUMNS.filter((column) => parsedLegacyColumns.includes(column));
-            if (normalizedLegacyColumns.length > 0) {
-              setVisibleColumns(normalizedLegacyColumns);
-            }
-          }
-        }
-        return;
-      }
-
-      const parsed = JSON.parse(raw);
-      if (!parsed || typeof parsed !== 'object') {
-        return;
-      }
-
-      if (Array.isArray(parsed.visibleColumns)) {
-        const normalized = ULD_TABLE_COLUMNS.filter((column) => parsed.visibleColumns.includes(column));
-        if (normalized.length > 0) {
-          setVisibleColumns(normalized);
-        }
-      }
-
-      if (parsed.filters && typeof parsed.filters === 'object') {
-        setFilters(parsed.filters);
-      }
-
-      if (parsed.sort && typeof parsed.sort === 'object') {
-        setSort({
-          column: typeof parsed.sort.column === 'string' ? parsed.sort.column : '',
-          direction: parsed.sort.direction === 'desc' ? 'desc' : parsed.sort.direction === 'asc' ? 'asc' : '',
-        });
-      }
-
-      if (Number.isInteger(parsed.page) && parsed.page > 0) {
-        setPage(parsed.page);
-      }
-
-      if (Number.isInteger(parsed.pageSize) && ULD_PAGE_SIZE_OPTIONS.includes(parsed.pageSize)) {
-        setPageSize(parsed.pageSize);
-      }
-    } catch {
-      setVisibleColumns(ULD_TABLE_COLUMNS);
-    }
-  }, []);
-
-  useEffect(() => {
-    try {
-      window.localStorage.setItem(
-        ULD_TABLE_SETTINGS_STORAGE_KEY,
-        JSON.stringify({
-          visibleColumns,
-          filters,
-          sort,
-          page,
-          pageSize,
-        })
-      );
-    } catch {
-      // Ignore localStorage write failures.
-    }
-  }, [visibleColumns, filters, sort, page, pageSize]);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [detail, setDetail] = useState({
+    isLoading: false,
+    item: null,
+    error: '',
+  });
 
   useEffect(() => {
     let cancelled = false;
 
-    async function loadRows() {
+    async function loadItems() {
       try {
-        const response = await fetch('/api/reports/ulds-table?limit=1000&offset=0');
+        const response = await fetch('/api/messages?status=error&limit=1000&offset=0');
         const data = await readJson(response);
 
         if (cancelled) {
@@ -107,7 +46,7 @@ function UldTablePage() {
           setState({
             isLoading: false,
             items: [],
-            error: data?.message || 'Unable to load ULD rows',
+            error: data?.message || 'Unable to load parse errors',
           });
           return;
         }
@@ -128,7 +67,7 @@ function UldTablePage() {
       }
     }
 
-    loadRows();
+    loadItems();
 
     return () => {
       cancelled = true;
@@ -142,6 +81,7 @@ function UldTablePage() {
         if (!query) {
           return true;
         }
+
         const value = String(row[column] ?? '').toLowerCase();
         return value.includes(query);
       });
@@ -152,7 +92,6 @@ function UldTablePage() {
     }
 
     const direction = sort.direction === 'asc' ? 1 : -1;
-    const columnType = ULD_COLUMN_TYPES[sort.column] || 'text';
     const sorted = [...filtered].sort((a, b) => {
       const aRaw = a[sort.column];
       const bRaw = b[sort.column];
@@ -164,15 +103,6 @@ function UldTablePage() {
 
       if (bRaw === null || bRaw === undefined || bRaw === '') {
         return -1;
-      }
-
-      if (columnType === 'number') {
-        const aNumber = Number(aRaw);
-        const bNumber = Number(bRaw);
-        if (Number.isNaN(aNumber) && Number.isNaN(bNumber)) return 0;
-        if (Number.isNaN(aNumber)) return 1;
-        if (Number.isNaN(bNumber)) return -1;
-        return (aNumber - bNumber) * direction;
       }
 
       return String(aRaw).localeCompare(String(bRaw), undefined, { numeric: true }) * direction;
@@ -222,14 +152,14 @@ function UldTablePage() {
 
   function clearAllControls() {
     setFilters({});
-    setSort({ column: '', direction: '' });
-    setVisibleColumns(ULD_TABLE_COLUMNS);
+    setSort({ column: 'parsed_at', direction: 'desc' });
+    setVisibleColumns(PARSE_ERRORS_COLUMNS);
     setPage(1);
-    setPageSize(ULD_DEFAULT_PAGE_SIZE);
+    setPageSize(DEFAULT_PAGE_SIZE);
   }
 
   function resetVisibleColumns() {
-    setVisibleColumns(ULD_TABLE_COLUMNS);
+    setVisibleColumns(PARSE_ERRORS_COLUMNS);
     setPage(1);
   }
 
@@ -245,7 +175,7 @@ function UldTablePage() {
         ? current.filter((name) => name !== column)
         : [...current, column];
 
-      return ULD_TABLE_COLUMNS.filter((name) => next.includes(name));
+      return PARSE_ERRORS_COLUMNS.filter((name) => next.includes(name));
     });
     setPage(1);
   }
@@ -258,57 +188,71 @@ function UldTablePage() {
     setPage((current) => Math.min(totalPages, current + 1));
   }
 
-  async function updateProcessingStatus(ffmUldId, processingStatus) {
-    if (!ffmUldId) {
-      return;
+  function summarizeStderr(stderr) {
+    if (!stderr) {
+      return '';
     }
+    const oneLine = String(stderr).replace(/\s+/g, ' ').trim();
+    if (oneLine.length <= 180) {
+      return oneLine;
+    }
+    return `${oneLine.slice(0, 177)}...`;
+  }
+
+  async function openDetail(id) {
+    setDetail({
+      isLoading: true,
+      item: null,
+      error: '',
+    });
 
     try {
-      const response = await fetch(`/api/reports/ulds/${ffmUldId}/processing-status`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ processingStatus }),
-      });
+      const response = await fetch(`/api/messages/${id}`);
       const data = await readJson(response);
 
       if (!response.ok) {
-        throw new Error(data?.message || 'Unable to update ULD processing status');
+        throw new Error(data?.message || 'Unable to load parse error detail');
       }
 
-      setState((current) => ({
-        ...current,
-        items: current.items.map((item) => {
-          if (item.ffm_uld_id !== ffmUldId) {
-            return item;
-          }
-          return {
-            ...item,
-            processing_status: data?.processing_status || processingStatus,
-          };
-        }),
-      }));
+      setDetail({
+        isLoading: false,
+        item: data,
+        error: '',
+      });
     } catch (error) {
-      window.alert(error.message);
+      setDetail({
+        isLoading: false,
+        item: null,
+        error: error.message,
+      });
     }
+  }
+
+  function closeDetail() {
+    setDetail({
+      isLoading: false,
+      item: null,
+      error: '',
+    });
   }
 
   return (
     <main className="page page-wide">
       <section className="hero-card">
         <a className="page-link" href="/">Back to index</a>
-        <p className="eyebrow">ULD table page</p>
-        <h1>ULD Table</h1>
+        <p className="eyebrow">Operations</p>
+        <h1>Parse Errors</h1>
+        <p className="lede">Failed parser runs from messages_parsed with status=error.</p>
+
         <div className="page-config">
           <div className="panel-head">
-            <h2>Configuration</h2>
+            <h2>Error records</h2>
           </div>
 
           {state.error ? (
             <p className="error-text">{state.error}</p>
           ) : state.isLoading ? (
-            <p className="muted-text">Loading ULD rows...</p>
+            <p className="muted-text">Loading parse errors...</p>
           ) : (
             <>
               <div className="table-tools">
@@ -332,7 +276,7 @@ function UldTablePage() {
                         setPage(1);
                       }}
                     >
-                      {ULD_PAGE_SIZE_OPTIONS.map((option) => (
+                      {PAGE_SIZE_OPTIONS.map((option) => (
                         <option key={option} value={option}>{option}</option>
                       ))}
                     </select>
@@ -345,7 +289,7 @@ function UldTablePage() {
                   <button type="button" className="clear-button" onClick={resetVisibleColumns}>Reset columns</button>
                 </div>
                 <div className="column-checkbox-grid">
-                  {ULD_TABLE_COLUMNS.map((column) => (
+                  {PARSE_ERRORS_COLUMNS.map((column) => (
                     <label key={column} className="column-checkbox-item">
                       <input
                         type="checkbox"
@@ -366,7 +310,7 @@ function UldTablePage() {
             <thead>
               <tr>
                 {visibleColumns.map((column) => (
-                  <th key={column} className={column === 'uld_code' ? 'sticky-column sticky-header' : undefined}>
+                  <th key={column} className={column === 'id' ? 'sticky-column sticky-header' : undefined}>
                     <button
                       type="button"
                       className={`sort-button ${sort.column === column ? 'active' : ''}`}
@@ -379,13 +323,11 @@ function UldTablePage() {
                     </button>
                   </th>
                 ))}
+                <th>actions</th>
               </tr>
               <tr>
                 {visibleColumns.map((column) => (
-                  <th
-                    key={`${column}-filter`}
-                    className={column === 'uld_code' ? 'sticky-column sticky-filter' : undefined}
-                  >
+                  <th key={`${column}-filter`} className={column === 'id' ? 'sticky-column sticky-filter' : undefined}>
                     <input
                       className="filter-input"
                       type="text"
@@ -396,49 +338,64 @@ function UldTablePage() {
                     />
                   </th>
                 ))}
+                <th />
               </tr>
             </thead>
             <tbody>
               {pageRows.map((row, index) => {
-                const rowId = row.ffm_uld_id;
-                const rowKey = rowId || row.uld_code || `uld-row-${index}`;
+                const rowId = row.id;
+                const rowKey = rowId || `parse-error-${index}`;
 
                 return (
                   <tr key={rowKey}>
                     {visibleColumns.map((column) => (
-                      <td
-                        key={`${rowKey}-${column}`}
-                        className={column === 'uld_code' ? 'sticky-column sticky-cell' : undefined}
-                      >
-                        {column === 'processing_status' ? (
-                          <select
-                            value={row.processing_status || 'new'}
-                            onChange={(event) => updateProcessingStatus(rowId, event.target.value)}
-                            disabled={!rowId}
-                          >
-                            {PROCESSING_STATUS_OPTIONS.map((statusOption) => (
-                              <option key={statusOption} value={statusOption}>{statusOption}</option>
-                            ))}
-                          </select>
-                        ) : (
-                          row[column] ?? ''
-                        )}
+                      <td key={`${rowKey}-${column}`} className={column === 'id' ? 'sticky-column sticky-cell' : undefined}>
+                        {column === 'stderr' ? summarizeStderr(row.stderr) : row[column] ?? ''}
                       </td>
                     ))}
+                    <td>
+                      <button type="button" className="clear-button" onClick={() => openDetail(rowId)} disabled={!rowId}>
+                        View
+                      </button>
+                    </td>
                   </tr>
                 );
               })}
               {rows.length === 0 ? (
                 <tr>
-                  <td className="empty-cell" colSpan={visibleColumns.length}>No rows match current filters.</td>
+                  <td className="empty-cell" colSpan={visibleColumns.length + 1}>No parse errors found.</td>
                 </tr>
               ) : null}
             </tbody>
           </table>
+        ) : null}
+
+        {detail.isLoading || detail.error || detail.item ? (
+          <section className="panel" style={{ marginTop: 12 }}>
+            <div className="panel-head">
+              <h2>Error detail</h2>
+              <button type="button" className="clear-button" onClick={closeDetail}>Close</button>
+            </div>
+            {detail.error ? <p className="error-text">{detail.error}</p> : null}
+            {detail.isLoading ? <p className="muted-text">Loading error detail...</p> : null}
+            {detail.item ? (
+              <>
+                <div className="info-grid" style={{ marginBottom: 12 }}>
+                  <div className="info-box"><span>ID</span><strong>{detail.item.id}</strong></div>
+                  <div className="info-box"><span>Type</span><strong>{detail.item.message_type}</strong></div>
+                  <div className="info-box"><span>Parsed At</span><strong>{detail.item.parsed_at}</strong></div>
+                </div>
+                <h3>stderr</h3>
+                <pre>{detail.item.stderr || '(empty)'}</pre>
+                <h3 style={{ marginTop: 12 }}>stdout</h3>
+                <pre>{detail.item.stdout || '(empty)'}</pre>
+              </>
+            ) : null}
+          </section>
         ) : null}
       </section>
     </main>
   );
 }
 
-export default UldTablePage;
+export default ParseErrorsPage;
