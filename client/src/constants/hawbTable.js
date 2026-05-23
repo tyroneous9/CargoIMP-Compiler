@@ -6,6 +6,7 @@ export const HAWB_TABLE_COLUMNS = [
   'mawb_number',
   'origin_airport_code',
   'destination_airport_code',
+  'scheduled_arrival_time',
 ];
 
 export const HAWB_TABLE_SETTINGS_STORAGE_KEY = 'ncaparser.hawbTable.settings';

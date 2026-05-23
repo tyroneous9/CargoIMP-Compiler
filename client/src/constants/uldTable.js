@@ -6,6 +6,7 @@ export const ULD_TABLE_COLUMNS = [
   'carrier_flight_number',
   'scheduled_departure_date',
   'scheduled_departure_time',
+  'scheduled_arrival_time',
   'departure_airport_code',
   'mawb_numbers',
 ];

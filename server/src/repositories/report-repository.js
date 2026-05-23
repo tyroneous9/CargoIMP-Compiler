@@ -54,6 +54,7 @@ async function listUldTableRows(limit, offset) {
         r.carrier_flight_number,
         r.scheduled_departure_date,
         r.scheduled_departure_time,
+        r.scheduled_arrival_time,
         r.departure_airport_code,
         r.mawb_numbers,
         r.awb_count
@@ -84,6 +85,7 @@ async function listMawbTableRows(limit, offset) {
         mawb_number,
         origin_airport_code,
         destination_airport_code,
+        scheduled_arrival_time,
         piece_count,
         weight_kg,
         nature_of_goods,
@@ -111,7 +113,8 @@ async function listHawbTableRows(limit, offset) {
         processing_status,
         mawb_number,
         origin_airport_code,
-        destination_airport_code
+        destination_airport_code,
+        scheduled_arrival_time
       FROM report_hawb
       WHERE hawb_number IS NOT NULL
         AND hawb_number <> ''

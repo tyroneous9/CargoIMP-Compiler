@@ -282,12 +282,23 @@ SELECT
 	f.mawb_number,
 	f.origin_airport_code,
 	f.destination_airport_code,
+	mawb_arrival.scheduled_arrival_time,
 	f.piece_count,
 	f.weight_kg,
 	f.nature_of_goods,
 	f.processing_status
 FROM fwb_master f
 JOIN messages_parsed mp ON mp.id = f.parsed_message_id
+LEFT JOIN LATERAL (
+	SELECT fr.scheduled_arrival_time
+	FROM ffm_awb fa
+	JOIN ffm_uld fu ON fu.id = fa.ffm_uld_id
+	JOIN ffm_flight ff ON ff.id = fu.ffm_flight_id
+	JOIN ffm_route fr ON fr.ffm_flight_id = ff.id
+	WHERE fa.master_awb_number = f.mawb_number
+	ORDER BY fr.route_seq ASC, fr.id ASC
+	LIMIT 1
+) mawb_arrival ON TRUE
 WHERE mp.status = 'ok';
 
 CREATE OR REPLACE VIEW report_hawb AS
@@ -300,10 +311,21 @@ SELECT
 	h.processing_status,
 	fm.mawb_number,
 	fm.origin_airport_code,
-	fm.destination_airport_code
+	fm.destination_airport_code,
+	hawb_arrival.scheduled_arrival_time
 FROM fhl_house h
 JOIN fhl_master fm ON fm.id = h.fhl_master_id
 JOIN messages_parsed mp ON mp.id = fm.parsed_message_id
+LEFT JOIN LATERAL (
+	SELECT fr.scheduled_arrival_time
+	FROM ffm_awb fa
+	JOIN ffm_uld fu ON fu.id = fa.ffm_uld_id
+	JOIN ffm_flight ff ON ff.id = fu.ffm_flight_id
+	JOIN ffm_route fr ON fr.ffm_flight_id = ff.id
+	WHERE fa.master_awb_number = fm.mawb_number
+	ORDER BY fr.route_seq ASC, fr.id ASC
+	LIMIT 1
+) hawb_arrival ON TRUE
 WHERE mp.status = 'ok';
 
 CREATE OR REPLACE VIEW report_uld AS
@@ -331,6 +353,7 @@ SELECT
 	ff.carrier_flight_number,
 	ff.scheduled_departure_date,
 	ff.scheduled_departure_time,
+	uld_arrival.scheduled_arrival_time,
 	ff.departure_airport_code,
 	STRING_AGG(DISTINCT fa.master_awb_number, ',' ORDER BY fa.master_awb_number) AS mawb_numbers,
 	COUNT(fa.id) AS awb_count
@@ -338,6 +361,13 @@ FROM ffm_uld u
 JOIN ffm_flight ff ON ff.id = u.ffm_flight_id
 JOIN messages_parsed mp ON mp.id = ff.parsed_message_id
 LEFT JOIN ffm_awb fa ON fa.ffm_uld_id = u.id
+LEFT JOIN LATERAL (
+	SELECT fr.scheduled_arrival_time
+	FROM ffm_route fr
+	WHERE fr.ffm_flight_id = ff.id
+	ORDER BY fr.route_seq ASC, fr.id ASC
+	LIMIT 1
+) uld_arrival ON TRUE
 LEFT JOIN LATERAL (
 	SELECT COALESCE(SUM(latest_fwb.piece_count), 0) AS total_piece_count
 	FROM (
@@ -360,6 +390,7 @@ GROUP BY
 	ff.carrier_flight_number,
 	ff.scheduled_departure_date,
 	ff.scheduled_departure_time,
+	uld_arrival.scheduled_arrival_time,
 	ff.departure_airport_code;
 
 -- 8) Simple list views for direct querying requirements.
