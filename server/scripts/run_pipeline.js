@@ -637,6 +637,7 @@ async function extractEmailsToDb() {
   });
 
   let extractedCount = 0;
+  let skippedUnrecognizedCount = 0;
 
   try {
     await client.connect();
@@ -660,6 +661,12 @@ async function extractEmailsToDb() {
         const parsedEmail = await simpleParser(message.source);
         const body = normalizeBody(parsedEmail);
         const messageType = detectMessageFormat(body);
+
+        if (!messageType || !isSupportedMessageType(messageType)) {
+          skippedUnrecognizedCount += 1;
+          log('warn', `[extract] skipped uid=${message.uid} due to unrecognized message type`);
+          continue;
+        }
 
         const rawJson = {
           uid: message.uid,
@@ -694,7 +701,7 @@ async function extractEmailsToDb() {
     await client.logout().catch(() => {});
   }
 
-  return { extractedCount };
+  return { extractedCount, skippedUnrecognizedCount };
 }
 
 async function fetchEmailsToParse(dbClient, force) {

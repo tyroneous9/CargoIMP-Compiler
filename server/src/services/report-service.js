@@ -35,9 +35,15 @@ async function listUldTableRows(query) {
   return reportRepository.listUldTableRows(limit, offset);
 }
 
+async function listMawbTableRows(query) {
+  const { limit, offset } = parsePagination(query || {});
+  return reportRepository.listMawbTableRows(limit, offset);
+}
+
 module.exports = {
   listMawbs,
   listUlds,
   listHawbs,
   listUldTableRows,
+  listMawbTableRows,
 };

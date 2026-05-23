@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import { readJson } from '../lib/readJson';
 import {
-  ULD_COLUMN_TYPES,
-  ULD_DEFAULT_PAGE_SIZE,
-  ULD_PAGE_SIZE_OPTIONS,
-  ULD_TABLE_COLUMNS,
-  ULD_TABLE_SETTINGS_STORAGE_KEY,
-} from '../constants/uldTable';
+  MAWB_COLUMN_TYPES,
+  MAWB_DEFAULT_PAGE_SIZE,
+  MAWB_PAGE_SIZE_OPTIONS,
+  MAWB_TABLE_COLUMNS,
+  MAWB_TABLE_SETTINGS_STORAGE_KEY,
+} from '../constants/mawbTable';
 
-function UldTablePage() {
+function MawbTablePage() {
   const [state, setState] = useState({
     status: 'loading',
     items: [],
@@ -16,19 +16,19 @@ function UldTablePage() {
   });
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState({ column: '', direction: '' });
-  const [visibleColumns, setVisibleColumns] = useState(ULD_TABLE_COLUMNS);
+  const [visibleColumns, setVisibleColumns] = useState(MAWB_TABLE_COLUMNS);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(ULD_DEFAULT_PAGE_SIZE);
+  const [pageSize, setPageSize] = useState(MAWB_DEFAULT_PAGE_SIZE);
 
   useEffect(() => {
     try {
-      const raw = window.localStorage.getItem(ULD_TABLE_SETTINGS_STORAGE_KEY);
+      const raw = window.localStorage.getItem(MAWB_TABLE_SETTINGS_STORAGE_KEY);
       if (!raw) {
-        const legacyColumns = window.localStorage.getItem('ncaparser.uldTable.visibleColumns');
+        const legacyColumns = window.localStorage.getItem('ncaparser.mawbTable.visibleColumns');
         if (legacyColumns) {
           const parsedLegacyColumns = JSON.parse(legacyColumns);
           if (Array.isArray(parsedLegacyColumns)) {
-            const normalizedLegacyColumns = ULD_TABLE_COLUMNS.filter((column) => parsedLegacyColumns.includes(column));
+            const normalizedLegacyColumns = MAWB_TABLE_COLUMNS.filter((column) => parsedLegacyColumns.includes(column));
             if (normalizedLegacyColumns.length > 0) {
               setVisibleColumns(normalizedLegacyColumns);
             }
@@ -43,7 +43,7 @@ function UldTablePage() {
       }
 
       if (Array.isArray(parsed.visibleColumns)) {
-        const normalized = ULD_TABLE_COLUMNS.filter((column) => parsed.visibleColumns.includes(column));
+        const normalized = MAWB_TABLE_COLUMNS.filter((column) => parsed.visibleColumns.includes(column));
         if (normalized.length > 0) {
           setVisibleColumns(normalized);
         }
@@ -64,18 +64,18 @@ function UldTablePage() {
         setPage(parsed.page);
       }
 
-      if (Number.isInteger(parsed.pageSize) && ULD_PAGE_SIZE_OPTIONS.includes(parsed.pageSize)) {
+      if (Number.isInteger(parsed.pageSize) && MAWB_PAGE_SIZE_OPTIONS.includes(parsed.pageSize)) {
         setPageSize(parsed.pageSize);
       }
     } catch {
-      setVisibleColumns(ULD_TABLE_COLUMNS);
+      setVisibleColumns(MAWB_TABLE_COLUMNS);
     }
   }, []);
 
   useEffect(() => {
     try {
       window.localStorage.setItem(
-        ULD_TABLE_SETTINGS_STORAGE_KEY,
+        MAWB_TABLE_SETTINGS_STORAGE_KEY,
         JSON.stringify({
           visibleColumns,
           filters,
@@ -94,7 +94,7 @@ function UldTablePage() {
 
     async function loadRows() {
       try {
-        const response = await fetch('/api/reports/ulds-table?limit=1000&offset=0');
+        const response = await fetch('/api/reports/mawbs-table?limit=1000&offset=0');
         const data = await readJson(response);
 
         if (cancelled) {
@@ -105,7 +105,7 @@ function UldTablePage() {
           setState({
             status: 'error',
             items: [],
-            error: data?.message || 'Unable to load ULD rows',
+            error: data?.message || 'Unable to load MAWB rows',
           });
           return;
         }
@@ -150,7 +150,7 @@ function UldTablePage() {
     }
 
     const direction = sort.direction === 'asc' ? 1 : -1;
-    const columnType = ULD_COLUMN_TYPES[sort.column] || 'text';
+    const columnType = MAWB_COLUMN_TYPES[sort.column] || 'text';
     const sorted = [...filtered].sort((a, b) => {
       const aRaw = a[sort.column];
       const bRaw = b[sort.column];
@@ -221,13 +221,13 @@ function UldTablePage() {
   function clearAllControls() {
     setFilters({});
     setSort({ column: '', direction: '' });
-    setVisibleColumns(ULD_TABLE_COLUMNS);
+    setVisibleColumns(MAWB_TABLE_COLUMNS);
     setPage(1);
-    setPageSize(ULD_DEFAULT_PAGE_SIZE);
+    setPageSize(MAWB_DEFAULT_PAGE_SIZE);
   }
 
   function resetVisibleColumns() {
-    setVisibleColumns(ULD_TABLE_COLUMNS);
+    setVisibleColumns(MAWB_TABLE_COLUMNS);
     setPage(1);
   }
 
@@ -243,7 +243,7 @@ function UldTablePage() {
         ? current.filter((name) => name !== column)
         : [...current, column];
 
-      return ULD_TABLE_COLUMNS.filter((name) => next.includes(name));
+      return MAWB_TABLE_COLUMNS.filter((name) => next.includes(name));
     });
     setPage(1);
   }
@@ -260,8 +260,8 @@ function UldTablePage() {
     <main className="page page-wide">
       <section className="hero-card">
         <a className="page-link" href="/">Back to index</a>
-        <p className="eyebrow">ULD table page</p>
-        <h1>ULD Table</h1>
+        <p className="eyebrow">MAWB table page</p>
+        <h1>MAWB Table</h1>
         <div className="page-config">
           <div className="panel-head">
             <h2>Configuration</h2>
@@ -271,7 +271,7 @@ function UldTablePage() {
           {state.status === 'error' ? (
             <p className="error-text">{state.error}</p>
           ) : state.status === 'loading' ? (
-            <p className="muted-text">Loading ULD rows...</p>
+            <p className="muted-text">Loading MAWB rows...</p>
           ) : (
             <>
               <div className="table-tools">
@@ -295,7 +295,7 @@ function UldTablePage() {
                         setPage(1);
                       }}
                     >
-                      {ULD_PAGE_SIZE_OPTIONS.map((option) => (
+                      {MAWB_PAGE_SIZE_OPTIONS.map((option) => (
                         <option key={option} value={option}>{option}</option>
                       ))}
                     </select>
@@ -308,7 +308,7 @@ function UldTablePage() {
                   <button type="button" className="clear-button" onClick={resetVisibleColumns}>Reset columns</button>
                 </div>
                 <div className="column-checkbox-grid">
-                  {ULD_TABLE_COLUMNS.map((column) => (
+                  {MAWB_TABLE_COLUMNS.map((column) => (
                     <label key={column} className="column-checkbox-item">
                       <input
                         type="checkbox"
@@ -329,7 +329,7 @@ function UldTablePage() {
             <thead>
               <tr>
                 {visibleColumns.map((column) => (
-                  <th key={column} className={column === 'uld_code' ? 'sticky-column sticky-header' : undefined}>
+                  <th key={column} className={column === 'mawb_number' ? 'sticky-column sticky-header' : undefined}>
                     <button
                       type="button"
                       className={`sort-button ${sort.column === column ? 'active' : ''}`}
@@ -347,7 +347,7 @@ function UldTablePage() {
                 {visibleColumns.map((column) => (
                   <th
                     key={`${column}-filter`}
-                    className={column === 'uld_code' ? 'sticky-column sticky-filter' : undefined}
+                    className={column === 'mawb_number' ? 'sticky-column sticky-filter' : undefined}
                   >
                     <input
                       className="filter-input"
@@ -362,18 +362,21 @@ function UldTablePage() {
               </tr>
             </thead>
             <tbody>
-              {pageRows.map((row) => (
-                <tr key={row.uld_code}>
-                  {visibleColumns.map((column) => (
-                    <td
-                      key={`${row.uld_code}-${column}`}
-                      className={column === 'uld_code' ? 'sticky-column sticky-cell' : undefined}
-                    >
-                      {row[column] ?? ''}
-                    </td>
-                  ))}
-                </tr>
-              ))}
+              {pageRows.map((row, index) => {
+                const rowKey = row.mawb_number || `mawb-row-${index}`;
+                return (
+                  <tr key={rowKey}>
+                    {visibleColumns.map((column) => (
+                      <td
+                        key={`${rowKey}-${column}`}
+                        className={column === 'mawb_number' ? 'sticky-column sticky-cell' : undefined}
+                      >
+                        {row[column] ?? ''}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
               {rows.length === 0 ? (
                 <tr>
                   <td className="empty-cell" colSpan={visibleColumns.length}>No rows match current filters.</td>
@@ -387,4 +390,4 @@ function UldTablePage() {
   );
 }
 
-export default UldTablePage;
+export default MawbTablePage;

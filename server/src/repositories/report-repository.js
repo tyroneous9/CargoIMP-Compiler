@@ -65,9 +65,31 @@ async function listUldTableRows(limit, offset) {
   return result.rows;
 }
 
+async function listMawbTableRows(limit, offset) {
+  const result = await pool.query(
+    `
+      SELECT DISTINCT ON (mawb_number)
+        mawb_number,
+        origin_airport_code,
+        destination_airport_code,
+        piece_count,
+        weight_kg,
+        nature_of_goods
+      FROM report_mawb
+      WHERE mawb_number IS NOT NULL
+        AND mawb_number <> ''
+      ORDER BY mawb_number ASC
+      LIMIT $1 OFFSET $2
+    `,
+    [limit, offset]
+  );
+  return result.rows;
+}
+
 module.exports = {
   listMawbs,
   listUlds,
   listHawbs,
   listUldTableRows,
+  listMawbTableRows,
 };

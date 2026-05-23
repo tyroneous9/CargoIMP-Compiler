@@ -62,6 +62,7 @@ function HealthPage() {
   return (
     <main className="page">
       <section className="hero-card">
+        <a className="page-link" href="/">Back to index</a>
         <p className="eyebrow">NCAParser frontend</p>
         <h1>Frontend is live.</h1>
         <p className="lede">

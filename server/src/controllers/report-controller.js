@@ -38,9 +38,19 @@ async function listUldTableRows(req, res, next) {
   }
 }
 
+async function listMawbTableRows(req, res, next) {
+  try {
+    const items = await reportService.listMawbTableRows(req.query || {});
+    res.json({ items });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   listMawbs,
   listUlds,
   listHawbs,
   listUldTableRows,
+  listMawbTableRows,
 };
