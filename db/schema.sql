@@ -138,6 +138,9 @@ CREATE TABLE IF NOT EXISTS ffm_uld (
 	CONSTRAINT uq_ffm_uld_seq UNIQUE (ffm_flight_id, uld_seq)
 );
 
+ALTER TABLE ffm_uld
+	ADD COLUMN IF NOT EXISTS processing_status processing_status_enum NOT NULL DEFAULT 'new';
+
 CREATE INDEX IF NOT EXISTS idx_ffm_uld_code ON ffm_uld (uld_code);
 
 CREATE TABLE IF NOT EXISTS ffm_awb (
@@ -179,6 +182,9 @@ CREATE TABLE IF NOT EXISTS fwb_master (
 	raw_fields JSONB,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+ALTER TABLE fwb_master
+	ADD COLUMN IF NOT EXISTS processing_status processing_status_enum NOT NULL DEFAULT 'new';
 
 CREATE INDEX IF NOT EXISTS idx_fwb_master_mawb ON fwb_master (mawb_number);
 
@@ -237,6 +243,9 @@ CREATE TABLE IF NOT EXISTS fhl_house (
 	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 	CONSTRAINT uq_fhl_house_seq UNIQUE (fhl_master_id, house_seq)
 );
+
+ALTER TABLE fhl_house
+	ADD COLUMN IF NOT EXISTS processing_status processing_status_enum NOT NULL DEFAULT 'new';
 
 CREATE INDEX IF NOT EXISTS idx_fhl_house_hawb ON fhl_house (hawb_number);
 
@@ -303,6 +312,22 @@ SELECT
 	u.uld_code,
 	u.uld_detail_text,
 	u.processing_status,
+	COALESCE(mawb_piece_totals.total_piece_count, 0) AS mawb_piece_count,
+	CASE
+		WHEN MAX(
+			CASE
+				WHEN fa.id IS NOT NULL
+					AND NOT EXISTS (
+						SELECT 1
+						FROM fwb_master fm_match
+						WHERE fm_match.mawb_number = fa.master_awb_number
+					)
+				THEN 1
+				ELSE 0
+			END
+		) = 1 THEN 'loose'
+		ELSE 'uld'
+	END AS load_type,
 	ff.carrier_flight_number,
 	ff.scheduled_departure_date,
 	ff.scheduled_departure_time,
@@ -313,12 +338,25 @@ FROM ffm_uld u
 JOIN ffm_flight ff ON ff.id = u.ffm_flight_id
 JOIN messages_parsed mp ON mp.id = ff.parsed_message_id
 LEFT JOIN ffm_awb fa ON fa.ffm_uld_id = u.id
+LEFT JOIN LATERAL (
+	SELECT COALESCE(SUM(latest_fwb.piece_count), 0) AS total_piece_count
+	FROM (
+		SELECT DISTINCT ON (fm.mawb_number)
+			fm.mawb_number,
+			fm.piece_count
+		FROM ffm_awb fa2
+		JOIN fwb_master fm ON fm.mawb_number = fa2.master_awb_number
+		WHERE fa2.ffm_uld_id = u.id
+		ORDER BY fm.mawb_number, fm.id DESC
+	) latest_fwb
+) mawb_piece_totals ON TRUE
 WHERE mp.status = 'ok'
 GROUP BY
 	u.id,
 	u.uld_code,
 	u.uld_detail_text,
 	u.processing_status,
+	mawb_piece_totals.total_piece_count,
 	ff.carrier_flight_number,
 	ff.scheduled_departure_date,
 	ff.scheduled_departure_time,

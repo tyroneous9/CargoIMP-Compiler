@@ -370,6 +370,12 @@ pre {
   z-index: 2;
 }
 
+.checkbox-column {
+  width: 44px;
+  min-width: 44px;
+  text-align: center;
+}
+
 .sheet-table tbody tr:nth-child(2n) .sticky-cell {
   background: #fafbfc;
 }

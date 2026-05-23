@@ -3,6 +3,7 @@
 const reportRepository = require('../repositories/report-repository');
 
 const PROCESSING_STATUS_VALUES = new Set(['new', 'complete']);
+const NEW_MESSAGE_RECORD_TYPES = new Set(['uld', 'mawb', 'hawb']);
 
 function toPositiveInt(value, fallback) {
   const parsed = Number(value);
@@ -34,6 +35,33 @@ function parseProcessingStatus(value) {
     throw error;
   }
   return value;
+}
+
+function parseNewMessageRecords(records) {
+  if (!Array.isArray(records) || records.length === 0) {
+    const error = new Error('records must be a non-empty array');
+    error.statusCode = 400;
+    throw error;
+  }
+
+  return records.map((record, index) => {
+    if (!record || typeof record !== 'object') {
+      const error = new Error(`records[${index}] must be an object`);
+      error.statusCode = 400;
+      throw error;
+    }
+
+    if (!NEW_MESSAGE_RECORD_TYPES.has(record.recordType)) {
+      const error = new Error(`records[${index}].recordType must be one of: uld, mawb, hawb`);
+      error.statusCode = 400;
+      throw error;
+    }
+
+    return {
+      recordType: record.recordType,
+      recordId: parseId(record.recordId, `records[${index}].recordId`),
+    };
+  });
 }
 
 async function listMawbs(query) {
@@ -102,6 +130,16 @@ async function updateHawbProcessingStatus(fhlHouseId, processingStatus) {
   return updated;
 }
 
+async function listNewMessages(query) {
+  const { limit, offset } = parsePagination(query || {});
+  return reportRepository.listNewMessages(limit, offset);
+}
+
+async function archiveNewMessages(records) {
+  const parsedRecords = parseNewMessageRecords(records);
+  return reportRepository.archiveNewMessages(parsedRecords);
+}
+
 module.exports = {
   listMawbs,
   listUlds,
@@ -112,4 +150,6 @@ module.exports = {
   updateUldProcessingStatus,
   updateMawbProcessingStatus,
   updateHawbProcessingStatus,
+  listNewMessages,
+  archiveNewMessages,
 };

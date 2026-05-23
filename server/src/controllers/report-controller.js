@@ -92,6 +92,24 @@ async function updateHawbProcessingStatus(req, res, next) {
   }
 }
 
+async function listNewMessages(req, res, next) {
+  try {
+    const items = await reportService.listNewMessages(req.query || {});
+    res.json({ items });
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function archiveNewMessages(req, res, next) {
+  try {
+    const result = await reportService.archiveNewMessages(req.body?.records);
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   listMawbs,
   listUlds,
@@ -102,4 +120,6 @@ module.exports = {
   updateUldProcessingStatus,
   updateMawbProcessingStatus,
   updateHawbProcessingStatus,
+  listNewMessages,
+  archiveNewMessages,
 };

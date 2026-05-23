@@ -44,21 +44,54 @@ async function listHawbs(limit, offset) {
 async function listUldTableRows(limit, offset) {
   const result = await pool.query(
     `
-      SELECT DISTINCT ON (uld_code)
-        ffm_uld_id,
-        uld_code,
-        uld_detail_text,
-        processing_status,
-        carrier_flight_number,
-        scheduled_departure_date,
-        scheduled_departure_time,
-        departure_airport_code,
-        mawb_numbers,
-        awb_count
-      FROM report_uld
-      WHERE uld_code IS NOT NULL
-        AND uld_code <> ''
-      ORDER BY uld_code ASC, ffm_uld_id DESC
+      SELECT DISTINCT ON (r.uld_code)
+        r.ffm_uld_id,
+        r.uld_code,
+        r.uld_detail_text,
+        r.processing_status,
+        COALESCE(mawb_piece_totals.total_piece_count, 0) AS mawb_piece_count,
+        CASE
+          WHEN COALESCE(load_type_calc.has_loose, 0) = 1 THEN 'loose'
+          ELSE 'uld'
+        END AS load_type,
+        r.carrier_flight_number,
+        r.scheduled_departure_date,
+        r.scheduled_departure_time,
+        r.departure_airport_code,
+        r.mawb_numbers,
+        r.awb_count
+      FROM report_uld r
+      LEFT JOIN LATERAL (
+        SELECT COALESCE(SUM(latest_fwb.piece_count), 0) AS total_piece_count
+        FROM (
+          SELECT DISTINCT ON (fm.mawb_number)
+            fm.mawb_number,
+            fm.piece_count
+          FROM ffm_awb fa2
+          JOIN fwb_master fm ON fm.mawb_number = fa2.master_awb_number
+          WHERE fa2.ffm_uld_id = r.ffm_uld_id
+          ORDER BY fm.mawb_number, fm.id DESC
+        ) latest_fwb
+      ) mawb_piece_totals ON TRUE
+      LEFT JOIN LATERAL (
+        SELECT MAX(
+          CASE
+            WHEN fa3.id IS NOT NULL
+              AND NOT EXISTS (
+                SELECT 1
+                FROM fwb_master fm_match
+                WHERE fm_match.mawb_number = fa3.master_awb_number
+              )
+            THEN 1
+            ELSE 0
+          END
+        ) AS has_loose
+        FROM ffm_awb fa3
+        WHERE fa3.ffm_uld_id = r.ffm_uld_id
+      ) load_type_calc ON TRUE
+      WHERE r.uld_code IS NOT NULL
+        AND r.uld_code <> ''
+      ORDER BY r.uld_code ASC, r.ffm_uld_id DESC
       LIMIT $1 OFFSET $2
     `,
     [limit, offset]
@@ -152,6 +185,112 @@ async function updateHawbProcessingStatus(fhlHouseId, processingStatus) {
   return result.rows[0] || null;
 }
 
+async function listNewMessages(limit, offset) {
+  const result = await pool.query(
+    `
+      SELECT *
+      FROM (
+        SELECT
+          'uld'::text AS record_type,
+          u.id::bigint AS record_id,
+          u.uld_code AS record_key,
+          u.processing_status::text AS processing_status,
+          u.uld_detail_text AS description,
+          ff.carrier_flight_number AS related_number,
+          ff.departure_airport_code AS origin_airport_code,
+          NULL::text AS destination_airport_code,
+          u.created_at AS created_at
+        FROM ffm_uld u
+        JOIN ffm_flight ff ON ff.id = u.ffm_flight_id
+        WHERE u.processing_status = 'new'
+
+        UNION ALL
+
+        SELECT
+          'mawb'::text AS record_type,
+          f.id::bigint AS record_id,
+          f.mawb_number AS record_key,
+          f.processing_status::text AS processing_status,
+          f.nature_of_goods AS description,
+          NULL::text AS related_number,
+          f.origin_airport_code AS origin_airport_code,
+          f.destination_airport_code AS destination_airport_code,
+          f.created_at AS created_at
+        FROM fwb_master f
+        WHERE f.processing_status = 'new'
+
+        UNION ALL
+
+        SELECT
+          'hawb'::text AS record_type,
+          h.id::bigint AS record_id,
+          h.hawb_number AS record_key,
+          h.processing_status::text AS processing_status,
+          h.goods_description AS description,
+          fm.mawb_number AS related_number,
+          fm.origin_airport_code AS origin_airport_code,
+          fm.destination_airport_code AS destination_airport_code,
+          h.created_at AS created_at
+        FROM fhl_house h
+        JOIN fhl_master fm ON fm.id = h.fhl_master_id
+        WHERE h.processing_status = 'new'
+      ) new_messages
+      ORDER BY created_at DESC, record_type ASC, record_id DESC
+      LIMIT $1 OFFSET $2
+    `,
+    [limit, offset]
+  );
+
+  return result.rows;
+}
+
+async function archiveNewMessages(records) {
+  const client = await pool.connect();
+
+  try {
+    await client.query('BEGIN');
+
+    for (const record of records) {
+      if (record.recordType === 'uld') {
+        await client.query(
+          `
+            UPDATE ffm_uld
+            SET processing_status = 'complete'
+            WHERE id = $1
+          `,
+          [record.recordId]
+        );
+      } else if (record.recordType === 'mawb') {
+        await client.query(
+          `
+            UPDATE fwb_master
+            SET processing_status = 'complete'
+            WHERE id = $1
+          `,
+          [record.recordId]
+        );
+      } else if (record.recordType === 'hawb') {
+        await client.query(
+          `
+            UPDATE fhl_house
+            SET processing_status = 'complete'
+            WHERE id = $1
+          `,
+          [record.recordId]
+        );
+      }
+    }
+
+    await client.query('COMMIT');
+    return { archivedCount: records.length };
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
 module.exports = {
   listMawbs,
   listUlds,
@@ -162,4 +301,6 @@ module.exports = {
   updateUldProcessingStatus,
   updateMawbProcessingStatus,
   updateHawbProcessingStatus,
+  listNewMessages,
+  archiveNewMessages,
 };

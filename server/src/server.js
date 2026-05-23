@@ -4,8 +4,10 @@ const app = require('./app');
 const { pool } = require('../config/db');
 
 const port = Number(process.env.PORT) || 3000;
-const server = app.listen(port, () => {
-  process.stdout.write(`Backend listening on port ${port}\n`);
+const host = process.env.HOST || '0.0.0.0';
+
+const server = app.listen(port, host, () => {
+  process.stdout.write(`Backend listening on ${host}:${port}\n`);
 });
 
 async function shutdown(signal) {

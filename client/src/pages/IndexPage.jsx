@@ -11,6 +11,10 @@ function IndexPage() {
             <h2>Health</h2>
             <p>Backend status and health response payload.</p>
           </a>
+          <a className="index-card" href="/new-messages">
+            <h2>New Messages</h2>
+            <p>Queue of unprocessed ULD, MAWB, and HAWB records with bulk archive actions.</p>
+          </a>
           <a className="index-card" href="/hawb-table">
             <h2>HAWB Table</h2>
             <p>Interactive HAWB table with filters, sort, paging, and column controls.</p>

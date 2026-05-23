@@ -10,20 +10,26 @@ This repository contains these project components:
 
 ## Quick Start
 
-### 1) Install dependencies
+### 1) Setup project
 
-You can install dependencies per package:
-
-```bash
-cd server && npm install
-cd ../client && npm install
-```
-
-Or from repo root (workspace-aware npm):
-
+Install dependencies:
 ```bash
 npm install
 ```
+
+Setup database user from init:
+Modify the init script by replacing the password placeholder (`{{DB_PASSWORD}}`) with your own password.
+```bash
+psql -h 127.0.0.1 -p 5432 -U postgres -d nca_cargo -f ./db/init.sql
+```
+
+Create database from schema:
+```bash
+psql -h 127.0.0.1 -p 5432 -U nca_cargo_user -d nca_cargo -f ./db/schema.sql
+```
+
+Schema updates:
+When pulling backend/schema changes, re-run the same schema command above to apply new/updated views and idempotent table changes.
 
 ### 2) Run backend
 
@@ -39,6 +45,14 @@ npm run client:dev
 
 Frontend runs on Vite dev server and proxies `/api` calls to backend `http://127.0.0.1:3000`.
 
+Current frontend pages:
+- `/` (index)
+- `/health`
+- `/new-messages`
+- `/hawb-table`
+- `/mawb-table`
+- `/uld-table`
+
 ## Useful Commands
 
 - `npm run client:build`
@@ -50,3 +64,4 @@ Frontend runs on Vite dev server and proxies `/api` calls to backend `http://127
 
 - Backend runtime env file: `server/.env`
 - Example env keys: `docs/.env.example`
+- Required DB runtime keys for backend: `DB_USER`, `DB_PASSWORD`
