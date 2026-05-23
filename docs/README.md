@@ -28,6 +28,11 @@ Run DB migrations:
 npm run db:migrate
 ```
 
+Create DB migrations structure for first run:
+```bash
+npm run db:migrate:baseline
+```
+
 Create a new migration:
 ```bash
 npm run db:migrate:create -- add_descriptive_name

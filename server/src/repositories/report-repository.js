@@ -60,6 +60,14 @@ async function listUldTableRows(limit, offset) {
       FROM report_uld r
       WHERE r.uld_code IS NOT NULL
         AND r.uld_code <> ''
+        AND EXISTS (
+          SELECT 1
+          FROM ffm_uld u_filter
+          JOIN ffm_flight ff_filter ON ff_filter.id = u_filter.ffm_flight_id
+          JOIN ffm_route fr_filter ON fr_filter.ffm_flight_id = ff_filter.id
+          WHERE u_filter.id = r.ffm_uld_id
+            AND fr_filter.arrival_airport_code = 'ORD'
+        )
       ORDER BY r.uld_code ASC, r.ffm_uld_id DESC
       LIMIT $1 OFFSET $2
     `,
@@ -172,6 +180,12 @@ async function listNewMessages(limit, offset) {
         FROM ffm_uld u
         JOIN ffm_flight ff ON ff.id = u.ffm_flight_id
         WHERE u.processing_status = 'new'
+          AND EXISTS (
+            SELECT 1
+            FROM ffm_route fr
+            WHERE fr.ffm_flight_id = ff.id
+              AND fr.arrival_airport_code = 'ORD'
+          )
 
         UNION ALL
 
