@@ -1,5 +1,6 @@
 export const MAWB_TABLE_COLUMNS = [
   'mawb_number',
+  'processing_status',
   'origin_airport_code',
   'destination_airport_code',
   'piece_count',

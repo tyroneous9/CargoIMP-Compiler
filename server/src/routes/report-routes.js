@@ -8,7 +8,11 @@ const router = express.Router();
 router.get('/mawbs', reportController.listMawbs);
 router.get('/ulds', reportController.listUlds);
 router.get('/hawbs', reportController.listHawbs);
+router.get('/hawbs-table', reportController.listHawbTableRows);
 router.get('/mawbs-table', reportController.listMawbTableRows);
 router.get('/ulds-table', reportController.listUldTableRows);
+router.patch('/ulds/:ffmUldId/processing-status', reportController.updateUldProcessingStatus);
+router.patch('/mawbs/:fwbMasterId/processing-status', reportController.updateMawbProcessingStatus);
+router.patch('/hawbs/:fhlHouseId/processing-status', reportController.updateHawbProcessingStatus);
 
 module.exports = router;

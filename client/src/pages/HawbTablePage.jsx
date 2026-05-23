@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useState } from 'react';
 import { readJson } from '../lib/readJson';
 import {
-  ULD_COLUMN_TYPES,
-  ULD_DEFAULT_PAGE_SIZE,
-  ULD_PAGE_SIZE_OPTIONS,
-  ULD_TABLE_COLUMNS,
-  ULD_TABLE_SETTINGS_STORAGE_KEY,
-} from '../constants/uldTable';
+  HAWB_COLUMN_TYPES,
+  HAWB_DEFAULT_PAGE_SIZE,
+  HAWB_PAGE_SIZE_OPTIONS,
+  HAWB_TABLE_COLUMNS,
+  HAWB_TABLE_SETTINGS_STORAGE_KEY,
+} from '../constants/hawbTable';
 
 const PROCESSING_STATUS_OPTIONS = ['new', 'complete'];
 
-function UldTablePage() {
+function HawbTablePage() {
   const [state, setState] = useState({
     status: 'loading',
     items: [],
@@ -18,19 +18,19 @@ function UldTablePage() {
   });
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState({ column: '', direction: '' });
-  const [visibleColumns, setVisibleColumns] = useState(ULD_TABLE_COLUMNS);
+  const [visibleColumns, setVisibleColumns] = useState(HAWB_TABLE_COLUMNS);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(ULD_DEFAULT_PAGE_SIZE);
+  const [pageSize, setPageSize] = useState(HAWB_DEFAULT_PAGE_SIZE);
 
   useEffect(() => {
     try {
-      const raw = window.localStorage.getItem(ULD_TABLE_SETTINGS_STORAGE_KEY);
+      const raw = window.localStorage.getItem(HAWB_TABLE_SETTINGS_STORAGE_KEY);
       if (!raw) {
-        const legacyColumns = window.localStorage.getItem('ncaparser.uldTable.visibleColumns');
+        const legacyColumns = window.localStorage.getItem('ncaparser.hawbTable.visibleColumns');
         if (legacyColumns) {
           const parsedLegacyColumns = JSON.parse(legacyColumns);
           if (Array.isArray(parsedLegacyColumns)) {
-            const normalizedLegacyColumns = ULD_TABLE_COLUMNS.filter((column) => parsedLegacyColumns.includes(column));
+            const normalizedLegacyColumns = HAWB_TABLE_COLUMNS.filter((column) => parsedLegacyColumns.includes(column));
             if (normalizedLegacyColumns.length > 0) {
               setVisibleColumns(normalizedLegacyColumns);
             }
@@ -45,7 +45,7 @@ function UldTablePage() {
       }
 
       if (Array.isArray(parsed.visibleColumns)) {
-        const normalized = ULD_TABLE_COLUMNS.filter((column) => parsed.visibleColumns.includes(column));
+        const normalized = HAWB_TABLE_COLUMNS.filter((column) => parsed.visibleColumns.includes(column));
         if (normalized.length > 0) {
           setVisibleColumns(normalized);
         }
@@ -66,18 +66,18 @@ function UldTablePage() {
         setPage(parsed.page);
       }
 
-      if (Number.isInteger(parsed.pageSize) && ULD_PAGE_SIZE_OPTIONS.includes(parsed.pageSize)) {
+      if (Number.isInteger(parsed.pageSize) && HAWB_PAGE_SIZE_OPTIONS.includes(parsed.pageSize)) {
         setPageSize(parsed.pageSize);
       }
     } catch {
-      setVisibleColumns(ULD_TABLE_COLUMNS);
+      setVisibleColumns(HAWB_TABLE_COLUMNS);
     }
   }, []);
 
   useEffect(() => {
     try {
       window.localStorage.setItem(
-        ULD_TABLE_SETTINGS_STORAGE_KEY,
+        HAWB_TABLE_SETTINGS_STORAGE_KEY,
         JSON.stringify({
           visibleColumns,
           filters,
@@ -96,7 +96,7 @@ function UldTablePage() {
 
     async function loadRows() {
       try {
-        const response = await fetch('/api/reports/ulds-table?limit=1000&offset=0');
+        const response = await fetch('/api/reports/hawbs-table?limit=1000&offset=0');
         const data = await readJson(response);
 
         if (cancelled) {
@@ -107,7 +107,7 @@ function UldTablePage() {
           setState({
             status: 'error',
             items: [],
-            error: data?.message || 'Unable to load ULD rows',
+            error: data?.message || 'Unable to load HAWB rows',
           });
           return;
         }
@@ -152,7 +152,7 @@ function UldTablePage() {
     }
 
     const direction = sort.direction === 'asc' ? 1 : -1;
-    const columnType = ULD_COLUMN_TYPES[sort.column] || 'text';
+    const columnType = HAWB_COLUMN_TYPES[sort.column] || 'text';
     const sorted = [...filtered].sort((a, b) => {
       const aRaw = a[sort.column];
       const bRaw = b[sort.column];
@@ -223,13 +223,13 @@ function UldTablePage() {
   function clearAllControls() {
     setFilters({});
     setSort({ column: '', direction: '' });
-    setVisibleColumns(ULD_TABLE_COLUMNS);
+    setVisibleColumns(HAWB_TABLE_COLUMNS);
     setPage(1);
-    setPageSize(ULD_DEFAULT_PAGE_SIZE);
+    setPageSize(HAWB_DEFAULT_PAGE_SIZE);
   }
 
   function resetVisibleColumns() {
-    setVisibleColumns(ULD_TABLE_COLUMNS);
+    setVisibleColumns(HAWB_TABLE_COLUMNS);
     setPage(1);
   }
 
@@ -245,7 +245,7 @@ function UldTablePage() {
         ? current.filter((name) => name !== column)
         : [...current, column];
 
-      return ULD_TABLE_COLUMNS.filter((name) => next.includes(name));
+      return HAWB_TABLE_COLUMNS.filter((name) => next.includes(name));
     });
     setPage(1);
   }
@@ -258,13 +258,13 @@ function UldTablePage() {
     setPage((current) => Math.min(totalPages, current + 1));
   }
 
-  async function updateProcessingStatus(ffmUldId, processingStatus) {
-    if (!ffmUldId) {
+  async function updateProcessingStatus(fhlHouseId, processingStatus) {
+    if (!fhlHouseId) {
       return;
     }
 
     try {
-      const response = await fetch(`/api/reports/ulds/${ffmUldId}/processing-status`, {
+      const response = await fetch(`/api/reports/hawbs/${fhlHouseId}/processing-status`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -274,13 +274,13 @@ function UldTablePage() {
       const data = await readJson(response);
 
       if (!response.ok) {
-        throw new Error(data?.message || 'Unable to update ULD processing status');
+        throw new Error(data?.message || 'Unable to update HAWB processing status');
       }
 
       setState((current) => ({
         ...current,
         items: current.items.map((item) => {
-          if (item.ffm_uld_id !== ffmUldId) {
+          if (item.fhl_house_id !== fhlHouseId) {
             return item;
           }
           return {
@@ -298,8 +298,8 @@ function UldTablePage() {
     <main className="page page-wide">
       <section className="hero-card">
         <a className="page-link" href="/">Back to index</a>
-        <p className="eyebrow">ULD table page</p>
-        <h1>ULD Table</h1>
+        <p className="eyebrow">HAWB table page</p>
+        <h1>HAWB Table</h1>
         <div className="page-config">
           <div className="panel-head">
             <h2>Configuration</h2>
@@ -309,7 +309,7 @@ function UldTablePage() {
           {state.status === 'error' ? (
             <p className="error-text">{state.error}</p>
           ) : state.status === 'loading' ? (
-            <p className="muted-text">Loading ULD rows...</p>
+            <p className="muted-text">Loading HAWB rows...</p>
           ) : (
             <>
               <div className="table-tools">
@@ -333,7 +333,7 @@ function UldTablePage() {
                         setPage(1);
                       }}
                     >
-                      {ULD_PAGE_SIZE_OPTIONS.map((option) => (
+                      {HAWB_PAGE_SIZE_OPTIONS.map((option) => (
                         <option key={option} value={option}>{option}</option>
                       ))}
                     </select>
@@ -346,7 +346,7 @@ function UldTablePage() {
                   <button type="button" className="clear-button" onClick={resetVisibleColumns}>Reset columns</button>
                 </div>
                 <div className="column-checkbox-grid">
-                  {ULD_TABLE_COLUMNS.map((column) => (
+                  {HAWB_TABLE_COLUMNS.map((column) => (
                     <label key={column} className="column-checkbox-item">
                       <input
                         type="checkbox"
@@ -367,7 +367,7 @@ function UldTablePage() {
             <thead>
               <tr>
                 {visibleColumns.map((column) => (
-                  <th key={column} className={column === 'uld_code' ? 'sticky-column sticky-header' : undefined}>
+                  <th key={column} className={column === 'hawb_number' ? 'sticky-column sticky-header' : undefined}>
                     <button
                       type="button"
                       className={`sort-button ${sort.column === column ? 'active' : ''}`}
@@ -385,7 +385,7 @@ function UldTablePage() {
                 {visibleColumns.map((column) => (
                   <th
                     key={`${column}-filter`}
-                    className={column === 'uld_code' ? 'sticky-column sticky-filter' : undefined}
+                    className={column === 'hawb_number' ? 'sticky-column sticky-filter' : undefined}
                   >
                     <input
                       className="filter-input"
@@ -401,15 +401,14 @@ function UldTablePage() {
             </thead>
             <tbody>
               {pageRows.map((row, index) => {
-                const rowId = row.ffm_uld_id;
-                const rowKey = rowId || row.uld_code || `uld-row-${index}`;
-
+                const rowId = row.fhl_house_id;
+                const rowKey = rowId || row.hawb_number || `hawb-row-${index}`;
                 return (
                   <tr key={rowKey}>
                     {visibleColumns.map((column) => (
                       <td
                         key={`${rowKey}-${column}`}
-                        className={column === 'uld_code' ? 'sticky-column sticky-cell' : undefined}
+                        className={column === 'hawb_number' ? 'sticky-column sticky-cell' : undefined}
                       >
                         {column === 'processing_status' ? (
                           <select
@@ -442,4 +441,4 @@ function UldTablePage() {
   );
 }
 
-export default UldTablePage;
+export default HawbTablePage;

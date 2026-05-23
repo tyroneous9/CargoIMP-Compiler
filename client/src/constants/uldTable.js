@@ -1,5 +1,6 @@
 export const ULD_TABLE_COLUMNS = [
   'uld_code',
+  'processing_status',
   'uld_detail_text',
   'carrier_flight_number',
   'scheduled_departure_date',

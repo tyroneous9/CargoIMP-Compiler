@@ -8,6 +8,8 @@ import {
   MAWB_TABLE_SETTINGS_STORAGE_KEY,
 } from '../constants/mawbTable';
 
+const PROCESSING_STATUS_OPTIONS = ['new', 'complete'];
+
 function MawbTablePage() {
   const [state, setState] = useState({
     status: 'loading',
@@ -256,6 +258,42 @@ function MawbTablePage() {
     setPage((current) => Math.min(totalPages, current + 1));
   }
 
+  async function updateProcessingStatus(fwbMasterId, processingStatus) {
+    if (!fwbMasterId) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/reports/mawbs/${fwbMasterId}/processing-status`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ processingStatus }),
+      });
+      const data = await readJson(response);
+
+      if (!response.ok) {
+        throw new Error(data?.message || 'Unable to update MAWB processing status');
+      }
+
+      setState((current) => ({
+        ...current,
+        items: current.items.map((item) => {
+          if (item.fwb_master_id !== fwbMasterId) {
+            return item;
+          }
+          return {
+            ...item,
+            processing_status: data?.processing_status || processingStatus,
+          };
+        }),
+      }));
+    } catch (error) {
+      window.alert(error.message);
+    }
+  }
+
   return (
     <main className="page page-wide">
       <section className="hero-card">
@@ -363,7 +401,8 @@ function MawbTablePage() {
             </thead>
             <tbody>
               {pageRows.map((row, index) => {
-                const rowKey = row.mawb_number || `mawb-row-${index}`;
+                const rowId = row.fwb_master_id;
+                const rowKey = rowId || row.mawb_number || `mawb-row-${index}`;
                 return (
                   <tr key={rowKey}>
                     {visibleColumns.map((column) => (
@@ -371,7 +410,19 @@ function MawbTablePage() {
                         key={`${rowKey}-${column}`}
                         className={column === 'mawb_number' ? 'sticky-column sticky-cell' : undefined}
                       >
-                        {row[column] ?? ''}
+                        {column === 'processing_status' ? (
+                          <select
+                            value={row.processing_status || 'new'}
+                            onChange={(event) => updateProcessingStatus(rowId, event.target.value)}
+                            disabled={!rowId}
+                          >
+                            {PROCESSING_STATUS_OPTIONS.map((statusOption) => (
+                              <option key={statusOption} value={statusOption}>{statusOption}</option>
+                            ))}
+                          </select>
+                        ) : (
+                          row[column] ?? ''
+                        )}
                       </td>
                     ))}
                   </tr>

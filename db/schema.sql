@@ -6,6 +6,13 @@ BEGIN
 	END IF;
 END $$;
 
+DO $$
+BEGIN
+	IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'processing_status_enum') THEN
+		CREATE TYPE processing_status_enum AS ENUM ('new', 'complete');
+	END IF;
+END $$;
+
 -- 1) Raw email ingestion
 CREATE TABLE IF NOT EXISTS emails_raw (
 	id BIGSERIAL PRIMARY KEY,
@@ -125,6 +132,7 @@ CREATE TABLE IF NOT EXISTS ffm_uld (
 	uld_seq INTEGER NOT NULL,
 	uld_code TEXT,
 	uld_detail_text TEXT,
+	processing_status processing_status_enum NOT NULL DEFAULT 'new',
 	raw_fields JSONB,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 	CONSTRAINT uq_ffm_uld_seq UNIQUE (ffm_flight_id, uld_seq)
@@ -164,6 +172,7 @@ CREATE TABLE IF NOT EXISTS fwb_master (
 	volume_amount NUMERIC(14, 3),
 	volume_unit TEXT,
 	nature_of_goods TEXT,
+	processing_status processing_status_enum NOT NULL DEFAULT 'new',
 	shipper_name TEXT,
 	consignee_name TEXT,
 	charges_declaration JSONB,
@@ -221,6 +230,7 @@ CREATE TABLE IF NOT EXISTS fhl_house (
 	piece_count INTEGER,
 	weight_kg NUMERIC(14, 3),
 	goods_description TEXT,
+	processing_status processing_status_enum NOT NULL DEFAULT 'new',
 	shipper_name TEXT,
 	consignee_name TEXT,
 	raw_fields JSONB,
@@ -265,7 +275,8 @@ SELECT
 	f.destination_airport_code,
 	f.piece_count,
 	f.weight_kg,
-	f.nature_of_goods
+	f.nature_of_goods,
+	f.processing_status
 FROM fwb_master f
 JOIN messages_parsed mp ON mp.id = f.parsed_message_id
 WHERE mp.status = 'ok';
@@ -277,6 +288,7 @@ SELECT
 	h.piece_count,
 	h.weight_kg,
 	h.goods_description,
+	h.processing_status,
 	fm.mawb_number,
 	fm.origin_airport_code,
 	fm.destination_airport_code
@@ -290,6 +302,7 @@ SELECT
 	u.id AS ffm_uld_id,
 	u.uld_code,
 	u.uld_detail_text,
+	u.processing_status,
 	ff.carrier_flight_number,
 	ff.scheduled_departure_date,
 	ff.scheduled_departure_time,
@@ -305,6 +318,7 @@ GROUP BY
 	u.id,
 	u.uld_code,
 	u.uld_detail_text,
+	u.processing_status,
 	ff.carrier_flight_number,
 	ff.scheduled_departure_date,
 	ff.scheduled_departure_time,
