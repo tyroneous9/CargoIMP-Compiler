@@ -9,6 +9,49 @@ import {
 } from '../constants/uldTable';
 
 const PROCESSING_STATUS_OPTIONS = ['new', 'complete'];
+const REQUIRED_ULD_COLUMNS = ['last_free_day'];
+const MONTH_NAMES = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+const MONTH_INDEX = {
+  JAN: 0,
+  FEB: 1,
+  MAR: 2,
+  APR: 3,
+  MAY: 4,
+  JUN: 5,
+  JUL: 6,
+  AUG: 7,
+  SEP: 8,
+  OCT: 9,
+  NOV: 10,
+  DEC: 11,
+};
+
+function withRequiredColumns(columns) {
+  const set = new Set(columns);
+  for (const required of REQUIRED_ULD_COLUMNS) {
+    set.add(required);
+  }
+  return ULD_TABLE_COLUMNS.filter((column) => set.has(column));
+}
+
+function computeLastFreeDay(scheduledDepartureDate) {
+  const text = String(scheduledDepartureDate || '').trim().toUpperCase();
+  const match = text.match(/^(\d{2})([A-Z]{3})$/);
+  if (!match) return '';
+
+  const day = Number(match[1]);
+  const month = MONTH_INDEX[match[2]];
+  if (!Number.isInteger(day) || month === undefined) return '';
+
+  const year = new Date().getUTCFullYear();
+  const date = new Date(Date.UTC(year, month, day));
+  if (Number.isNaN(date.getTime())) return '';
+
+  date.setUTCDate(date.getUTCDate() + 2);
+  const nextDay = String(date.getUTCDate()).padStart(2, '0');
+  const nextMonth = MONTH_NAMES[date.getUTCMonth()];
+  return `${nextDay}${nextMonth}`;
+}
 
 function UldTablePage() {
   const [state, setState] = useState({
@@ -30,7 +73,7 @@ function UldTablePage() {
         if (legacyColumns) {
           const parsedLegacyColumns = JSON.parse(legacyColumns);
           if (Array.isArray(parsedLegacyColumns)) {
-            const normalizedLegacyColumns = ULD_TABLE_COLUMNS.filter((column) => parsedLegacyColumns.includes(column));
+            const normalizedLegacyColumns = withRequiredColumns(parsedLegacyColumns);
             if (normalizedLegacyColumns.length > 0) {
               setVisibleColumns(normalizedLegacyColumns);
             }
@@ -45,7 +88,7 @@ function UldTablePage() {
       }
 
       if (Array.isArray(parsed.visibleColumns)) {
-        const normalized = ULD_TABLE_COLUMNS.filter((column) => parsed.visibleColumns.includes(column));
+        const normalized = withRequiredColumns(parsed.visibleColumns);
         if (normalized.length > 0) {
           setVisibleColumns(normalized);
         }
@@ -112,9 +155,16 @@ function UldTablePage() {
           return;
         }
 
+        const items = Array.isArray(data?.items)
+          ? data.items.map((item) => ({
+              ...item,
+              last_free_day: computeLastFreeDay(item?.scheduled_departure_date),
+            }))
+          : [];
+
         setState({
           isLoading: false,
-          items: Array.isArray(data?.items) ? data.items : [],
+          items,
           error: '',
         });
       } catch (error) {

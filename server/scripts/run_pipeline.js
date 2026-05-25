@@ -273,10 +273,89 @@ function normalizeFhlFields(fields) {
   return fields;
 }
 
+function parseMvtDateTime6(value) {
+  const text = String(value || '').trim();
+  if (!/^\d{6}$/.test(text)) {
+    return {
+      eventDateTime: null,
+      eventDate: null,
+      eventTime: null,
+    };
+  }
+
+  return {
+    eventDateTime: text,
+    eventDate: text.slice(0, 2),
+    eventTime: text.slice(2),
+  };
+}
+
+function normalizeMvtFields(fields) {
+  if (!fields || typeof fields !== 'object') return {};
+
+  const event = fields.Event && typeof fields.Event === 'object' ? fields.Event : {};
+  const flight = fields.FlightIdentification && typeof fields.FlightIdentification === 'object'
+    ? fields.FlightIdentification
+    : {};
+
+  const rawEventLine = String(event.RawLine || '').trim();
+  const inferredMovementType = /^[A-Z]{2}/.test(rawEventLine)
+    ? rawEventLine.slice(0, 2)
+    : null;
+
+  if (!fields.MovementType && inferredMovementType) {
+    fields.MovementType = inferredMovementType;
+  }
+
+  if (!fields.CarrierFlightNumber && flight.CarrierFlightNumber) {
+    fields.CarrierFlightNumber = flight.CarrierFlightNumber;
+  }
+
+  if (!fields.Registration && flight.AircraftRegistration) {
+    fields.Registration = flight.AircraftRegistration;
+  }
+
+  if (!fields.BoardPoint && flight.AirportCode) {
+    fields.BoardPoint = flight.AirportCode;
+  }
+
+  const movementType = fields.MovementType || null;
+
+  let chosenDateTime = '';
+  if (movementType === 'AA') {
+    chosenDateTime = event.ActualArrivalDateTime || event.ActualDepartureDateTime || '';
+  } else if (movementType === 'AD') {
+    chosenDateTime = event.AdditionalActualDateTime || event.ActualDepartureDateTime || '';
+  } else if (movementType === 'ED') {
+    chosenDateTime = event.EventDepartureDateTime || '';
+  } else if (movementType === 'EA') {
+    chosenDateTime = event.ActualArrivalDateTime || '';
+  }
+
+  const parsedDateTime = parseMvtDateTime6(chosenDateTime);
+
+  if (!fields.EventDateTime && parsedDateTime.eventDateTime) {
+    fields.EventDateTime = parsedDateTime.eventDateTime;
+  }
+  if (!fields.EventDate && parsedDateTime.eventDate) {
+    fields.EventDate = parsedDateTime.eventDate;
+  }
+  if (!fields.EventTime) {
+    if (parsedDateTime.eventTime) {
+      fields.EventTime = parsedDateTime.eventTime;
+    } else if (event.EstimatedArrivalTime) {
+      fields.EventTime = String(event.EstimatedArrivalTime).trim();
+    }
+  }
+
+  return fields;
+}
+
 function normalizeParsedFields(messageType, fields) {
   if (messageType === SUPPORTED_MESSAGE_TYPES.FFM) return normalizeFfmFields(fields);
   if (messageType === SUPPORTED_MESSAGE_TYPES.FWB) return normalizeFwbFields(fields);
   if (messageType === SUPPORTED_MESSAGE_TYPES.FHL) return normalizeFhlFields(fields);
+  if (messageType === SUPPORTED_MESSAGE_TYPES.MVT) return normalizeMvtFields(fields);
   return fields || {};
 }
 

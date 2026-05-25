@@ -9,6 +9,15 @@ import {
 } from '../constants/mawbTable';
 
 const PROCESSING_STATUS_OPTIONS = ['new', 'complete'];
+const REQUIRED_MAWB_COLUMNS = ['scheduled_arrival_date'];
+
+function withRequiredColumns(columns) {
+  const set = new Set(columns);
+  for (const required of REQUIRED_MAWB_COLUMNS) {
+    set.add(required);
+  }
+  return MAWB_TABLE_COLUMNS.filter((column) => set.has(column));
+}
 
 function MawbTablePage() {
   const [state, setState] = useState({
@@ -30,7 +39,7 @@ function MawbTablePage() {
         if (legacyColumns) {
           const parsedLegacyColumns = JSON.parse(legacyColumns);
           if (Array.isArray(parsedLegacyColumns)) {
-            const normalizedLegacyColumns = MAWB_TABLE_COLUMNS.filter((column) => parsedLegacyColumns.includes(column));
+            const normalizedLegacyColumns = withRequiredColumns(parsedLegacyColumns);
             if (normalizedLegacyColumns.length > 0) {
               setVisibleColumns(normalizedLegacyColumns);
             }
@@ -45,7 +54,7 @@ function MawbTablePage() {
       }
 
       if (Array.isArray(parsed.visibleColumns)) {
-        const normalized = MAWB_TABLE_COLUMNS.filter((column) => parsed.visibleColumns.includes(column));
+        const normalized = withRequiredColumns(parsed.visibleColumns);
         if (normalized.length > 0) {
           setVisibleColumns(normalized);
         }

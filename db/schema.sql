@@ -284,6 +284,7 @@ SELECT
 	f.mawb_number,
 	f.origin_airport_code,
 	f.destination_airport_code,
+	mawb_arrival.scheduled_arrival_date,
 	mawb_arrival.scheduled_arrival_time,
 	f.piece_count,
 	f.weight_kg,
@@ -293,6 +294,17 @@ FROM fwb_master f
 JOIN messages_parsed mp ON mp.id = f.parsed_message_id
 LEFT JOIN LATERAL (
 	SELECT COALESCE(
+		(
+			SELECT me.event_date_text
+			FROM mvt_event me
+			WHERE me.carrier_flight_number = ff.carrier_flight_number
+				AND me.event_type IN ('EA', 'AA')
+			ORDER BY me.id DESC
+			LIMIT 1
+		),
+		fr.scheduled_arrival_date
+	) AS scheduled_arrival_date,
+	COALESCE(
 		(
 			SELECT me.event_time_text
 			FROM mvt_event me
