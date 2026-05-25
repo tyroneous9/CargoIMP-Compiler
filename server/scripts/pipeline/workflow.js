@@ -14,11 +14,10 @@ const { getPipelineConfig, getExtractEmailLimit } = require('../../config/pipeli
 const { getImapConfig } = require('../../config/imap');
 const { getParserConfig } = require('../../config/parser');
 const {
-  detectMessageFormat,
-  messageTypeToDbEnum,
   normalizeBody,
-  runParser,
 } = require('./normalizers');
+const { detectMessageFormat, messageTypeToDbEnum } = require('./message-format');
+const { runParser } = require('./parser-runner');
 const {
   persistNormalized,
 } = require('./persistence');
