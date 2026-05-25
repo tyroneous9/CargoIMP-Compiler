@@ -1,7 +1,5 @@
 'use strict';
 
-const { readEnv } = require('./env');
-
 const DEFAULT_PIPELINE_CONFIG = Object.freeze({
   pollIntervalMs: 300000,
   stepMaxRetries: 1,
@@ -9,39 +7,16 @@ const DEFAULT_PIPELINE_CONFIG = Object.freeze({
   extractEmailLimit: 100,
 });
 
-function parsePositiveIntEnv(key, fallback) {
-  const raw = readEnv(key);
-  if (!raw || raw.trim() === '') return fallback;
-
-  const parsed = Number(raw);
-  if (!Number.isInteger(parsed) || parsed <= 0) {
-    throw new Error(`Invalid ${key}: expected a positive integer`);
-  }
-  return parsed;
-}
-
-function parsePositiveIntOrUnlimitedEnv(key, fallback) {
-  const raw = readEnv(key);
-  if (!raw || raw.trim() === '') return fallback;
-
-  const parsed = Number(raw);
-  if (parsed === -1) return -1;
-  if (!Number.isInteger(parsed) || parsed <= 0) {
-    throw new Error(`Invalid ${key}: expected a positive integer or -1`);
-  }
-  return parsed;
-}
-
 function getPipelineConfig() {
   return {
-    pollIntervalMs: parsePositiveIntEnv('EMAIL_POLL_INTERVAL_MS', DEFAULT_PIPELINE_CONFIG.pollIntervalMs),
-    stepMaxRetries: parsePositiveIntEnv('PIPELINE_STEP_MAX_RETRIES', DEFAULT_PIPELINE_CONFIG.stepMaxRetries),
-    parseBatchLimit: parsePositiveIntEnv('PARSE_BATCH_LIMIT', DEFAULT_PIPELINE_CONFIG.parseBatchLimit),
+    pollIntervalMs: DEFAULT_PIPELINE_CONFIG.pollIntervalMs,
+    stepMaxRetries: DEFAULT_PIPELINE_CONFIG.stepMaxRetries,
+    parseBatchLimit: DEFAULT_PIPELINE_CONFIG.parseBatchLimit,
   };
 }
 
 function getExtractEmailLimit() {
-  return parsePositiveIntOrUnlimitedEnv('EXTRACT_EMAIL_LIMIT', DEFAULT_PIPELINE_CONFIG.extractEmailLimit);
+  return DEFAULT_PIPELINE_CONFIG.extractEmailLimit;
 }
 
 module.exports = {

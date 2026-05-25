@@ -16,7 +16,11 @@ const { getParserConfig } = require('../../config/parser');
 const {
   normalizeBody,
 } = require('./normalizers');
-const { detectMessageFormat, messageTypeToDbEnum } = require('./message-format');
+const {
+  detectMessageTypeFromBody,
+  detectMessageTypeFromSubject,
+  messageTypeToDbEnum,
+} = require('./message-format');
 const { runParser } = require('./parser-runner');
 const {
   persistNormalized,
@@ -138,7 +142,8 @@ async function extractEmailsToDb() {
 
         const parsedEmail = await simpleParser(message.source);
         const body = normalizeBody(parsedEmail);
-        const messageType = detectMessageFormat(body);
+        const subject = parsedEmail.subject || '(no subject)';
+        const messageType = detectMessageTypeFromSubject(subject);
 
         if (!messageType || !isSupportedMessageType(messageType)) {
           skippedUnrecognizedCount += 1;
@@ -149,11 +154,11 @@ async function extractEmailsToDb() {
           uid: message.uid,
           mailbox,
           date: message.internalDate ? message.internalDate.toISOString() : null,
-          subject: parsedEmail.subject || '(no subject)',
+          subject,
           from: parsedEmail.from ? parsedEmail.from.text : '(unknown sender)',
           to: parsedEmail.to ? parsedEmail.to.text : null,
           body,
-          messageType,
+          subjectMessageType: messageType,
         };
 
         await withDbClient(async (dbClient) => {
@@ -161,7 +166,7 @@ async function extractEmailsToDb() {
             mailbox,
             uid: message.uid,
             messageType,
-            subject: rawJson.subject,
+            subject,
             sender: rawJson.from,
             receivedAt: rawJson.date,
             body,
@@ -185,7 +190,7 @@ async function fetchEmailsToParse(dbClient, force) {
   if (force) {
     const result = await dbClient.query(
       `
-        SELECT id, mailbox, uid, message_type, body
+        SELECT id, mailbox, uid, message_type, subject, body
         FROM emails_raw
         ORDER BY uid DESC
         LIMIT $1
@@ -197,7 +202,7 @@ async function fetchEmailsToParse(dbClient, force) {
 
   const result = await dbClient.query(
     `
-      SELECT er.id, er.mailbox, er.uid, er.message_type, er.body
+      SELECT er.id, er.mailbox, er.uid, er.message_type, er.subject, er.body
       FROM emails_raw er
       LEFT JOIN LATERAL (
         SELECT mp.id
@@ -223,13 +228,13 @@ async function parseEmailsFromDb(force) {
     const rows = await fetchEmailsToParse(dbClient, force);
 
     for (const row of rows) {
-      const inferredType = row.message_type ? String(row.message_type).toLowerCase() : detectMessageFormat(row.body || '');
-      const dbMessageType = messageTypeToDbEnum(inferredType);
-      const localMessageType = inferredType;
+      const subjectMessageType = detectMessageTypeFromSubject(row.subject || '');
+      const dbMessageType = messageTypeToDbEnum(subjectMessageType);
+      const localMessageType = subjectMessageType;
 
       if (!dbMessageType || !localMessageType || !isSupportedMessageType(localMessageType)) {
         errorCount += 1;
-        log('warn', `[parse] skipped unsupported email_id=${row.id} uid=${row.uid} message_type=${row.message_type || 'NULL'}`);
+        log('warn', `[parse] skipped unsupported email_id=${row.id} uid=${row.uid} subject=${row.subject || '(no subject)'}`);
         continue;
       }
       const parserBinary = localMessageType && PARSER_BINARIES[localMessageType] ? PARSER_BINARIES[localMessageType] : null;
@@ -251,14 +256,23 @@ async function parseEmailsFromDb(force) {
           stderr: `Parser binary missing for type ${localMessageType}`,
         };
       } else {
-        const parsed = runParser(parserBinary, row.body || '');
-        parserResult = {
-          ...baseResult,
-          status: parsed.status,
-          stderr: parsed.stderr || null,
-          stdout: parsed.stdout || null,
-          fields: parsed.status === 'ok' ? parsed.fields : null,
-        };
+        const bodyMessageType = detectMessageTypeFromBody(row.body || '');
+        if (bodyMessageType && bodyMessageType !== localMessageType) {
+          parserResult = {
+            ...baseResult,
+            status: 'error',
+            stderr: `Subject/body mismatch: subject expects ${localMessageType.toUpperCase()} but body header looks like ${bodyMessageType.toUpperCase()}`,
+          };
+        } else {
+          const parsed = runParser(parserBinary, row.body || '');
+          parserResult = {
+            ...baseResult,
+            status: parsed.status,
+            stderr: parsed.stderr || null,
+            stdout: parsed.stdout || null,
+            fields: parsed.status === 'ok' ? parsed.fields : null,
+          };
+        }
       }
 
       await dbClient.query('BEGIN');
@@ -280,6 +294,7 @@ async function parseEmailsFromDb(force) {
           parsedCount += 1;
         } else {
           errorCount += 1;
+          log('error', `[parse] email_id=${row.id} uid=${row.uid} subject=${row.subject || '(no subject)'}: ${parserResult.stderr || 'unknown parse failure'}`);
         }
 
         await dbClient.query('COMMIT');
