@@ -24,12 +24,13 @@ function detectMessageTypeFromSubject(subject) {
 
 function detectNotificationSubject(subject) {
   const header = firstLine(subject);
+  const mawbPattern = '([0-9]{3}-[0-9]{8})';
   const patterns = [
-    { eventType: 'rcf', regex: /^RCF[_\s-]+(.+)$/ },
-    { eventType: 'delivery_complete', regex: /^DELIVERY\s+COMPLETE[_\s-]+(.+)$/ },
-    { eventType: 'ready_for_pick_up', regex: /^READY\s+FOR\s+PICK\s+UP[_\s-]+(.+)$/ },
-    { eventType: 'dlv', regex: /^DLV[_\s-]+(.+)$/ },
-    { eventType: 'nfd', regex: /^NFD[_\s-]+(.+)$/ },
+    { eventType: 'rcf', regex: new RegExp(`^RCF[_\\s-]+${mawbPattern}$`) },
+    { eventType: 'delivery_complete', regex: new RegExp(`^DELIVERY\\s+COMPLETE[_\\s-]+${mawbPattern}$`) },
+    { eventType: 'ready_for_pick_up', regex: new RegExp(`^READY\\s+FOR\\s+PICK\\s+UP[_\\s-]+${mawbPattern}$`) },
+    { eventType: 'dlv', regex: new RegExp(`^DLV[_\\s-]+${mawbPattern}$`) },
+    { eventType: 'nfd', regex: new RegExp(`^NFD[_\\s-]+${mawbPattern}$`) },
   ];
 
   for (const pattern of patterns) {

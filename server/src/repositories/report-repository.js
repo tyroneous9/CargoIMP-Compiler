@@ -82,21 +82,28 @@ async function listUldTableRows(limit, offset) {
 async function listMawbTableRows(limit, offset) {
   const result = await pool.query(
     `
-      SELECT DISTINCT ON (mawb_number)
-        fwb_master_id,
-        mawb_number,
-        origin_airport_code,
-        destination_airport_code,
-        scheduled_arrival_date,
-        scheduled_arrival_time,
-        piece_count,
-        weight_kg,
-        nature_of_goods,
-        processing_status
-      FROM report_mawb
-      WHERE mawb_number IS NOT NULL
-        AND mawb_number <> ''
-      ORDER BY mawb_number ASC
+      SELECT DISTINCT ON (rm.mawb_number)
+        rm.fwb_master_id,
+        rm.mawb_number,
+        rm.origin_airport_code,
+        rm.destination_airport_code,
+        rm.scheduled_arrival_date,
+        rm.scheduled_arrival_time,
+        rm.piece_count,
+        rm.weight_kg,
+        rm.nature_of_goods,
+        rm.processing_status,
+        COALESCE(ns.has_rcf, FALSE) AS has_rcf,
+        COALESCE(ns.has_delivery_complete, FALSE) AS has_delivery_complete,
+        COALESCE(ns.has_ready_for_pick_up, FALSE) AS has_ready_for_pick_up,
+        COALESCE(ns.has_dlv, FALSE) AS has_dlv,
+        COALESCE(ns.has_nfd, FALSE) AS has_nfd
+      FROM report_mawb rm
+      LEFT JOIN mawb_notification_status ns
+        ON ns.mawb_number = rm.mawb_number
+      WHERE rm.mawb_number IS NOT NULL
+        AND rm.mawb_number <> ''
+      ORDER BY rm.mawb_number ASC
       LIMIT $1 OFFSET $2
     `,
     [limit, offset]

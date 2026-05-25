@@ -10,6 +10,13 @@ import {
 
 const PROCESSING_STATUS_OPTIONS = ['new', 'complete'];
 const REQUIRED_MAWB_COLUMNS = ['scheduled_arrival_date'];
+const MAWB_NOTIFICATION_COLUMNS = new Set([
+  'has_rcf',
+  'has_delivery_complete',
+  'has_ready_for_pick_up',
+  'has_dlv',
+  'has_nfd',
+]);
 
 function withRequiredColumns(columns) {
   const set = new Set(columns);
@@ -428,6 +435,8 @@ function MawbTablePage() {
                               <option key={statusOption} value={statusOption}>{statusOption}</option>
                             ))}
                           </select>
+                        ) : MAWB_NOTIFICATION_COLUMNS.has(column) ? (
+                          row[column] ? 'YES' : 'NO'
                         ) : (
                           row[column] ?? ''
                         )}

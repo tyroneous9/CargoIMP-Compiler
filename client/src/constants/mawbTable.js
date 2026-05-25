@@ -1,5 +1,10 @@
 export const MAWB_TABLE_COLUMNS = [
   'mawb_number',
+  'has_rcf',
+  'has_delivery_complete',
+  'has_ready_for_pick_up',
+  'has_dlv',
+  'has_nfd',
   'processing_status',
   'origin_airport_code',
   'destination_airport_code',
