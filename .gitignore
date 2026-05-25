@@ -20,8 +20,11 @@ server/data/logs/
 
 # C++ build artifacts
 cpp/build/
-cpp/output/
-cpp/data/
+cpp/CMakeFiles/
+cpp/CMakeCache.txt
+cpp/cmake_install.cmake
+cpp/Makefile
+cpp/data/generated_parsers/
 
 # OS/editor
 .DS_Store

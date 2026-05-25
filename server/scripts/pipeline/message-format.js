@@ -6,19 +6,44 @@ function firstLine(text) {
   return String(text || '').replace(/\r\n/g, '\n').split('\n')[0].trim().toUpperCase();
 }
 
-function detectMessageTypeFromText(text) {
-  const header = firstLine(text);
+function detectMessageTypeFromSubject(subject) {
+  const header = firstLine(subject);
   const cimpMatch = header.match(/^(FFM|FWB|FHL)\/\d+/);
   if (cimpMatch) {
     const format = cimpMatch[1].toLowerCase();
     if (SUPPORTED_CIMP_MESSAGE_TYPES.includes(format)) return format;
   }
+
+  if (/^SENT-FROM-MOVEMENTMANAGER:?/.test(header)) {
+    return SUPPORTED_MESSAGE_TYPES.MVT;
+  }
+
   if (header === 'MVT' || header.startsWith('MVT ')) return SUPPORTED_MESSAGE_TYPES.MVT;
   return null;
 }
 
-function detectMessageTypeFromSubject(subject) {
-  return detectMessageTypeFromText(subject);
+function detectNotificationSubject(subject) {
+  const header = firstLine(subject);
+  const patterns = [
+    { eventType: 'rcf', regex: /^RCF[_\s-]+(.+)$/ },
+    { eventType: 'delivery_complete', regex: /^DELIVERY\s+COMPLETE[_\s-]+(.+)$/ },
+    { eventType: 'ready_for_pick_up', regex: /^READY\s+FOR\s+PICK\s+UP[_\s-]+(.+)$/ },
+    { eventType: 'dlv', regex: /^DLV[_\s-]+(.+)$/ },
+    { eventType: 'nfd', regex: /^NFD[_\s-]+(.+)$/ },
+  ];
+
+  for (const pattern of patterns) {
+    const match = header.match(pattern.regex);
+    if (!match) continue;
+
+    const mawb = String(match[1] || '').trim();
+    return {
+      eventType: pattern.eventType,
+      mawb: mawb || null,
+    };
+  }
+
+  return null;
 }
 
 function messageTypeToDbEnum(messageType) {
@@ -30,6 +55,7 @@ function messageTypeToDbEnum(messageType) {
 }
 
 module.exports = {
+  detectNotificationSubject,
   detectMessageTypeFromSubject,
   firstLine,
   messageTypeToDbEnum,

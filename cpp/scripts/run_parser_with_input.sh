@@ -9,10 +9,10 @@ set -euo pipefail
 #   3) The script streams parser JSON to stdout and also mirrors output to stderr
 #
 # Quick examples:
-#   cpp/scripts/run_parser_with_input.sh ffm cpp/data/input_tests/ffm_test.txt
-#   cpp/scripts/run_parser_with_input.sh fwb cpp/data/input_tests/fwb_test.txt
-#   cpp/scripts/run_parser_with_input.sh fhl cpp/data/input_tests/fhl_test.txt
-#   cpp/scripts/run_parser_with_input.sh cpp/build/parser_fwb_json cpp/data/input_tests/fwb_test.txt
+#   cpp/scripts/run_parser_with_input.sh ffm ./ffm_test.txt
+#   cpp/scripts/run_parser_with_input.sh fwb ./fwb_test.txt
+#   cpp/scripts/run_parser_with_input.sh fhl ./fhl_test.txt
+#   cpp/scripts/run_parser_with_input.sh cpp/build/parser_fwb_json ./fwb_test.txt
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CPP_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
@@ -28,10 +28,10 @@ Arguments:
   <input_file>  Path to input file (relative paths resolve from current directory)
 
 Examples:
-  cpp/scripts/run_parser_with_input.sh ffm cpp/data/input_tests/ffm_test.txt
-  cpp/scripts/run_parser_with_input.sh fwb cpp/data/input_tests/fwb_test.txt
-  cpp/scripts/run_parser_with_input.sh fhl cpp/data/input_tests/fhl_test.txt
-  cpp/scripts/run_parser_with_input.sh cpp/build/parser_fwb_json cpp/data/input_tests/fwb_test.txt
+  cpp/scripts/run_parser_with_input.sh ffm ./ffm_test.txt
+  cpp/scripts/run_parser_with_input.sh fwb ./fwb_test.txt
+  cpp/scripts/run_parser_with_input.sh fhl ./fhl_test.txt
+  cpp/scripts/run_parser_with_input.sh cpp/build/parser_fwb_json ./fwb_test.txt
 EOF
 }
 

@@ -17,8 +17,11 @@
 
 MVTMessage =
     MessageHeader EOL
-    FlightIdentificationLine EOL
+    FlightIdentificationLine
+    (EOL / SP)
+    [EventStatusQualifier SP]
     EventLine
+    *(SP SupplementLine)
     *(EOL SupplementLine)
     [EOL];
 
@@ -95,6 +98,7 @@ ActualDepartureEstimatedArrivalLine =
 
 EstimatedArrivalOnlyLine = "EA" Time4;  # Estimated arrival time only
 EventDepartureLine = "ED" DateTime6;  # Event departure (semantics less clear)
+EventStatusQualifier = 2Upper;
 
 # ==================== SUPPLEMENTAL OPERATIONAL LINES ====================
 # Optional operational/administrative updates that may follow the EventLine.
@@ -114,9 +118,13 @@ SupplementLine =
     / EdlatLine
     / SiLine;
 
-# DL = Delay family (DLRA/DLWT/DLFS): delay code, reason, and optional time fields
-DelayLine = DelayCode [Slant DelayReason] [Slant Time4] [Slant Time4];
-DelayCode = "DLRA" / "DLWT" / "DLFS";  # Delay Reason/Weight/Fuel
+# DL = Delay family (DLxx...): delay code with optional reason/time tokens.
+# Supports both legacy forms (DLRA/TD/2255/0200) and MovementManager forms
+# seen in one-line updates (e.g., DLAT/0013, DLTD/0040).
+DelayLine =
+    DelayCode [Slant DelayReason] [Slant Time4] [Slant Time4]
+    / DelayCode [Slant Time4] [Slant Time4] [Slant Time4];
+DelayCode = "DL" 2*4Upper;
 DelayReason = 1*4Upper;  # Reason code
 
 # PX = Passenger/Payload count

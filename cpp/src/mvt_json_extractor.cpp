@@ -24,6 +24,7 @@ using std::vector;
 #include "Rule_ActualDepartureEstimatedArrivalLine.hpp"
 #include "Rule_EstimatedArrivalOnlyLine.hpp"
 #include "Rule_EventDepartureLine.hpp"
+#include "Rule_EventStatusQualifier.hpp"
 #include "Rule_SupplementLine.hpp"
 #include "Rule_DelayLine.hpp"
 #include "Rule_DelayCode.hpp"
@@ -96,6 +97,12 @@ void* MvtJsonExtractor::visit(const Rule_EstimatedArrivalOnlyLine* rule)
 void* MvtJsonExtractor::visit(const Rule_EventDepartureLine* rule)
 {
   event = parseEventDepartureLine(rule->spelling);
+  return NULL;
+}
+
+void* MvtJsonExtractor::visit(const Rule_EventStatusQualifier* rule)
+{
+  (void)rule;
   return NULL;
 }
 

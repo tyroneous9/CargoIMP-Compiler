@@ -17,6 +17,7 @@ const {
   normalizeBody,
 } = require('./normalizers');
 const {
+  detectNotificationSubject,
   detectMessageTypeFromSubject,
   messageTypeToDbEnum,
 } = require('./message-format');
@@ -143,8 +144,9 @@ async function extractEmailsToDb() {
         const body = normalizeBody(parsedEmail);
         const subject = parsedEmail.subject || '(no subject)';
         const messageType = detectMessageTypeFromSubject(subject);
+        const notificationSubject = detectNotificationSubject(subject);
 
-        if (!messageType || !isSupportedMessageType(messageType)) {
+        if ((!messageType || !isSupportedMessageType(messageType)) && !notificationSubject) {
           skippedUnrecognizedCount += 1;
           continue;
         }
@@ -158,6 +160,7 @@ async function extractEmailsToDb() {
           to: parsedEmail.to ? parsedEmail.to.text : null,
           body,
           subjectMessageType: messageType,
+          recognizedNotification: notificationSubject,
         };
 
         await withDbClient(async (dbClient) => {
@@ -191,6 +194,7 @@ async function fetchEmailsToParse(dbClient, force) {
       `
         SELECT id, mailbox, uid, message_type, subject, body
         FROM emails_raw
+        WHERE message_type IS NOT NULL
         ORDER BY uid DESC
         LIMIT $1
       `,
@@ -211,6 +215,7 @@ async function fetchEmailsToParse(dbClient, force) {
         LIMIT 1
       ) latest ON TRUE
       WHERE latest.id IS NULL
+        AND er.message_type IS NOT NULL
       ORDER BY er.uid DESC
       LIMIT $1
     `,
@@ -227,9 +232,8 @@ async function parseEmailsFromDb(force) {
     const rows = await fetchEmailsToParse(dbClient, force);
 
     for (const row of rows) {
-      const subjectMessageType = detectMessageTypeFromSubject(row.subject || '');
-      const dbMessageType = messageTypeToDbEnum(subjectMessageType);
-      const localMessageType = subjectMessageType;
+      const dbMessageType = row.message_type ? String(row.message_type).toUpperCase() : null;
+      const localMessageType = dbMessageType ? dbMessageType.toLowerCase() : null;
 
       if (!dbMessageType || !localMessageType || !isSupportedMessageType(localMessageType)) {
         errorCount += 1;

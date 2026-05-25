@@ -19,6 +19,7 @@ class Rule_ActualMovementLine;
 class Rule_ActualDepartureEstimatedArrivalLine;
 class Rule_EstimatedArrivalOnlyLine;
 class Rule_EventDepartureLine;
+class Rule_EventStatusQualifier;
 class Rule_SupplementLine;
 class Rule_DelayLine;
 class Rule_DelayCode;
@@ -115,6 +116,7 @@ public:
   void* visit(const Rule_ActualDepartureEstimatedArrivalLine* rule);
   void* visit(const Rule_EstimatedArrivalOnlyLine* rule);
   void* visit(const Rule_EventDepartureLine* rule);
+  void* visit(const Rule_EventStatusQualifier* rule);
   void* visit(const Rule_SupplementLine* rule);
   void* visit(const Rule_DelayLine* rule);
   void* visit(const Rule_DelayCode* rule);
