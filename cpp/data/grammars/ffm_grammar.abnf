@@ -167,7 +167,13 @@ OriginAndDestination = AirportCode AirportCode;
 # ==================== ELEMENTS: ULD & SHIPMENT ====================
 
 ULDIdentifier = 5*20ULDChar;  # Containerized unit ID (e.g., 'AKE12345KJ')
-ULDDetailText = 1*LineChar;  # Optional detail or position info
+# Optional ULD detail payload.
+# Observed operational format includes ULD-level weight and contour/class token, e.g.:
+#   W-3014.0 C-N
+# Keep a permissive fallback to preserve compatibility with other airline variants.
+ULDDetailText =
+    ("W-" 1*7Digit [Dot 1*3Digit] [1*%x20 "C-" 1*4(Upper / Digit / Hyphen)] [1*%x20])
+    / 1*LineChar;
 
 # Shipment Summary: piece count, weight, volume, and total manifest pieces.
 # Formats handled:

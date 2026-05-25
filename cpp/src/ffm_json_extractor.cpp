@@ -9,6 +9,7 @@ using std::string;
 using std::vector;
 
 #include <cstddef>
+#include <cctype>
 
 #include "ffm_json_extractor.hpp"
 
@@ -137,7 +138,12 @@ void* FfmJsonExtractor::visit(const Rule_SlashQualifierLine* rule) { ulds.back()
 void* FfmJsonExtractor::visit(const Rule_CorLine* rule) { (void)rule; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_ContinuationLine* rule) { ulds.back().awbs.back().continuations.push_back(rule->spelling); return NULL; }
 void* FfmJsonExtractor::visit(const Rule_ULDIdentifier* rule) { ulds.back().uldIdentifier = rule->spelling; return NULL; }
-void* FfmJsonExtractor::visit(const Rule_ULDDetailText* rule) { ulds.back().uldDetailText = rule->spelling; return NULL; }
+void* FfmJsonExtractor::visit(const Rule_ULDDetailText* rule)
+{
+  ulds.back().uldDetailText = rule->spelling;
+  parseUldDetailText(rule->spelling, ulds.back().uldWeight, ulds.back().uldDetailCode);
+  return NULL;
+}
 void* FfmJsonExtractor::visit(const Rule_MasterAirwayBillNumber* rule) { ulds.back().awbs.back().masterAWBNumber = rule->spelling; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_OriginAndDestination* rule) { ulds.back().awbs.back().originAndDest = rule->spelling; return NULL; }
 void* FfmJsonExtractor::visit(const Rule_ShipmentSummary* rule) { ulds.back().awbs.back().shipmentSummary = rule->spelling; return NULL; }
@@ -271,6 +277,73 @@ void FfmJsonExtractor::splitDateTime(const string& dateTime, string& datePart, s
   if (dateTime.size() > 5) timePart = dateTime.substr(5);
 }
 
+void FfmJsonExtractor::parseUldDetailText(const string& detailText, string& weight, string& detailCode) const
+{
+  weight.clear();
+  detailCode.clear();
+
+  if (detailText.empty()) return;
+
+  size_t start = 0;
+  size_t end = detailText.size();
+  while (start < end && std::isspace(static_cast<unsigned char>(detailText[start]))) ++start;
+  while (end > start && std::isspace(static_cast<unsigned char>(detailText[end - 1]))) --end;
+  if (start >= end) return;
+
+  const string trimmed = detailText.substr(start, end - start);
+  if (trimmed.size() < 3 || trimmed.compare(0, 2, "W-") != 0) return;
+
+  size_t pos = 2;
+  size_t weightStart = pos;
+  bool dotSeen = false;
+  while (pos < trimmed.size())
+  {
+    const char c = trimmed[pos];
+    if (std::isdigit(static_cast<unsigned char>(c)))
+    {
+      ++pos;
+      continue;
+    }
+    if (c == '.' && !dotSeen)
+    {
+      dotSeen = true;
+      ++pos;
+      continue;
+    }
+    break;
+  }
+
+  if (pos > weightStart)
+  {
+    weight = trimmed.substr(weightStart, pos - weightStart);
+  }
+  else
+  {
+    return;
+  }
+
+  while (pos < trimmed.size() && std::isspace(static_cast<unsigned char>(trimmed[pos]))) ++pos;
+  if (pos + 2 > trimmed.size() || trimmed.compare(pos, 2, "C-") != 0) return;
+  pos += 2;
+
+  const size_t codeStart = pos;
+  while (pos < trimmed.size())
+  {
+    const char c = trimmed[pos];
+    if (std::isalnum(static_cast<unsigned char>(c)) || c == '-')
+    {
+      ++pos;
+      continue;
+    }
+    break;
+  }
+
+  if (pos > codeStart)
+  {
+    detailCode = trimmed.substr(codeStart, pos - codeStart);
+  }
+}
+
 FfmRouteData FfmJsonExtractor::parseArrivalInformationLine(const string& line) const
 {
   FfmRouteData route;
@@ -381,6 +454,10 @@ void FfmJsonExtractor::printJson() const
   {
     const FfmUldData& uld = ulds[i];
     cout << "    \"" << escapeJson(uld.uldIdentifier) << "\": {" << endl;
+    if (!uld.uldWeight.empty())
+      cout << "      \"ULDWeight\": \"" << escapeJson(uld.uldWeight) << "\"," << endl;
+    if (!uld.uldDetailCode.empty())
+      cout << "      \"ULDDetailCode\": \"" << escapeJson(uld.uldDetailCode) << "\"," << endl;
     if (!uld.uldDetailText.empty())
       cout << "      \"ULDDetailText\": \"" << escapeJson(uld.uldDetailText) << "\"," << endl;
     cout << "      \"AWBs\": [" << endl;

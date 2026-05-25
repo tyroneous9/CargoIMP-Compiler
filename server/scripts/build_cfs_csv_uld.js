@@ -29,7 +29,7 @@ const OUTPUT_CSV = path.join(PARSED_TABLES_DIR, TABLE_FILES.uld);
 // ── CSV header ────────────────────────────────────────────────────────────────
 
 const HEADERS = [
-  'email_rcvd', 'flight', 'std', 'sta', 'ata', 'lfd', 'uld', 'mawb', 'weight', 'MAWB_ttl_pcs', 'ULD_ttl_pcs', 'pob',
+  'email_rcvd', 'flight', 'std', 'sta', 'ata', 'lfd', 'uld', 'uld_weight', 'mawb', 'weight', 'MAWB_ttl_pcs', 'ULD_ttl_pcs', 'pob',
   'PCS RCVD', 'load_type', 'PMC\nLOCATION', 'Consignee', 'AMS\nSTATUS',
   'P3', 'Trucking/Skid $', 'Storage', 'ISC',
   'Tolead→NCA\nRCF MESSAGE', 'Tolead→NCA\nNFD MESSAGE', 'Tolead→NCA\nDLV MESSAGE',
@@ -330,7 +330,11 @@ for (const filename of filenames) {
         // Keep highest-UID record per ULD (handles FFM revision emails)
         const existing = entry.ulds.get(uldKey);
         if (!existing || uid > existing.uid) {
-          entry.ulds.set(uldKey, { uid, ...summary });
+          entry.ulds.set(uldKey, {
+            uid,
+            ...summary,
+            uldTotalWeight: parseNumeric(uld.ULDWeight),
+          });
         }
 
         if (uldKey === '') {
@@ -477,6 +481,7 @@ for (const [key, mawbSet] of uldMawbs) {
 // Sum displayed MAWB TTL PCS by ULD occurrence (flightKey + ULD).
 // Bare ULD IDs can be reused across flights/dates, so totals must be scoped.
 const uldTotalPcsByKey = new Map();
+const uldTotalWeightByKey = new Map();
 
 for (const mawb of [...displayMawbs].sort()) {
   const ffm = resolveFfm(mawb);
@@ -493,6 +498,14 @@ for (const mawb of [...displayMawbs].sort()) {
     .sort(([left], [right]) => left.localeCompare(right));
 
   for (const [uldKey, uldInfo] of sortedUlds) {
+    if (uldInfo.uldTotalWeight != null) {
+      const key = `${flightKey}|${uldKey}`;
+      const existingWeight = uldTotalWeightByKey.get(key);
+      if (!existingWeight || uldInfo.uid > existingWeight.uid) {
+        uldTotalWeightByKey.set(key, { uid: uldInfo.uid, weight: uldInfo.uldTotalWeight });
+      }
+    }
+
     const mawbTtlPcs = uldInfo.uldPcs != null
       ? String(uldInfo.uldPcs)
       : fallbackPieces;
@@ -538,6 +551,8 @@ for (const mawb of [...displayMawbs].sort()) {
     const pob         = pobEntry ? String(pobEntry.totalPcs) : '';
 
     for (const [uldKey, uldInfo] of sortedUlds) {
+      const uldWeightMeta = uldTotalWeightByKey.get(`${flightKey}|${uldKey}`);
+      const uldTotalWeight = uldWeightMeta ? String(uldWeightMeta.weight) : '';
       const uldWeight = uldInfo.uldWt != null
         ? `${uldInfo.uldWt}${uldInfo.wtUnit}`
         : fallbackWeight;
@@ -548,7 +563,7 @@ for (const mawb of [...displayMawbs].sort()) {
       const uldTtlPcs = uldTotalPcsByKey.get(`${flightKey}|${uldKey}`);
 
       rows.push([
-        emailRcvd, flight, std, sta, ata, lfd, uldKey, mawb,
+        emailRcvd, flight, std, sta, ata, lfd, uldKey, uldTotalWeight, mawb,
         uldWeight, mawbTtlPcs, uldTtlPcs != null ? String(uldTtlPcs) : '', pob,
         '',         // PCS RCVD — human input
         loadType, '', // load_type, PMC LOCATION
@@ -571,7 +586,7 @@ for (const mawb of [...displayMawbs].sort()) {
       ) ? 'loose' : '';
 
       rows.push([
-        emailRcvd, flight, std, sta, ata, lfd, '', mawb,
+        emailRcvd, flight, std, sta, ata, lfd, '', '', mawb,
         noUldWeight, noUldMawbTtlPcs, '', pob,
         '',             // PCS RCVD — human input
         noUldLoadType, '', // load_type, PMC LOCATION
@@ -600,6 +615,7 @@ for (const mawb of [...displayMawbs].sort()) {
         noUldAta,
         noUldMeta.lfd || lfd,
         '',
+        '',
         mawb,
         noUldWeight,
         noUldMawbTtlPcs,
@@ -616,7 +632,7 @@ for (const mawb of [...displayMawbs].sort()) {
   } else {
     // No FFM or no ULD info: single fallback row with blank PMC#
     rows.push([
-      emailRcvd, flight, std, sta, ata, lfd, '', mawb,
+      emailRcvd, flight, std, sta, ata, lfd, '', '', mawb,
       fallbackWeight, fallbackPieces, '', '',
       '',    // PCS RCVD
       '', '', consignee, '',

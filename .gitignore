@@ -1,0 +1,7 @@
+node_modules/
+server/.env
+server/data/
+client/.env
+client/node_modules/
+cpp/data/
+cpp/build/

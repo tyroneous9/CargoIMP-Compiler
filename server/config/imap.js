@@ -13,5 +13,5 @@ module.exports = {
 
   // ── Extraction settings ───────────────────────────────────────────────────
   // Maximum emails to extract per pipeline run; -1 = unlimited.
-  extractLimit: 500,
+  extractLimit: 200,
 };
