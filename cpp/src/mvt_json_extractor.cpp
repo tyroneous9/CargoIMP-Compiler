@@ -1,4 +1,5 @@
 #include <cstddef>
+#include <cctype>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -222,6 +223,43 @@ vector<string> MvtJsonExtractor::split(const string& input, char delimiter) cons
   return parts;
 }
 
+std::string MvtJsonExtractor::movementTypeForEventKind(const std::string& kind) const
+{
+  if (kind == "ActualMovement") return "AA";
+  if (kind == "ActualDepartureEstimatedArrival") return "AD";
+  if (kind == "EstimatedArrivalOnly") return "EA";
+  if (kind == "EventDeparture") return "ED";
+  return "";
+}
+
+std::string MvtJsonExtractor::chooseEventDateTime() const
+{
+  if (event.kind == "ActualMovement")
+    return !event.actualArrivalDateTime.empty() ? event.actualArrivalDateTime : event.actualDepartureDateTime;
+  if (event.kind == "ActualDepartureEstimatedArrival")
+    return !event.additionalActualDateTime.empty() ? event.additionalActualDateTime : event.actualDepartureDateTime;
+  if (event.kind == "EventDeparture")
+    return event.eventDepartureDateTime;
+  if (event.kind == "EstimatedArrivalOnly")
+    return event.actualArrivalDateTime;
+  return string();
+}
+
+void MvtJsonExtractor::splitDateTime6(const string& dateTime, string& datePart, string& timePart) const
+{
+  datePart.clear();
+  timePart.clear();
+
+  if (dateTime.size() != 6) return;
+  for (size_t i = 0; i < dateTime.size(); ++i)
+  {
+    if (!std::isdigit(static_cast<unsigned char>(dateTime[i]))) return;
+  }
+
+  datePart = dateTime.substr(0, 2);
+  timePart = dateTime.substr(2);
+}
+
 MvtFlightIdentificationData MvtJsonExtractor::parseFlightIdentificationLine(const string& line) const
 {
   MvtFlightIdentificationData data;
@@ -350,6 +388,14 @@ MvtEdlatData MvtJsonExtractor::parseEdlatLine(const string& line) const
 
 void MvtJsonExtractor::printJson() const
 {
+  const string movementType = movementTypeForEventKind(event.kind);
+  const string eventDateTime = chooseEventDateTime();
+  string eventDate;
+  string eventTime;
+  splitDateTime6(eventDateTime, eventDate, eventTime);
+  if (eventTime.empty() && !event.estimatedArrivalTime.empty())
+    eventTime = event.estimatedArrivalTime;
+
   cout << "{" << endl;
   cout << "  \"MessageHeader\": \"" << escapeJson(messageHeader) << "\"," << endl;
   cout << "  \"FlightIdentification\": {" << endl;
@@ -359,6 +405,14 @@ void MvtJsonExtractor::printJson() const
   cout << "    \"AircraftRegistration\": \"" << escapeJson(flightIdentification.aircraftRegistration) << "\"," << endl;
   cout << "    \"AirportCode\": \"" << escapeJson(flightIdentification.airportCode) << "\"" << endl;
   cout << "  }," << endl;
+  cout << "  \"MovementType\": \"" << escapeJson(movementType) << "\"," << endl;
+  cout << "  \"EventType\": \"" << escapeJson(movementType) << "\"," << endl;
+  cout << "  \"CarrierFlightNumber\": \"" << escapeJson(flightIdentification.carrierFlightNumber) << "\"," << endl;
+  cout << "  \"BoardPoint\": \"" << escapeJson(flightIdentification.airportCode) << "\"," << endl;
+  cout << "  \"Registration\": \"" << escapeJson(flightIdentification.aircraftRegistration) << "\"," << endl;
+  cout << "  \"EventDateTime\": \"" << escapeJson(eventDateTime) << "\"," << endl;
+  cout << "  \"EventDate\": \"" << escapeJson(eventDate) << "\"," << endl;
+  cout << "  \"EventTime\": \"" << escapeJson(eventTime) << "\"," << endl;
   cout << "  \"Event\": {" << endl;
   cout << "    \"Kind\": \"" << escapeJson(event.kind) << "\"," << endl;
   cout << "    \"RawLine\": \"" << escapeJson(event.rawLine) << "\"," << endl;

@@ -156,6 +156,9 @@ private:
   void* visitRules(const std::vector<const Rule*>& rules);
   std::string escapeJson(const std::string& input) const;
   std::vector<std::string> split(const std::string& input, char delimiter) const;
+  std::string movementTypeForEventKind(const std::string& kind) const;
+  std::string chooseEventDateTime() const;
+  void splitDateTime6(const std::string& dateTime, std::string& datePart, std::string& timePart) const;
   MvtFlightIdentificationData parseFlightIdentificationLine(const std::string& line) const;
   MvtEventData parseActualMovementLine(const std::string& line) const;
   MvtEventData parseActualDepartureEstimatedArrivalLine(const std::string& line) const;
