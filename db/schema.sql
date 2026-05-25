@@ -4,7 +4,7 @@ BEGIN
 	IF current_database() <> 'nca_cargo' THEN
 		RAISE EXCEPTION 'This script must run on nca_cargo, current db is %', current_database();
 	END IF;
-END $$;
+END $$;remove all routing from the index page. instead, each page button 
 
 DO $$
 BEGIN
@@ -132,6 +132,8 @@ CREATE TABLE IF NOT EXISTS ffm_uld (
 	uld_seq INTEGER NOT NULL,
 	uld_code TEXT,
 	uld_detail_text TEXT,
+	uld_weight NUMERIC(14, 3),
+	uld_detail_code TEXT,
 	processing_status processing_status_enum NOT NULL DEFAULT 'new',
 	raw_fields JSONB,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -352,7 +354,8 @@ CREATE OR REPLACE VIEW report_uld AS
 SELECT
 	u.id AS ffm_uld_id,
 	u.uld_code,
-	u.uld_detail_text,
+	u.uld_weight,
+	u.uld_detail_code,
 	u.processing_status,
 	COALESCE(mawb_piece_totals.total_piece_count, 0) AS mawb_piece_count,
 	CASE
@@ -412,7 +415,8 @@ WHERE mp.status = 'ok'
 GROUP BY
 	u.id,
 	u.uld_code,
-	u.uld_detail_text,
+	u.uld_weight,
+	u.uld_detail_code,
 	u.processing_status,
 	mawb_piece_totals.total_piece_count,
 	ff.carrier_flight_number,

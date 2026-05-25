@@ -129,6 +129,19 @@ function splitBySlash(line) {
   return line.split('/');
 }
 
+function parseFfmUldDetailText(detailText) {
+  const text = String(detailText || '').trim();
+  if (!text) return { uldWeight: null, uldDetailCode: null };
+
+  const match = text.match(/^W-([0-9]+(?:\.[0-9]+)?)(?:\s+C-([A-Za-z0-9-]+))?$/);
+  if (!match) return { uldWeight: null, uldDetailCode: null };
+
+  return {
+    uldWeight: match[1] || null,
+    uldDetailCode: match[2] || null,
+  };
+}
+
 function normalizeFfmFields(fields) {
   if (!fields || typeof fields !== 'object') return {};
 
@@ -179,6 +192,21 @@ function normalizeFfmFields(fields) {
         ScheduledOnwardDepartureDateTime: '',
       };
     });
+  }
+
+  if (fields.ULDs && typeof fields.ULDs === 'object') {
+    for (const uldValue of Object.values(fields.ULDs)) {
+      if (!uldValue || typeof uldValue !== 'object') continue;
+      if (!uldValue.ULDDetailText) continue;
+
+      const { uldWeight, uldDetailCode } = parseFfmUldDetailText(uldValue.ULDDetailText);
+      if (!uldValue.ULDWeight && uldWeight) {
+        uldValue.ULDWeight = uldWeight;
+      }
+      if (!uldValue.ULDDetailCode && uldDetailCode) {
+        uldValue.ULDDetailCode = uldDetailCode;
+      }
+    }
   }
 
   return fields;
@@ -395,11 +423,19 @@ async function persistFfmNormalized(client, parsedMessageId, fields) {
     const uldInsert = await client.query(
       `
         INSERT INTO ffm_uld (
-          ffm_flight_id, uld_seq, uld_code, uld_detail_text, raw_fields
-        ) VALUES ($1,$2,$3,$4,$5)
+          ffm_flight_id, uld_seq, uld_code, uld_detail_text, uld_weight, uld_detail_code, raw_fields
+        ) VALUES ($1,$2,$3,$4,$5,$6,$7)
         RETURNING id
       `,
-      [ffmFlightId, uldSeq, uldCode || null, uld.ULDDetailText || null, uld]
+      [
+        ffmFlightId,
+        uldSeq,
+        uldCode || null,
+        uld.ULDDetailText || null,
+        Number.isFinite(Number(uld.ULDWeight)) ? Number(uld.ULDWeight) : null,
+        uld.ULDDetailCode || null,
+        uld,
+      ]
     );
 
     const ffmUldId = uldInsert.rows[0].id;

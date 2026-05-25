@@ -47,7 +47,8 @@ async function listUldTableRows(limit, offset) {
       SELECT DISTINCT ON (r.uld_code)
         r.ffm_uld_id,
         r.uld_code,
-        r.uld_detail_text,
+        r.uld_weight,
+        r.uld_detail_code,
         r.processing_status,
         r.mawb_piece_count,
         r.load_type,

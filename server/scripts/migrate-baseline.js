@@ -1,27 +1,18 @@
 'use strict';
 
 const { Client } = require('pg');
-const paths = require('../config/paths');
-
-require('dotenv').config({ path: paths.ENV_FILE });
+const { buildPoolConfig } = require('../config/db');
 
 const BASELINE_MIGRATION = '1714000000000_initial_schema';
 
-function requireEnv(name) {
-  const value = process.env[name];
-  if (!value) {
-    throw new Error(`Missing required environment variable: ${name}`);
-  }
-  return value;
-}
-
 function toClientConfig() {
+  const config = buildPoolConfig();
   return {
-    host: process.env.DB_HOST || '127.0.0.1',
-    port: Number(process.env.DB_PORT || '5432'),
-    user: requireEnv('DB_USER'),
-    password: requireEnv('DB_PASSWORD'),
-    database: process.env.DB_NAME || 'nca_cargo',
+    host: config.host,
+    port: config.port,
+    user: config.user,
+    password: config.password,
+    database: config.database,
   };
 }
 

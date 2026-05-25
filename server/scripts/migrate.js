@@ -2,9 +2,7 @@
 
 const path = require('path');
 const { runner } = require('node-pg-migrate');
-const paths = require('../config/paths');
-
-require('dotenv').config({ path: paths.ENV_FILE });
+const { buildPoolConfig } = require('../config/db');
 
 function requireEnv(name) {
   const value = process.env[name];
@@ -15,11 +13,12 @@ function requireEnv(name) {
 }
 
 function toDatabaseUrl() {
-  const user = encodeURIComponent(requireEnv('DB_USER'));
-  const password = encodeURIComponent(requireEnv('DB_PASSWORD'));
-  const host = process.env.DB_HOST || '127.0.0.1';
-  const port = process.env.DB_PORT || '5432';
-  const database = process.env.DB_NAME || 'nca_cargo';
+  const config = buildPoolConfig();
+  const user = encodeURIComponent(config.user || requireEnv('DB_USER'));
+  const password = encodeURIComponent(config.password || requireEnv('DB_PASSWORD'));
+  const host = config.host;
+  const port = String(config.port);
+  const database = config.database;
   return `postgres://${user}:${password}@${host}:${port}/${database}`;
 }
 

@@ -25,6 +25,8 @@ struct FfmUldData
 {
   std::string uldIdentifier;
   std::string uldDetailText;
+  std::string uldWeight;
+  std::string uldDetailCode;
   std::vector<FfmAwbData> awbs;
 };
 
@@ -135,6 +137,7 @@ private:
   FfmFlightIdentificationData parseFlightIdentificationLine(const std::string& line) const;
   FfmRouteData parseArrivalInformationLine(const std::string& line) const;
   void splitDateTime(const std::string& dateTime, std::string& datePart, std::string& timePart) const;
+  void parseUldDetailText(const std::string& detailText, std::string& weight, std::string& detailCode) const;
   void printJson() const;
 };
 

@@ -47,6 +47,13 @@ async function withDbClient(handler) {
 }
 
 module.exports = {
+  DB_HOST,
+  DB_PORT,
+  DB_NAME,
+  DB_POOL_MAX,
+  DB_IDLE_TIMEOUT_MS,
+  DB_SSL,
+  buildPoolConfig,
   pool,
   withDbClient,
 };

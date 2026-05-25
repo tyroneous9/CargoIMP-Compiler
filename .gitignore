@@ -21,6 +21,7 @@ server/data/logs/
 # C++ build artifacts
 cpp/build/
 cpp/output/
+cpp/data/
 
 # OS/editor
 .DS_Store
