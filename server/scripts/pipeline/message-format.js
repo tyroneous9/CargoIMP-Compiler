@@ -21,10 +21,6 @@ function detectMessageTypeFromSubject(subject) {
   return detectMessageTypeFromText(subject);
 }
 
-function detectMessageTypeFromBody(body) {
-  return detectMessageTypeFromText(body);
-}
-
 function messageTypeToDbEnum(messageType) {
   if (messageType === SUPPORTED_MESSAGE_TYPES.FFM) return 'FFM';
   if (messageType === SUPPORTED_MESSAGE_TYPES.FWB) return 'FWB';
@@ -34,7 +30,6 @@ function messageTypeToDbEnum(messageType) {
 }
 
 module.exports = {
-  detectMessageTypeFromBody,
   detectMessageTypeFromSubject,
   firstLine,
   messageTypeToDbEnum,

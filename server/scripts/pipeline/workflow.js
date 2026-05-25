@@ -17,7 +17,6 @@ const {
   normalizeBody,
 } = require('./normalizers');
 const {
-  detectMessageTypeFromBody,
   detectMessageTypeFromSubject,
   messageTypeToDbEnum,
 } = require('./message-format');
@@ -256,23 +255,14 @@ async function parseEmailsFromDb(force) {
           stderr: `Parser binary missing for type ${localMessageType}`,
         };
       } else {
-        const bodyMessageType = detectMessageTypeFromBody(row.body || '');
-        if (bodyMessageType && bodyMessageType !== localMessageType) {
-          parserResult = {
-            ...baseResult,
-            status: 'error',
-            stderr: `Subject/body mismatch: subject expects ${localMessageType.toUpperCase()} but body header looks like ${bodyMessageType.toUpperCase()}`,
-          };
-        } else {
-          const parsed = runParser(parserBinary, row.body || '');
-          parserResult = {
-            ...baseResult,
-            status: parsed.status,
-            stderr: parsed.stderr || null,
-            stdout: parsed.stdout || null,
-            fields: parsed.status === 'ok' ? parsed.fields : null,
-          };
-        }
+        const parsed = runParser(parserBinary, row.body || '');
+        parserResult = {
+          ...baseResult,
+          status: parsed.status,
+          stderr: parsed.stderr || null,
+          stdout: parsed.stdout || null,
+          fields: parsed.status === 'ok' ? parsed.fields : null,
+        };
       }
 
       await dbClient.query('BEGIN');
