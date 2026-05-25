@@ -8,7 +8,6 @@ const { spawnSync } = require('child_process');
 const { ImapFlow } = require('imapflow');
 const { simpleParser } = require('mailparser');
 const {
-  ENV_FILE,
   LOGS_DIR,
   PARSER_BINARIES,
 } = require('../config/paths');
@@ -16,13 +15,13 @@ const { SUPPORTED_MESSAGE_TYPES, SUPPORTED_CIMP_MESSAGE_TYPES, isSupportedMessag
 const { withDbClient, pool } = require('../config/db');
 const { getPipelineConfig, getExtractEmailLimit } = require('../config/pipeline');
 const { getImapConfig } = require('../config/imap');
-
-require('dotenv').config({ path: ENV_FILE });
+const { getParserConfig } = require('../config/parser');
 
 const PIPELINE_RUNS_DIR = path.join(LOGS_DIR, 'pipeline-runs');
 const PIPELINE_LOCK_FILE = path.join(LOGS_DIR, 'pipeline.lock.json');
 
 const pipelineConfig = getPipelineConfig();
+const parserConfig = getParserConfig();
 
 const POLL_INTERVAL_MS = pipelineConfig.pollIntervalMs;
 const STEP_MAX_RETRIES = pipelineConfig.stepMaxRetries;
@@ -829,7 +828,7 @@ async function parseEmailsFromDb(force) {
         const parsedMessageId = await insertParsedResult(dbClient, {
           emailId: row.id,
           parserName: localMessageType ? `parser_${localMessageType}_json` : 'parser_unknown',
-          parserVersion: process.env.PARSER_VERSION || 'v1',
+          parserVersion: parserConfig.version,
           messageType: dbMessageType,
           status: parserResult.status,
           stderr: parserResult.stderr,

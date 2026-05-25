@@ -4,18 +4,10 @@ const path = require('path');
 const { runner } = require('node-pg-migrate');
 const { buildPoolConfig } = require('../config/db');
 
-function requireEnv(name) {
-  const value = process.env[name];
-  if (!value) {
-    throw new Error(`Missing required environment variable: ${name}`);
-  }
-  return value;
-}
-
 function toDatabaseUrl() {
   const config = buildPoolConfig();
-  const user = encodeURIComponent(config.user || requireEnv('DB_USER'));
-  const password = encodeURIComponent(config.password || requireEnv('DB_PASSWORD'));
+  const user = encodeURIComponent(config.user);
+  const password = encodeURIComponent(config.password);
   const host = config.host;
   const port = String(config.port);
   const database = config.database;

@@ -1,9 +1,7 @@
 'use strict';
 
 const { Pool } = require('pg');
-const paths = require('./paths');
-
-require('dotenv').config({ path: paths.ENV_FILE });
+const { requireEnv } = require('./env');
 
 const DB_HOST = '127.0.0.1';
 const DB_PORT = 5432;
@@ -11,14 +9,6 @@ const DB_NAME = 'nca_cargo';
 const DB_POOL_MAX = 10;
 const DB_IDLE_TIMEOUT_MS = 30000;
 const DB_SSL = false;
-
-function requireEnv(name) {
-  const value = process.env[name];
-  if (value === undefined || value === '') {
-    throw new Error(`Missing required environment variable: ${name}`);
-  }
-  return value;
-}
 
 function buildPoolConfig() {
   const sslEnabled = DB_SSL;

@@ -1,5 +1,7 @@
 'use strict';
 
+const { readEnv } = require('./env');
+
 const DEFAULT_PIPELINE_CONFIG = Object.freeze({
   pollIntervalMs: 300000,
   stepMaxRetries: 1,
@@ -8,7 +10,7 @@ const DEFAULT_PIPELINE_CONFIG = Object.freeze({
 });
 
 function parsePositiveIntEnv(key, fallback) {
-  const raw = process.env[key];
+  const raw = readEnv(key);
   if (!raw || raw.trim() === '') return fallback;
 
   const parsed = Number(raw);
@@ -19,7 +21,7 @@ function parsePositiveIntEnv(key, fallback) {
 }
 
 function parsePositiveIntOrUnlimitedEnv(key, fallback) {
-  const raw = process.env[key];
+  const raw = readEnv(key);
   if (!raw || raw.trim() === '') return fallback;
 
   const parsed = Number(raw);
