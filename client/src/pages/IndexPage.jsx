@@ -11,6 +11,9 @@ function IndexPage() {
           <a className="index-card" href="/parse-errors">
             <h2>Parse Errors</h2>
           </a>
+          <a className="index-card" href="/email-xxx-table">
+            <h2>Email XXX</h2>
+          </a>
           <a className="index-card" href="/hawb-table">
             <h2>HAWB Table</h2>
           </a>

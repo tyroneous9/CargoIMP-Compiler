@@ -108,6 +108,11 @@ async function listMawbTableRows(query) {
   return reportRepository.listMawbTableRows(limit, offset);
 }
 
+async function listEmailXxxRows(query) {
+  const { limit, offset } = parsePagination(query);
+  return reportRepository.listEmailXxxRows(limit, offset);
+}
+
 async function listHawbTableRows(query) {
   const { limit, offset } = parsePagination(query);
   return reportRepository.listHawbTableRows(limit, offset);
@@ -165,6 +170,7 @@ module.exports = {
   listHawbs,
   listUldTableRows,
   listMawbTableRows,
+  listEmailXxxRows,
   listHawbTableRows,
   updateUldProcessingStatus,
   updateMawbProcessingStatus,

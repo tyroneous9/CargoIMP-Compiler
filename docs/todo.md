@@ -9,14 +9,14 @@ create a new page with the following qualities:
 email_xxx:
 order is: carrier_flight_number, scheduled_arrival_date, mawb_number, has_rcf, has_nfd, has_dlv, has_arrival_notice, has_ready_for_pick_up, has_delivery_complete
 
-has_arrival_notice:
-format: Arrival Notice_[mawb]
-example: Arrival Notice_205-85645416
-
 office_operation:
 1) AMS/Notes(trucking/skids$)/storage need to let us enter value
 2) when it's after lfd time, highlight the entire row
 3) P3/ISC need drop down menu
 4) cargo delivery is the same as has_delivery_complete, if email was sent, archive the entire row or make it visible but unchangeable
 
-
+office_operation:
+- many of these features requires a save feature, consider also handling the processing status w/ this feature (archived roles disappear OR are filtered out OR sorted by new first by default)
+- 3 columns which are empty by default, but the user can write to them: AMS, Notes, Storage
+- once the current date is past the LFD date, highlight the row (purely visual, should be minimal)
+- P3: YES/NO, ISC: TOLEAD,NCA,STORAGE,VFY_REQ

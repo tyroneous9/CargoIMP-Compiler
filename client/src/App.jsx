@@ -1,3 +1,4 @@
+import EmailXxxTablePage from './pages/EmailXxxTablePage';
 import HawbTablePage from './pages/HawbTablePage';
 import IndexPage from './pages/IndexPage';
 import MawbTablePage from './pages/MawbTablePage';
@@ -8,6 +9,7 @@ import UldTablePage from './pages/UldTablePage';
 
 function App() {
   const path = window.location.pathname;
+  const isEmailXxxTablePage = path === '/email-xxx-table';
   const isIndexPage = path === '/' || path === '/index';
   const isHawbTablePage = path === '/hawb-table';
   const isMawbTablePage = window.location.pathname === '/mawb-table';
@@ -25,6 +27,10 @@ function App() {
 
   if (isParseErrorsPage) {
     return <ParseErrorsPage />;
+  }
+
+  if (isEmailXxxTablePage) {
+    return <EmailXxxTablePage />;
   }
 
   if (isHawbTablePage) {

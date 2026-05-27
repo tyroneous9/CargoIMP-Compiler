@@ -10,6 +10,7 @@ router.get('/ulds', reportController.listUlds);
 router.get('/hawbs', reportController.listHawbs);
 router.get('/hawbs-table', reportController.listHawbTableRows);
 router.get('/mawbs-table', reportController.listMawbTableRows);
+router.get('/email-xxx-table', reportController.listEmailXxxRows);
 router.get('/new-messages', reportController.listNewMessages);
 router.get('/ulds-table', reportController.listUldTableRows);
 router.patch('/new-messages/archive', reportController.archiveNewMessages);

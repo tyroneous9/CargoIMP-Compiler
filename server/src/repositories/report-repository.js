@@ -113,6 +113,33 @@ async function listMawbTableRows(limit, offset) {
   return result.rows;
 }
 
+async function listEmailXxxRows(limit, offset) {
+  const result = await pool.query(
+    `
+      SELECT DISTINCT ON (rm.mawb_number)
+        rm.fwb_master_id,
+        rm.carrier_flight_number,
+        rm.scheduled_arrival_date,
+        rm.mawb_number,
+        COALESCE(ns.has_rcf, FALSE) AS has_rcf,
+        COALESCE(ns.has_nfd, FALSE) AS has_nfd,
+        COALESCE(ns.has_dlv, FALSE) AS has_dlv,
+        COALESCE(rm.has_arrival_notice, FALSE) AS has_arrival_notice,
+        COALESCE(ns.has_ready_for_pick_up, FALSE) AS has_ready_for_pick_up,
+        COALESCE(ns.has_delivery_complete, FALSE) AS has_delivery_complete
+      FROM report_mawb rm
+      LEFT JOIN mawb_notification_status ns
+        ON ns.mawb_number = rm.mawb_number
+      WHERE rm.mawb_number IS NOT NULL
+        AND rm.mawb_number <> ''
+      ORDER BY rm.mawb_number ASC
+      LIMIT $1 OFFSET $2
+    `,
+    [limit, offset]
+  );
+  return result.rows;
+}
+
 async function listHawbTableRows(limit, offset) {
   const result = await pool.query(
     `
@@ -295,6 +322,7 @@ module.exports = {
   listHawbs,
   listUldTableRows,
   listMawbTableRows,
+  listEmailXxxRows,
   listHawbTableRows,
   updateUldProcessingStatus,
   updateMawbProcessingStatus,

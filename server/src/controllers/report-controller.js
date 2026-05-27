@@ -47,6 +47,15 @@ async function listMawbTableRows(req, res, next) {
   }
 }
 
+async function listEmailXxxRows(req, res, next) {
+  try {
+    const items = await reportService.listEmailXxxRows(req.query);
+    res.json({ items });
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function listHawbTableRows(req, res, next) {
   try {
     const items = await reportService.listHawbTableRows(req.query);
@@ -116,6 +125,7 @@ module.exports = {
   listHawbs,
   listUldTableRows,
   listMawbTableRows,
+  listEmailXxxRows,
   listHawbTableRows,
   updateUldProcessingStatus,
   updateMawbProcessingStatus,
