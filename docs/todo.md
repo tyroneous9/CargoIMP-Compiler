@@ -17,7 +17,7 @@ office_operation:
 - many of these features requires a save feature, consider also handling the processing status w/ this feature (archived roles disappear OR are filtered out OR sorted by new first by default)
 - 3 columns which are empty by default, but the user can write to them: AMS, Notes, Storage
 - once the current date is past the LFD date, highlight the row (purely visual, should be minimal)
-- P3: YES/NO, ISC: TOLEAD,NCA,STORAGE,VFY_REQ
+- P3: true/false, ISC: TOLEAD,NCA,STORAGE,VFY_REQ
 
 New message type verification:
 RCF_[mawb]
