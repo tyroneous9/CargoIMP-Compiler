@@ -1,0 +1,5 @@
+ rcf_subjects | delivery_complete_subjects | ready_for_pickup_subjects | dlv_subjects | nfd_subjects 
+--------------+----------------------------+---------------------------+--------------+--------------
+            0 |                          0 |                         0 |            1 |            0
+(1 row)
+

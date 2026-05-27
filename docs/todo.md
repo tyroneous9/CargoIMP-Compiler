@@ -1,12 +1,18 @@
-RCF_[mawb]
-Delivery Complete_[mawb]
-Ready for Pick Up_[mawb]
-DLV_[mawb]
-NFD_[mawb]
 
-Examples:
-RCF_933-34474602
-Delivery Complete_205-33676484
-Ready for Pick Up_933-34771542
-DLV_205-33676484
-NFD_933-34771542
+get storage fee
+
+test new message types
+
+discuss whether it is valuable to create a new report view for the new feature:
+create a new page with the following qualities:
+
+email_xxx:
+order is: carrier_flight_number, scheduled_arrival_date, mawb_number, has_rcf, has_nfd, has_dlv, has_arrival_notice, has_ready_for_pick_up, has_delivery_complete
+
+office_operation:
+1) AMS/Notes(trucking/skids$)/storage need to let us enter value
+2) when it's after lfd time, highlight the entire row
+3) P3/ISC need drop down menu
+4) cargo delivery is the same as has_delivery_complete, if email was sent, archive the entire row or make it visible but unchangeable
+
+

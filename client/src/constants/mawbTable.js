@@ -1,11 +1,12 @@
 export const MAWB_TABLE_COLUMNS = [
+  'processing_status',
   'mawb_number',
+  'carrier_flight_number',
   'has_rcf',
   'has_delivery_complete',
   'has_ready_for_pick_up',
   'has_dlv',
   'has_nfd',
-  'processing_status',
   'origin_airport_code',
   'destination_airport_code',
   'scheduled_arrival_date',
@@ -13,6 +14,8 @@ export const MAWB_TABLE_COLUMNS = [
   'piece_count',
   'weight_kg',
 ];
+
+export const MAWB_DEFAULT_VISIBLE_COLUMNS = [...MAWB_TABLE_COLUMNS];
 
 export const MAWB_TABLE_SETTINGS_STORAGE_KEY = 'ncaparser.mawbTable.settings';
 export const MAWB_DEFAULT_PAGE_SIZE = 25;

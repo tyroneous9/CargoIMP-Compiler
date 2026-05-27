@@ -87,6 +87,7 @@ async function listMawbTableRows(limit, offset) {
         rm.mawb_number,
         rm.origin_airport_code,
         rm.destination_airport_code,
+        rm.carrier_flight_number,
         rm.scheduled_arrival_date,
         rm.scheduled_arrival_time,
         rm.piece_count,

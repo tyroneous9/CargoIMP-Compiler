@@ -1,9 +1,6 @@
 export const ULD_TABLE_COLUMNS = [
-  'uld_code',
-  'uld_weight',
   'processing_status',
-  'mawb_piece_count',
-  'load_type',
+  'uld_code',
   'carrier_flight_number',
   'scheduled_departure_date',
   'last_free_day',
@@ -12,7 +9,12 @@ export const ULD_TABLE_COLUMNS = [
   'scheduled_arrival_time',
   'departure_airport_code',
   'mawb_numbers',
+  'mawb_piece_count',
+  'load_type',
+  'uld_weight',
 ];
+
+export const ULD_DEFAULT_VISIBLE_COLUMNS = [...ULD_TABLE_COLUMNS];
 
 export const ULD_TABLE_SETTINGS_STORAGE_KEY = 'ncaparser.uldTable.settings';
 export const ULD_DEFAULT_PAGE_SIZE = 25;
