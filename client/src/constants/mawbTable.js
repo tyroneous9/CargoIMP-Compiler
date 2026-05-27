@@ -4,6 +4,7 @@ export const MAWB_TABLE_COLUMNS = [
   'carrier_flight_number',
   'has_rcf',
   'has_delivery_complete',
+  'has_arrival_notice',
   'has_ready_for_pick_up',
   'has_dlv',
   'has_nfd',

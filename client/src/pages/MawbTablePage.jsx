@@ -10,6 +10,7 @@ import {
 
 const MAWB_NOTIFICATION_COLUMNS = new Set([
   'has_rcf',
+  'has_arrival_notice',
   'has_delivery_complete',
   'has_ready_for_pick_up',
   'has_dlv',

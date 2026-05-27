@@ -95,6 +95,7 @@ async function listMawbTableRows(limit, offset) {
         rm.nature_of_goods,
         rm.processing_status,
         COALESCE(ns.has_rcf, FALSE) AS has_rcf,
+        COALESCE(rm.has_arrival_notice, FALSE) AS has_arrival_notice,
         COALESCE(ns.has_delivery_complete, FALSE) AS has_delivery_complete,
         COALESCE(ns.has_ready_for_pick_up, FALSE) AS has_ready_for_pick_up,
         COALESCE(ns.has_dlv, FALSE) AS has_dlv,

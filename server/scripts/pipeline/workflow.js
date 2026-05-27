@@ -8,7 +8,7 @@ const {
   LOGS_DIR,
   PARSER_BINARIES,
 } = require('../../config/paths');
-const { SUPPORTED_MESSAGE_TYPES, isSupportedMessageType } = require('../../config/messageTypes');
+const { isSupportedMessageType } = require('../../config/messageTypes');
 const { withDbClient, pool } = require('../../config/db');
 const { getPipelineConfig, getExtractEmailLimit } = require('../../config/pipeline');
 const { getImapConfig } = require('../../config/imap');
