@@ -1,4 +1,5 @@
 -- Active: 1779404189835@@127.0.0.1@5432@nca_cargo
+
 -- Show MAWBs with their notification statuses (e.g. RCF, dlv, nfd)
 WITH raw_events AS (
   SELECT
@@ -42,3 +43,60 @@ FROM mawb_notification_status mns
 LEFT JOIN per_mawb_events pme
   ON pme.mawb_number = mns.mawb_number
 ORDER BY mns.mawb_number;
+
+
+-- -----------------------------------------------------------------------------
+-- DANGER ZONE: wipe all application data (preserves schema objects)
+-- -----------------------------------------------------------------------------
+DO $$
+DECLARE
+  truncate_sql TEXT;
+BEGIN
+  SELECT
+    'TRUNCATE TABLE '
+    || string_agg(format('%I.%I', schemaname, tablename), ', ')
+    || ' RESTART IDENTITY CASCADE'
+  INTO truncate_sql
+  FROM pg_tables
+  WHERE schemaname = 'public'
+    AND tablename <> 'pgmigrations';
+
+  IF truncate_sql IS NULL THEN
+    RAISE NOTICE 'No tables found to truncate.';
+    RETURN;
+  END IF;
+
+  EXECUTE truncate_sql;
+END
+$$;
+
+
+-- -----------------------------------------------------------------------------
+-- DANGER ZONE: delete only records marked processing_status = 'complete'
+-- Affects status-bearing tables only: fwb_master, fhl_house, ffm_uld.
+-- Child rows linked with ON DELETE CASCADE are removed automatically.
+-- -----------------------------------------------------------------------------
+BEGIN;
+
+WITH deleted AS (
+  DELETE FROM fwb_master
+  WHERE processing_status = 'complete'
+  RETURNING id
+)
+SELECT 'fwb_master' AS table_name, COUNT(*) AS deleted_rows FROM deleted;
+
+WITH deleted AS (
+  DELETE FROM fhl_house
+  WHERE processing_status = 'complete'
+  RETURNING id
+)
+SELECT 'fhl_house' AS table_name, COUNT(*) AS deleted_rows FROM deleted;
+
+WITH deleted AS (
+  DELETE FROM ffm_uld
+  WHERE processing_status = 'complete'
+  RETURNING id
+)
+SELECT 'ffm_uld' AS table_name, COUNT(*) AS deleted_rows FROM deleted;
+
+COMMIT;

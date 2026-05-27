@@ -16,41 +16,43 @@ function firstLine(text) {
   return String(text || '').replace(/\r\n/g, '\n').split('\n')[0].trim().toUpperCase();
 }
 
-function detectMessageTypeFromSubject(subject) {
+function detectSubjectClassification(subject) {
   const header = firstLine(subject);
-  const cimpMatch = header.match(/^(FFM|FWB|FHL)\/\d+/);
-  if (cimpMatch) {
-    return cimpMatch[1].toLowerCase();
+  const firstToken = header.split(/\s+/)[0] || '';
+
+  let messageType = null;
+
+  if (firstToken === 'FFM') messageType = BODY_PARSE_MESSAGE_TYPES.FFM;
+  if (firstToken === 'FWB') messageType = BODY_PARSE_MESSAGE_TYPES.FWB;
+  if (firstToken === 'FHL') messageType = BODY_PARSE_MESSAGE_TYPES.FHL;
+  if (firstToken === 'MVT') messageType = BODY_PARSE_MESSAGE_TYPES.MVT;
+
+  if (!messageType && /^SENT-FROM-MOVEMENTMANAGER:?/.test(header)) {
+    messageType = BODY_PARSE_MESSAGE_TYPES.MVT;
   }
 
-  if (/^SENT-FROM-MOVEMENTMANAGER:?/.test(header)) {
-    return BODY_PARSE_MESSAGE_TYPES.MVT;
-  }
-
-  if (header === 'MVT' || header.startsWith('MVT ')) return BODY_PARSE_MESSAGE_TYPES.MVT;
-  return null;
-}
-
-function detectNotificationSubject(subject) {
-  const header = firstLine(subject);
+  let notificationSubject = null;
 
   for (const pattern of NOTIFICATION_REGEX_PATTERNS) {
     const match = header.match(pattern.regex);
     if (!match) continue;
 
     const mawb = String(match[1] || '').trim();
-    return {
+    notificationSubject = {
       eventType: pattern.eventType,
       mawb: mawb || null,
     };
+    break;
   }
 
-  return null;
+  return {
+    messageType,
+    notificationSubject,
+  };
 }
 
 module.exports = {
-  detectNotificationSubject,
-  detectMessageTypeFromSubject,
+  detectSubjectClassification,
   firstLine,
   messageTypeToDbEnum,
 };

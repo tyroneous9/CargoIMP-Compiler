@@ -17,8 +17,7 @@ const {
   normalizeBody,
 } = require('./normalizers');
 const {
-  detectNotificationSubject,
-  detectMessageTypeFromSubject,
+  detectSubjectClassification,
   messageTypeToDbEnum,
 } = require('./message-format');
 const { runParser } = require('./parser-runner');
@@ -35,7 +34,6 @@ const parserConfig = getParserConfig();
 const POLL_INTERVAL_MS = pipelineConfig.pollIntervalMs;
 const STEP_MAX_RETRIES = pipelineConfig.stepMaxRetries;
 const PARSE_BATCH_LIMIT = pipelineConfig.parseBatchLimit;
-const IMAP_FETCH_CHUNK_SIZE = 200;
 
 const RUN_ONCE = process.argv.includes('--once');
 const FORCE = process.argv.includes('--force');
@@ -66,16 +64,6 @@ function toAddressText(addresses) {
     })
     .filter(Boolean)
     .join(', ');
-}
-
-function chunkArray(items, chunkSize) {
-  if (!Array.isArray(items) || items.length === 0) return [];
-
-  const chunks = [];
-  for (let i = 0; i < items.length; i += chunkSize) {
-    chunks.push(items.slice(i, i + chunkSize));
-  }
-  return chunks;
 }
 
 async function upsertRawEmail(client, email) {
@@ -160,6 +148,8 @@ async function extractEmailsToDb() {
     port,
     secure: true,
     auth: { user, pass },
+    // Default socket timeout is 5 minutes; extraction can exceed that on large batches.
+    socketTimeout: 15 * 60 * 1000,
     logger: false,
   });
 
@@ -167,88 +157,102 @@ async function extractEmailsToDb() {
   let skippedUnrecognizedCount = 0;
 
   try {
+    log('log', `[extract] connecting to IMAP host=${host} mailbox=${mailbox}`);
     await client.connect();
     const lock = await client.getMailboxLock(mailbox);
 
     try {
       const searchStartUid = latestFetchedUid > 0 ? latestFetchedUid + 1 : 1;
+      log('log', `[extract] searching uid range ${searchStartUid}:*`);
       const uids = await client.search({ uid: `${searchStartUid}:*` }, { uid: true });
       uids.sort((a, b) => a - b);
       const candidateUids = extractLimit === -1 ? uids : uids.slice(0, extractLimit);
-      const uidChunks = chunkArray(candidateUids, IMAP_FETCH_CHUNK_SIZE);
+
+      log(
+        'log',
+        `[extract] latestFetchedUid=${latestFetchedUid} matched=${uids.length} candidate=${candidateUids.length} limit=${extractLimit}`
+      );
+
+      if (candidateUids.length === 0) {
+        return { extractedCount, skippedUnrecognizedCount };
+      }
 
       await withDbClient(async (dbClient) => {
-        for (const uidChunk of uidChunks) {
-          for await (const messageHeader of client.fetch(
-            uidChunk,
-            { uid: true, internalDate: true, envelope: true },
-            { uid: true }
-          )) {
-            const uid = Number(messageHeader.uid);
-            if (!Number.isFinite(uid) || uid <= 0) continue;
+        const headers = [];
+        for await (const messageHeader of client.fetch(
+          candidateUids,
+          { uid: true, internalDate: true, envelope: true },
+          { uid: true }
+        )) {
+          headers.push(messageHeader);
+        }
 
-            const envelope = messageHeader.envelope || {};
-            const subject = envelope.subject || '(no subject)';
-            const messageType = detectMessageTypeFromSubject(subject);
-            const notificationSubject = detectNotificationSubject(subject);
+        for (const messageHeader of headers) {
+          const uid = Number(messageHeader.uid);
+          if (!Number.isFinite(uid) || uid <= 0) continue;
 
-            if ((!messageType || !isSupportedMessageType(messageType)) && !notificationSubject) {
+          const envelope = messageHeader.envelope || {};
+          const subject = envelope.subject || '(no subject)';
+          const { messageType, notificationSubject } = detectSubjectClassification(subject);
+          const isParserEligible = Boolean(messageType && isSupportedMessageType(messageType));
+
+          let body = null;
+          let sender = toAddressText(envelope.from) || '(unknown sender)';
+          let recipients = toAddressText(envelope.to);
+
+          if (isParserEligible) {
+            const sourceMessage = await client.fetchOne(
+              uid,
+              { uid: true, source: true },
+              { uid: true }
+            );
+
+            if (!sourceMessage || !sourceMessage.source) {
               skippedUnrecognizedCount += 1;
               continue;
             }
 
-            let body = null;
-            let sender = toAddressText(envelope.from) || '(unknown sender)';
-            let recipients = toAddressText(envelope.to);
-
-            if (messageType && isSupportedMessageType(messageType)) {
-              const sourceMessage = await client.fetchOne(
-                uid,
-                { uid: true, source: true },
-                { uid: true }
-              );
-
-              if (!sourceMessage || !sourceMessage.source) {
-                skippedUnrecognizedCount += 1;
-                continue;
-              }
-
-              const parsedEmail = await simpleParser(sourceMessage.source);
-              body = normalizeBody(parsedEmail);
-              sender = parsedEmail.from ? parsedEmail.from.text : sender;
-              recipients = parsedEmail.to ? parsedEmail.to.text : recipients;
-            }
-
-            const rawJson = {
-              uid,
-              mailbox,
-              date: messageHeader.internalDate ? messageHeader.internalDate.toISOString() : null,
-              subject,
-              from: sender,
-              to: recipients,
-              body,
-              subjectMessageType: messageType,
-              recognizedNotification: notificationSubject,
-            };
-
-            await upsertRawEmail(dbClient, {
-              mailbox,
-              uid,
-              messageType,
-              subject,
-              sender,
-              receivedAt: rawJson.date,
-              body,
-              rawJson,
-            });
-
-            extractedCount += 1;
+            const parsedEmail = await simpleParser(sourceMessage.source);
+            body = normalizeBody(parsedEmail);
+            sender = parsedEmail.from ? parsedEmail.from.text : sender;
+            recipients = parsedEmail.to ? parsedEmail.to.text : recipients;
+          } else {
+            skippedUnrecognizedCount += 1;
           }
+
+          const rawJson = {
+            uid,
+            mailbox,
+            date: messageHeader.internalDate ? messageHeader.internalDate.toISOString() : null,
+            subject,
+            from: sender,
+            to: recipients,
+            body,
+            subjectMessageType: messageType,
+            recognizedNotification: notificationSubject,
+          };
+
+          const persistedBody = typeof body === 'string' ? body : '';
+
+          await upsertRawEmail(dbClient, {
+            mailbox,
+            uid,
+            messageType: isParserEligible ? messageType : null,
+            subject,
+            sender,
+            receivedAt: rawJson.date,
+            body: persistedBody,
+            rawJson,
+          });
+
+          extractedCount += 1;
         }
       });
     } finally {
       lock.release();
     }
+  } catch (error) {
+    throw error;
   } finally {
     await client.logout().catch(() => {});
   }
@@ -292,9 +296,18 @@ async function fetchEmailsToParse(dbClient, force) {
 async function parseEmailsFromDb(force) {
   let parsedCount = 0;
   let errorCount = 0;
+  let selectedCount = 0;
+
+  log(
+    'log',
+    `[parse] starting parse_to_db force=${force} batch_limit=${PARSE_BATCH_LIMIT} parser_version=${parserConfig.version}`
+  );
 
   await withDbClient(async (dbClient) => {
     const rows = await fetchEmailsToParse(dbClient, force);
+    selectedCount = rows.length;
+
+    log('log', `[parse] selected ${selectedCount} candidate emails`);
 
     for (const row of rows) {
       const dbMessageType = row.message_type ? String(row.message_type).toUpperCase() : null;
@@ -365,7 +378,9 @@ async function parseEmailsFromDb(force) {
     }
   });
 
-  return { parsedCount, errorCount };
+  log('log', `[parse] finished parsed_ok=${parsedCount} parsed_error=${errorCount} selected=${selectedCount}`);
+
+  return { parsedCount, errorCount, selectedCount };
 }
 
 async function createRunRow(client, runId, runNumber) {
@@ -548,6 +563,11 @@ async function executePipelineRun(runNumber) {
     log('error', `${label} report: ${reportPath}`);
     return;
   }
+
+  log(
+    'log',
+    `${label} entering parse stage force=${FORCE} parse_batch_limit=${PARSE_BATCH_LIMIT} parser_version=${parserConfig.version}`
+  );
 
   const parseResult = await executeWithRetry('parse_to_db', () => parseEmailsFromDb(FORCE), STEP_MAX_RETRIES);
   report.steps.push(parseResult);
