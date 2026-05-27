@@ -4,6 +4,16 @@ const reportRepository = require('../repositories/report-repository');
 
 const PROCESSING_STATUS_VALUES = new Set(['new', 'complete']);
 const NEW_MESSAGE_RECORD_TYPES = new Set(['uld', 'mawb', 'hawb']);
+const HAWB_EDITABLE_COLUMNS = new Set(['processing_status', 'hawb_number', 'piece_count', 'weight_kg']);
+const MAWB_EDITABLE_COLUMNS = new Set([
+  'processing_status',
+  'mawb_number',
+  'origin_airport_code',
+  'destination_airport_code',
+  'piece_count',
+  'weight_kg',
+]);
+const ULD_EDITABLE_COLUMNS = new Set(['processing_status', 'uld_code', 'uld_weight']);
 
 function toPositiveInt(value, label) {
   const parsed = Number(value);
@@ -80,6 +90,53 @@ function parseNewMessageRecords(records) {
       recordType: record.recordType,
       recordId: parseId(record.recordId, `records[${index}].recordId`),
     };
+  });
+}
+
+function parseRowUpdates(updates, editableColumns) {
+  if (!Array.isArray(updates) || updates.length === 0) {
+    const error = new Error('updates must be a non-empty array');
+    error.statusCode = 400;
+    throw error;
+  }
+
+  return updates.map((update, index) => {
+    if (!update || typeof update !== 'object') {
+      const error = new Error(`updates[${index}] must be an object`);
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const id = parseId(update.id, `updates[${index}].id`);
+    const changes = update.changes;
+    if (!changes || typeof changes !== 'object' || Array.isArray(changes)) {
+      const error = new Error(`updates[${index}].changes must be an object`);
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const normalizedChanges = {};
+    for (const [column, value] of Object.entries(changes)) {
+      if (!editableColumns.has(column)) {
+        const error = new Error(`updates[${index}].changes.${column} is not editable`);
+        error.statusCode = 400;
+        throw error;
+      }
+
+      if (column === 'processing_status') {
+        normalizedChanges[column] = parseProcessingStatus(value);
+      } else {
+        normalizedChanges[column] = value;
+      }
+    }
+
+    if (Object.keys(normalizedChanges).length === 0) {
+      const error = new Error(`updates[${index}].changes must include at least one editable field`);
+      error.statusCode = 400;
+      throw error;
+    }
+
+    return { id, changes: normalizedChanges };
   });
 }
 
@@ -164,6 +221,21 @@ async function archiveNewMessages(records) {
   return reportRepository.archiveNewMessages(parsedRecords);
 }
 
+async function updateHawbRows(updates) {
+  const parsedUpdates = parseRowUpdates(updates, HAWB_EDITABLE_COLUMNS);
+  return reportRepository.updateHawbRows(parsedUpdates);
+}
+
+async function updateMawbRows(updates) {
+  const parsedUpdates = parseRowUpdates(updates, MAWB_EDITABLE_COLUMNS);
+  return reportRepository.updateMawbRows(parsedUpdates);
+}
+
+async function updateUldRows(updates) {
+  const parsedUpdates = parseRowUpdates(updates, ULD_EDITABLE_COLUMNS);
+  return reportRepository.updateUldRows(parsedUpdates);
+}
+
 module.exports = {
   listMawbs,
   listUlds,
@@ -177,4 +249,7 @@ module.exports = {
   updateHawbProcessingStatus,
   listNewMessages,
   archiveNewMessages,
+  updateHawbRows,
+  updateMawbRows,
+  updateUldRows,
 };

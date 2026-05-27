@@ -8,27 +8,11 @@ import {
   EMAIL_XXX_TABLE_SETTINGS_STORAGE_KEY,
 } from '../constants/emailXxxTable';
 
-const EMAIL_NOTIFICATION_COLUMNS = new Set([
-  'has_rcf',
-  'has_nfd',
-  'has_dlv',
-  'has_arrival_notice',
-  'has_ready_for_pick_up',
-  'has_delivery_complete',
-]);
-
-function renderEmailXxxCell(column, row) {
-  if (EMAIL_NOTIFICATION_COLUMNS.has(column)) {
-    return row[column] ? 'YES' : 'NO';
-  }
-  return undefined;
-}
-
 function EmailXxxTablePage() {
   return (
     <DataTablePage
-      title="Email XXX"
-      eyebrow="Email notification matrix"
+      title="Email XXX Table"
+      eyebrow="Email notification summary"
       columns={EMAIL_XXX_TABLE_COLUMNS}
       defaultVisibleColumns={EMAIL_XXX_DEFAULT_VISIBLE_COLUMNS}
       columnTypes={EMAIL_XXX_COLUMN_TYPES}
@@ -36,14 +20,13 @@ function EmailXxxTablePage() {
       pageSizeOptions={EMAIL_XXX_PAGE_SIZE_OPTIONS}
       storageKey={EMAIL_XXX_TABLE_SETTINGS_STORAGE_KEY}
       fetchUrl="/api/reports/email-xxx-table?limit=1000&offset=0"
-      loadingText="Loading email_xxx rows..."
-      fetchErrorText="Unable to load email_xxx rows"
+      loadingText="Loading Email XXX rows..."
+      fetchErrorText="Unable to load Email XXX rows"
       stickyColumn="mawb_number"
-      rowIdField="fwb_master_id"
+      rowIdField="mawb_number"
       rowKeyFallbackField="mawb_number"
       rowKeyPrefix="email-xxx-row"
-      statusUpdateUrl={(id) => `/api/reports/mawbs/${id}/processing-status`}
-      renderCell={renderEmailXxxCell}
+      statusUpdateUrl={() => ''}
     />
   );
 }

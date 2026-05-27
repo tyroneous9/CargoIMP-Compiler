@@ -119,6 +119,33 @@ async function archiveNewMessages(req, res, next) {
   }
 }
 
+async function updateHawbRows(req, res, next) {
+  try {
+    const result = await reportService.updateHawbRows(req.body.updates);
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function updateMawbRows(req, res, next) {
+  try {
+    const result = await reportService.updateMawbRows(req.body.updates);
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function updateUldRows(req, res, next) {
+  try {
+    const result = await reportService.updateUldRows(req.body.updates);
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   listMawbs,
   listUlds,
@@ -132,4 +159,7 @@ module.exports = {
   updateHawbProcessingStatus,
   listNewMessages,
   archiveNewMessages,
+  updateHawbRows,
+  updateMawbRows,
+  updateUldRows,
 };

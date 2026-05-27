@@ -1,7 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import { readJson } from '../lib/readJson';
 
-const PROCESSING_STATUS_OPTIONS = ['new', 'complete'];
+const BOOLEAN_EDIT_OPTIONS = [
+  { value: 'true', label: 'true' },
+  { value: 'false', label: 'false' },
+];
+
+const PROCESSING_STATUS_EDIT_OPTIONS = [
+  { value: 'complete', label: 'complete' },
+  { value: 'new', label: 'new' },
+];
 
 function withRequiredColumns(columns, allColumns, requiredColumns) {
   const set = new Set(columns);
@@ -32,9 +40,10 @@ function withRequiredColumns(columns, allColumns, requiredColumns) {
  * @param {string}   props.rowIdField           - Row field used as the update ID
  * @param {string}   props.rowKeyFallbackField  - Row field used as key when rowIdField is absent
  * @param {string}   props.rowKeyPrefix         - Prefix for index-based fallback key
- * @param {function} props.statusUpdateUrl      - (id: string) => url string
+ * @param {string[]} [props.editableColumns]    - Columns editable in Edit Table mode; when omitted all columns are editable
  * @param {function} [props.transformItems]     - (items: object[]) => object[]
  * @param {function} [props.renderCell]         - (column: string, row: object) => node | undefined
+ * @param {function} [props.onSaveEdits]        - async ({ items, originalItems }) => items?; return items to replace local state
  */
 function DataTablePage({
   title,
@@ -53,9 +62,10 @@ function DataTablePage({
   rowIdField,
   rowKeyFallbackField,
   rowKeyPrefix,
-  statusUpdateUrl,
+  editableColumns,
   transformItems,
   renderCell,
+  onSaveEdits,
 }) {
   const normalizedDefaultVisibleColumns = useMemo(() => {
     const configuredColumns = Array.isArray(defaultVisibleColumns)
@@ -75,6 +85,9 @@ function DataTablePage({
   const [visibleColumns, setVisibleColumns] = useState(normalizedDefaultVisibleColumns);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(defaultPageSize);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editBaseItems, setEditBaseItems] = useState(null);
+  const [isSavingEdits, setIsSavingEdits] = useState(false);
 
   // Load persisted settings from localStorage on mount.
   useEffect(() => {
@@ -205,6 +218,25 @@ function DataTablePage({
     });
   }, [state.items, filters, sort, visibleColumns, columnTypes]);
 
+  const booleanEditableColumns = useMemo(() => {
+    const detected = new Set();
+    for (const row of state.items) {
+      for (const column of columns) {
+        if (typeof row?.[column] === 'boolean') {
+          detected.add(column);
+        }
+      }
+    }
+    return detected;
+  }, [state.items, columns]);
+
+  const editableColumnSet = useMemo(() => {
+    if (!Array.isArray(editableColumns)) {
+      return null;
+    }
+    return new Set(editableColumns);
+  }, [editableColumns]);
+
   const totalRows = rows.length;
   const totalPages = Math.max(1, Math.ceil(totalRows / pageSize));
   const safePage = Math.min(page, totalPages);
@@ -262,30 +294,67 @@ function DataTablePage({
     setPage(1);
   }
 
-  async function updateProcessingStatus(rowId, processingStatus) {
-    if (!rowId) return;
+  function updateCellValue(targetRow, column, value) {
+    setState((current) => ({
+      ...current,
+      items: current.items.map((item) => {
+        if (item !== targetRow) return item;
+        return { ...item, [column]: value };
+      }),
+    }));
+  }
+
+  function cloneItems(items) {
+    return items.map((item) => ({ ...item }));
+  }
+
+  function startEditMode() {
+    if (isEditMode) return;
+    setEditBaseItems(cloneItems(state.items));
+    setIsEditMode(true);
+  }
+
+  function cancelEdits() {
+    if (!isEditMode || !editBaseItems) {
+      setIsEditMode(false);
+      setEditBaseItems(null);
+      return;
+    }
+
+    setState((current) => ({
+      ...current,
+      items: cloneItems(editBaseItems),
+    }));
+    setIsEditMode(false);
+    setEditBaseItems(null);
+  }
+
+  async function saveEdits() {
+    if (!isEditMode) return;
+
+    const originalItems = editBaseItems || [];
+    const nextItems = state.items;
 
     try {
-      const response = await fetch(statusUpdateUrl(rowId), {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ processingStatus }),
-      });
-      const data = await readJson(response);
-
-      if (!response.ok) {
-        throw new Error(data?.message || 'Unable to update processing status');
+      setIsSavingEdits(true);
+      let savedItems = nextItems;
+      if (onSaveEdits) {
+        const result = await onSaveEdits({ items: nextItems, originalItems });
+        if (Array.isArray(result)) {
+          savedItems = result;
+        }
       }
 
       setState((current) => ({
         ...current,
-        items: current.items.map((item) => {
-          if (item[rowIdField] !== rowId) return item;
-          return { ...item, processing_status: data?.processing_status || processingStatus };
-        }),
+        items: cloneItems(savedItems),
       }));
+      setIsEditMode(false);
+      setEditBaseItems(null);
     } catch (error) {
-      window.alert(error.message);
+      window.alert(error?.message || 'Unable to save edits');
+    } finally {
+      setIsSavingEdits(false);
     }
   }
 
@@ -295,22 +364,65 @@ function DataTablePage({
       if (custom !== undefined) return custom;
     }
 
-    if (column === 'processing_status') {
-      const rowId = row[rowIdField];
+    if (isEditMode) {
+      const value = row[column];
+      const isColumnEditable = !editableColumnSet || editableColumnSet.has(column);
+
+      if (!isColumnEditable) {
+        if (typeof value === 'boolean') {
+          return value ? 'true' : 'false';
+        }
+        return value ?? '';
+      }
+
+      if (column === 'processing_status') {
+        const selectedValue = value === 'complete' ? 'complete' : 'new';
+        return (
+          <select
+            value={selectedValue}
+            onChange={(event) => updateCellValue(row, column, event.target.value)}
+          >
+            {PROCESSING_STATUS_EDIT_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>{option.label}</option>
+            ))}
+          </select>
+        );
+      }
+
+      if (booleanEditableColumns.has(column)) {
+        const selectedValue = value === false ? 'false' : 'true';
+        return (
+          <select
+            value={selectedValue}
+            onChange={(event) => {
+              const nextValue = event.target.value;
+              updateCellValue(row, column, nextValue === 'false' ? false : true);
+            }}
+          >
+            {BOOLEAN_EDIT_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>{option.label}</option>
+            ))}
+          </select>
+        );
+      }
+
+      const inputType = columnTypes[column] === 'number' ? 'number' : 'text';
       return (
-        <select
-          value={row.processing_status || 'new'}
-          onChange={(event) => updateProcessingStatus(rowId, event.target.value)}
-          disabled={!rowId}
-        >
-          {PROCESSING_STATUS_OPTIONS.map((opt) => (
-            <option key={opt} value={opt}>{opt}</option>
-          ))}
-        </select>
+        <input
+          className="filter-input"
+          type={inputType}
+          value={value ?? ''}
+          onChange={(event) => updateCellValue(row, column, event.target.value)}
+        />
       );
     }
 
-    return row[column] ?? '';
+    const value = row[column];
+    if (typeof value === 'boolean') {
+      return value ? 'true' : 'false';
+    }
+
+    return value ?? '';
   }
 
   return (
@@ -321,7 +433,7 @@ function DataTablePage({
         <h1>{title}</h1>
         <div className="page-config">
           <div className="panel-head">
-            <h2>Configuration</h2>
+            <h2>Controls</h2>
           </div>
 
           {state.error ? (
@@ -333,6 +445,20 @@ function DataTablePage({
               <div className="table-tools">
                 <div className="table-tools-left">
                   <button type="button" className="clear-button" onClick={clearAllControls}>Reset Table</button>
+                  {isEditMode ? (
+                    <>
+                      <button type="button" className="clear-button" onClick={saveEdits} disabled={isSavingEdits}>
+                        {isSavingEdits ? 'Saving...' : 'Save'}
+                      </button>
+                      <button type="button" className="clear-button" onClick={cancelEdits} disabled={isSavingEdits}>
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <button type="button" className="clear-button" onClick={startEditMode}>
+                      Edit Table
+                    </button>
+                  )}
                   <button type="button" className="clear-button" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={safePage <= 1}>
                     Prev
                   </button>

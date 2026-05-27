@@ -1,8 +1,11 @@
 import DataTablePage from '../components/DataTablePage';
+import { readJson } from '../lib/readJson';
+import { buildOrderedUpdates } from '../lib/tableEdits';
 import {
   ULD_COLUMN_TYPES,
   ULD_DEFAULT_PAGE_SIZE,
   ULD_DEFAULT_VISIBLE_COLUMNS,
+  ULD_EDITABLE_COLUMNS,
   ULD_PAGE_SIZE_OPTIONS,
   ULD_TABLE_COLUMNS,
   ULD_TABLE_SETTINGS_STORAGE_KEY,
@@ -40,6 +43,31 @@ function transformUldItems(items) {
   }));
 }
 
+async function saveUldEdits({ items, originalItems }) {
+  const { updates, unsupportedColumns } = buildOrderedUpdates(items, originalItems, {
+    idField: 'ffm_uld_id',
+    columnOrder: ULD_TABLE_COLUMNS,
+    editableColumns: ULD_EDITABLE_COLUMNS,
+  });
+  if (unsupportedColumns.length > 0) {
+    throw new Error(`These fields cannot be saved: ${unsupportedColumns.join(', ')}`);
+  }
+  if (updates.length === 0) return items;
+
+  const response = await fetch('/api/reports/ulds-table/batch', {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ updates }),
+  });
+  const data = await readJson(response);
+
+  if (!response.ok) {
+    throw new Error(data?.message || 'Unable to save ULD edits');
+  }
+
+  return items;
+}
+
 function UldTablePage() {
   return (
     <DataTablePage
@@ -59,8 +87,9 @@ function UldTablePage() {
       rowIdField="ffm_uld_id"
       rowKeyFallbackField="uld_code"
       rowKeyPrefix="uld-row"
-      statusUpdateUrl={(id) => `/api/reports/ulds/${id}/processing-status`}
+      editableColumns={ULD_EDITABLE_COLUMNS}
       transformItems={transformUldItems}
+      onSaveEdits={saveUldEdits}
     />
   );
 }

@@ -1,27 +1,39 @@
 import DataTablePage from '../components/DataTablePage';
+import { readJson } from '../lib/readJson';
+import { buildOrderedUpdates } from '../lib/tableEdits';
 import {
   MAWB_COLUMN_TYPES,
   MAWB_DEFAULT_PAGE_SIZE,
   MAWB_DEFAULT_VISIBLE_COLUMNS,
+  MAWB_EDITABLE_COLUMNS,
   MAWB_PAGE_SIZE_OPTIONS,
   MAWB_TABLE_COLUMNS,
   MAWB_TABLE_SETTINGS_STORAGE_KEY,
 } from '../constants/mawbTable';
 
-const MAWB_NOTIFICATION_COLUMNS = new Set([
-  'has_rcf',
-  'has_arrival_notice',
-  'has_delivery_complete',
-  'has_ready_for_pick_up',
-  'has_dlv',
-  'has_nfd',
-]);
-
-function renderMawbCell(column, row) {
-  if (MAWB_NOTIFICATION_COLUMNS.has(column)) {
-    return row[column] ? 'YES' : 'NO';
+async function saveMawbEdits({ items, originalItems }) {
+  const { updates, unsupportedColumns } = buildOrderedUpdates(items, originalItems, {
+    idField: 'fwb_master_id',
+    columnOrder: MAWB_TABLE_COLUMNS,
+    editableColumns: MAWB_EDITABLE_COLUMNS,
+  });
+  if (unsupportedColumns.length > 0) {
+    throw new Error(`These fields cannot be saved: ${unsupportedColumns.join(', ')}`);
   }
-  return undefined;
+  if (updates.length === 0) return items;
+
+  const response = await fetch('/api/reports/mawbs-table/batch', {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ updates }),
+  });
+  const data = await readJson(response);
+
+  if (!response.ok) {
+    throw new Error(data?.message || 'Unable to save MAWB edits');
+  }
+
+  return items;
 }
 
 function MawbTablePage() {
@@ -43,8 +55,8 @@ function MawbTablePage() {
       rowIdField="fwb_master_id"
       rowKeyFallbackField="mawb_number"
       rowKeyPrefix="mawb-row"
-      statusUpdateUrl={(id) => `/api/reports/mawbs/${id}/processing-status`}
-      renderCell={renderMawbCell}
+      editableColumns={MAWB_EDITABLE_COLUMNS}
+      onSaveEdits={saveMawbEdits}
     />
   );
 }

@@ -16,6 +16,17 @@ export const HAWB_DEFAULT_VISIBLE_COLUMNS = [
   'mawb_number',
 ];
 
+const HAWB_EDITABLE_COLUMN_SET = new Set([
+  'processing_status',
+  'hawb_number',
+  'piece_count',
+  'weight_kg',
+]);
+
+export const HAWB_EDITABLE_COLUMNS = HAWB_TABLE_COLUMNS.filter((column) =>
+  HAWB_EDITABLE_COLUMN_SET.has(column)
+);
+
 export const HAWB_TABLE_SETTINGS_STORAGE_KEY = 'ncaparser.hawbTable.settings';
 export const HAWB_DEFAULT_PAGE_SIZE = 25;
 export const HAWB_PAGE_SIZE_OPTIONS = [10, 25, 50, 100];

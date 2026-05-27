@@ -204,6 +204,130 @@ async function updateHawbProcessingStatus(fhlHouseId, processingStatus) {
   return result.rows[0] || null;
 }
 
+async function updateHawbRows(updates) {
+  const client = await pool.connect();
+  const updatedRows = [];
+
+  try {
+    await client.query('BEGIN');
+
+    for (const update of updates) {
+      const columns = Object.keys(update.changes);
+      if (columns.length === 0) continue;
+
+      const setClauses = columns.map((column, index) => `${column} = $${index + 2}`);
+      const values = [update.id, ...columns.map((column) => update.changes[column])];
+
+      const result = await client.query(
+        `
+          UPDATE fhl_house
+          SET ${setClauses.join(', ')}
+          WHERE id = $1
+          RETURNING id AS fhl_house_id, processing_status, hawb_number, piece_count, weight_kg
+        `,
+        values
+      );
+
+      if (result.rowCount === 0) {
+        throw new Error(`HAWB record not found for id=${update.id}`);
+      }
+
+      updatedRows.push(result.rows[0]);
+    }
+
+    await client.query('COMMIT');
+    return { updatedCount: updatedRows.length, items: updatedRows };
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
+async function updateMawbRows(updates) {
+  const client = await pool.connect();
+  const updatedRows = [];
+
+  try {
+    await client.query('BEGIN');
+
+    for (const update of updates) {
+      const columns = Object.keys(update.changes);
+      if (columns.length === 0) continue;
+
+      const setClauses = columns.map((column, index) => `${column} = $${index + 2}`);
+      const values = [update.id, ...columns.map((column) => update.changes[column])];
+
+      const result = await client.query(
+        `
+          UPDATE fwb_master
+          SET ${setClauses.join(', ')}
+          WHERE id = $1
+          RETURNING id AS fwb_master_id, processing_status, mawb_number,
+                    origin_airport_code, destination_airport_code, piece_count, weight_kg
+        `,
+        values
+      );
+
+      if (result.rowCount === 0) {
+        throw new Error(`MAWB record not found for id=${update.id}`);
+      }
+
+      updatedRows.push(result.rows[0]);
+    }
+
+    await client.query('COMMIT');
+    return { updatedCount: updatedRows.length, items: updatedRows };
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
+async function updateUldRows(updates) {
+  const client = await pool.connect();
+  const updatedRows = [];
+
+  try {
+    await client.query('BEGIN');
+
+    for (const update of updates) {
+      const columns = Object.keys(update.changes);
+      if (columns.length === 0) continue;
+
+      const setClauses = columns.map((column, index) => `${column} = $${index + 2}`);
+      const values = [update.id, ...columns.map((column) => update.changes[column])];
+
+      const result = await client.query(
+        `
+          UPDATE ffm_uld
+          SET ${setClauses.join(', ')}
+          WHERE id = $1
+          RETURNING id AS ffm_uld_id, processing_status, uld_code, uld_weight
+        `,
+        values
+      );
+
+      if (result.rowCount === 0) {
+        throw new Error(`ULD record not found for id=${update.id}`);
+      }
+
+      updatedRows.push(result.rows[0]);
+    }
+
+    await client.query('COMMIT');
+    return { updatedCount: updatedRows.length, items: updatedRows };
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
 async function listNewMessages(limit, offset) {
   const result = await pool.query(
     `
@@ -327,6 +451,9 @@ module.exports = {
   updateUldProcessingStatus,
   updateMawbProcessingStatus,
   updateHawbProcessingStatus,
+  updateHawbRows,
+  updateMawbRows,
+  updateUldRows,
   listNewMessages,
   archiveNewMessages,
 };

@@ -1,8 +1,6 @@
 
 get storage fee
 
-test new message types
-
 discuss whether it is valuable to create a new report view for the new feature:
 create a new page with the following qualities:
 
@@ -20,3 +18,17 @@ office_operation:
 - 3 columns which are empty by default, but the user can write to them: AMS, Notes, Storage
 - once the current date is past the LFD date, highlight the row (purely visual, should be minimal)
 - P3: YES/NO, ISC: TOLEAD,NCA,STORAGE,VFY_REQ
+
+New message type verification:
+RCF_[mawb]
+Delivery Complete_[mawb]
+Ready for Pick Up_[mawb]
+DLV_[mawb]
+NFD_[mawb]
+
+Examples:
+RCF_933-34474602
+Delivery Complete_205-33676484
+Ready for Pick Up_933-34771542
+DLV_205-33676484
+NFD_933-34771542

@@ -1,8 +1,11 @@
 import DataTablePage from '../components/DataTablePage';
+import { readJson } from '../lib/readJson';
+import { buildOrderedUpdates } from '../lib/tableEdits';
 import {
   HAWB_COLUMN_TYPES,
   HAWB_DEFAULT_PAGE_SIZE,
   HAWB_DEFAULT_VISIBLE_COLUMNS,
+  HAWB_EDITABLE_COLUMNS,
   HAWB_FETCH_ERROR_TEXT,
   HAWB_FETCH_URL,
   HAWB_LOADING_TEXT,
@@ -14,6 +17,31 @@ import {
   HAWB_TABLE_COLUMNS,
   HAWB_TABLE_SETTINGS_STORAGE_KEY,
 } from '../constants/hawbTable';
+
+async function saveHawbEdits({ items, originalItems }) {
+  const { updates, unsupportedColumns } = buildOrderedUpdates(items, originalItems, {
+    idField: HAWB_ROW_ID_FIELD,
+    columnOrder: HAWB_TABLE_COLUMNS,
+    editableColumns: HAWB_EDITABLE_COLUMNS,
+  });
+  if (unsupportedColumns.length > 0) {
+    throw new Error(`These fields cannot be saved: ${unsupportedColumns.join(', ')}`);
+  }
+  if (updates.length === 0) return items;
+
+  const response = await fetch('/api/reports/hawbs-table/batch', {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ updates }),
+  });
+  const data = await readJson(response);
+
+  if (!response.ok) {
+    throw new Error(data?.message || 'Unable to save HAWB edits');
+  }
+
+  return items;
+}
 
 function HawbTablePage() {
   return (
@@ -33,7 +61,8 @@ function HawbTablePage() {
       rowIdField={HAWB_ROW_ID_FIELD}
       rowKeyFallbackField={HAWB_ROW_KEY_FALLBACK_FIELD}
       rowKeyPrefix={HAWB_ROW_KEY_PREFIX}
-      statusUpdateUrl={(id) => `/api/reports/hawbs/${id}/processing-status`}
+      editableColumns={HAWB_EDITABLE_COLUMNS}
+      onSaveEdits={saveHawbEdits}
     />
   );
 }

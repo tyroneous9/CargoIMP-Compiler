@@ -18,6 +18,19 @@ export const MAWB_TABLE_COLUMNS = [
 
 export const MAWB_DEFAULT_VISIBLE_COLUMNS = [...MAWB_TABLE_COLUMNS];
 
+const MAWB_EDITABLE_COLUMN_SET = new Set([
+  'processing_status',
+  'mawb_number',
+  'origin_airport_code',
+  'destination_airport_code',
+  'piece_count',
+  'weight_kg',
+]);
+
+export const MAWB_EDITABLE_COLUMNS = MAWB_TABLE_COLUMNS.filter((column) =>
+  MAWB_EDITABLE_COLUMN_SET.has(column)
+);
+
 export const MAWB_TABLE_SETTINGS_STORAGE_KEY = 'ncaparser.mawbTable.settings';
 export const MAWB_DEFAULT_PAGE_SIZE = 25;
 export const MAWB_PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
