@@ -36,5 +36,3 @@ Delivery Complete_205-33676484
 Ready for Pick Up_933-34771542
 DLV_205-33676484
 NFD_933-34771542
-
-documentation for schema and how each field is parsed from the emails

@@ -469,7 +469,6 @@ async function listOfficeOperationRows(limit, offset) {
       SELECT
         rm.carrier_flight_number,
         rm.actual_arrival_datetime,
-        rm.scheduled_arrival_date,
         COALESCE(
           UPPER(TO_CHAR(oo.last_free_day, 'DDMON')),
           CASE

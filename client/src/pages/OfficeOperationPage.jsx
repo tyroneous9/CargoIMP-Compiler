@@ -16,7 +16,7 @@ const COLUMN_SELECT_OPTIONS = {
   isc: OFFICE_OPERATION_ISC_OPTIONS,
 };
 
-function formatActualArrivalDateTime(value, fallbackDate) {
+function formatActualArrivalDateTime(value) {
   const text = String(value || '').trim().toUpperCase();
   if (!text) return '';
 
@@ -27,14 +27,9 @@ function formatActualArrivalDateTime(value, fallbackDate) {
 
   const dayOnlyMatch = text.match(/^(\d{2})\s+(\d{2}):?(\d{2})$/);
   if (dayOnlyMatch) {
-    const fallback = String(fallbackDate || '').trim().toUpperCase();
-    const fallbackMatch = fallback.match(/^(\d{2})([A-Z]{3})$/);
     const day = dayOnlyMatch[1];
     const hh = dayOnlyMatch[2];
     const mm = dayOnlyMatch[3];
-    if (fallbackMatch) {
-      return `${day}${fallbackMatch[2]} ${hh}:${mm}`;
-    }
     return `${day} ${hh}:${mm}`;
   }
 
@@ -44,10 +39,7 @@ function formatActualArrivalDateTime(value, fallbackDate) {
 function transformOfficeOperationItems(items) {
   return items.map((item) => ({
     ...item,
-    actual_arrival_datetime: formatActualArrivalDateTime(
-      item?.actual_arrival_datetime,
-      item?.scheduled_arrival_date
-    ),
+    actual_arrival_datetime: formatActualArrivalDateTime(item?.actual_arrival_datetime),
   }));
 }
 
