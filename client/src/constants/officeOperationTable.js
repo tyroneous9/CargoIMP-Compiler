@@ -1,8 +1,8 @@
 export const OFFICE_OPERATION_TABLE_COLUMNS = [
+  'processing_status',
   'carrier_flight_number',
   'actual_arrival_datetime',
   'last_free_day',
-  'processing_status',
   'mawb_number',
   'hawb_number',
   'weight_kg',
@@ -24,7 +24,6 @@ const OFFICE_OPERATION_EDITABLE_COLUMN_SET = new Set([
   'ams_status',
   'p3',
   'freight_charge',
-  'storage',
   'isc',
 ]);
 

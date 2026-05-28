@@ -16,6 +16,65 @@ const COLUMN_SELECT_OPTIONS = {
   isc: OFFICE_OPERATION_ISC_OPTIONS,
 };
 
+const MONTH_INDEX = {
+  JAN: 0,
+  FEB: 1,
+  MAR: 2,
+  APR: 3,
+  MAY: 4,
+  JUN: 5,
+  JUL: 6,
+  AUG: 7,
+  SEP: 8,
+  OCT: 9,
+  NOV: 10,
+  DEC: 11,
+};
+
+function startOfToday() {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+}
+
+function parseLastFreeDay(rawValue) {
+  const text = String(rawValue || '').trim().toUpperCase();
+  const match = text.match(/^(\d{2})([A-Z]{3})$/);
+  if (!match) return null;
+
+  const day = Number(match[1]);
+  const month = MONTH_INDEX[match[2]];
+  if (!Number.isInteger(day) || month === undefined) return null;
+
+  const year = new Date().getFullYear();
+  const parsed = new Date(year, month, day);
+  if (Number.isNaN(parsed.getTime())) return null;
+  return parsed;
+}
+
+function computeStorageValue({ weightKg, hasDeliveryComplete, effectiveLastFreeDay }) {
+  const weight = Number(weightKg);
+  const isWeightMissing = !Number.isFinite(weight) || weight <= 0;
+
+  // Google-sheet equivalent: IF(OR(F="", X<>""), "", ...)
+  if (isWeightMissing || Boolean(hasDeliveryComplete)) {
+    return '';
+  }
+
+  if (!effectiveLastFreeDay) {
+    return '';
+  }
+
+  const today = startOfToday();
+  // Google-sheet equivalent: IF(TODAY() < INT(C), "", ...)
+  if (today < effectiveLastFreeDay) {
+    return '';
+  }
+
+  const dailyRate = Math.max(300, Math.ceil(weight / 45) * 45);
+  const days = Math.floor((today - effectiveLastFreeDay) / (24 * 60 * 60 * 1000)) + 1;
+  return dailyRate * days;
+}
+
 function formatActualArrivalDateTime(value) {
   const text = String(value || '').trim().toUpperCase();
   if (!text) return '';
@@ -37,10 +96,24 @@ function formatActualArrivalDateTime(value) {
 }
 
 function transformOfficeOperationItems(items) {
-  return items.map((item) => ({
-    ...item,
-    actual_arrival_datetime: formatActualArrivalDateTime(item?.actual_arrival_datetime),
-  }));
+  let latestNonEmptyLastFreeDay = null;
+
+  return items.map((item) => {
+    const parsedLastFreeDay = parseLastFreeDay(item?.last_free_day);
+    if (parsedLastFreeDay) {
+      latestNonEmptyLastFreeDay = parsedLastFreeDay;
+    }
+
+    return {
+      ...item,
+      actual_arrival_datetime: formatActualArrivalDateTime(item?.actual_arrival_datetime),
+      storage: computeStorageValue({
+        weightKg: item?.weight_kg,
+        hasDeliveryComplete: item?.has_delivery_complete,
+        effectiveLastFreeDay: latestNonEmptyLastFreeDay,
+      }),
+    };
+  });
 }
 
 function buildOfficeOperationUpdates(items, originalItems) {

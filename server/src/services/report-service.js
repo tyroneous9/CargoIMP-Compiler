@@ -10,7 +10,6 @@ const OFFICE_OPERATION_EDITABLE_COLUMNS = new Set([
   'ams_status',
   'p3',
   'freight_charge',
-  'storage',
   'isc',
 ]);
 const ISC_VALUES = new Set(['TOLEAD', 'NCA', 'STORAGE', 'VFY_REQ']);
