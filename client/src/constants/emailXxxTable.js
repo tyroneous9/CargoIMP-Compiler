@@ -1,4 +1,5 @@
 export const EMAIL_XXX_TABLE_COLUMNS = [
+  'processing_status',
   'carrier_flight_number',
   'scheduled_arrival_date',
   'mawb_number',
@@ -11,6 +12,8 @@ export const EMAIL_XXX_TABLE_COLUMNS = [
 ];
 
 export const EMAIL_XXX_DEFAULT_VISIBLE_COLUMNS = [...EMAIL_XXX_TABLE_COLUMNS];
+
+export const EMAIL_XXX_EDITABLE_COLUMNS = ['processing_status'];
 
 export const EMAIL_XXX_TABLE_SETTINGS_STORAGE_KEY = 'ncaparser.emailXxxTable.settings';
 export const EMAIL_XXX_DEFAULT_PAGE_SIZE = 25;

@@ -36,3 +36,7 @@ Delivery Complete_205-33676484
 Ready for Pick Up_933-34771542
 DLV_205-33676484
 NFD_933-34771542
+
+breakdown_manifest:
+mawb_number, hawb_number, piece count of mawb, uld_code
+the table should be keyed on mawb_number, therefore hawb_number and uld_code should be a list of all hawb/uld associated with the mawb

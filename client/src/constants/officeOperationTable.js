@@ -2,6 +2,7 @@ export const OFFICE_OPERATION_TABLE_COLUMNS = [
   'carrier_flight_number',
   'actual_arrival_datetime',
   'last_free_day',
+  'processing_status',
   'mawb_number',
   'hawb_number',
   'weight_kg',
@@ -19,6 +20,7 @@ export const OFFICE_OPERATION_TABLE_COLUMNS = [
 export const OFFICE_OPERATION_DEFAULT_VISIBLE_COLUMNS = [...OFFICE_OPERATION_TABLE_COLUMNS];
 
 const OFFICE_OPERATION_EDITABLE_COLUMN_SET = new Set([
+  'processing_status',
   'ams_status',
   'p3',
   'freight_charge',
@@ -45,6 +47,7 @@ export const OFFICE_OPERATION_COLUMN_LABELS = {
   carrier_flight_number: 'Flight',
   actual_arrival_datetime: 'Actual Arrival',
   last_free_day: 'LFD',
+  processing_status: 'Status',
   mawb_number: 'MAWB',
   hawb_number: 'HAWB',
   weight_kg: 'Weight (kg)',

@@ -120,6 +120,7 @@ async function listEmailXxxRows(limit, offset) {
     `
       SELECT DISTINCT ON (rm.mawb_number)
         rm.fwb_master_id,
+        rm.processing_status,
         rm.carrier_flight_number,
         rm.scheduled_arrival_date,
         rm.mawb_number,
@@ -461,7 +462,50 @@ module.exports = {
   archiveNewMessages,
   listOfficeOperationRows,
   upsertOfficeOperationRows,
+  listBreakdownManifestRows,
 };
+
+async function listBreakdownManifestRows(limit, offset) {
+  const result = await pool.query(
+    `
+      SELECT
+        rm.processing_status,
+        rm.mawb_number,
+        COALESCE(rh.hawb_numbers, '') AS hawb_number,
+        f.piece_count,
+        COALESCE(ru.uld_codes, '') AS uld_code,
+        f.id AS fwb_master_id
+      FROM report_mawb rm
+      JOIN fwb_master f ON f.id = rm.fwb_master_id
+      LEFT JOIN (
+        SELECT
+          mawb_number,
+          STRING_AGG(DISTINCT hawb_number, ', ' ORDER BY hawb_number) AS hawb_numbers
+        FROM report_hawb
+        WHERE hawb_number IS NOT NULL AND hawb_number <> ''
+        GROUP BY mawb_number
+      ) rh ON rh.mawb_number = rm.mawb_number
+      LEFT JOIN (
+        SELECT
+          fa.master_awb_number AS mawb_number,
+          STRING_AGG(DISTINCT fu.uld_code, ', ' ORDER BY fu.uld_code) AS uld_codes
+        FROM ffm_awb fa
+        JOIN ffm_uld fu ON fu.id = fa.ffm_uld_id
+        WHERE fa.master_awb_number IS NOT NULL
+          AND fa.master_awb_number <> ''
+          AND fu.uld_code IS NOT NULL
+          AND fu.uld_code <> ''
+        GROUP BY fa.master_awb_number
+      ) ru ON ru.mawb_number = rm.mawb_number
+      WHERE rm.mawb_number IS NOT NULL
+        AND rm.mawb_number <> ''
+      ORDER BY rm.mawb_number ASC
+      LIMIT $1 OFFSET $2
+    `,
+    [limit, offset]
+  );
+  return result.rows;
+}
 
 async function listOfficeOperationRows(limit, offset) {
   const result = await pool.query(
@@ -482,6 +526,7 @@ async function listOfficeOperationRows(limit, offset) {
             ELSE NULL
           END
         ) AS last_free_day,
+        rm.processing_status,
         rm.mawb_number,
         COALESCE(rh.hawb_numbers, '') AS hawb_number,
         f.weight_kg,
@@ -565,19 +610,44 @@ async function upsertOfficeOperationRows(updates) {
       const columns = Object.keys(changes);
       if (columns.length === 0) continue;
 
-      const setClauseParts = columns.map((col, i) => `${col} = $${i + 2}`);
-      const values = [mawb_number, ...columns.map((col) => changes[col])];
+      const hasStatusChange = Object.prototype.hasOwnProperty.call(changes, 'processing_status');
+      const processingStatus = hasStatusChange ? changes.processing_status : null;
+
+      if (hasStatusChange) {
+        const statusResult = await client.query(
+          `
+            UPDATE fwb_master
+            SET processing_status = $2
+            WHERE mawb_number = $1
+            RETURNING id
+          `,
+          [mawb_number, processingStatus]
+        );
+
+        if (statusResult.rowCount === 0) {
+          throw new Error(`MAWB record not found for mawb_number=${mawb_number}`);
+        }
+      }
+
+      const officeColumns = columns.filter((column) => column !== 'processing_status');
+      if (officeColumns.length === 0) {
+        updatedRows.push({ mawb_number, processing_status: processingStatus });
+        continue;
+      }
+
+      const setClauseParts = officeColumns.map((col, i) => `${col} = $${i + 2}`);
+      const values = [mawb_number, ...officeColumns.map((col) => changes[col])];
 
       const result = await client.query(
         `
-          INSERT INTO office_operation (mawb_number, ${columns.join(', ')}, updated_at)
-          VALUES ($1, ${columns.map((_, i) => `$${i + 2}`).join(', ')}, NOW())
+          INSERT INTO office_operation (mawb_number, ${officeColumns.join(', ')}, updated_at)
+          VALUES ($1, ${officeColumns.map((_, i) => `$${i + 2}`).join(', ')}, NOW())
           ON CONFLICT (mawb_number)
           DO UPDATE SET ${setClauseParts.join(', ')}, updated_at = NOW()
-          RETURNING id AS office_operation_id, mawb_number, ams_status, p3,
+          RETURNING id AS office_operation_id, mawb_number, $${officeColumns.length + 2}::text AS processing_status, ams_status, p3,
                     freight_charge, storage, isc, last_free_day
         `,
-        values
+        [...values, processingStatus]
       );
 
       updatedRows.push(result.rows[0]);

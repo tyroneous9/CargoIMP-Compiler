@@ -1,4 +1,5 @@
 import EmailXxxTablePage from './pages/EmailXxxTablePage';
+import BreakdownManifestPage from './pages/BreakdownManifestPage';
 import HawbTablePage from './pages/HawbTablePage';
 import IndexPage from './pages/IndexPage';
 import MawbTablePage from './pages/MawbTablePage';
@@ -11,6 +12,7 @@ import UldTablePage from './pages/UldTablePage';
 function App() {
   const path = window.location.pathname;
   const isEmailXxxTablePage = path === '/email-xxx-table';
+  const isBreakdownManifestPage = path === '/breakdown-manifest';
   const isIndexPage = path === '/' || path === '/index';
   const isHawbTablePage = path === '/hawb-table';
   const isMawbTablePage = window.location.pathname === '/mawb-table';
@@ -33,6 +35,10 @@ function App() {
 
   if (isEmailXxxTablePage) {
     return <EmailXxxTablePage />;
+  }
+
+  if (isBreakdownManifestPage) {
+    return <BreakdownManifestPage />;
   }
 
   if (isHawbTablePage) {

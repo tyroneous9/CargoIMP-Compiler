@@ -164,6 +164,15 @@ async function upsertOfficeOperationRows(req, res, next) {
   }
 }
 
+async function listBreakdownManifestRows(req, res, next) {
+  try {
+    const items = await reportService.listBreakdownManifestRows(req.query);
+    res.json({ items });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   listMawbs,
   listUlds,
@@ -182,4 +191,5 @@ module.exports = {
   updateUldRows,
   listOfficeOperationRows,
   upsertOfficeOperationRows,
+  listBreakdownManifestRows,
 };

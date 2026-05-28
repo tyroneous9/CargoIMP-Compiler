@@ -6,6 +6,7 @@ const PROCESSING_STATUS_VALUES = new Set(['new', 'complete']);
 const NEW_MESSAGE_RECORD_TYPES = new Set(['uld', 'mawb', 'hawb']);
 const HAWB_EDITABLE_COLUMNS = new Set(['processing_status', 'hawb_number', 'piece_count', 'weight_kg']);
 const OFFICE_OPERATION_EDITABLE_COLUMNS = new Set([
+  'processing_status',
   'ams_status',
   'p3',
   'freight_charge',
@@ -249,6 +250,11 @@ async function listOfficeOperationRows(query) {
   return reportRepository.listOfficeOperationRows(limit, offset);
 }
 
+async function listBreakdownManifestRows(query) {
+  const { limit, offset } = parsePagination(query);
+  return reportRepository.listBreakdownManifestRows(limit, offset);
+}
+
 function parseOfficeOperationUpdates(updates) {
   if (!Array.isArray(updates) || updates.length === 0) {
     const error = new Error('updates must be a non-empty array');
@@ -281,6 +287,10 @@ function parseOfficeOperationUpdates(updates) {
         const error = new Error(`updates[${index}].changes.${column} is not editable`);
         error.statusCode = 400;
         throw error;
+      }
+      if (column === 'processing_status') {
+        normalizedChanges[column] = parseProcessingStatus(value);
+        continue;
       }
       if (column === 'isc' && value !== null && !ISC_VALUES.has(value)) {
         const error = new Error(`updates[${index}].changes.isc must be one of: TOLEAD, NCA, STORAGE, VFY_REQ`);
@@ -323,4 +333,5 @@ module.exports = {
   updateUldRows,
   listOfficeOperationRows,
   upsertOfficeOperationRows,
+  listBreakdownManifestRows,
 };

@@ -22,5 +22,6 @@ router.patch('/mawbs/:fwbMasterId/processing-status', reportController.updateMaw
 router.patch('/hawbs/:fhlHouseId/processing-status', reportController.updateHawbProcessingStatus);
 router.get('/office-operation-table', reportController.listOfficeOperationRows);
 router.patch('/office-operation-table/batch', reportController.upsertOfficeOperationRows);
+router.get('/breakdown-manifest-table', reportController.listBreakdownManifestRows);
 
 module.exports = router;
