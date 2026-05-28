@@ -57,6 +57,7 @@ async function listUldTableRows(limit, offset) {
         r.scheduled_departure_time,
         r.scheduled_arrival_date,
         r.scheduled_arrival_time,
+        r.actual_arrival_datetime,
         r.departure_airport_code,
         r.mawb_numbers,
         r.awb_count
@@ -90,6 +91,7 @@ async function listMawbTableRows(limit, offset) {
         rm.carrier_flight_number,
         rm.scheduled_arrival_date,
         rm.scheduled_arrival_time,
+        rm.actual_arrival_datetime,
         rm.piece_count,
         rm.weight_kg,
         rm.nature_of_goods,
@@ -153,7 +155,8 @@ async function listHawbTableRows(limit, offset) {
         mawb_number,
         origin_airport_code,
         destination_airport_code,
-        scheduled_arrival_time
+        scheduled_arrival_time,
+        actual_arrival_datetime
       FROM report_hawb
       WHERE hawb_number IS NOT NULL
         AND hawb_number <> ''
@@ -456,4 +459,137 @@ module.exports = {
   updateUldRows,
   listNewMessages,
   archiveNewMessages,
+  listOfficeOperationRows,
+  upsertOfficeOperationRows,
 };
+
+async function listOfficeOperationRows(limit, offset) {
+  const result = await pool.query(
+    `
+      SELECT
+        rm.carrier_flight_number,
+        rm.actual_arrival_datetime,
+        rm.scheduled_arrival_date,
+        COALESCE(
+          UPPER(TO_CHAR(oo.last_free_day, 'DDMON')),
+          CASE
+            WHEN dep.scheduled_departure_date ~ '^[0-9]{2}[A-Za-z]{3}$' THEN
+              UPPER(
+                TO_CHAR(
+                  TO_DATE(dep.scheduled_departure_date || TO_CHAR(CURRENT_DATE, 'YYYY'), 'DDMONYYYY') + INTERVAL '2 day',
+                  'DDMON'
+                )
+              )
+            ELSE NULL
+          END
+        ) AS last_free_day,
+        rm.mawb_number,
+        COALESCE(rh.hawb_numbers, '') AS hawb_number,
+        f.weight_kg,
+        f.piece_count,
+        COALESCE(ru.uld_codes, '') AS uld_code,
+        COALESCE(NULLIF(BTRIM(f.consignee_name), ''), hc.hawb_consignees, '') AS consignee_name,
+        oo.ams_status,
+        oo.p3,
+        oo.freight_charge,
+        oo.storage,
+        oo.isc,
+        COALESCE(ns.has_delivery_complete, FALSE) AS has_delivery_complete,
+        oo.id AS office_operation_id
+      FROM report_mawb rm
+      JOIN fwb_master f ON f.id = rm.fwb_master_id
+      LEFT JOIN mawb_notification_status ns
+        ON ns.mawb_number = rm.mawb_number
+      LEFT JOIN (
+        SELECT
+          mawb_number,
+          STRING_AGG(DISTINCT hawb_number, ', ' ORDER BY hawb_number) AS hawb_numbers
+        FROM report_hawb
+        WHERE hawb_number IS NOT NULL AND hawb_number <> ''
+        GROUP BY mawb_number
+      ) rh ON rh.mawb_number = rm.mawb_number
+      LEFT JOIN (
+        SELECT
+          fa.master_awb_number AS mawb_number,
+          STRING_AGG(DISTINCT fu.uld_code, ', ' ORDER BY fu.uld_code) AS uld_codes
+        FROM ffm_awb fa
+        JOIN ffm_uld fu ON fu.id = fa.ffm_uld_id
+        WHERE fa.master_awb_number IS NOT NULL
+          AND fa.master_awb_number <> ''
+          AND fu.uld_code IS NOT NULL
+          AND fu.uld_code <> ''
+        GROUP BY fa.master_awb_number
+      ) ru ON ru.mawb_number = rm.mawb_number
+      LEFT JOIN (
+        SELECT
+          fm.mawb_number,
+          STRING_AGG(DISTINCT h.consignee_name, ', ' ORDER BY h.consignee_name) AS hawb_consignees
+        FROM fhl_house h
+        JOIN fhl_master fm ON fm.id = h.fhl_master_id
+        WHERE h.consignee_name IS NOT NULL
+          AND BTRIM(h.consignee_name) <> ''
+        GROUP BY fm.mawb_number
+      ) hc ON hc.mawb_number = rm.mawb_number
+      LEFT JOIN LATERAL (
+        SELECT ff.scheduled_departure_date
+        FROM ffm_awb fa
+        JOIN ffm_uld fu ON fu.id = fa.ffm_uld_id
+        JOIN ffm_flight ff ON ff.id = fu.ffm_flight_id
+        WHERE fa.master_awb_number = rm.mawb_number
+          AND ff.scheduled_departure_date IS NOT NULL
+          AND ff.scheduled_departure_date <> ''
+        ORDER BY ff.id DESC
+        LIMIT 1
+      ) dep ON TRUE
+      LEFT JOIN office_operation oo
+        ON oo.mawb_number = rm.mawb_number
+      WHERE rm.mawb_number IS NOT NULL
+        AND rm.mawb_number <> ''
+      ORDER BY rm.carrier_flight_number ASC NULLS LAST, rm.mawb_number ASC
+      LIMIT $1 OFFSET $2
+    `,
+    [limit, offset]
+  );
+  return result.rows;
+}
+
+async function upsertOfficeOperationRows(updates) {
+  const client = await pool.connect();
+  const updatedRows = [];
+
+  try {
+    await client.query('BEGIN');
+
+    for (const update of updates) {
+      const { mawb_number, changes } = update;
+
+      const columns = Object.keys(changes);
+      if (columns.length === 0) continue;
+
+      const setClauseParts = columns.map((col, i) => `${col} = $${i + 2}`);
+      const values = [mawb_number, ...columns.map((col) => changes[col])];
+
+      const result = await client.query(
+        `
+          INSERT INTO office_operation (mawb_number, ${columns.join(', ')}, updated_at)
+          VALUES ($1, ${columns.map((_, i) => `$${i + 2}`).join(', ')}, NOW())
+          ON CONFLICT (mawb_number)
+          DO UPDATE SET ${setClauseParts.join(', ')}, updated_at = NOW()
+          RETURNING id AS office_operation_id, mawb_number, ams_status, p3,
+                    freight_charge, storage, isc, last_free_day
+        `,
+        values
+      );
+
+      updatedRows.push(result.rows[0]);
+    }
+
+    await client.query('COMMIT');
+    return { updatedCount: updatedRows.length, items: updatedRows };
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+}

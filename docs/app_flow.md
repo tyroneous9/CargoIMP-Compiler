@@ -118,6 +118,121 @@ Parser result contract:
 - `stderr`
 - parsed fields (`payload_json`) only when `status = ok`
 
+### Parsed Payload Field Reference
+
+This section describes the semantic meaning of parser output fields stored in `messages_parsed.payload_json`.
+
+#### FFM payload fields
+
+- `FlightIdentification`: flight-level header details.
+- `FlightIdentification.MessagePageNumber`: message page index for multipart FFM.
+- `FlightIdentification.CarrierFlightNumber`: carrier code + flight number.
+- `FlightIdentification.ScheduledDepartureDateTime`: planned departure date/time text from the message.
+- `FlightIdentification.ScheduledDepartureDate`: planned departure date token.
+- `FlightIdentification.ScheduledDepartureTime`: planned departure time token.
+- `FlightIdentification.DepartureAirportCode`: departure airport (board point).
+- `FlightIdentification.AircraftRegistration`: aircraft registration/tail.
+- `Routes[]`: ordered route legs.
+- `Routes[].ArrivalAirportCode`: arrival airport for the leg.
+- `Routes[].ScheduledArrivalDateTime`: leg arrival date/time text.
+- `Routes[].ScheduledArrivalDate`: leg arrival date token.
+- `Routes[].ScheduledArrivalClockTime`: leg arrival time token.
+- `Routes[].ScheduledOnwardDepartureDateTime`: onward departure date/time text.
+- `Routes[].ScheduledOnwardDepartureDate`: onward departure date token.
+- `Routes[].ScheduledOnwardDepartureTime`: onward departure time token.
+- `ULDs`: object keyed by ULD code.
+- `ULDs[code].ULDDetailText`: free-text ULD details.
+- `ULDs[code].ULDWeight`: ULD-level reported weight.
+- `ULDs[code].ULDDetailCode`: ULD detail/type code.
+- `ULDs[code].AWBs[]`: AWB entries loaded in the ULD.
+- `AWBs[].MasterAirwayBillNumber`: MAWB number linked to this ULD.
+- `AWBs[].OriginAndDestination`: AWB origin/destination token.
+- `AWBs[].ShipmentSummary`: shipment summary token.
+- `AWBs[].FreeText`: AWB free-text segment.
+- `AWBs[].OSI[]`, `AWBs[].OCI[]`, `AWBs[].SCI[]`, `AWBs[].Qualifiers[]`, `AWBs[].Continuations[]`: supplemental line groups retained from the parser output.
+
+#### FWB payload fields
+
+- `MasterAirwayBillNumber`: MAWB identifier.
+- `OriginAndDestination`: origin and destination airport pair token.
+- `TotalPieceCount`: MAWB total pieces.
+- `WeightUnit`: MAWB weight unit (for example `K` or `L`).
+- `TotalWeight`: MAWB total weight.
+- `VolumeUnit`: optional volume unit.
+- `VolumeAmount`: optional volume value.
+- `NatureOfGoods`: nature-of-goods text.
+- `FlightBookings[]`: booked flight segments.
+- `FlightBookings[].CarrierFlightNumber`: booked carrier flight number.
+- `FlightBookings[].Day`: booked day token.
+- `Routing[]`: routing legs.
+- `Routing[].AirportCode`: airport code in route sequence.
+- `Routing[].CarrierCode`: carrier code for that leg.
+- `Shipper`: shipper party block.
+- `Shipper.NameLine`: shipper name line (usually `NAM/...`).
+- `Shipper.AddressLine`: shipper address line (usually `ADR/...`).
+- `Shipper.LocationLine`: shipper location line (usually `LOC/...`).
+- `Shipper.Continuations[]`: continuation lines for shipper block.
+- `Consignee`: consignee party block.
+- `Consignee.NameLine`: consignee name line (usually `NAM/...`).
+- `Consignee.AddressLine`: consignee address line (usually `ADR/...`).
+- `Consignee.LocationLine`: consignee location line (usually `LOC/...`).
+- `Consignee.Continuations[]`: continuation lines for consignee block.
+- `ChargesDeclaration`: charge declaration breakdown.
+- `ChargesDeclaration.CurrencyCode`: charge currency.
+- `ChargesDeclaration.WeightValuation`: weight valuation code.
+- `ChargesDeclaration.OtherCharges`: other-charges code.
+- `ChargesDeclaration.DeclaredValueForCarriage`: declared value for carriage.
+- `ChargesDeclaration.DeclaredValueForCustoms`: declared value for customs.
+- `ChargesDeclaration.InsuranceValue`: insurance value token.
+- `AgentLine`, `AgentContinuations[]`, `AccountingLine`, `RatingLine`, `RatingContinuations[]`, `OtherChargesLine`, `OtherChargesContinuations[]`, `PrepaidLine`, `PrepaidContinuations[]`, `CertificationLine`, `IssuanceLine`, `OsiLines[]`, `OciLines[]`, `RefLines[]`, `SphLine`: additional declared segments preserved for diagnostics and later enrichment.
+
+#### FHL payload fields
+
+- `MasterAirwayBillNumber`: parent MAWB identifier.
+- `MasterOriginAndDestination`: master origin/destination pair token.
+- `MasterPieceCount`: master piece count.
+- `MasterWeightUnit`: master weight unit.
+- `MasterWeight`: master weight.
+- `HouseBills[]`: house shipment groups.
+- `HouseBills[].HouseOriginAndDestination`: house origin/destination pair token.
+- `HouseBills[].HouseWaybillNumber`: HAWB number.
+- `HouseBills[].HousePieceCount`: house piece count.
+- `HouseBills[].HouseSlac`: SLAC token.
+- `HouseBills[].HouseWeightUnit`: house weight unit.
+- `HouseBills[].HouseWeight`: house weight.
+- `HouseBills[].DescriptionLine`: house goods description line.
+- `HouseBills[].DescriptionContinuations[]`: continuation lines for description.
+- `HouseBills[].HtsLines[]`: HTS lines.
+- `HouseBills[].OciLines[]`: OCI lines.
+- `Shipper`: message-level shipper party block.
+- `Shipper.ShipperLine`: shipper line (typically `SHP/...`).
+- `Shipper.Continuations[]`: shipper continuation lines.
+- `Consignee`: message-level consignee party block.
+- `Consignee.ConsigneeLine`: consignee line (typically `CNE/...`).
+- `Consignee.Continuations[]`: consignee continuation lines.
+- `ChargesDeclaration`: charge declaration block.
+- `ChargesDeclaration.CurrencyCode`: charge currency.
+- `ChargesDeclaration.WeightValuation`: weight valuation code.
+- `ChargesDeclaration.DeclaredValueForCarriage`: declared value for carriage.
+- `ChargesDeclaration.DeclaredValueForCustoms`: declared value for customs.
+- `ChargesDeclaration.InsuranceValue`: insurance value token.
+
+#### MVT payload fields
+
+- `EventType` or `MovementType`: movement event code (for example `EA`, `AA`, `DEP`, etc.).
+- `CarrierFlightNumber` or `FlightNumber`: target flight number.
+- `BoardPoint`: board/departure point.
+- `OffPoint`: off/arrival point.
+- `EventDateTime`: event date-time text.
+- `EventDate`: event date token.
+- `EventTime`: event time token.
+- `Registration`: aircraft registration.
+- `ServiceType`: service-type token.
+- `DiversionAirportCode`: diversion airport when present.
+- `DelayAirportCode`: delay airport when present.
+- `DelayReasonCode`: delay reason code.
+- `DelayDurationMinutes`: delay duration in minutes.
+
 Transactional behavior:
 - each parse write and normalization write happens inside a DB transaction (`BEGIN`/`COMMIT`, rollback on failure).
 

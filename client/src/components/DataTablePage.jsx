@@ -43,6 +43,8 @@ function withRequiredColumns(columns, allColumns, requiredColumns) {
  * @param {string[]} [props.editableColumns]    - Columns editable in Edit Table mode; when omitted all columns are editable
  * @param {function} [props.transformItems]     - (items: object[]) => object[]
  * @param {function} [props.renderCell]         - (column: string, row: object) => node | undefined
+ * @param {object}   [props.columnLabels]       - Map of column name → display label
+ * @param {object}   [props.columnSelectOptions] - Map of column name → string[] for enum select in edit mode
  * @param {function} [props.onSaveEdits]        - async ({ items, originalItems }) => items?; return items to replace local state
  */
 function DataTablePage({
@@ -65,6 +67,8 @@ function DataTablePage({
   editableColumns,
   transformItems,
   renderCell,
+  columnLabels = {},
+  columnSelectOptions = {},
   onSaveEdits,
 }) {
   const normalizedDefaultVisibleColumns = useMemo(() => {
@@ -389,18 +393,42 @@ function DataTablePage({
         );
       }
 
-      if (booleanEditableColumns.has(column)) {
-        const selectedValue = value === false ? 'false' : 'true';
+      if (columnTypes[column] === 'boolean' || booleanEditableColumns.has(column)) {
+        const selectedValue = value === true ? 'true' : value === false ? 'false' : '';
         return (
           <select
             value={selectedValue}
             onChange={(event) => {
               const nextValue = event.target.value;
-              updateCellValue(row, column, nextValue === 'false' ? false : true);
+              if (nextValue === 'true') {
+                updateCellValue(row, column, true);
+                return;
+              }
+              if (nextValue === 'false') {
+                updateCellValue(row, column, false);
+                return;
+              }
+              updateCellValue(row, column, null);
             }}
           >
+            <option value="">—</option>
             {BOOLEAN_EDIT_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>{option.label}</option>
+            ))}
+          </select>
+        );
+      }
+
+      if (columnSelectOptions[column]) {
+        const selectedValue = value ?? '';
+        return (
+          <select
+            value={selectedValue}
+            onChange={(event) => updateCellValue(row, column, event.target.value || null)}
+          >
+            <option value="">—</option>
+            {columnSelectOptions[column].map((opt) => (
+              <option key={opt} value={opt}>{opt}</option>
             ))}
           </select>
         );
@@ -497,7 +525,7 @@ function DataTablePage({
                         checked={visibleColumns.includes(column)}
                         onChange={() => toggleVisibleColumn(column)}
                       />
-                      <span>{column}</span>
+                      <span>{columnLabels[column] ?? column}</span>
                     </label>
                   ))}
                 </div>
@@ -517,7 +545,7 @@ function DataTablePage({
                       className={`sort-button ${sort.column === column ? 'active' : ''}`}
                       onClick={() => onSortToggle(column)}
                     >
-                      {column}
+                      {columnLabels[column] ?? column}
                       <span className="sort-indicator">
                         {sort.column === column ? (sort.direction === 'asc' ? '↑' : '↓') : '↕'}
                       </span>

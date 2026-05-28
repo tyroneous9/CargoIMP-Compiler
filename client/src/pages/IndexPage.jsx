@@ -23,6 +23,9 @@ function IndexPage() {
           <a className="index-card" href="/uld-table">
             <h2>ULD Table</h2>
           </a>
+          <a className="index-card" href="/office-operation">
+            <h2>Office Operation</h2>
+          </a>
         </div>
       </section>
     </main>

@@ -163,14 +163,24 @@ async function extractEmailsToDb() {
 
     try {
       const searchStartUid = latestFetchedUid > 0 ? latestFetchedUid + 1 : 1;
+      const hasCheckpoint = latestFetchedUid > 0;
+      const processNewestFirst = !hasCheckpoint;
       log('log', `[extract] searching uid range ${searchStartUid}:*`);
       const uids = await client.search({ uid: `${searchStartUid}:*` }, { uid: true });
       uids.sort((a, b) => a - b);
-      const candidateUids = extractLimit === -1 ? uids : uids.slice(0, extractLimit);
+
+      let candidateUids;
+      if (extractLimit === -1) {
+        candidateUids = processNewestFirst ? [...uids].reverse() : uids;
+      } else if (processNewestFirst) {
+        candidateUids = uids.slice(-extractLimit).reverse();
+      } else {
+        candidateUids = uids.slice(0, extractLimit);
+      }
 
       log(
         'log',
-        `[extract] latestFetchedUid=${latestFetchedUid} matched=${uids.length} candidate=${candidateUids.length} limit=${extractLimit}`
+        `[extract] latestFetchedUid=${latestFetchedUid} matched=${uids.length} candidate=${candidateUids.length} limit=${extractLimit} newestFirst=${processNewestFirst}`
       );
 
       if (candidateUids.length === 0) {
@@ -186,6 +196,12 @@ async function extractEmailsToDb() {
         )) {
           headers.push(messageHeader);
         }
+
+        headers.sort((a, b) => {
+          const aUid = Number(a?.uid || 0);
+          const bUid = Number(b?.uid || 0);
+          return processNewestFirst ? bUid - aUid : aUid - bUid;
+        });
 
         for (const messageHeader of headers) {
           const uid = Number(messageHeader.uid);

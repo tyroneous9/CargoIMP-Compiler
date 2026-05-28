@@ -11,6 +11,51 @@ function parseOriginDestination(value) {
   return { origin: null, destination: null };
 }
 
+function cleanText(value) {
+  const text = String(value || '').trim();
+  return text.length > 0 ? text : null;
+}
+
+function extractNameFromLine(line, allowedPrefixes) {
+  const text = cleanText(line);
+  if (!text) return null;
+
+  const slashIndex = text.indexOf('/');
+  if (slashIndex > 0) {
+    const prefix = text.slice(0, slashIndex).trim().toUpperCase();
+    if (allowedPrefixes.has(prefix)) {
+      const suffix = cleanText(text.slice(slashIndex + 1));
+      return suffix || null;
+    }
+  }
+
+  return text;
+}
+
+function extractPartyName(party, fallbackLineKey, allowedPrefixes) {
+  if (!party || typeof party !== 'object') return null;
+
+  const directName = cleanText(party.Name) || cleanText(party.name);
+  if (directName) return directName;
+
+  const nameLine = cleanText(party.NameLine) || cleanText(party.nameLine);
+  if (nameLine) {
+    const parsed = extractNameFromLine(nameLine, allowedPrefixes);
+    if (parsed) return parsed;
+  }
+
+  const fallbackLine = cleanText(party[fallbackLineKey]);
+  if (fallbackLine) {
+    const parsed = extractNameFromLine(fallbackLine, allowedPrefixes);
+    if (parsed) return parsed;
+  }
+
+  return null;
+}
+
+const SHIPPER_PREFIXES = new Set(['SHP', 'NAM']);
+const CONSIGNEE_PREFIXES = new Set(['CNE', 'NAM']);
+
 async function persistFfmNormalized(client, parsedMessageId, fields) {
   const fi = fields.FlightIdentification || {};
 
@@ -137,6 +182,8 @@ async function persistFfmNormalized(client, parsedMessageId, fields) {
 async function persistFwbNormalized(client, parsedMessageId, fields) {
   const masterAwb = fields.MasterAirwayBillNumber || null;
   const od = parseOriginDestination(fields.OriginAndDestination);
+  const shipperName = extractPartyName(fields.Shipper, 'ShipperLine', SHIPPER_PREFIXES);
+  const consigneeName = extractPartyName(fields.Consignee, 'ConsigneeLine', CONSIGNEE_PREFIXES);
 
   const insert = await client.query(
     `
@@ -170,8 +217,8 @@ async function persistFwbNormalized(client, parsedMessageId, fields) {
       Number.isFinite(Number(fields.VolumeAmount)) ? Number(fields.VolumeAmount) : null,
       fields.VolumeUnit || null,
       fields.NatureOfGoods || null,
-      (fields.Shipper && fields.Shipper.Name) || null,
-      (fields.Consignee && fields.Consignee.Name) || null,
+      shipperName,
+      consigneeName,
       fields.ChargesDeclaration || null,
       fields,
     ]
@@ -210,6 +257,8 @@ async function persistFwbNormalized(client, parsedMessageId, fields) {
 
 async function persistFhlNormalized(client, parsedMessageId, fields) {
   const od = parseOriginDestination(fields.MasterOriginAndDestination);
+  const fallbackShipperName = extractPartyName(fields.Shipper, 'ShipperLine', SHIPPER_PREFIXES);
+  const fallbackConsigneeName = extractPartyName(fields.Consignee, 'ConsigneeLine', CONSIGNEE_PREFIXES);
   const master = await client.query(
     `
       INSERT INTO fhl_master (
@@ -240,6 +289,10 @@ async function persistFhlNormalized(client, parsedMessageId, fields) {
   const houses = Array.isArray(fields.HouseBills) ? fields.HouseBills : [];
   for (let i = 0; i < houses.length; i++) {
     const house = houses[i] || {};
+    const houseShipperName =
+      extractPartyName(house.Shipper, 'ShipperLine', SHIPPER_PREFIXES) || fallbackShipperName;
+    const houseConsigneeName =
+      extractPartyName(house.Consignee, 'ConsigneeLine', CONSIGNEE_PREFIXES) || fallbackConsigneeName;
     await client.query(
       `
         INSERT INTO fhl_house (
@@ -254,8 +307,8 @@ async function persistFhlNormalized(client, parsedMessageId, fields) {
         Number.isFinite(Number(house.HousePieceCount)) ? Number(house.HousePieceCount) : null,
         Number.isFinite(Number(house.HouseWeight)) ? Number(house.HouseWeight) : null,
         house.NatureOfGoodsDescription || null,
-        (house.Shipper && house.Shipper.Name) || null,
-        (house.Consignee && house.Consignee.Name) || null,
+        houseShipperName,
+        houseConsigneeName,
         house,
       ]
     );

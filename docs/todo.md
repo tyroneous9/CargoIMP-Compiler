@@ -19,6 +19,10 @@ office_operation:
 - once the current date is past the LFD date, highlight the row (purely visual, should be minimal)
 - P3: true/false, ISC: TOLEAD,NCA,STORAGE,VFY_REQ
 
+office_operation order:
+carrier_flight_number, actual_arrival_datetime, last_free_day, mawb_number, hawb_number, weight (of the mawb), total pieces (of the mawb), uld_code, consignee, ams_status, p3, freight_charge, storage, ISC, has_delivery_complete
+
+
 New message type verification:
 RCF_[mawb]
 Delivery Complete_[mawb]
@@ -32,3 +36,5 @@ Delivery Complete_205-33676484
 Ready for Pick Up_933-34771542
 DLV_205-33676484
 NFD_933-34771542
+
+documentation for schema and how each field is parsed from the emails

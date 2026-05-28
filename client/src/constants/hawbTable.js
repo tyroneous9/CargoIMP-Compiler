@@ -7,6 +7,7 @@ export const HAWB_TABLE_COLUMNS = [
   'origin_airport_code',
   'destination_airport_code',
   'scheduled_arrival_time',
+  'actual_arrival_datetime',
 ];
 
 export const HAWB_DEFAULT_VISIBLE_COLUMNS = [

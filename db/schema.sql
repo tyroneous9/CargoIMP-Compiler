@@ -4,7 +4,7 @@ BEGIN
 	IF current_database() <> 'nca_cargo' THEN
 		RAISE EXCEPTION 'This script must run on nca_cargo, current db is %', current_database();
 	END IF;
-END $$;remove all routing from the index page. instead, each page button 
+END $$;
 
 DO $$
 BEGIN
@@ -287,6 +287,7 @@ SELECT
 	mawb_arrival.carrier_flight_number,
 	mawb_arrival.scheduled_arrival_date,
 	mawb_arrival.scheduled_arrival_time,
+	mawb_arrival.actual_arrival_datetime,
 	f.piece_count,
 	f.weight_kg,
 	f.nature_of_goods,
@@ -317,7 +318,19 @@ LEFT JOIN LATERAL (
 				LIMIT 1
 			),
 			fr.scheduled_arrival_time
-		) AS scheduled_arrival_time
+		) AS scheduled_arrival_time,
+		(
+			SELECT
+				CASE
+					WHEN COALESCE(me.event_date_text, '') = '' OR COALESCE(me.event_time_text, '') = '' THEN NULL
+					ELSE me.event_date_text || ' ' || me.event_time_text
+				END
+			FROM mvt_event me
+			WHERE me.carrier_flight_number = ff.carrier_flight_number
+				AND me.event_type = 'AA'
+			ORDER BY me.id DESC
+			LIMIT 1
+		) AS actual_arrival_datetime
 	FROM ffm_awb fa
 	JOIN ffm_uld fu ON fu.id = fa.ffm_uld_id
 	JOIN ffm_flight ff ON ff.id = fu.ffm_flight_id
@@ -339,22 +352,36 @@ SELECT
 	fm.mawb_number,
 	fm.origin_airport_code,
 	fm.destination_airport_code,
-	hawb_arrival.scheduled_arrival_time
+	hawb_arrival.scheduled_arrival_time,
+	hawb_arrival.actual_arrival_datetime
 FROM fhl_house h
 JOIN fhl_master fm ON fm.id = h.fhl_master_id
 JOIN messages_parsed mp ON mp.id = fm.parsed_message_id
 LEFT JOIN LATERAL (
-	SELECT COALESCE(
+	SELECT
+		COALESCE(
+			(
+				SELECT me.event_time_text
+				FROM mvt_event me
+				WHERE me.carrier_flight_number = ff.carrier_flight_number
+					AND me.event_type IN ('EA', 'AA')
+				ORDER BY me.id DESC
+				LIMIT 1
+			),
+			fr.scheduled_arrival_time
+		) AS scheduled_arrival_time,
 		(
-			SELECT me.event_time_text
+			SELECT
+				CASE
+					WHEN COALESCE(me.event_date_text, '') = '' OR COALESCE(me.event_time_text, '') = '' THEN NULL
+					ELSE me.event_date_text || ' ' || me.event_time_text
+				END
 			FROM mvt_event me
 			WHERE me.carrier_flight_number = ff.carrier_flight_number
-				AND me.event_type IN ('EA', 'AA')
+				AND me.event_type = 'AA'
 			ORDER BY me.id DESC
 			LIMIT 1
-		),
-		fr.scheduled_arrival_time
-	) AS scheduled_arrival_time
+		) AS actual_arrival_datetime
 	FROM ffm_awb fa
 	JOIN ffm_uld fu ON fu.id = fa.ffm_uld_id
 	JOIN ffm_flight ff ON ff.id = fu.ffm_flight_id
@@ -392,6 +419,7 @@ SELECT
 	ff.scheduled_departure_date,
 	ff.scheduled_departure_time,
 	COALESCE(mvt_arrival.scheduled_arrival_time, uld_arrival.scheduled_arrival_time) AS scheduled_arrival_time,
+	mvt_arrival.actual_arrival_datetime,
 	ff.departure_airport_code,
 	STRING_AGG(DISTINCT fa.master_awb_number, ',' ORDER BY fa.master_awb_number) AS mawb_numbers,
 	COUNT(fa.id) AS awb_count
@@ -400,12 +428,28 @@ JOIN ffm_flight ff ON ff.id = u.ffm_flight_id
 JOIN messages_parsed mp ON mp.id = ff.parsed_message_id
 LEFT JOIN ffm_awb fa ON fa.ffm_uld_id = u.id
 LEFT JOIN LATERAL (
-	SELECT me.event_time_text AS scheduled_arrival_time
-	FROM mvt_event me
-	WHERE me.carrier_flight_number = ff.carrier_flight_number
-		AND me.event_type IN ('EA', 'AA')
-	ORDER BY me.id DESC
-	LIMIT 1
+	SELECT
+		me_any.event_time_text AS scheduled_arrival_time,
+		CASE
+			WHEN COALESCE(me_aa.event_date_text, '') = '' OR COALESCE(me_aa.event_time_text, '') = '' THEN NULL
+			ELSE me_aa.event_date_text || ' ' || me_aa.event_time_text
+		END AS actual_arrival_datetime
+	FROM (
+		SELECT me.event_time_text
+		FROM mvt_event me
+		WHERE me.carrier_flight_number = ff.carrier_flight_number
+			AND me.event_type IN ('EA', 'AA')
+		ORDER BY me.id DESC
+		LIMIT 1
+	) me_any
+	LEFT JOIN LATERAL (
+		SELECT me.event_date_text, me.event_time_text
+		FROM mvt_event me
+		WHERE me.carrier_flight_number = ff.carrier_flight_number
+			AND me.event_type = 'AA'
+		ORDER BY me.id DESC
+		LIMIT 1
+	) me_aa ON TRUE
 ) mvt_arrival ON TRUE
 LEFT JOIN LATERAL (
 	SELECT fr.scheduled_arrival_time
@@ -438,6 +482,7 @@ GROUP BY
 	ff.scheduled_departure_date,
 	ff.scheduled_departure_time,
 	mvt_arrival.scheduled_arrival_time,
+	mvt_arrival.actual_arrival_datetime,
 	uld_arrival.scheduled_arrival_time,
 	ff.departure_airport_code;
 
@@ -526,6 +571,7 @@ SELECT
 	mawb_arrival.carrier_flight_number,
 	mawb_arrival.scheduled_arrival_date,
 	mawb_arrival.scheduled_arrival_time,
+	mawb_arrival.actual_arrival_datetime,
 	f.piece_count,
 	f.weight_kg,
 	f.nature_of_goods,
@@ -557,7 +603,19 @@ LEFT JOIN LATERAL (
 				LIMIT 1
 			),
 			fr.scheduled_arrival_time
-		) AS scheduled_arrival_time
+		) AS scheduled_arrival_time,
+		(
+			SELECT
+				CASE
+					WHEN COALESCE(me.event_date_text, '') = '' OR COALESCE(me.event_time_text, '') = '' THEN NULL
+					ELSE me.event_date_text || ' ' || me.event_time_text
+				END
+			FROM mvt_event me
+			WHERE me.carrier_flight_number = ff.carrier_flight_number
+				AND me.event_type = 'AA'
+			ORDER BY me.id DESC
+			LIMIT 1
+		) AS actual_arrival_datetime
 	FROM ffm_awb fa
 	JOIN ffm_uld fu ON fu.id = fa.ffm_uld_id
 	JOIN ffm_flight ff ON ff.id = fu.ffm_flight_id

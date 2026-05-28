@@ -12,6 +12,7 @@ export const MAWB_TABLE_COLUMNS = [
   'destination_airport_code',
   'scheduled_arrival_date',
   'scheduled_arrival_time',
+  'actual_arrival_datetime',
   'piece_count',
   'weight_kg',
 ];

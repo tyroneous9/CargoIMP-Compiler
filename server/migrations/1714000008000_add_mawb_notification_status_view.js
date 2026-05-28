@@ -2,6 +2,8 @@
 
 exports.up = (pgm) => {
   pgm.sql(`
+    DROP VIEW IF EXISTS mawb_notification_status;
+
     CREATE INDEX IF NOT EXISTS idx_emails_raw_notification_mawb_event
     ON emails_raw (
       (raw_json->'recognizedNotification'->>'mawb'),

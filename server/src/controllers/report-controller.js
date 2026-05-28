@@ -146,6 +146,24 @@ async function updateUldRows(req, res, next) {
   }
 }
 
+async function listOfficeOperationRows(req, res, next) {
+  try {
+    const items = await reportService.listOfficeOperationRows(req.query);
+    res.json({ items });
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function upsertOfficeOperationRows(req, res, next) {
+  try {
+    const result = await reportService.upsertOfficeOperationRows(req.body.updates);
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   listMawbs,
   listUlds,
@@ -162,4 +180,6 @@ module.exports = {
   updateHawbRows,
   updateMawbRows,
   updateUldRows,
+  listOfficeOperationRows,
+  upsertOfficeOperationRows,
 };

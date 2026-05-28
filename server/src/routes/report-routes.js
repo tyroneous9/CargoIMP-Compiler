@@ -20,5 +20,7 @@ router.patch('/ulds-table/batch', reportController.updateUldRows);
 router.patch('/ulds/:ffmUldId/processing-status', reportController.updateUldProcessingStatus);
 router.patch('/mawbs/:fwbMasterId/processing-status', reportController.updateMawbProcessingStatus);
 router.patch('/hawbs/:fhlHouseId/processing-status', reportController.updateHawbProcessingStatus);
+router.get('/office-operation-table', reportController.listOfficeOperationRows);
+router.patch('/office-operation-table/batch', reportController.upsertOfficeOperationRows);
 
 module.exports = router;

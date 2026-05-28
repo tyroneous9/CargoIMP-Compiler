@@ -5,6 +5,14 @@ const reportRepository = require('../repositories/report-repository');
 const PROCESSING_STATUS_VALUES = new Set(['new', 'complete']);
 const NEW_MESSAGE_RECORD_TYPES = new Set(['uld', 'mawb', 'hawb']);
 const HAWB_EDITABLE_COLUMNS = new Set(['processing_status', 'hawb_number', 'piece_count', 'weight_kg']);
+const OFFICE_OPERATION_EDITABLE_COLUMNS = new Set([
+  'ams_status',
+  'p3',
+  'freight_charge',
+  'storage',
+  'isc',
+]);
+const ISC_VALUES = new Set(['TOLEAD', 'NCA', 'STORAGE', 'VFY_REQ']);
 const MAWB_EDITABLE_COLUMNS = new Set([
   'processing_status',
   'mawb_number',
@@ -236,6 +244,67 @@ async function updateUldRows(updates) {
   return reportRepository.updateUldRows(parsedUpdates);
 }
 
+async function listOfficeOperationRows(query) {
+  const { limit, offset } = parsePagination(query);
+  return reportRepository.listOfficeOperationRows(limit, offset);
+}
+
+function parseOfficeOperationUpdates(updates) {
+  if (!Array.isArray(updates) || updates.length === 0) {
+    const error = new Error('updates must be a non-empty array');
+    error.statusCode = 400;
+    throw error;
+  }
+
+  return updates.map((update, index) => {
+    if (!update || typeof update !== 'object') {
+      const error = new Error(`updates[${index}] must be an object`);
+      error.statusCode = 400;
+      throw error;
+    }
+    if (typeof update.mawb_number !== 'string' || update.mawb_number.trim() === '') {
+      const error = new Error(`updates[${index}].mawb_number is required`);
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const changes = update.changes;
+    if (!changes || typeof changes !== 'object' || Array.isArray(changes)) {
+      const error = new Error(`updates[${index}].changes must be an object`);
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const normalizedChanges = {};
+    for (const [column, value] of Object.entries(changes)) {
+      if (!OFFICE_OPERATION_EDITABLE_COLUMNS.has(column)) {
+        const error = new Error(`updates[${index}].changes.${column} is not editable`);
+        error.statusCode = 400;
+        throw error;
+      }
+      if (column === 'isc' && value !== null && !ISC_VALUES.has(value)) {
+        const error = new Error(`updates[${index}].changes.isc must be one of: TOLEAD, NCA, STORAGE, VFY_REQ`);
+        error.statusCode = 400;
+        throw error;
+      }
+      normalizedChanges[column] = value;
+    }
+
+    if (Object.keys(normalizedChanges).length === 0) {
+      const error = new Error(`updates[${index}].changes must include at least one editable field`);
+      error.statusCode = 400;
+      throw error;
+    }
+
+    return { mawb_number: update.mawb_number.trim(), changes: normalizedChanges };
+  });
+}
+
+async function upsertOfficeOperationRows(updates) {
+  const parsedUpdates = parseOfficeOperationUpdates(updates);
+  return reportRepository.upsertOfficeOperationRows(parsedUpdates);
+}
+
 module.exports = {
   listMawbs,
   listUlds,
@@ -252,4 +321,6 @@ module.exports = {
   updateHawbRows,
   updateMawbRows,
   updateUldRows,
+  listOfficeOperationRows,
+  upsertOfficeOperationRows,
 };
