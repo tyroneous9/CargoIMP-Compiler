@@ -1,7 +1,6 @@
 import DataTablePage from '../components/DataTablePage';
 import { readJson } from '../lib/readJson';
 import {
-  BREAKDOWN_MANIFEST_COLUMN_LABELS,
   BREAKDOWN_MANIFEST_COLUMN_TYPES,
   BREAKDOWN_MANIFEST_DEFAULT_PAGE_SIZE,
   BREAKDOWN_MANIFEST_DEFAULT_VISIBLE_COLUMNS,
@@ -10,6 +9,22 @@ import {
   BREAKDOWN_MANIFEST_TABLE_COLUMNS,
   BREAKDOWN_MANIFEST_TABLE_SETTINGS_STORAGE_KEY,
 } from '../constants/breakdownManifestTable';
+
+function toMultilineList(value) {
+  return String(value || '')
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .join('\n');
+}
+
+function renderBreakdownCell(column, row) {
+  if (column !== 'hawb_number' && column !== 'uld_code') {
+    return undefined;
+  }
+
+  return <span style={{ whiteSpace: 'pre-line' }}>{toMultilineList(row[column])}</span>;
+}
 
 function buildBreakdownManifestUpdates(items, originalItems) {
   const originalById = new Map(
@@ -21,10 +36,10 @@ function buildBreakdownManifestUpdates(items, originalItems) {
     const original = originalById.get(row.fwb_master_id);
     if (!original) continue;
 
-    if (row.processing_status !== original.processing_status) {
+    if (row.archive_status !== original.archive_status) {
       updates.push({
         id: row.fwb_master_id,
-        changes: { processing_status: row.processing_status ?? 'new' },
+        changes: { archive_status: row.archive_status ?? false },
       });
     }
   }
@@ -61,7 +76,6 @@ function BreakdownManifestPage() {
       defaultPageSize={BREAKDOWN_MANIFEST_DEFAULT_PAGE_SIZE}
       pageSizeOptions={BREAKDOWN_MANIFEST_PAGE_SIZE_OPTIONS}
       storageKey={BREAKDOWN_MANIFEST_TABLE_SETTINGS_STORAGE_KEY}
-      columnLabels={BREAKDOWN_MANIFEST_COLUMN_LABELS}
       requiredColumns={['mawb_number']}
       fetchUrl="/api/reports/breakdown-manifest-table?limit=1000&offset=0"
       loadingText="Loading breakdown manifest rows..."
@@ -71,6 +85,7 @@ function BreakdownManifestPage() {
       rowKeyFallbackField="mawb_number"
       rowKeyPrefix="breakdown-row"
       editableColumns={BREAKDOWN_MANIFEST_EDITABLE_COLUMNS}
+      renderCell={renderBreakdownCell}
       onSaveEdits={saveBreakdownManifestEdits}
     />
   );

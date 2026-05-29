@@ -1,64 +1,50 @@
 export const OFFICE_OPERATION_TABLE_COLUMNS = [
-  'processing_status',
+  'archive_status',
   'carrier_flight_number',
-  'actual_arrival_datetime',
   'last_free_day',
   'mawb_number',
   'hawb_number',
-  'weight_kg',
   'piece_count',
-  'uld_code',
-  'consignee_name',
+  'processing_status',
+  'hold',
   'ams_status',
   'p3',
-  'freight_charge',
   'storage',
   'isc',
-  'has_delivery_complete',
+  'consignee_name',
+  'notes',
 ];
 
 export const OFFICE_OPERATION_DEFAULT_VISIBLE_COLUMNS = [...OFFICE_OPERATION_TABLE_COLUMNS];
 
 const OFFICE_OPERATION_EDITABLE_COLUMN_SET = new Set([
-  'processing_status',
+  'archive_status',
   'ams_status',
   'p3',
-  'freight_charge',
+  'hold',
   'isc',
+  'notes',
 ]);
 
 export const OFFICE_OPERATION_EDITABLE_COLUMNS = OFFICE_OPERATION_TABLE_COLUMNS.filter((col) =>
   OFFICE_OPERATION_EDITABLE_COLUMN_SET.has(col)
 );
 
-export const OFFICE_OPERATION_TABLE_SETTINGS_STORAGE_KEY = 'ncaparser.officeOperationTable.settings';
+export const OFFICE_OPERATION_TABLE_SETTINGS_STORAGE_KEY = 'ncaparser.officeOperationTable.settings.v5';
 export const OFFICE_OPERATION_DEFAULT_PAGE_SIZE = 25;
 export const OFFICE_OPERATION_PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 
 export const OFFICE_OPERATION_COLUMN_TYPES = {
+  archive_status: 'boolean',
   p3: 'boolean',
+  hold: 'boolean',
   weight_kg: 'number',
   piece_count: 'number',
-  freight_charge: 'number',
 };
 
-export const OFFICE_OPERATION_COLUMN_LABELS = {
-  carrier_flight_number: 'Flight',
-  actual_arrival_datetime: 'Actual Arrival',
-  last_free_day: 'LFD',
-  processing_status: 'Status',
-  mawb_number: 'MAWB',
-  hawb_number: 'HAWB',
-  weight_kg: 'Weight (kg)',
-  piece_count: 'Pieces',
-  uld_code: 'ULD',
-  consignee_name: 'Consignee',
-  ams_status: 'AMS',
-  p3: 'P3',
-  freight_charge: 'Freight Charge',
-  storage: 'Storage',
-  isc: 'ISC',
-  has_delivery_complete: 'Delivered',
-};
-
-export const OFFICE_OPERATION_ISC_OPTIONS = ['TOLEAD', 'NCA', 'STORAGE', 'VFY_REQ'];
+export const OFFICE_OPERATION_ISC_OPTIONS = [
+  'ISC - NCA',
+  'ISC - TOLEAD',
+  'ISC + STORAGE',
+  'ISC - VFY_REQ',
+];

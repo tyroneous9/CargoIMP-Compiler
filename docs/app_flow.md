@@ -10,24 +10,6 @@ Covers:
 - Email extraction, classification, parsing, normalization, and reporting projections.
 - Error handling and where parse failures are stored.
 
-## High-Level Architecture
-
-```mermaid
-flowchart TD
-  A[IMAP mailbox] --> B[extract_to_db]
-  B --> C[(emails_raw)]
-  C --> D[parse_to_db]
-  D --> E[cpp/build/parser_*_json binaries]
-  E --> F[(messages_parsed)]
-  F --> G[(normalized tables: ffm_*, fwb_*, fhl_*, mvt_event)]
-  G --> H[(report_* and *_list views)]
-  H --> I[/api/reports/*]
-  C --> J[(mawb_notification_status)]
-  J --> H
-  F --> K[/api/messages/*]
-  L[(pipeline_runs + pipeline_run_steps)] --> M[/api/pipeline/runs*]
-```
-
 ## Backend Runtime Flow
 
 1. HTTP server starts in `server/src/server.js`.

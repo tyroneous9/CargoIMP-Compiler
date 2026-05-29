@@ -49,7 +49,7 @@ async function listUldTableRows(limit, offset) {
         r.uld_code,
         r.uld_weight,
         r.uld_detail_code,
-        r.processing_status,
+        r.archive_status,
         r.mawb_piece_count,
         r.load_type,
         r.carrier_flight_number,
@@ -95,7 +95,7 @@ async function listMawbTableRows(limit, offset) {
         rm.piece_count,
         rm.weight_kg,
         rm.nature_of_goods,
-        rm.processing_status,
+        rm.archive_status,
         COALESCE(ns.has_rcf, FALSE) AS has_rcf,
         COALESCE(rm.has_arrival_notice, FALSE) AS has_arrival_notice,
         COALESCE(ns.has_delivery_complete, FALSE) AS has_delivery_complete,
@@ -120,7 +120,7 @@ async function listEmailXxxRows(limit, offset) {
     `
       SELECT DISTINCT ON (rm.mawb_number)
         rm.fwb_master_id,
-        rm.processing_status,
+        rm.archive_status,
         rm.carrier_flight_number,
         rm.scheduled_arrival_date,
         rm.mawb_number,
@@ -152,7 +152,7 @@ async function listHawbTableRows(limit, offset) {
         piece_count,
         weight_kg,
         goods_description,
-        processing_status,
+        archive_status,
         mawb_number,
         origin_airport_code,
         destination_airport_code,
@@ -169,41 +169,41 @@ async function listHawbTableRows(limit, offset) {
   return result.rows;
 }
 
-async function updateUldProcessingStatus(ffmUldId, processingStatus) {
+async function updateUldArchiveStatus(ffmUldId, archiveStatus) {
   const result = await pool.query(
     `
       UPDATE ffm_uld
-      SET processing_status = $2
+      SET archive_status = $2
       WHERE id = $1
-      RETURNING id AS ffm_uld_id, processing_status
+      RETURNING id AS ffm_uld_id, archive_status
     `,
-    [ffmUldId, processingStatus]
+    [ffmUldId, archiveStatus]
   );
   return result.rows[0] || null;
 }
 
-async function updateMawbProcessingStatus(fwbMasterId, processingStatus) {
+async function updateMawbArchiveStatus(fwbMasterId, archiveStatus) {
   const result = await pool.query(
     `
       UPDATE fwb_master
-      SET processing_status = $2
+      SET archive_status = $2
       WHERE id = $1
-      RETURNING id AS fwb_master_id, processing_status
+      RETURNING id AS fwb_master_id, archive_status
     `,
-    [fwbMasterId, processingStatus]
+    [fwbMasterId, archiveStatus]
   );
   return result.rows[0] || null;
 }
 
-async function updateHawbProcessingStatus(fhlHouseId, processingStatus) {
+async function updateHawbArchiveStatus(fhlHouseId, archiveStatus) {
   const result = await pool.query(
     `
       UPDATE fhl_house
-      SET processing_status = $2
+      SET archive_status = $2
       WHERE id = $1
-      RETURNING id AS fhl_house_id, processing_status
+      RETURNING id AS fhl_house_id, archive_status
     `,
-    [fhlHouseId, processingStatus]
+    [fhlHouseId, archiveStatus]
   );
   return result.rows[0] || null;
 }
@@ -227,7 +227,7 @@ async function updateHawbRows(updates) {
           UPDATE fhl_house
           SET ${setClauses.join(', ')}
           WHERE id = $1
-          RETURNING id AS fhl_house_id, processing_status, hawb_number, piece_count, weight_kg
+          RETURNING id AS fhl_house_id, archive_status, hawb_number, piece_count, weight_kg
         `,
         values
       );
@@ -268,7 +268,7 @@ async function updateMawbRows(updates) {
           UPDATE fwb_master
           SET ${setClauses.join(', ')}
           WHERE id = $1
-          RETURNING id AS fwb_master_id, processing_status, mawb_number,
+          RETURNING id AS fwb_master_id, archive_status, mawb_number,
                     origin_airport_code, destination_airport_code, piece_count, weight_kg
         `,
         values
@@ -310,7 +310,7 @@ async function updateUldRows(updates) {
           UPDATE ffm_uld
           SET ${setClauses.join(', ')}
           WHERE id = $1
-          RETURNING id AS ffm_uld_id, processing_status, uld_code, uld_weight
+          RETURNING id AS ffm_uld_id, archive_status, uld_code, uld_weight
         `,
         values
       );
@@ -341,7 +341,7 @@ async function listNewMessages(limit, offset) {
           'uld'::text AS record_type,
           u.id::bigint AS record_id,
           u.uld_code AS record_key,
-          u.processing_status::text AS processing_status,
+          u.archive_status,
           u.uld_detail_text AS description,
           ff.carrier_flight_number AS related_number,
           ff.departure_airport_code AS origin_airport_code,
@@ -349,7 +349,7 @@ async function listNewMessages(limit, offset) {
           u.created_at AS created_at
         FROM ffm_uld u
         JOIN ffm_flight ff ON ff.id = u.ffm_flight_id
-        WHERE u.processing_status = 'new'
+        WHERE u.archive_status = FALSE
           AND EXISTS (
             SELECT 1
             FROM ffm_route fr
@@ -363,14 +363,14 @@ async function listNewMessages(limit, offset) {
           'mawb'::text AS record_type,
           f.id::bigint AS record_id,
           f.mawb_number AS record_key,
-          f.processing_status::text AS processing_status,
+          f.archive_status,
           f.nature_of_goods AS description,
           NULL::text AS related_number,
           f.origin_airport_code AS origin_airport_code,
           f.destination_airport_code AS destination_airport_code,
           f.created_at AS created_at
         FROM fwb_master f
-        WHERE f.processing_status = 'new'
+        WHERE f.archive_status = FALSE
 
         UNION ALL
 
@@ -378,7 +378,7 @@ async function listNewMessages(limit, offset) {
           'hawb'::text AS record_type,
           h.id::bigint AS record_id,
           h.hawb_number AS record_key,
-          h.processing_status::text AS processing_status,
+          h.archive_status,
           h.goods_description AS description,
           fm.mawb_number AS related_number,
           fm.origin_airport_code AS origin_airport_code,
@@ -386,7 +386,7 @@ async function listNewMessages(limit, offset) {
           h.created_at AS created_at
         FROM fhl_house h
         JOIN fhl_master fm ON fm.id = h.fhl_master_id
-        WHERE h.processing_status = 'new'
+        WHERE h.archive_status = FALSE
       ) new_messages
       ORDER BY created_at DESC, record_type ASC, record_id DESC
       LIMIT $1 OFFSET $2
@@ -408,7 +408,7 @@ async function archiveNewMessages(records) {
         await client.query(
           `
             UPDATE ffm_uld
-            SET processing_status = 'complete'
+            SET archive_status = TRUE
             WHERE id = $1
           `,
           [record.recordId]
@@ -417,7 +417,7 @@ async function archiveNewMessages(records) {
         await client.query(
           `
             UPDATE fwb_master
-            SET processing_status = 'complete'
+            SET archive_status = TRUE
             WHERE id = $1
           `,
           [record.recordId]
@@ -426,7 +426,7 @@ async function archiveNewMessages(records) {
         await client.query(
           `
             UPDATE fhl_house
-            SET processing_status = 'complete'
+            SET archive_status = TRUE
             WHERE id = $1
           `,
           [record.recordId]
@@ -452,9 +452,9 @@ module.exports = {
   listMawbTableRows,
   listEmailXxxRows,
   listHawbTableRows,
-  updateUldProcessingStatus,
-  updateMawbProcessingStatus,
-  updateHawbProcessingStatus,
+  updateUldArchiveStatus,
+  updateMawbArchiveStatus,
+  updateHawbArchiveStatus,
   updateHawbRows,
   updateMawbRows,
   updateUldRows,
@@ -469,7 +469,7 @@ async function listBreakdownManifestRows(limit, offset) {
   const result = await pool.query(
     `
       SELECT
-        rm.processing_status,
+        rm.archive_status,
         rm.mawb_number,
         COALESCE(rh.hawb_numbers, '') AS hawb_number,
         f.piece_count,
@@ -480,9 +480,21 @@ async function listBreakdownManifestRows(limit, offset) {
       LEFT JOIN (
         SELECT
           mawb_number,
-          STRING_AGG(DISTINCT hawb_number, ', ' ORDER BY hawb_number) AS hawb_numbers
-        FROM report_hawb
-        WHERE hawb_number IS NOT NULL AND hawb_number <> ''
+          STRING_AGG(
+            hawb_number || '_' || total_piece_count::text || 'pcs',
+            ', '
+            ORDER BY hawb_number
+          ) AS hawb_numbers
+        FROM (
+          SELECT
+            mawb_number,
+            hawb_number,
+            COALESCE(SUM(piece_count), 0)::bigint AS total_piece_count
+          FROM report_hawb
+          WHERE hawb_number IS NOT NULL
+            AND hawb_number <> ''
+          GROUP BY mawb_number, hawb_number
+        ) hawb_totals
         GROUP BY mawb_number
       ) rh ON rh.mawb_number = rm.mawb_number
       LEFT JOIN (
@@ -510,7 +522,7 @@ async function listBreakdownManifestRows(limit, offset) {
 async function listOfficeOperationRows(limit, offset) {
   const result = await pool.query(
     `
-      SELECT
+      SELECT DISTINCT ON (rm.mawb_number)
         rm.carrier_flight_number,
         rm.actual_arrival_datetime,
         COALESCE(
@@ -526,7 +538,7 @@ async function listOfficeOperationRows(limit, offset) {
             ELSE NULL
           END
         ) AS last_free_day,
-        rm.processing_status,
+        rm.archive_status,
         rm.mawb_number,
         COALESCE(rh.hawb_numbers, '') AS hawb_number,
         f.weight_kg,
@@ -534,10 +546,17 @@ async function listOfficeOperationRows(limit, offset) {
         COALESCE(ru.uld_codes, '') AS uld_code,
         COALESCE(NULLIF(BTRIM(f.consignee_name), ''), hc.hawb_consignees, '') AS consignee_name,
         oo.ams_status,
-        oo.p3,
-        oo.freight_charge,
+        COALESCE(oo.p3, FALSE) AS p3,
+        COALESCE(oo.hold, FALSE) AS hold,
         oo.storage,
         oo.isc,
+        COALESCE(oo.notes, '') AS notes,
+        CASE
+          WHEN COALESCE(ns.has_delivery_complete, FALSE) THEN 'archive'
+          WHEN COALESCE(ns.has_arrival_notice, FALSE) = FALSE THEN 'arriving'
+          WHEN COALESCE(ns.has_ready_for_pick_up, FALSE) = FALSE THEN 'receiving'
+          ELSE 'ready'
+        END AS processing_status,
         COALESCE(ns.has_delivery_complete, FALSE) AS has_delivery_complete,
         oo.id AS office_operation_id
       FROM report_mawb rm
@@ -547,9 +566,21 @@ async function listOfficeOperationRows(limit, offset) {
       LEFT JOIN (
         SELECT
           mawb_number,
-          STRING_AGG(DISTINCT hawb_number, ', ' ORDER BY hawb_number) AS hawb_numbers
-        FROM report_hawb
-        WHERE hawb_number IS NOT NULL AND hawb_number <> ''
+          STRING_AGG(
+            hawb_number || '_' || total_piece_count::text || 'pcs',
+            ', '
+            ORDER BY hawb_number
+          ) AS hawb_numbers
+        FROM (
+          SELECT
+            mawb_number,
+            hawb_number,
+            COALESCE(SUM(piece_count), 0)::bigint AS total_piece_count
+          FROM report_hawb
+          WHERE hawb_number IS NOT NULL
+            AND hawb_number <> ''
+          GROUP BY mawb_number, hawb_number
+        ) hawb_totals
         GROUP BY mawb_number
       ) rh ON rh.mawb_number = rm.mawb_number
       LEFT JOIN (
@@ -589,7 +620,7 @@ async function listOfficeOperationRows(limit, offset) {
         ON oo.mawb_number = rm.mawb_number
       WHERE rm.mawb_number IS NOT NULL
         AND rm.mawb_number <> ''
-      ORDER BY rm.carrier_flight_number ASC NULLS LAST, rm.mawb_number ASC
+      ORDER BY rm.mawb_number ASC, rm.fwb_master_id DESC
       LIMIT $1 OFFSET $2
     `,
     [limit, offset]
@@ -610,18 +641,18 @@ async function upsertOfficeOperationRows(updates) {
       const columns = Object.keys(changes);
       if (columns.length === 0) continue;
 
-      const hasStatusChange = Object.prototype.hasOwnProperty.call(changes, 'processing_status');
-      const processingStatus = hasStatusChange ? changes.processing_status : null;
+      const hasArchiveStatusChange = Object.prototype.hasOwnProperty.call(changes, 'archive_status');
+      const archiveStatus = hasArchiveStatusChange ? changes.archive_status : null;
 
-      if (hasStatusChange) {
+      if (hasArchiveStatusChange) {
         const statusResult = await client.query(
           `
             UPDATE fwb_master
-            SET processing_status = $2
+            SET archive_status = $2
             WHERE mawb_number = $1
             RETURNING id
           `,
-          [mawb_number, processingStatus]
+          [mawb_number, archiveStatus]
         );
 
         if (statusResult.rowCount === 0) {
@@ -629,9 +660,9 @@ async function upsertOfficeOperationRows(updates) {
         }
       }
 
-      const officeColumns = columns.filter((column) => column !== 'processing_status');
+      const officeColumns = columns.filter((column) => column !== 'archive_status');
       if (officeColumns.length === 0) {
-        updatedRows.push({ mawb_number, processing_status: processingStatus });
+        updatedRows.push({ mawb_number, archive_status: archiveStatus });
         continue;
       }
 
@@ -644,10 +675,10 @@ async function upsertOfficeOperationRows(updates) {
           VALUES ($1, ${officeColumns.map((_, i) => `$${i + 2}`).join(', ')}, NOW())
           ON CONFLICT (mawb_number)
           DO UPDATE SET ${setClauseParts.join(', ')}, updated_at = NOW()
-          RETURNING id AS office_operation_id, mawb_number, $${officeColumns.length + 2}::text AS processing_status, ams_status, p3,
-                    freight_charge, storage, isc, last_free_day
+          RETURNING id AS office_operation_id, mawb_number, $${officeColumns.length + 2}::boolean AS archive_status, ams_status,
+                    COALESCE(p3, FALSE) AS p3, hold, storage, isc, COALESCE(notes, '') AS notes, last_free_day
         `,
-        [...values, processingStatus]
+        [...values, archiveStatus]
       );
 
       updatedRows.push(result.rows[0]);

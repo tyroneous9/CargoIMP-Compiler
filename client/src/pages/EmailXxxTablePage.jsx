@@ -20,10 +20,10 @@ function buildEmailXxxUpdates(items, originalItems) {
     const original = originalById.get(row.fwb_master_id);
     if (!original) continue;
 
-    if (row.processing_status !== original.processing_status) {
+    if (row.archive_status !== original.archive_status) {
       updates.push({
         id: row.fwb_master_id,
-        changes: { processing_status: row.processing_status ?? 'new' },
+        changes: { archive_status: row.archive_status ?? false },
       });
     }
   }

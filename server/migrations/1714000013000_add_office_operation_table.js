@@ -5,7 +5,7 @@ exports.up = (pgm) => {
     DO $$
     BEGIN
       IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'isc_enum') THEN
-        CREATE TYPE isc_enum AS ENUM ('TOLEAD', 'NCA', 'STORAGE', 'VFY_REQ');
+        CREATE TYPE isc_enum AS ENUM ('ISC - NCA', 'ISC - TOLEAD', 'ISC + STORAGE', 'ISC - VFY_REQ');
       END IF;
     END $$;
 
@@ -14,7 +14,8 @@ exports.up = (pgm) => {
       mawb_number TEXT NOT NULL,
       hawb_number TEXT,
       ams_status TEXT,
-      p3 BOOLEAN,
+      p3 BOOLEAN NOT NULL DEFAULT FALSE,
+      hold BOOLEAN NOT NULL DEFAULT FALSE,
       freight_charge NUMERIC(12, 2),
       storage TEXT,
       isc isc_enum,

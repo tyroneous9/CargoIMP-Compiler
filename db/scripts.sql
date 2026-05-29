@@ -72,7 +72,7 @@ $$;
 
 
 -- -----------------------------------------------------------------------------
--- DANGER ZONE: delete only records marked processing_status = 'complete'
+-- DANGER ZONE: delete only records marked archive_status = TRUE
 -- Affects status-bearing tables only: fwb_master, fhl_house, ffm_uld.
 -- Child rows linked with ON DELETE CASCADE are removed automatically.
 -- -----------------------------------------------------------------------------
@@ -80,21 +80,21 @@ BEGIN;
 
 WITH deleted AS (
   DELETE FROM fwb_master
-  WHERE processing_status = 'complete'
+  WHERE archive_status = TRUE
   RETURNING id
 )
 SELECT 'fwb_master' AS table_name, COUNT(*) AS deleted_rows FROM deleted;
 
 WITH deleted AS (
   DELETE FROM fhl_house
-  WHERE processing_status = 'complete'
+  WHERE archive_status = TRUE
   RETURNING id
 )
 SELECT 'fhl_house' AS table_name, COUNT(*) AS deleted_rows FROM deleted;
 
 WITH deleted AS (
   DELETE FROM ffm_uld
-  WHERE processing_status = 'complete'
+  WHERE archive_status = TRUE
   RETURNING id
 )
 SELECT 'ffm_uld' AS table_name, COUNT(*) AS deleted_rows FROM deleted;

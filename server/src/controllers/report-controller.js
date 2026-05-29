@@ -65,11 +65,11 @@ async function listHawbTableRows(req, res, next) {
   }
 }
 
-async function updateUldProcessingStatus(req, res, next) {
+async function updateUldArchiveStatus(req, res, next) {
   try {
-    const updated = await reportService.updateUldProcessingStatus(
+    const updated = await reportService.updateUldArchiveStatus(
       req.params.ffmUldId,
-      req.body.processingStatus
+      req.body.archiveStatus
     );
     res.json(updated);
   } catch (error) {
@@ -77,11 +77,11 @@ async function updateUldProcessingStatus(req, res, next) {
   }
 }
 
-async function updateMawbProcessingStatus(req, res, next) {
+async function updateMawbArchiveStatus(req, res, next) {
   try {
-    const updated = await reportService.updateMawbProcessingStatus(
+    const updated = await reportService.updateMawbArchiveStatus(
       req.params.fwbMasterId,
-      req.body.processingStatus
+      req.body.archiveStatus
     );
     res.json(updated);
   } catch (error) {
@@ -89,11 +89,11 @@ async function updateMawbProcessingStatus(req, res, next) {
   }
 }
 
-async function updateHawbProcessingStatus(req, res, next) {
+async function updateHawbArchiveStatus(req, res, next) {
   try {
-    const updated = await reportService.updateHawbProcessingStatus(
+    const updated = await reportService.updateHawbArchiveStatus(
       req.params.fhlHouseId,
-      req.body.processingStatus
+      req.body.archiveStatus
     );
     res.json(updated);
   } catch (error) {
@@ -181,9 +181,9 @@ module.exports = {
   listMawbTableRows,
   listEmailXxxRows,
   listHawbTableRows,
-  updateUldProcessingStatus,
-  updateMawbProcessingStatus,
-  updateHawbProcessingStatus,
+  updateUldArchiveStatus,
+  updateMawbArchiveStatus,
+  updateHawbArchiveStatus,
   listNewMessages,
   archiveNewMessages,
   updateHawbRows,

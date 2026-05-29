@@ -14,7 +14,7 @@ exports.up = (pgm) => {
       f.piece_count,
       f.weight_kg,
       f.nature_of_goods,
-      f.processing_status,
+      f.archive_status,
       COALESCE(ns.has_arrival_notice, FALSE) AS has_arrival_notice
     FROM fwb_master f
     JOIN messages_parsed mp ON mp.id = f.parsed_message_id

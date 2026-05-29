@@ -6,13 +6,6 @@ BEGIN
 	END IF;
 END $$;
 
-DO $$
-BEGIN
-	IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'processing_status_enum') THEN
-		CREATE TYPE processing_status_enum AS ENUM ('new', 'complete');
-	END IF;
-END $$;
-
 -- 1) Raw email ingestion
 CREATE TABLE IF NOT EXISTS emails_raw (
 	id BIGSERIAL PRIMARY KEY,
@@ -134,14 +127,14 @@ CREATE TABLE IF NOT EXISTS ffm_uld (
 	uld_detail_text TEXT,
 	uld_weight NUMERIC(14, 3),
 	uld_detail_code TEXT,
-	processing_status processing_status_enum NOT NULL DEFAULT 'new',
+	archive_status BOOLEAN NOT NULL DEFAULT FALSE,
 	raw_fields JSONB,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 	CONSTRAINT uq_ffm_uld_seq UNIQUE (ffm_flight_id, uld_seq)
 );
 
 ALTER TABLE ffm_uld
-	ADD COLUMN IF NOT EXISTS processing_status processing_status_enum NOT NULL DEFAULT 'new';
+	ADD COLUMN IF NOT EXISTS archive_status BOOLEAN NOT NULL DEFAULT FALSE;
 
 CREATE INDEX IF NOT EXISTS idx_ffm_uld_code ON ffm_uld (uld_code);
 
@@ -177,7 +170,7 @@ CREATE TABLE IF NOT EXISTS fwb_master (
 	volume_amount NUMERIC(14, 3),
 	volume_unit TEXT,
 	nature_of_goods TEXT,
-	processing_status processing_status_enum NOT NULL DEFAULT 'new',
+	archive_status BOOLEAN NOT NULL DEFAULT FALSE,
 	shipper_name TEXT,
 	consignee_name TEXT,
 	charges_declaration JSONB,
@@ -186,7 +179,7 @@ CREATE TABLE IF NOT EXISTS fwb_master (
 );
 
 ALTER TABLE fwb_master
-	ADD COLUMN IF NOT EXISTS processing_status processing_status_enum NOT NULL DEFAULT 'new';
+	ADD COLUMN IF NOT EXISTS archive_status BOOLEAN NOT NULL DEFAULT FALSE;
 
 CREATE INDEX IF NOT EXISTS idx_fwb_master_mawb ON fwb_master (mawb_number);
 
@@ -238,7 +231,7 @@ CREATE TABLE IF NOT EXISTS fhl_house (
 	piece_count INTEGER,
 	weight_kg NUMERIC(14, 3),
 	goods_description TEXT,
-	processing_status processing_status_enum NOT NULL DEFAULT 'new',
+	archive_status BOOLEAN NOT NULL DEFAULT FALSE,
 	shipper_name TEXT,
 	consignee_name TEXT,
 	raw_fields JSONB,
@@ -247,7 +240,7 @@ CREATE TABLE IF NOT EXISTS fhl_house (
 );
 
 ALTER TABLE fhl_house
-	ADD COLUMN IF NOT EXISTS processing_status processing_status_enum NOT NULL DEFAULT 'new';
+	ADD COLUMN IF NOT EXISTS archive_status BOOLEAN NOT NULL DEFAULT FALSE;
 
 CREATE INDEX IF NOT EXISTS idx_fhl_house_hawb ON fhl_house (hawb_number);
 
@@ -287,7 +280,7 @@ SELECT
 	f.piece_count,
 	f.weight_kg,
 	f.nature_of_goods,
-	f.processing_status
+	f.archive_status
 FROM fwb_master f
 JOIN messages_parsed mp ON mp.id = f.parsed_message_id
 WHERE mp.status = 'ok';
@@ -299,7 +292,7 @@ SELECT
 	h.piece_count,
 	h.weight_kg,
 	h.goods_description,
-	h.processing_status,
+	h.archive_status,
 	fm.mawb_number,
 	fm.origin_airport_code,
 	fm.destination_airport_code
@@ -314,7 +307,7 @@ SELECT
 	u.uld_code,
 	u.uld_weight,
 	u.uld_detail_code,
-	u.processing_status,
+	u.archive_status,
 	COALESCE(mawb_piece_totals.total_piece_count, 0) AS mawb_piece_count,
 	CASE
 		WHEN MAX(
@@ -359,7 +352,7 @@ GROUP BY
 	u.uld_code,
 	u.uld_weight,
 	u.uld_detail_code,
-	u.processing_status,
+	u.archive_status,
 	mawb_piece_totals.total_piece_count,
 	ff.carrier_flight_number,
 	ff.scheduled_departure_date,

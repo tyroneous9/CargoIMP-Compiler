@@ -17,6 +17,22 @@ const MONTH_INDEX = {
   JUL: 6, AUG: 7, SEP: 8, OCT: 9, NOV: 10, DEC: 11,
 };
 
+function toMultilineList(value) {
+  return String(value || '')
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .join('\n');
+}
+
+function renderUldCell(column, row) {
+  if (column !== 'mawb_numbers') {
+    return undefined;
+  }
+
+  return <span style={{ whiteSpace: 'pre-line' }}>{toMultilineList(row[column])}</span>;
+}
+
 function computeLastFreeDay(scheduledDepartureDate) {
   const text = String(scheduledDepartureDate || '').trim().toUpperCase();
   const match = text.match(/^(\d{2})([A-Z]{3})$/);
@@ -89,6 +105,7 @@ function UldTablePage() {
       rowKeyPrefix="uld-row"
       editableColumns={ULD_EDITABLE_COLUMNS}
       transformItems={transformUldItems}
+      renderCell={renderUldCell}
       onSaveEdits={saveUldEdits}
     />
   );

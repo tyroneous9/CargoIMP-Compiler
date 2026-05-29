@@ -2,26 +2,26 @@
 
 const reportRepository = require('../repositories/report-repository');
 
-const PROCESSING_STATUS_VALUES = new Set(['new', 'complete']);
 const NEW_MESSAGE_RECORD_TYPES = new Set(['uld', 'mawb', 'hawb']);
-const HAWB_EDITABLE_COLUMNS = new Set(['processing_status', 'hawb_number', 'piece_count', 'weight_kg']);
+const HAWB_EDITABLE_COLUMNS = new Set(['archive_status', 'hawb_number', 'piece_count', 'weight_kg']);
 const OFFICE_OPERATION_EDITABLE_COLUMNS = new Set([
-  'processing_status',
+  'archive_status',
   'ams_status',
   'p3',
-  'freight_charge',
+  'hold',
   'isc',
+  'notes',
 ]);
-const ISC_VALUES = new Set(['TOLEAD', 'NCA', 'STORAGE', 'VFY_REQ']);
+const ISC_VALUES = new Set(['ISC - NCA', 'ISC - TOLEAD', 'ISC + STORAGE', 'ISC - VFY_REQ']);
 const MAWB_EDITABLE_COLUMNS = new Set([
-  'processing_status',
+  'archive_status',
   'mawb_number',
   'origin_airport_code',
   'destination_airport_code',
   'piece_count',
   'weight_kg',
 ]);
-const ULD_EDITABLE_COLUMNS = new Set(['processing_status', 'uld_code', 'uld_weight']);
+const ULD_EDITABLE_COLUMNS = new Set(['archive_status', 'uld_code', 'uld_weight']);
 
 function toPositiveInt(value, label) {
   const parsed = Number(value);
@@ -65,9 +65,9 @@ function parseId(value, label) {
   return parsed;
 }
 
-function parseProcessingStatus(value) {
-  if (!PROCESSING_STATUS_VALUES.has(value)) {
-    const error = new Error('processingStatus must be one of: new, complete');
+function parseArchiveStatus(value) {
+  if (typeof value !== 'boolean') {
+    const error = new Error('archiveStatus must be true or false');
     error.statusCode = 400;
     throw error;
   }
@@ -131,8 +131,8 @@ function parseRowUpdates(updates, editableColumns) {
         throw error;
       }
 
-      if (column === 'processing_status') {
-        normalizedChanges[column] = parseProcessingStatus(value);
+      if (column === 'archive_status') {
+        normalizedChanges[column] = parseArchiveStatus(value);
       } else {
         normalizedChanges[column] = value;
       }
@@ -183,10 +183,10 @@ async function listHawbTableRows(query) {
   return reportRepository.listHawbTableRows(limit, offset);
 }
 
-async function updateUldProcessingStatus(ffmUldId, processingStatus) {
+async function updateUldArchiveStatus(ffmUldId, archiveStatus) {
   const parsedId = parseId(ffmUldId, 'ffmUldId');
-  const parsedStatus = parseProcessingStatus(processingStatus);
-  const updated = await reportRepository.updateUldProcessingStatus(parsedId, parsedStatus);
+  const parsedStatus = parseArchiveStatus(archiveStatus);
+  const updated = await reportRepository.updateUldArchiveStatus(parsedId, parsedStatus);
   if (!updated) {
     const error = new Error('ULD record not found');
     error.statusCode = 404;
@@ -195,10 +195,10 @@ async function updateUldProcessingStatus(ffmUldId, processingStatus) {
   return updated;
 }
 
-async function updateMawbProcessingStatus(fwbMasterId, processingStatus) {
+async function updateMawbArchiveStatus(fwbMasterId, archiveStatus) {
   const parsedId = parseId(fwbMasterId, 'fwbMasterId');
-  const parsedStatus = parseProcessingStatus(processingStatus);
-  const updated = await reportRepository.updateMawbProcessingStatus(parsedId, parsedStatus);
+  const parsedStatus = parseArchiveStatus(archiveStatus);
+  const updated = await reportRepository.updateMawbArchiveStatus(parsedId, parsedStatus);
   if (!updated) {
     const error = new Error('MAWB record not found');
     error.statusCode = 404;
@@ -207,10 +207,10 @@ async function updateMawbProcessingStatus(fwbMasterId, processingStatus) {
   return updated;
 }
 
-async function updateHawbProcessingStatus(fhlHouseId, processingStatus) {
+async function updateHawbArchiveStatus(fhlHouseId, archiveStatus) {
   const parsedId = parseId(fhlHouseId, 'fhlHouseId');
-  const parsedStatus = parseProcessingStatus(processingStatus);
-  const updated = await reportRepository.updateHawbProcessingStatus(parsedId, parsedStatus);
+  const parsedStatus = parseArchiveStatus(archiveStatus);
+  const updated = await reportRepository.updateHawbArchiveStatus(parsedId, parsedStatus);
   if (!updated) {
     const error = new Error('HAWB record not found');
     error.statusCode = 404;
@@ -287,14 +287,30 @@ function parseOfficeOperationUpdates(updates) {
         error.statusCode = 400;
         throw error;
       }
-      if (column === 'processing_status') {
-        normalizedChanges[column] = parseProcessingStatus(value);
+      if (column === 'archive_status') {
+        normalizedChanges[column] = parseArchiveStatus(value);
         continue;
       }
-      if (column === 'isc' && value !== null && !ISC_VALUES.has(value)) {
-        const error = new Error(`updates[${index}].changes.isc must be one of: TOLEAD, NCA, STORAGE, VFY_REQ`);
+      if (column === 'p3' && typeof value !== 'boolean') {
+        const error = new Error(`updates[${index}].changes.p3 must be true or false`);
         error.statusCode = 400;
         throw error;
+      }
+      if (column === 'isc' && value !== null && !ISC_VALUES.has(value)) {
+        const error = new Error(
+          `updates[${index}].changes.isc must be one of: ISC - NCA, ISC - TOLEAD, ISC + STORAGE, ISC - VFY_REQ`
+        );
+        error.statusCode = 400;
+        throw error;
+      }
+      if (column === 'notes' && value !== null && typeof value !== 'string') {
+        const error = new Error(`updates[${index}].changes.notes must be a string`);
+        error.statusCode = 400;
+        throw error;
+      }
+      if (column === 'notes') {
+        normalizedChanges[column] = value ?? '';
+        continue;
       }
       normalizedChanges[column] = value;
     }
@@ -322,9 +338,9 @@ module.exports = {
   listMawbTableRows,
   listEmailXxxRows,
   listHawbTableRows,
-  updateUldProcessingStatus,
-  updateMawbProcessingStatus,
-  updateHawbProcessingStatus,
+  updateUldArchiveStatus,
+  updateMawbArchiveStatus,
+  updateHawbArchiveStatus,
   listNewMessages,
   archiveNewMessages,
   updateHawbRows,

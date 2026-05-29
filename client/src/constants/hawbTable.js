@@ -1,5 +1,5 @@
 export const HAWB_TABLE_COLUMNS = [
-  'processing_status',
+  'archive_status',
   'hawb_number',
   'piece_count',
   'weight_kg',
@@ -11,14 +11,14 @@ export const HAWB_TABLE_COLUMNS = [
 ];
 
 export const HAWB_DEFAULT_VISIBLE_COLUMNS = [
-  'processing_status',
+  'archive_status',
   'hawb_number',
   'piece_count',
   'mawb_number',
 ];
 
 const HAWB_EDITABLE_COLUMN_SET = new Set([
-  'processing_status',
+  'archive_status',
   'hawb_number',
   'piece_count',
   'weight_kg',
@@ -32,6 +32,7 @@ export const HAWB_TABLE_SETTINGS_STORAGE_KEY = 'ncaparser.hawbTable.settings';
 export const HAWB_DEFAULT_PAGE_SIZE = 25;
 export const HAWB_PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 export const HAWB_COLUMN_TYPES = {
+  archive_status: 'boolean',
   piece_count: 'number',
   weight_kg: 'number',
 };

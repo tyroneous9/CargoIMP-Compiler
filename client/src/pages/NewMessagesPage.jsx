@@ -4,14 +4,14 @@ import { readJson } from '../lib/readJson';
 const NEW_MESSAGES_COLUMNS = [
   'record_type',
   'record_key',
-  'processing_status',
+  'archive_status',
   'description',
   'related_number',
   'origin_airport_code',
   'destination_airport_code',
   'created_at',
 ];
-const NEW_MESSAGES_SETTINGS_STORAGE_KEY = 'ncaparser.newMessages.settings';
+const NEW_MESSAGES_SETTINGS_STORAGE_KEY = 'ncaparser.newMessages.settings.v2';
 const NEW_MESSAGES_DEFAULT_PAGE_SIZE = 25;
 const NEW_MESSAGES_PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 
@@ -464,7 +464,7 @@ function NewMessagesPage() {
               ))}
               {rows.length === 0 ? (
                 <tr>
-                  <td className="empty-cell" colSpan={visibleColumns.length + 1}>No unprocessed records found.</td>
+                  <td className="empty-cell" colSpan={visibleColumns.length + 1}>No unarchived records found.</td>
                 </tr>
               ) : null}
             </tbody>

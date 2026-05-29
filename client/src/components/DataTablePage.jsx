@@ -6,11 +6,6 @@ const BOOLEAN_EDIT_OPTIONS = [
   { value: 'false', label: 'false' },
 ];
 
-const PROCESSING_STATUS_EDIT_OPTIONS = [
-  { value: 'complete', label: 'complete' },
-  { value: 'new', label: 'new' },
-];
-
 function withRequiredColumns(columns, allColumns, requiredColumns) {
   const set = new Set(columns);
   for (const required of requiredColumns) {
@@ -21,9 +16,9 @@ function withRequiredColumns(columns, allColumns, requiredColumns) {
 
 /**
  * Reusable paginated data table with column visibility, sorting, filtering,
- * and per-row processing-status editing.
+ * and per-row editing.
  *
- * @param {object} props
+ * @param {object}   props
  * @param {string}   props.title
  * @param {string}   props.eyebrow
  * @param {string[]} props.columns              - Full ordered column list
@@ -43,8 +38,8 @@ function withRequiredColumns(columns, allColumns, requiredColumns) {
  * @param {string[]} [props.editableColumns]    - Columns editable in Edit Table mode; when omitted all columns are editable
  * @param {function} [props.transformItems]     - (items: object[]) => object[]
  * @param {function} [props.renderCell]         - (column: string, row: object) => node | undefined
- * @param {object}   [props.columnLabels]       - Map of column name → display label
  * @param {object}   [props.columnSelectOptions] - Map of column name → string[] for enum select in edit mode
+ * @param {string[]} [props.nonNullableBooleanColumns] - Boolean columns that should only allow true/false
  * @param {function} [props.onSaveEdits]        - async ({ items, originalItems }) => items?; return items to replace local state
  */
 function DataTablePage({
@@ -67,8 +62,8 @@ function DataTablePage({
   editableColumns,
   transformItems,
   renderCell,
-  columnLabels = {},
   columnSelectOptions = {},
+  nonNullableBooleanColumns = [],
   onSaveEdits,
 }) {
   const normalizedDefaultVisibleColumns = useMemo(() => {
@@ -92,6 +87,10 @@ function DataTablePage({
   const [isEditMode, setIsEditMode] = useState(false);
   const [editBaseItems, setEditBaseItems] = useState(null);
   const [isSavingEdits, setIsSavingEdits] = useState(false);
+  const nonNullableBooleanColumnSet = useMemo(
+    () => new Set(nonNullableBooleanColumns),
+    [nonNullableBooleanColumns]
+  );
 
   // Load persisted settings from localStorage on mount.
   useEffect(() => {
@@ -216,6 +215,10 @@ function DataTablePage({
         if (Number.isNaN(aNum)) return 1;
         if (Number.isNaN(bNum)) return -1;
         return (aNum - bNum) * direction;
+      }
+
+      if (columnType === 'boolean') {
+        return (Number(aRaw) - Number(bRaw)) * direction;
       }
 
       return String(aRaw).localeCompare(String(bRaw), undefined, { numeric: true }) * direction;
@@ -379,22 +382,13 @@ function DataTablePage({
         return value ?? '';
       }
 
-      if (column === 'processing_status') {
-        const selectedValue = value === 'complete' ? 'complete' : 'new';
-        return (
-          <select
-            value={selectedValue}
-            onChange={(event) => updateCellValue(row, column, event.target.value)}
-          >
-            {PROCESSING_STATUS_EDIT_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>{option.label}</option>
-            ))}
-          </select>
-        );
-      }
-
       if (columnTypes[column] === 'boolean' || booleanEditableColumns.has(column)) {
-        const selectedValue = value === true ? 'true' : value === false ? 'false' : '';
+        const isNonNullableBoolean = column === 'archive_status' || nonNullableBooleanColumnSet.has(column);
+        const selectedValue = value === true
+          ? 'true'
+          : value === false || isNonNullableBoolean
+            ? 'false'
+            : '';
         return (
           <select
             value={selectedValue}
@@ -408,10 +402,10 @@ function DataTablePage({
                 updateCellValue(row, column, false);
                 return;
               }
-              updateCellValue(row, column, null);
+              updateCellValue(row, column, isNonNullableBoolean ? false : null);
             }}
           >
-            <option value="">—</option>
+            {!isNonNullableBoolean ? <option value="">—</option> : null}
             {BOOLEAN_EDIT_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>{option.label}</option>
             ))}
@@ -525,7 +519,7 @@ function DataTablePage({
                         checked={visibleColumns.includes(column)}
                         onChange={() => toggleVisibleColumn(column)}
                       />
-                      <span>{columnLabels[column] ?? column}</span>
+                      <span>{column}</span>
                     </label>
                   ))}
                 </div>
@@ -545,7 +539,7 @@ function DataTablePage({
                       className={`sort-button ${sort.column === column ? 'active' : ''}`}
                       onClick={() => onSortToggle(column)}
                     >
-                      {columnLabels[column] ?? column}
+                      {column}
                       <span className="sort-indicator">
                         {sort.column === column ? (sort.direction === 'asc' ? '↑' : '↓') : '↕'}
                       </span>

@@ -1,7 +1,6 @@
 import DataTablePage from '../components/DataTablePage';
 import { readJson } from '../lib/readJson';
 import {
-  OFFICE_OPERATION_COLUMN_LABELS,
   OFFICE_OPERATION_COLUMN_TYPES,
   OFFICE_OPERATION_DEFAULT_PAGE_SIZE,
   OFFICE_OPERATION_DEFAULT_VISIBLE_COLUMNS,
@@ -15,6 +14,22 @@ import {
 const COLUMN_SELECT_OPTIONS = {
   isc: OFFICE_OPERATION_ISC_OPTIONS,
 };
+
+function toMultilineList(value) {
+  return String(value || '')
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .join('\n');
+}
+
+function renderOfficeOperationCell(column, row) {
+  if (column !== 'hawb_number' && column !== 'uld_code' && column !== 'consignee_name') {
+    return undefined;
+  }
+
+  return <span style={{ whiteSpace: 'pre-line' }}>{toMultilineList(row[column])}</span>;
+}
 
 const MONTH_INDEX = {
   JAN: 0,
@@ -172,7 +187,6 @@ function OfficeOperationPage() {
       defaultPageSize={OFFICE_OPERATION_DEFAULT_PAGE_SIZE}
       pageSizeOptions={OFFICE_OPERATION_PAGE_SIZE_OPTIONS}
       storageKey={OFFICE_OPERATION_TABLE_SETTINGS_STORAGE_KEY}
-      columnLabels={OFFICE_OPERATION_COLUMN_LABELS}
       columnSelectOptions={COLUMN_SELECT_OPTIONS}
       requiredColumns={['mawb_number']}
       fetchUrl="/api/reports/office-operation-table?limit=1000&offset=0"
@@ -183,7 +197,9 @@ function OfficeOperationPage() {
       rowKeyFallbackField="mawb_number"
       rowKeyPrefix="oo-row"
       editableColumns={OFFICE_OPERATION_EDITABLE_COLUMNS}
+      nonNullableBooleanColumns={['p3']}
       transformItems={transformOfficeOperationItems}
+      renderCell={renderOfficeOperationCell}
       onSaveEdits={saveOfficeOperationEdits}
     />
   );

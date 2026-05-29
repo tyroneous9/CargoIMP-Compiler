@@ -9,7 +9,7 @@ exports.up = (pgm) => {
       u.id AS ffm_uld_id,
       u.uld_code,
       u.uld_detail_text,
-      u.processing_status,
+      u.archive_status,
       COALESCE(mawb_piece_totals.total_piece_count, 0) AS mawb_piece_count,
       CASE
         WHEN MAX(
@@ -53,7 +53,7 @@ exports.up = (pgm) => {
       u.id,
       u.uld_code,
       u.uld_detail_text,
-      u.processing_status,
+      u.archive_status,
       mawb_piece_totals.total_piece_count,
       ff.carrier_flight_number,
       ff.scheduled_departure_date,

@@ -2,6 +2,101 @@
 
 exports.up = (pgm) => {
   pgm.sql(`
+    DROP VIEW IF EXISTS report_uld;
+    DROP VIEW IF EXISTS report_hawb;
+    DROP VIEW IF EXISTS report_mawb;
+
+    DO $$
+    BEGIN
+      IF EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = 'ffm_uld'
+          AND column_name = 'processing_status'
+      ) THEN
+        ALTER TABLE ffm_uld RENAME COLUMN processing_status TO archive_status;
+      END IF;
+
+      IF EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = 'fwb_master'
+          AND column_name = 'processing_status'
+      ) THEN
+        ALTER TABLE fwb_master RENAME COLUMN processing_status TO archive_status;
+      END IF;
+
+      IF EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = 'fhl_house'
+          AND column_name = 'processing_status'
+      ) THEN
+        ALTER TABLE fhl_house RENAME COLUMN processing_status TO archive_status;
+      END IF;
+    END $$;
+
+    DO $$
+    BEGIN
+      IF EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = 'ffm_uld'
+          AND column_name = 'archive_status'
+          AND udt_name <> 'bool'
+      ) THEN
+        ALTER TABLE ffm_uld ALTER COLUMN archive_status DROP DEFAULT;
+        ALTER TABLE ffm_uld
+        ALTER COLUMN archive_status TYPE BOOLEAN
+        USING CASE WHEN archive_status::text = 'complete' THEN TRUE ELSE FALSE END;
+      END IF;
+
+      IF EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = 'fwb_master'
+          AND column_name = 'archive_status'
+          AND udt_name <> 'bool'
+      ) THEN
+        ALTER TABLE fwb_master ALTER COLUMN archive_status DROP DEFAULT;
+        ALTER TABLE fwb_master
+        ALTER COLUMN archive_status TYPE BOOLEAN
+        USING CASE WHEN archive_status::text = 'complete' THEN TRUE ELSE FALSE END;
+      END IF;
+
+      IF EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = 'fhl_house'
+          AND column_name = 'archive_status'
+          AND udt_name <> 'bool'
+      ) THEN
+        ALTER TABLE fhl_house ALTER COLUMN archive_status DROP DEFAULT;
+        ALTER TABLE fhl_house
+        ALTER COLUMN archive_status TYPE BOOLEAN
+        USING CASE WHEN archive_status::text = 'complete' THEN TRUE ELSE FALSE END;
+      END IF;
+    END $$;
+
+    UPDATE ffm_uld SET archive_status = FALSE WHERE archive_status IS NULL;
+    UPDATE fwb_master SET archive_status = FALSE WHERE archive_status IS NULL;
+    UPDATE fhl_house SET archive_status = FALSE WHERE archive_status IS NULL;
+
+    ALTER TABLE ffm_uld ALTER COLUMN archive_status SET DEFAULT FALSE;
+    ALTER TABLE ffm_uld ALTER COLUMN archive_status SET NOT NULL;
+    ALTER TABLE fwb_master ALTER COLUMN archive_status SET DEFAULT FALSE;
+    ALTER TABLE fwb_master ALTER COLUMN archive_status SET NOT NULL;
+    ALTER TABLE fhl_house ALTER COLUMN archive_status SET DEFAULT FALSE;
+    ALTER TABLE fhl_house ALTER COLUMN archive_status SET NOT NULL;
+
+    DROP TYPE IF EXISTS processing_status_enum;
+
     CREATE OR REPLACE VIEW report_mawb AS
     SELECT
       f.id AS fwb_master_id,
@@ -11,12 +106,12 @@ exports.up = (pgm) => {
       mawb_arrival.carrier_flight_number,
       mawb_arrival.scheduled_arrival_date,
       mawb_arrival.scheduled_arrival_time,
+      mawb_arrival.actual_arrival_datetime,
       f.piece_count,
       f.weight_kg,
       f.nature_of_goods,
       f.archive_status,
-      COALESCE(ns.has_arrival_notice, FALSE) AS has_arrival_notice,
-      mawb_arrival.actual_arrival_datetime
+      COALESCE(ns.has_arrival_notice, FALSE) AS has_arrival_notice
     FROM fwb_master f
     JOIN messages_parsed mp ON mp.id = f.parsed_message_id
     LEFT JOIN LATERAL (
@@ -66,9 +161,7 @@ exports.up = (pgm) => {
     ) mawb_arrival ON TRUE
     LEFT JOIN mawb_notification_status ns ON ns.mawb_number = f.mawb_number
     WHERE mp.status = 'ok';
-  `);
 
-  pgm.sql(`
     CREATE OR REPLACE VIEW report_hawb AS
     SELECT
       h.id AS fhl_house_id,
@@ -119,9 +212,7 @@ exports.up = (pgm) => {
       LIMIT 1
     ) hawb_arrival ON TRUE
     WHERE mp.status = 'ok';
-  `);
 
-  pgm.sql(`
     CREATE OR REPLACE VIEW report_uld AS
     SELECT
       u.id AS ffm_uld_id,
@@ -223,5 +314,5 @@ exports.up = (pgm) => {
 };
 
 exports.down = () => {
-  throw new Error('Down migration is not supported for 1714000012000_add_actual_arrival_datetime_to_report_views');
+  throw new Error('Down migration is not supported for 1714000019000_refactor_archive_status');
 };

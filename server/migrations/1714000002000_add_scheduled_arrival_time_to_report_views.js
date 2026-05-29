@@ -16,7 +16,7 @@ exports.up = (pgm) => {
       f.piece_count,
       f.weight_kg,
       f.nature_of_goods,
-      f.processing_status
+      f.archive_status
     FROM fwb_master f
     JOIN messages_parsed mp ON mp.id = f.parsed_message_id
     LEFT JOIN LATERAL (
@@ -38,7 +38,7 @@ exports.up = (pgm) => {
       h.piece_count,
       h.weight_kg,
       h.goods_description,
-      h.processing_status,
+      h.archive_status,
       fm.mawb_number,
       fm.origin_airport_code,
       fm.destination_airport_code,
@@ -63,7 +63,7 @@ exports.up = (pgm) => {
       u.id AS ffm_uld_id,
       u.uld_code,
       u.uld_detail_text,
-      u.processing_status,
+      u.archive_status,
       COALESCE(mawb_piece_totals.total_piece_count, 0) AS mawb_piece_count,
       CASE
         WHEN MAX(
@@ -115,7 +115,7 @@ exports.up = (pgm) => {
       u.id,
       u.uld_code,
       u.uld_detail_text,
-      u.processing_status,
+      u.archive_status,
       mawb_piece_totals.total_piece_count,
       ff.carrier_flight_number,
       ff.scheduled_departure_date,
