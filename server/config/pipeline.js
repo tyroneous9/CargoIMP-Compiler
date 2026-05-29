@@ -4,7 +4,7 @@ const DEFAULT_PIPELINE_CONFIG = Object.freeze({
   pollIntervalMs: 600000,
   stepMaxRetries: 1,
   parseBatchLimit: 2000,
-  extractEmailLimit: 1000,
+  extractEmailLimit: 3000,
 });
 
 function getPipelineConfig() {

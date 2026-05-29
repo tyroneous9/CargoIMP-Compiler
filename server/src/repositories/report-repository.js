@@ -332,6 +332,80 @@ async function updateUldRows(updates) {
   }
 }
 
+async function listPickupRows(limit, offset) {
+  const result = await pool.query(
+    `
+      SELECT DISTINCT ON (r.uld_code)
+        r.ffm_uld_id,
+        r.carrier_flight_number,
+        r.scheduled_departure_date,
+        r.scheduled_departure_time,
+        r.scheduled_arrival_date,
+        r.scheduled_arrival_time,
+        r.load_type,
+        r.uld_code,
+        COALESCE(po.pickup_status::text, 'new') AS pickup_status
+      FROM report_uld r
+      LEFT JOIN pickup_operation po ON po.ffm_uld_id = r.ffm_uld_id
+      WHERE r.uld_code IS NOT NULL
+        AND r.uld_code <> ''
+        AND EXISTS (
+          SELECT 1
+          FROM ffm_uld u_filter
+          JOIN ffm_flight ff_filter ON ff_filter.id = u_filter.ffm_flight_id
+          JOIN ffm_route fr_filter ON fr_filter.ffm_flight_id = ff_filter.id
+          WHERE u_filter.id = r.ffm_uld_id
+            AND fr_filter.arrival_airport_code = 'ORD'
+        )
+      ORDER BY r.uld_code ASC, r.ffm_uld_id DESC
+      LIMIT $1 OFFSET $2
+    `,
+    [limit, offset]
+  );
+
+  return result.rows;
+}
+
+async function updatePickupRows(updates) {
+  const client = await pool.connect();
+  const updatedRows = [];
+
+  try {
+    await client.query('BEGIN');
+
+    for (const update of updates) {
+      const pickupStatus = update.changes.pickup_status;
+
+      const result = await client.query(
+        `
+          INSERT INTO pickup_operation (ffm_uld_id, pickup_status, updated_at)
+          VALUES ($1, $2::pickup_status_enum, NOW())
+          ON CONFLICT (ffm_uld_id)
+          DO UPDATE SET
+            pickup_status = EXCLUDED.pickup_status,
+            updated_at = NOW()
+          RETURNING id AS pickup_operation_id, ffm_uld_id, pickup_status::text AS pickup_status
+        `,
+        [update.id, pickupStatus]
+      );
+
+      if (result.rowCount === 0) {
+        throw new Error(`Pickup record not found for ffm_uld_id=${update.id}`);
+      }
+
+      updatedRows.push(result.rows[0]);
+    }
+
+    await client.query('COMMIT');
+    return { updatedCount: updatedRows.length, items: updatedRows };
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
 async function listNewMessages(limit, offset) {
   const result = await pool.query(
     `
@@ -463,6 +537,8 @@ module.exports = {
   listOfficeOperationRows,
   upsertOfficeOperationRows,
   listBreakdownManifestRows,
+  listPickupRows,
+  updatePickupRows,
 };
 
 async function listBreakdownManifestRows(limit, offset) {
@@ -474,9 +550,11 @@ async function listBreakdownManifestRows(limit, offset) {
         COALESCE(rh.hawb_numbers, '') AS hawb_number,
         f.piece_count,
         COALESCE(ru.uld_codes, '') AS uld_code,
+        oo.ams_status,
         f.id AS fwb_master_id
       FROM report_mawb rm
       JOIN fwb_master f ON f.id = rm.fwb_master_id
+      LEFT JOIN office_operation oo ON oo.mawb_number = rm.mawb_number
       LEFT JOIN (
         SELECT
           mawb_number,
@@ -499,15 +577,33 @@ async function listBreakdownManifestRows(limit, offset) {
       ) rh ON rh.mawb_number = rm.mawb_number
       LEFT JOIN (
         SELECT
-          fa.master_awb_number AS mawb_number,
-          STRING_AGG(DISTINCT fu.uld_code, ', ' ORDER BY fu.uld_code) AS uld_codes
-        FROM ffm_awb fa
-        JOIN ffm_uld fu ON fu.id = fa.ffm_uld_id
-        WHERE fa.master_awb_number IS NOT NULL
-          AND fa.master_awb_number <> ''
-          AND fu.uld_code IS NOT NULL
-          AND fu.uld_code <> ''
-        GROUP BY fa.master_awb_number
+          uld_totals.mawb_number,
+          STRING_AGG(
+            uld_totals.uld_code || '_' || COALESCE(uld_totals.total_piece_count::text, '0') || 'pcs',
+            ', '
+            ORDER BY uld_totals.uld_code
+          ) AS uld_codes
+        FROM (
+          SELECT
+            mawb_uld.mawb_number,
+            mawb_uld.uld_code,
+            COALESCE(SUM(COALESCE(ru.mawb_piece_count, 0)), 0)::bigint AS total_piece_count
+          FROM (
+            SELECT DISTINCT
+              fa.master_awb_number AS mawb_number,
+              fu.id AS ffm_uld_id,
+              fu.uld_code
+            FROM ffm_awb fa
+            JOIN ffm_uld fu ON fu.id = fa.ffm_uld_id
+            WHERE fa.master_awb_number IS NOT NULL
+              AND fa.master_awb_number <> ''
+              AND fu.uld_code IS NOT NULL
+              AND fu.uld_code <> ''
+          ) mawb_uld
+          LEFT JOIN report_uld ru ON ru.ffm_uld_id = mawb_uld.ffm_uld_id
+          GROUP BY mawb_uld.mawb_number, mawb_uld.uld_code
+        ) uld_totals
+        GROUP BY uld_totals.mawb_number
       ) ru ON ru.mawb_number = rm.mawb_number
       WHERE rm.mawb_number IS NOT NULL
         AND rm.mawb_number <> ''
@@ -524,6 +620,7 @@ async function listOfficeOperationRows(limit, offset) {
     `
       SELECT DISTINCT ON (rm.mawb_number)
         rm.carrier_flight_number,
+        dep.scheduled_departure_date,
         rm.actual_arrival_datetime,
         COALESCE(
           UPPER(TO_CHAR(oo.last_free_day, 'DDMON')),

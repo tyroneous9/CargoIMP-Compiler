@@ -173,6 +173,24 @@ async function listBreakdownManifestRows(req, res, next) {
   }
 }
 
+async function listPickupRows(req, res, next) {
+  try {
+    const items = await reportService.listPickupRows(req.query);
+    res.json({ items });
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function updatePickupRows(req, res, next) {
+  try {
+    const result = await reportService.updatePickupRows(req.body.updates);
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   listMawbs,
   listUlds,
@@ -192,4 +210,6 @@ module.exports = {
   listOfficeOperationRows,
   upsertOfficeOperationRows,
   listBreakdownManifestRows,
+  listPickupRows,
+  updatePickupRows,
 };

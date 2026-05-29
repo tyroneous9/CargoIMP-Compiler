@@ -6,12 +6,34 @@ const BOOLEAN_EDIT_OPTIONS = [
   { value: 'false', label: 'false' },
 ];
 
+function formatLastFreeDayValue(value) {
+  const text = String(value ?? '').trim();
+  if (!text) {
+    return '';
+  }
+  if (/_8AM$/i.test(text)) {
+    return text;
+  }
+  return `${text}_8AM`;
+}
+
+function formatDisplayValue(column, value) {
+  if (column === 'last_free_day') {
+    return formatLastFreeDayValue(value);
+  }
+  return value;
+}
+
 function withRequiredColumns(columns, allColumns, requiredColumns) {
   const set = new Set(columns);
   for (const required of requiredColumns) {
     set.add(required);
   }
   return allColumns.filter((column) => set.has(column));
+}
+
+function normalizeGroupValue(value) {
+  return String(value ?? '').trim().toUpperCase();
 }
 
 /**
@@ -41,6 +63,9 @@ function withRequiredColumns(columns, allColumns, requiredColumns) {
  * @param {object}   [props.columnSelectOptions] - Map of column name → string[] for enum select in edit mode
  * @param {string[]} [props.nonNullableBooleanColumns] - Boolean columns that should only allow true/false
  * @param {function} [props.onSaveEdits]        - async ({ items, originalItems }) => items?; return items to replace local state
+ * @param {string}   [props.visualGroupByColumn] - Insert visual group rows when this column value changes between adjacent rows
+ * @param {string[]} [props.visualGroupHeaderColumns] - Columns shown in each inserted visual group row
+ * @param {boolean}  [props.disableVisualGroupingInEditMode] - Hide visual group rows while in Edit mode
  */
 function DataTablePage({
   title,
@@ -65,6 +90,9 @@ function DataTablePage({
   columnSelectOptions = {},
   nonNullableBooleanColumns = [],
   onSaveEdits,
+  visualGroupByColumn,
+  visualGroupHeaderColumns = [],
+  disableVisualGroupingInEditMode = true,
 }) {
   const normalizedDefaultVisibleColumns = useMemo(() => {
     const configuredColumns = Array.isArray(defaultVisibleColumns)
@@ -192,6 +220,13 @@ function DataTablePage({
     });
 
     if (!sort.column || !sort.direction) {
+      if (visualGroupByColumn) {
+        return [...filtered].sort((a, b) => {
+          const aGroup = normalizeGroupValue(a?.[visualGroupByColumn]);
+          const bGroup = normalizeGroupValue(b?.[visualGroupByColumn]);
+          return aGroup.localeCompare(bGroup, undefined, { numeric: true });
+        });
+      }
       return filtered;
     }
 
@@ -223,7 +258,7 @@ function DataTablePage({
 
       return String(aRaw).localeCompare(String(bRaw), undefined, { numeric: true }) * direction;
     });
-  }, [state.items, filters, sort, visibleColumns, columnTypes]);
+  }, [state.items, filters, sort, visibleColumns, columnTypes, visualGroupByColumn]);
 
   const booleanEditableColumns = useMemo(() => {
     const detected = new Set();
@@ -249,6 +284,66 @@ function DataTablePage({
   const safePage = Math.min(page, totalPages);
   const pageStart = (safePage - 1) * pageSize;
   const pageRows = rows.slice(pageStart, pageStart + pageSize);
+
+  const shouldRenderVisualGroups = Boolean(
+    visualGroupByColumn
+      && (!isEditMode || !disableVisualGroupingInEditMode)
+  );
+
+  const visualGroupColumns = useMemo(() => {
+    if (!visualGroupByColumn) {
+      return [];
+    }
+
+    // Group header columns are always shown regardless of main-table column visibility.
+    if (Array.isArray(visualGroupHeaderColumns) && visualGroupHeaderColumns.length > 0) {
+      return visualGroupHeaderColumns.filter((col, i) => visualGroupHeaderColumns.indexOf(col) === i);
+    }
+
+    return [visualGroupByColumn];
+  }, [visualGroupByColumn, visualGroupHeaderColumns]);
+
+  function buildRowKey(row, index) {
+    const rowId = row[rowIdField];
+    return rowId || row[rowKeyFallbackField] || `${rowKeyPrefix}-${index}`;
+  }
+
+  const displayRows = useMemo(() => {
+    if (!shouldRenderVisualGroups || visualGroupColumns.length === 0) {
+      return pageRows.map((row, index) => ({
+        type: 'data',
+        row,
+        rowKey: buildRowKey(row, index),
+      }));
+    }
+
+    const nextRows = [];
+    let prevGroupValue;
+    let hasPreviousGroup = false;
+
+    for (let index = 0; index < pageRows.length; index += 1) {
+      const row = pageRows[index];
+      const groupValue = normalizeGroupValue(row?.[visualGroupByColumn]);
+
+      if (!hasPreviousGroup || groupValue !== prevGroupValue) {
+        nextRows.push({
+          type: 'group',
+          groupKey: `group-${safePage}-${index}-${groupValue}`,
+          sourceRow: row,
+        });
+        prevGroupValue = groupValue;
+        hasPreviousGroup = true;
+      }
+
+      nextRows.push({
+        type: 'data',
+        row,
+        rowKey: buildRowKey(row, index),
+      });
+    }
+
+    return nextRows;
+  }, [pageRows, shouldRenderVisualGroups, visualGroupColumns, visualGroupByColumn, safePage]);
 
   useEffect(() => {
     if (sort.column && !visibleColumns.includes(sort.column)) {
@@ -367,7 +462,7 @@ function DataTablePage({
 
   function renderCellValue(column, row) {
     if (renderCell) {
-      const custom = renderCell(column, row);
+      const custom = renderCell(column, row, { isEditMode });
       if (custom !== undefined) return custom;
     }
 
@@ -379,7 +474,7 @@ function DataTablePage({
         if (typeof value === 'boolean') {
           return value ? 'true' : 'false';
         }
-        return value ?? '';
+        return formatDisplayValue(column, value) ?? '';
       }
 
       if (columnTypes[column] === 'boolean' || booleanEditableColumns.has(column)) {
@@ -444,7 +539,7 @@ function DataTablePage({
       return value ? 'true' : 'false';
     }
 
-    return value ?? '';
+    return formatDisplayValue(column, value) ?? '';
   }
 
   return (
@@ -566,17 +661,32 @@ function DataTablePage({
               </tr>
             </thead>
             <tbody>
-              {pageRows.map((row, index) => {
-                const rowId = row[rowIdField];
-                const rowKey = rowId || row[rowKeyFallbackField] || `${rowKeyPrefix}-${index}`;
+              {displayRows.map((displayRow) => {
+                if (displayRow.type === 'group') {
+                  return (
+                    <tr key={displayRow.groupKey} className="group-header-row">
+                      <td colSpan={visibleColumns.length}>
+                        <div className="group-row-values">
+                          {visualGroupColumns.map((column) => (
+                            <span key={`${displayRow.groupKey}-${column}`} className="group-row-item">
+                              <strong>{column}</strong>
+                              <span>{formatDisplayValue(column, displayRow.sourceRow?.[column]) ?? ''}</span>
+                            </span>
+                          ))}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                }
+
                 return (
-                  <tr key={rowKey}>
+                  <tr key={displayRow.rowKey}>
                     {visibleColumns.map((column) => (
                       <td
-                        key={`${rowKey}-${column}`}
+                        key={`${displayRow.rowKey}-${column}`}
                         className={column === stickyColumn ? 'sticky-column sticky-cell' : undefined}
                       >
-                        {renderCellValue(column, row)}
+                        {renderCellValue(column, displayRow.row)}
                       </td>
                     ))}
                   </tr>

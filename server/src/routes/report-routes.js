@@ -23,5 +23,7 @@ router.patch('/hawbs/:fhlHouseId/archive-status', reportController.updateHawbArc
 router.get('/office-operation-table', reportController.listOfficeOperationRows);
 router.patch('/office-operation-table/batch', reportController.upsertOfficeOperationRows);
 router.get('/breakdown-manifest-table', reportController.listBreakdownManifestRows);
+router.get('/pickup-table', reportController.listPickupRows);
+router.patch('/pickup-table/batch', reportController.updatePickupRows);
 
 module.exports = router;

@@ -23,7 +23,11 @@ function toMultilineList(value) {
     .join('\n');
 }
 
-function renderOfficeOperationCell(column, row) {
+function renderOfficeOperationCell(column, row, { isEditMode } = {}) {
+  if (column === 'hold' && !isEditMode) {
+    return row[column] ? 'CBP_HOLD' : '';
+  }
+
   if (column !== 'hawb_number' && column !== 'uld_code' && column !== 'consignee_name') {
     return undefined;
   }
@@ -119,8 +123,11 @@ function transformOfficeOperationItems(items) {
       latestNonEmptyLastFreeDay = parsedLastFreeDay;
     }
 
+    const shouldArchive = String(item?.processing_status || '').toLowerCase() === 'archive';
+
     return {
       ...item,
+      archive_status: shouldArchive ? true : item?.archive_status,
       actual_arrival_datetime: formatActualArrivalDateTime(item?.actual_arrival_datetime),
       storage: computeStorageValue({
         weightKg: item?.weight_kg,
@@ -201,6 +208,9 @@ function OfficeOperationPage() {
       transformItems={transformOfficeOperationItems}
       renderCell={renderOfficeOperationCell}
       onSaveEdits={saveOfficeOperationEdits}
+      visualGroupByColumn="carrier_flight_number"
+      visualGroupHeaderColumns={['carrier_flight_number', 'scheduled_departure_date', 'last_free_day']}
+      disableVisualGroupingInEditMode={false}
     />
   );
 }

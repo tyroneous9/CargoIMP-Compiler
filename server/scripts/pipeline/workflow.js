@@ -136,12 +136,31 @@ async function getLatestFetchedUidForMailbox(client, mailbox) {
 }
 
 async function extractEmailsToDb() {
-  const { host, user, pass, port, mailbox } = getImapConfig();
+  const { host, user, pass, port, mailbox, sentMailbox } = getImapConfig();
   const extractLimit = getExtractEmailLimit();
 
-  const latestFetchedUid = await withDbClient((dbClient) =>
-    getLatestFetchedUidForMailbox(dbClient, mailbox)
+  const mailboxesToScan = Array.from(
+    new Set(
+      [mailbox, sentMailbox]
+        .map((name) => String(name || '').trim())
+        .filter(Boolean)
+    )
   );
+
+  if (mailboxesToScan.length === 0) {
+    throw new Error('No mailbox configured for extraction');
+  }
+
+  const latestFetchedUidByMailbox = await withDbClient(async (dbClient) => {
+    const entries = await Promise.all(
+      mailboxesToScan.map(async (mailboxName) => {
+        const latestUid = await getLatestFetchedUidForMailbox(dbClient, mailboxName);
+        return [mailboxName, latestUid];
+      })
+    );
+
+    return new Map(entries);
+  });
 
   const client = new ImapFlow({
     host,
@@ -157,115 +176,129 @@ async function extractEmailsToDb() {
   let skippedUnrecognizedCount = 0;
 
   try {
-    log('log', `[extract] connecting to IMAP host=${host} mailbox=${mailbox}`);
+    log('log', `[extract] connecting to IMAP host=${host} mailboxes=${mailboxesToScan.join(',')}`);
     await client.connect();
-    const lock = await client.getMailboxLock(mailbox);
+    for (const mailboxName of mailboxesToScan) {
+      const latestFetchedUid = latestFetchedUidByMailbox.get(mailboxName) || 0;
+      let lock = null;
 
-    try {
-      const searchStartUid = latestFetchedUid > 0 ? latestFetchedUid + 1 : 1;
-      const hasCheckpoint = latestFetchedUid > 0;
-      const processNewestFirst = !hasCheckpoint;
-      log('log', `[extract] searching uid range ${searchStartUid}:*`);
-      const uids = await client.search({ uid: `${searchStartUid}:*` }, { uid: true });
-      uids.sort((a, b) => a - b);
-
-      let candidateUids;
-      if (extractLimit === -1) {
-        candidateUids = processNewestFirst ? [...uids].reverse() : uids;
-      } else if (processNewestFirst) {
-        candidateUids = uids.slice(-extractLimit).reverse();
-      } else {
-        candidateUids = uids.slice(0, extractLimit);
+      try {
+        lock = await client.getMailboxLock(mailboxName);
+      } catch (error) {
+        if (mailboxName === mailbox) {
+          throw error;
+        }
+        log('warn', `[extract] skipped mailbox=${mailboxName}: ${error.message}`);
+        continue;
       }
 
-      log(
-        'log',
-        `[extract] latestFetchedUid=${latestFetchedUid} matched=${uids.length} candidate=${candidateUids.length} limit=${extractLimit} newestFirst=${processNewestFirst}`
-      );
+      try {
+        const searchStartUid = latestFetchedUid > 0 ? latestFetchedUid + 1 : 1;
+        const hasCheckpoint = latestFetchedUid > 0;
+        const processNewestFirst = !hasCheckpoint;
 
-      if (candidateUids.length === 0) {
-        return { extractedCount, skippedUnrecognizedCount };
-      }
+        log('log', `[extract] mailbox=${mailboxName} searching uid range ${searchStartUid}:*`);
+        const uids = await client.search({ uid: `${searchStartUid}:*` }, { uid: true });
+        uids.sort((a, b) => a - b);
 
-      await withDbClient(async (dbClient) => {
-        const headers = [];
-        for await (const messageHeader of client.fetch(
-          candidateUids,
-          { uid: true, internalDate: true, envelope: true },
-          { uid: true }
-        )) {
-          headers.push(messageHeader);
+        let candidateUids;
+        if (extractLimit === -1) {
+          candidateUids = processNewestFirst ? [...uids].reverse() : uids;
+        } else if (processNewestFirst) {
+          candidateUids = uids.slice(-extractLimit).reverse();
+        } else {
+          candidateUids = uids.slice(0, extractLimit);
         }
 
-        headers.sort((a, b) => {
-          const aUid = Number(a?.uid || 0);
-          const bUid = Number(b?.uid || 0);
-          return processNewestFirst ? bUid - aUid : aUid - bUid;
-        });
+        log(
+          'log',
+          `[extract] mailbox=${mailboxName} latestFetchedUid=${latestFetchedUid} matched=${uids.length} candidate=${candidateUids.length} limit=${extractLimit} newestFirst=${processNewestFirst}`
+        );
 
-        for (const messageHeader of headers) {
-          const uid = Number(messageHeader.uid);
-          if (!Number.isFinite(uid) || uid <= 0) continue;
+        if (candidateUids.length === 0) {
+          continue;
+        }
 
-          const envelope = messageHeader.envelope || {};
-          const subject = envelope.subject || '(no subject)';
-          const { messageType, notificationSubject } = detectSubjectClassification(subject);
-          const isParserEligible = Boolean(messageType && isSupportedMessageType(messageType));
-
-          let body = null;
-          let sender = toAddressText(envelope.from) || '(unknown sender)';
-          let recipients = toAddressText(envelope.to);
-
-          if (isParserEligible) {
-            const sourceMessage = await client.fetchOne(
-              uid,
-              { uid: true, source: true },
-              { uid: true }
-            );
-
-            if (!sourceMessage || !sourceMessage.source) {
-              skippedUnrecognizedCount += 1;
-              continue;
-            }
-
-            const parsedEmail = await simpleParser(sourceMessage.source);
-            body = normalizeBody(parsedEmail);
-            sender = parsedEmail.from ? parsedEmail.from.text : sender;
-            recipients = parsedEmail.to ? parsedEmail.to.text : recipients;
-          } else {
-            skippedUnrecognizedCount += 1;
+        await withDbClient(async (dbClient) => {
+          const headers = [];
+          for await (const messageHeader of client.fetch(
+            candidateUids,
+            { uid: true, internalDate: true, envelope: true },
+            { uid: true }
+          )) {
+            headers.push(messageHeader);
           }
 
-          const rawJson = {
-            uid,
-            mailbox,
-            date: messageHeader.internalDate ? messageHeader.internalDate.toISOString() : null,
-            subject,
-            from: sender,
-            to: recipients,
-            body,
-            subjectMessageType: messageType,
-            recognizedNotification: notificationSubject,
-          };
-
-          const persistedBody = typeof body === 'string' ? body : '';
-
-          await upsertRawEmail(dbClient, {
-            mailbox,
-            uid,
-            messageType: isParserEligible ? messageType : null,
-            subject,
-            sender,
-            receivedAt: rawJson.date,
-            body: persistedBody,
-            rawJson,
+          headers.sort((a, b) => {
+            const aUid = Number(a?.uid || 0);
+            const bUid = Number(b?.uid || 0);
+            return processNewestFirst ? bUid - aUid : aUid - bUid;
           });
 
-          extractedCount += 1;
-        }
-      });
-    } finally {
-      lock.release();
+          for (const messageHeader of headers) {
+            const uid = Number(messageHeader.uid);
+            if (!Number.isFinite(uid) || uid <= 0) continue;
+
+            const envelope = messageHeader.envelope || {};
+            const subject = envelope.subject || '(no subject)';
+            const { messageType, notificationSubject } = detectSubjectClassification(subject);
+            const isParserEligible = Boolean(messageType && isSupportedMessageType(messageType));
+
+            let body = null;
+            let sender = toAddressText(envelope.from) || '(unknown sender)';
+            let recipients = toAddressText(envelope.to);
+
+            if (isParserEligible) {
+              const sourceMessage = await client.fetchOne(
+                uid,
+                { uid: true, source: true },
+                { uid: true }
+              );
+
+              if (!sourceMessage || !sourceMessage.source) {
+                skippedUnrecognizedCount += 1;
+                continue;
+              }
+
+              const parsedEmail = await simpleParser(sourceMessage.source);
+              body = normalizeBody(parsedEmail);
+              sender = parsedEmail.from ? parsedEmail.from.text : sender;
+              recipients = parsedEmail.to ? parsedEmail.to.text : recipients;
+            } else {
+              skippedUnrecognizedCount += 1;
+            }
+
+            const rawJson = {
+              uid,
+              mailbox: mailboxName,
+              date: messageHeader.internalDate ? messageHeader.internalDate.toISOString() : null,
+              subject,
+              from: sender,
+              to: recipients,
+              body,
+              subjectMessageType: messageType,
+              recognizedNotification: notificationSubject,
+            };
+
+            const persistedBody = typeof body === 'string' ? body : '';
+
+            await upsertRawEmail(dbClient, {
+              mailbox: mailboxName,
+              uid,
+              messageType: isParserEligible ? messageType : null,
+              subject,
+              sender,
+              receivedAt: rawJson.date,
+              body: persistedBody,
+              rawJson,
+            });
+
+            extractedCount += 1;
+          }
+        });
+      } finally {
+        lock.release();
+      }
     }
   } catch (error) {
     throw error;

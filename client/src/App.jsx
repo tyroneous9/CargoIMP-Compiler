@@ -7,6 +7,7 @@ import NewMessagesPage from './pages/NewMessagesPage';
 import NotFoundPage from './pages/NotFoundPage';
 import OfficeOperationPage from './pages/OfficeOperationPage';
 import ParseErrorsPage from './pages/ParseErrorsPage';
+import PickupPage from './pages/PickupPage';
 import UldTablePage from './pages/UldTablePage';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
   const isNewMessagesPage = path === '/new-messages';
   const isOfficeOperationPage = path === '/office-operation';
   const isParseErrorsPage = path === '/parse-errors';
+  const isPickupPage = path === '/pickup';
   const isUldTablePage = window.location.pathname === '/uld-table';
 
   if (isIndexPage) {
@@ -55,6 +57,10 @@ function App() {
 
   if (isOfficeOperationPage) {
     return <OfficeOperationPage />;
+  }
+
+  if (isPickupPage) {
+    return <PickupPage />;
   }
 
   return <NotFoundPage />;

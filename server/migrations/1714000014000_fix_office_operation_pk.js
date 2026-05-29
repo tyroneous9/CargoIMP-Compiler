@@ -2,11 +2,8 @@
 
 exports.up = (pgm) => {
   pgm.sql(`
-    -- Recreate table keyed only on mawb_number; hawb_number was never part of the
-    -- office_operation data model — it's displayed from a view join.
-    DROP TABLE IF EXISTS office_operation;
-
-    CREATE TABLE office_operation (
+    -- Ensure table exists in the expected shape keyed by mawb_number.
+    CREATE TABLE IF NOT EXISTS office_operation (
       id BIGSERIAL PRIMARY KEY,
       mawb_number TEXT NOT NULL UNIQUE,
       ams_status TEXT,
@@ -20,7 +17,25 @@ exports.up = (pgm) => {
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
 
-    CREATE INDEX idx_office_operation_mawb ON office_operation (mawb_number);
+    -- Remove obsolete column/constraint from early schema variants.
+    ALTER TABLE office_operation DROP COLUMN IF EXISTS hawb_number;
+    ALTER TABLE office_operation DROP CONSTRAINT IF EXISTS uq_office_operation_mawb_hawb;
+
+    -- Guarantee upsert target exists for ON CONFLICT (mawb_number).
+    DO $$
+    BEGIN
+      IF NOT EXISTS (
+        SELECT 1
+        FROM pg_constraint
+        WHERE conname = 'uq_office_operation_mawb'
+          AND conrelid = 'office_operation'::regclass
+      ) THEN
+        ALTER TABLE office_operation
+        ADD CONSTRAINT uq_office_operation_mawb UNIQUE (mawb_number);
+      END IF;
+    END $$;
+
+    CREATE INDEX IF NOT EXISTS idx_office_operation_mawb ON office_operation (mawb_number);
   `);
 };
 

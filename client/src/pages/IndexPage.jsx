@@ -29,6 +29,9 @@ function IndexPage() {
           <a className="index-card" href="/breakdown-manifest">
             <h2>Breakdown Manifest</h2>
           </a>
+          <a className="index-card" href="/pickup">
+            <h2>Pickup</h2>
+          </a>
         </div>
       </section>
     </main>

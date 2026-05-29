@@ -15,7 +15,9 @@ export const OFFICE_OPERATION_TABLE_COLUMNS = [
   'notes',
 ];
 
-export const OFFICE_OPERATION_DEFAULT_VISIBLE_COLUMNS = [...OFFICE_OPERATION_TABLE_COLUMNS];
+export const OFFICE_OPERATION_DEFAULT_VISIBLE_COLUMNS = OFFICE_OPERATION_TABLE_COLUMNS.filter(
+  (col) => col !== 'carrier_flight_number' && col !== 'last_free_day'
+);
 
 const OFFICE_OPERATION_EDITABLE_COLUMN_SET = new Set([
   'archive_status',

@@ -22,6 +22,8 @@ const MAWB_EDITABLE_COLUMNS = new Set([
   'weight_kg',
 ]);
 const ULD_EDITABLE_COLUMNS = new Set(['archive_status', 'uld_code', 'uld_weight']);
+const PICKUP_EDITABLE_COLUMNS = new Set(['pickup_status']);
+const PICKUP_STATUS_VALUES = new Set(['new', 'arranged', 'complete']);
 
 function toPositiveInt(value, label) {
   const parsed = Number(value);
@@ -254,6 +256,38 @@ async function listBreakdownManifestRows(query) {
   return reportRepository.listBreakdownManifestRows(limit, offset);
 }
 
+async function listPickupRows(query) {
+  const { limit, offset } = parsePagination(query);
+  return reportRepository.listPickupRows(limit, offset);
+}
+
+function parsePickupUpdates(updates) {
+  const parsedUpdates = parseRowUpdates(updates, PICKUP_EDITABLE_COLUMNS);
+
+  return parsedUpdates.map((update, index) => {
+    const status = update.changes.pickup_status;
+    if (typeof status !== 'string' || !PICKUP_STATUS_VALUES.has(status)) {
+      const error = new Error(
+        `updates[${index}].changes.pickup_status must be one of: new, arranged, complete`
+      );
+      error.statusCode = 400;
+      throw error;
+    }
+
+    return {
+      id: update.id,
+      changes: {
+        pickup_status: status,
+      },
+    };
+  });
+}
+
+async function updatePickupRows(updates) {
+  const parsedUpdates = parsePickupUpdates(updates);
+  return reportRepository.updatePickupRows(parsedUpdates);
+}
+
 function parseOfficeOperationUpdates(updates) {
   if (!Array.isArray(updates) || updates.length === 0) {
     const error = new Error('updates must be a non-empty array');
@@ -349,4 +383,6 @@ module.exports = {
   listOfficeOperationRows,
   upsertOfficeOperationRows,
   listBreakdownManifestRows,
+  listPickupRows,
+  updatePickupRows,
 };

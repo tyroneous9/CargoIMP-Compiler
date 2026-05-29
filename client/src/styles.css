@@ -412,6 +412,38 @@ pre {
   background: #fafbfc;
 }
 
+.sheet-table tbody tr.group-header-row {
+  background: #edf3ff;
+}
+
+.sheet-table tbody tr.group-header-row td {
+  border-top: 1px solid #d4deef;
+  border-bottom: 1px solid #d4deef;
+  border-right: 0;
+  padding: 7px 10px;
+}
+
+.group-row-values {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.group-row-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  color: #224173;
+}
+
+.group-row-item strong {
+  color: #1d4ed8;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
 @media (max-width: 760px) {
   .page {
     width: calc(100% - 12px);

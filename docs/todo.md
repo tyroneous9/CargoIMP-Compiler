@@ -40,3 +40,15 @@ NFD_933-34771542
 breakdown_manifest:
 mawb_number, hawb_number, piece count of mawb, uld_code
 the table should be keyed on mawb_number, therefore hawb_number and uld_code should be a list of all hawb/uld associated with the mawb
+
+pickup:
+carrier_flight_number, scheduled_departure_date, scheduled_departure_time, scheduled_arrival_date, scheduled_arrival_time, load_type, uld_code, pickup_status
+
+pickup_status holds an enum: 'new', 'arranged', 'complete'
+by default pickup_status is set to 'new' and this column should be editable
+
+create a row header similar to OfficeOperation for the Pickup page
+carrier_flight_number, scheduled_departure_date, pickup_status
+
+
+

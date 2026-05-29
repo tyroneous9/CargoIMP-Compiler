@@ -12,7 +12,6 @@ exports.up = (pgm) => {
     CREATE TABLE IF NOT EXISTS office_operation (
       id BIGSERIAL PRIMARY KEY,
       mawb_number TEXT NOT NULL,
-      hawb_number TEXT,
       ams_status TEXT,
       p3 BOOLEAN NOT NULL DEFAULT FALSE,
       hold BOOLEAN NOT NULL DEFAULT FALSE,
@@ -22,11 +21,10 @@ exports.up = (pgm) => {
       last_free_day DATE,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      CONSTRAINT uq_office_operation_mawb_hawb UNIQUE (mawb_number, hawb_number)
+      CONSTRAINT uq_office_operation_mawb UNIQUE (mawb_number)
     );
 
     CREATE INDEX IF NOT EXISTS idx_office_operation_mawb ON office_operation (mawb_number);
-    CREATE INDEX IF NOT EXISTS idx_office_operation_hawb ON office_operation (hawb_number);
   `);
 };
 

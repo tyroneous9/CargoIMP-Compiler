@@ -31,35 +31,58 @@ function buildBreakdownManifestUpdates(items, originalItems) {
     originalItems.map((row) => [row.fwb_master_id, row])
   );
 
-  const updates = [];
+  const mawbUpdates = [];
+  const officeOperationUpdates = [];
+
   for (const row of items) {
     const original = originalById.get(row.fwb_master_id);
     if (!original) continue;
 
     if (row.archive_status !== original.archive_status) {
-      updates.push({
+      mawbUpdates.push({
         id: row.fwb_master_id,
         changes: { archive_status: row.archive_status ?? false },
       });
     }
+
+    if (row.ams_status !== original.ams_status) {
+      officeOperationUpdates.push({
+        mawb_number: row.mawb_number,
+        changes: { ams_status: row.ams_status ?? null },
+      });
+    }
   }
 
-  return updates;
+  return { mawbUpdates, officeOperationUpdates };
 }
 
 async function saveBreakdownManifestEdits({ items, originalItems }) {
-  const updates = buildBreakdownManifestUpdates(items, originalItems);
-  if (updates.length === 0) return items;
+  const { mawbUpdates, officeOperationUpdates } = buildBreakdownManifestUpdates(items, originalItems);
 
-  const response = await fetch('/api/reports/mawbs-table/batch', {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ updates }),
-  });
-  const data = await readJson(response);
+  if (mawbUpdates.length === 0 && officeOperationUpdates.length === 0) return items;
 
-  if (!response.ok) {
-    throw new Error(data?.message || 'Unable to save breakdown manifest edits');
+  if (mawbUpdates.length > 0) {
+    const response = await fetch('/api/reports/mawbs-table/batch', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ updates: mawbUpdates }),
+    });
+    const data = await readJson(response);
+    if (!response.ok) {
+      throw new Error(data?.message || 'Unable to save breakdown manifest edits');
+    }
+  }
+
+  if (officeOperationUpdates.length > 0) {
+    const response = await fetch('/api/reports/office-operation-table/batch', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ updates: officeOperationUpdates }),
+    });
+    const data = await readJson(response);
+    if (!response.ok) {
+      throw new Error(data?.message || 'Unable to save AMS status edits');
+    }
   }
 
   return items;
