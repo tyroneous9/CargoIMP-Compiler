@@ -587,12 +587,20 @@ async function listBreakdownManifestRows(limit, offset) {
           SELECT
             mawb_uld.mawb_number,
             mawb_uld.uld_code,
-            COALESCE(SUM(COALESCE(ru.mawb_piece_count, 0)), 0)::bigint AS total_piece_count
+            COALESCE(
+              SUM(
+                COALESCE(
+                  NULLIF(SUBSTRING(mawb_uld.shipment_summary FROM '^[A-Z]([0-9]+)K'), '')::bigint,
+                  0
+                )
+              ),
+              0
+            )::bigint AS total_piece_count
           FROM (
             SELECT DISTINCT
               fa.master_awb_number AS mawb_number,
-              fu.id AS ffm_uld_id,
-              fu.uld_code
+              fu.uld_code,
+              fa.shipment_summary
             FROM ffm_awb fa
             JOIN ffm_uld fu ON fu.id = fa.ffm_uld_id
             WHERE fa.master_awb_number IS NOT NULL
@@ -600,7 +608,6 @@ async function listBreakdownManifestRows(limit, offset) {
               AND fu.uld_code IS NOT NULL
               AND fu.uld_code <> ''
           ) mawb_uld
-          LEFT JOIN report_uld ru ON ru.ffm_uld_id = mawb_uld.ffm_uld_id
           GROUP BY mawb_uld.mawb_number, mawb_uld.uld_code
         ) uld_totals
         GROUP BY uld_totals.mawb_number
@@ -708,6 +715,7 @@ async function listOfficeOperationRows(limit, offset) {
         JOIN ffm_uld fu ON fu.id = fa.ffm_uld_id
         JOIN ffm_flight ff ON ff.id = fu.ffm_flight_id
         WHERE fa.master_awb_number = rm.mawb_number
+          AND (rm.carrier_flight_number IS NULL OR ff.carrier_flight_number = rm.carrier_flight_number)
           AND ff.scheduled_departure_date IS NOT NULL
           AND ff.scheduled_departure_date <> ''
         ORDER BY ff.id DESC

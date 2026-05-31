@@ -36,6 +36,30 @@ function normalizeGroupValue(value) {
   return String(value ?? '').trim().toUpperCase();
 }
 
+function compareCellValues(aRaw, bRaw, columnType, direction) {
+  if (aRaw === null || aRaw === undefined || aRaw === '') {
+    return bRaw === null || bRaw === undefined || bRaw === '' ? 0 : 1;
+  }
+  if (bRaw === null || bRaw === undefined || bRaw === '') {
+    return -1;
+  }
+
+  if (columnType === 'number') {
+    const aNum = Number(aRaw);
+    const bNum = Number(bRaw);
+    if (Number.isNaN(aNum) && Number.isNaN(bNum)) return 0;
+    if (Number.isNaN(aNum)) return 1;
+    if (Number.isNaN(bNum)) return -1;
+    return (aNum - bNum) * direction;
+  }
+
+  if (columnType === 'boolean') {
+    return (Number(aRaw) - Number(bRaw)) * direction;
+  }
+
+  return String(aRaw).localeCompare(String(bRaw), undefined, { numeric: true }) * direction;
+}
+
 /**
  * Reusable paginated data table with column visibility, sorting, filtering,
  * and per-row editing.
@@ -210,55 +234,69 @@ function DataTablePage({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const rows = useMemo(() => {
-    const filtered = state.items.filter((row) => {
+  const filteredRows = useMemo(() => {
+    return state.items.filter((row) => {
       return visibleColumns.every((column) => {
         const query = (filters[column] || '').trim().toLowerCase();
         if (!query) return true;
         return String(row[column] ?? '').toLowerCase().includes(query);
       });
     });
+  }, [state.items, filters, visibleColumns]);
 
-    if (!sort.column || !sort.direction) {
-      if (visualGroupByColumn) {
-        return [...filtered].sort((a, b) => {
-          const aGroup = normalizeGroupValue(a?.[visualGroupByColumn]);
-          const bGroup = normalizeGroupValue(b?.[visualGroupByColumn]);
-          return aGroup.localeCompare(bGroup, undefined, { numeric: true });
-        });
-      }
-      return filtered;
+  const groupHeaderSourceByKey = useMemo(() => {
+    const sourceByKey = new Map();
+    if (!visualGroupByColumn) {
+      return sourceByKey;
     }
 
-    const direction = sort.direction === 'asc' ? 1 : -1;
-    const columnType = columnTypes[sort.column] || 'text';
-    return [...filtered].sort((a, b) => {
-      const aRaw = a[sort.column];
-      const bRaw = b[sort.column];
-
-      if (aRaw === null || aRaw === undefined || aRaw === '') {
-        return bRaw === null || bRaw === undefined || bRaw === '' ? 0 : 1;
+    for (const row of filteredRows) {
+      const groupValue = normalizeGroupValue(row?.[visualGroupByColumn]);
+      if (!sourceByKey.has(groupValue)) {
+        sourceByKey.set(groupValue, row);
       }
-      if (bRaw === null || bRaw === undefined || bRaw === '') {
-        return -1;
-      }
+    }
 
-      if (columnType === 'number') {
-        const aNum = Number(aRaw);
-        const bNum = Number(bRaw);
-        if (Number.isNaN(aNum) && Number.isNaN(bNum)) return 0;
-        if (Number.isNaN(aNum)) return 1;
-        if (Number.isNaN(bNum)) return -1;
-        return (aNum - bNum) * direction;
-      }
+    return sourceByKey;
+  }, [filteredRows, visualGroupByColumn]);
 
-      if (columnType === 'boolean') {
-        return (Number(aRaw) - Number(bRaw)) * direction;
-      }
+  const rows = useMemo(() => {
+    const indexedRows = filteredRows.map((row, index) => ({ row, index }));
+    const hasExplicitSort = Boolean(sort.column && sort.direction);
+    const shouldGroupSort = Boolean(visualGroupByColumn);
 
-      return String(aRaw).localeCompare(String(bRaw), undefined, { numeric: true }) * direction;
-    });
-  }, [state.items, filters, sort, visibleColumns, columnTypes, visualGroupByColumn]);
+    if (!hasExplicitSort && !shouldGroupSort) {
+      return filteredRows;
+    }
+
+    return indexedRows
+      .sort((aEntry, bEntry) => {
+        const a = aEntry.row;
+        const b = bEntry.row;
+
+        if (shouldGroupSort) {
+          const aGroup = normalizeGroupValue(a?.[visualGroupByColumn]);
+          const bGroup = normalizeGroupValue(b?.[visualGroupByColumn]);
+          const groupDirection = sort.column === visualGroupByColumn && sort.direction === 'desc' ? -1 : 1;
+          const groupCompare = aGroup.localeCompare(bGroup, undefined, { numeric: true }) * groupDirection;
+          if (groupCompare !== 0) {
+            return groupCompare;
+          }
+        }
+
+        if (hasExplicitSort && sort.column !== visualGroupByColumn) {
+          const direction = sort.direction === 'asc' ? 1 : -1;
+          const columnType = columnTypes[sort.column] || 'text';
+          const valueCompare = compareCellValues(a[sort.column], b[sort.column], columnType, direction);
+          if (valueCompare !== 0) {
+            return valueCompare;
+          }
+        }
+
+        return aEntry.index - bEntry.index;
+      })
+      .map((entry) => entry.row);
+  }, [filteredRows, sort, columnTypes, visualGroupByColumn]);
 
   const booleanEditableColumns = useMemo(() => {
     const detected = new Set();
@@ -329,7 +367,7 @@ function DataTablePage({
         nextRows.push({
           type: 'group',
           groupKey: `group-${safePage}-${index}-${groupValue}`,
-          sourceRow: row,
+          sourceRow: groupHeaderSourceByKey.get(groupValue) || row,
         });
         prevGroupValue = groupValue;
         hasPreviousGroup = true;
@@ -343,7 +381,14 @@ function DataTablePage({
     }
 
     return nextRows;
-  }, [pageRows, shouldRenderVisualGroups, visualGroupColumns, visualGroupByColumn, safePage]);
+  }, [
+    pageRows,
+    shouldRenderVisualGroups,
+    visualGroupColumns,
+    visualGroupByColumn,
+    safePage,
+    groupHeaderSourceByKey,
+  ]);
 
   useEffect(() => {
     if (sort.column && !visibleColumns.includes(sort.column)) {

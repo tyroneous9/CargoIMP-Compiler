@@ -1,6 +1,7 @@
 export const OFFICE_OPERATION_TABLE_COLUMNS = [
   'archive_status',
   'carrier_flight_number',
+  'scheduled_departure_date',
   'last_free_day',
   'mawb_number',
   'hawb_number',
@@ -16,7 +17,7 @@ export const OFFICE_OPERATION_TABLE_COLUMNS = [
 ];
 
 export const OFFICE_OPERATION_DEFAULT_VISIBLE_COLUMNS = OFFICE_OPERATION_TABLE_COLUMNS.filter(
-  (col) => col !== 'carrier_flight_number' && col !== 'last_free_day'
+  (col) => col !== 'carrier_flight_number' && col !== 'scheduled_departure_date' && col !== 'last_free_day'
 );
 
 const OFFICE_OPERATION_EDITABLE_COLUMN_SET = new Set([
