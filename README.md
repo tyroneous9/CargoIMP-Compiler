@@ -1,6 +1,6 @@
 # NCAParser
 
-NCAParser ingests IATA Cargo-IMP teletype messages (FFM, FWB, FHL, MVT) from an airline mailbox, parses them with grammar-generated C++ parsers, normalizes them into PostgreSQL, and serves the results through an Express API to a React front end for day-to-day cargo operations (MAWB/HAWB/ULD tracking, office operations, pickup status).
+NCAParser reads IATA Cargo-IMP teletype messages (FFM, FWB, FHL, MVT) from an airline mailbox, parses them with grammar-generated C++ parsers, normalizes them into PostgreSQL, and serves the results through an Express API to a React front end for day-to-day cargo operations (MAWB/HAWB/ULD tracking, office operations, pickup status).
 
 ## How it works
 
@@ -8,7 +8,7 @@ NCAParser ingests IATA Cargo-IMP teletype messages (FFM, FWB, FHL, MVT) from an 
 alimail (IMAP) → extract to DB → parse to DB (C++ binaries) → normalize → Postgres → REST API → React client
 ```
 
-1. **Extract** (`extract_to_db`) — incrementally scan the IMAP mailbox by UID, classify each message from its subject (parser type like `FFM/*`, `FWB/*`, `FHL/*`, `MVT`, or a subject-only notification like `RCF`/`Arrival Notice`/`DLV`/`NFD`), fully parse MIME only for recognized types, and upsert into `emails_raw`.
+1. **Extract** (`extract_to_db`) — incrementally scan the IMAP mailbox by UID, classify each email from its subject line (parser types like `FFM/*`, `FWB/*`, `FHL/*`, `MVT`, or notification types like `RCF`/`Arrival Notice`/`DLV`/`NFD`). Successfully classified parser type emails additionally have their body text extracted and inserted into `emails_raw`.
 2. **Parse** (`parse_to_db`) — for raw rows with a known `message_type`, run the matching C++ parser binary against the stored body and insert the result (`ok`/`error`, stdout/stderr, `payload_json`) into `messages_parsed`.
 3. **Normalize** — on successful parses, decompose `payload_json` into per-type relational tables (`ffm_*`, `fwb_*`, `fhl_*`, `mvt_event`), all inside one DB transaction per message.
 4. **Serve** — an Express API (`/api/pipeline`, `/api/messages`, `/api/reports`) reads from reporting views/tables in Postgres.
