@@ -8,7 +8,7 @@ NCAParser reads IATA Cargo-IMP teletype messages (FFM, FWB, FHL, MVT) from an ai
 alimail (IMAP) → extract to DB → parse to DB (C++ binaries) → normalize → Postgres → REST API → React client
 ```
 
-1. **Extract** (`extract_to_db`) — incrementally scan the IMAP mailbox by UID, classify each email from its subject line (parser types like `FFM/*`, `FWB/*`, `FHL/*`, `MVT`, or notification types like `RCF`/`Arrival Notice`/`DLV`/`NFD`). Successfully classified parser type emails additionally have their body text extracted and inserted into `emails_raw`.
+1. **Extract** (`extract_to_db`) — incrementally scan the IMAP mailbox by UID, classify each email from its subject line (`message types` like `FFM/*`, `FWB/*`, `FHL/*`, `MVT`, or notification types like `RCF`/`Arrival Notice`/`DLV`/`NFD`). Successfully classified parser type emails additionally have their body text extracted and inserted into the database's table `emails_raw`.
 2. **Parse** (`parse_to_db`) — for raw rows with a known `message_type`, run the matching C++ parser binary against the stored body and insert the result (`ok`/`error`, stdout/stderr, `payload_json`) into `messages_parsed`.
 3. **Normalize** — on successful parses, decompose `payload_json` into per-type relational tables (`ffm_*`, `fwb_*`, `fhl_*`, `mvt_event`), all inside one DB transaction per message.
 4. **Serve** — an Express API (`/api/pipeline`, `/api/messages`, `/api/reports`) reads from reporting views/tables in Postgres.
