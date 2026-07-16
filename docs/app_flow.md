@@ -1,6 +1,6 @@
 # Backend App Flow
 
-This document describes backend data flow in NCAParser, from IMAP extraction to API-facing report views.
+This document describes backend data flow in CargoIMP-Compiler, from IMAP extraction to API-facing report views.
 
 ## Scope
 

@@ -3,7 +3,7 @@
 # Build: cmake --build build_dir
 
 cmake_minimum_required(VERSION 3.20)
-project(NCAParser LANGUAGES CXX)
+project(CargoIMP-Compiler LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 

@@ -2,7 +2,7 @@ function IndexPage() {
   return (
     <main className="page">
       <section className="hero-card">
-        <p className="eyebrow">NCAParser frontend</p>
+        <p className="eyebrow">CargoIMP-Compiler frontend</p>
         <h1>Page Index</h1>
         <div className="index-grid">
           <a className="index-card" href="/new-messages">
