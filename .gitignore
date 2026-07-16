@@ -30,3 +30,7 @@ cpp/data/generated_parsers/
 .DS_Store
 .idea/
 .vscode/settings.json
+
+# Licensed third-party reference material (IATA Cargo-IMP manual) - not ours to redistribute
+docs/CIMP-34thEdition2014.pdf
+docs/CIMP-34thEdition2014.txt
