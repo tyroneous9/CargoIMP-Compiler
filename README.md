@@ -1,25 +1,27 @@
 # CargoIMP-Compiler
 
-Reads IATA Cargo-IMP teletype cargo messages (FFM, FWB, FHL, MVT) out of an airline mailbox, parses them with grammar-generated C++ parsers, and normalizes the result into PostgreSQL. An Express API and React front end sit on top for day-to-day cargo ops — MAWB/HAWB/ULD tracking, office operations, pickup status.
+Reads IATA Cargo-IMP cargo messages out of an airline mailbox, parses them with grammar-generated C++ parsers, and normalizes the result into a PostgreSQL database. An Express API and React front end uses this data to assist with day-to-day cargo operations, such as MAWB/HAWB/ULD tracking and pickup status.
 
-In production against live mailbox traffic, the parser suite runs at an effectively 100% success rate. The remaining failures are messages that genuinely don't conform to the CIMP format — not parser bugs — and get recorded as such.
+In production against live mailbox traffic, the parser suite runs at an effectively 100% success rate. The remaining failures are messages that genuinely don't conform to the CIMP format, which are still recorded.
 
 ## Why a grammar instead of string-splitting
 
-Cargo-IMP (IATA/A4A Resolution 670) is a fixed-token teletype format from the telex era that's still in daily production use across the air cargo industry. It's not friendly to parse: a single message type has several incompatible wire revisions live in the same mailbox at once (`FFM/4`, `FFM/5`, `FFM/8` all show up), field boundaries are positional rather than tagged, and some structure is conditionally dropped entirely — a "loose"/bulk FFM shipment just omits its ULD line instead of encoding an empty one.
+Cargo-IMP (IATA/A4A Resolution 670) is a format that's still in daily production use across the air cargo industry. It's not friendly to parse: a single message type has several incompatible wire revisions live in the same mailbox at once (`FFM/4`, `FFM/5`, `FFM/8` all show up), field boundaries are positional rather than tagged, and some structure is conditionally dropped entirely — a "loose"/bulk FFM shipment just omits its ULD line instead of encoding an empty one.
 
-Hand-written string-splitting handles whatever sample messages motivated it and then degrades silently on the first one that doesn't match. So each message type is treated as a formal language instead: an ABNF grammar defines what's structurally valid for a given revision, and a generated parser is the single source of truth for how a message decomposes into fields. The accepted-language rules live in version control next to the format docs, not scattered across hand-written conditionals.
+To address this format's complexity, each message type is treated as a formal language: an ABNF grammar defines what's structurally valid for a given revision, and a generated parser is the single source of truth for how a message decomposes into fields.
 
 ## The parsers
 
-Each grammar (`cpp/data/grammars/*.abnf`) compiles through [aParse](https://www.parse2.com/) into a standalone C++ parser binary — one executable per message type, built in isolation rather than linked into a single parser binary, since the generator doesn't namespace its output and cross-grammar symbol collisions are a real risk otherwise.
+Each grammar (`cpp/data/grammars/*.abnf`) compiles through [aParse](https://www.parse2.com/) into its own C++ parser binary — one executable per message type. They're built as separate binaries rather than linked together into one, because aParse doesn't namespace its generated code; combining multiple grammars into a single binary would risk symbol collisions between them. 
+
+The currently supported message types are those useful to our operations. New message types can be added by: a new grammar `*_grammar.abnf`, JSON extractor (`*_json_extractor.cpp`) , and CLI entrypoint (`*_json_main.cpp`) produce a working standalone parser with no changes to existing ones.
 
 | Type | Formats | Content |
 |------|---------|---------|
 | FFM  | FFM/4, FFM/5, FFM/8 | Freight manifest — flight, routing, ULDs, AWBs |
 | FWB  | FWB/17 | Master air waybill (MAWB) details |
 | FHL  | FHL/4, FHL/5 | House waybill (HAWB) details under a MAWB |
-| MVT  | — | Flight movement events (actual departure/arrival times) |
+| MVT  |  | Flight movement events (actual departure/arrival times) |
 
 Building:
 
@@ -29,7 +31,9 @@ bash scripts/generate_parsers.sh data/grammars/fwb_grammar.abnf   # grammar -> g
 cmake -S . -B build && cmake --build build                        # -> cpp/build/parser_*_json
 ```
 
-Generated parse trees (`cpp/data/generated_parsers/`, gitignored) are never hand-edited. `cpp/src/*_json_extractor.cpp` is hand-written code that walks the tree and emits a stable JSON contract — regenerating a grammar can change the internal parse structure without silently changing the API the rest of the system depends on.
+Compiling a grammar produces two layers, kept intentionally separate. `cpp/data/generated_parsers/` (build artifact so gitignored) is aParse's direct output: C++ code that parses a message into a tree mirroring the grammar's rules. It's regenerated from scratch on every grammar change. `cpp/src/*_json_extractor.cpp` is separate file that reads from that generated tree and pulls fields out into a fixed, usable JSON shape used by the actual data pipeline.
+
+The point of the split: a grammar change can restructure the generated tree significantly, but as long as the extractor is updated to still walk it correctly, the JSON keys it produces stay the same. So, minor changes in the grammars never become a breaking change for the rest of the system.
 
 ### Standalone, dependency-free CLI
 
@@ -42,50 +46,39 @@ The binaries have no dependency on Node, Postgres, or the network — just the C
 ./build/parser_mvt_json -file data/input_tests/mvt_test.txt
 ```
 
-This is the same binary the ingestion pipeline shells out to (`spawnSync`, `server/scripts/pipeline/parser-runner.js`) — not a wrapped-up internal API, the actual CLI. Given a raw message on disk, it deterministically produces JSON or a diagnosed error with nothing else running, which makes it easy to test in isolation, embed in a different ingestion system, or use as a standalone CIMP decoding tool on its own.
+This is the same binary the pipeline shells out to (`spawnSync`, `server/scripts/pipeline/parser-runner.js`). Given a raw message on disk, it deterministically produces JSON or a diagnosed error with nothing else running, which makes it easy to embed in a totally different pipeline or use as a standalone CIMP decoding tool on its own.
 
-### Fuzzing plan
+## Design tradeoffs in the current implementation
 
-Untrusted bytes in, a bounded ok/error/crash outcome out — that's a fuzz target. Next layer of hardening on top of the production numbers above:
+**Classification on bad labels.** The subject line is a human- or system-authored label for the message that follows, and it disagrees with the body often enough to have caused real operational incidents: a message subject-tagged `FFM8` whose body is actually a `FWB17` results in a failed parse, so we have to request for the messages to be resent correctly. The system still trusts the subject for parser selection, on purpose: cross-checking the body would mean a full MIME parse of every message before even knowing what it is, which is too expensive to do unconditionally. A wrong subject just produces a grammar mismatch, which becomes a `status = 'error'` row instead of a silent misparse. Correctness comes from the grammar rejecting the wrong structure, not from getting classification right on the first try.
 
-- Wrap each `-file` entrypoint as a libFuzzer/AFL++ harness, seeded from `cpp/data/input_tests/` so mutation starts from valid messages instead of noise.
-- Build with ASan/UBSan on so memory-safety issues (buffer overreads, use-after-free) fail hard instead of corrupting silently.
-- The bar is narrow: grammar-rejecting a bad message is correct behavior (an `error` status, same as production). The only real failure mode being hunted is a crash, hang, or sanitizer trip — correctness on well-formed input is the grammar's job and gets validated separately.
-- Runs per-grammar independently for free, since the binaries are already isolated — a crash in the FFM fuzzer says nothing about FWB.
-
-Worth doing because these parsers process whatever shows up in a mailbox, unauthenticated and unsanitized upstream. The grammar rejects garbage by design, but a corrupted or adversarial message that trips an edge case in the generated parser or the hand-written extractor is exactly the kind of input a subject-line-only classifier (below) won't have filtered out first.
-
-## Two hard problems in the data model
-
-**Classification runs on noisy labels.** The subject line is a human- or system-authored label for the message that follows, and it disagrees with the body often enough to have caused real operational incidents — a message subject-tagged `FFM8` whose body is actually a `FWB17` is not hypothetical. The system still trusts the subject for parser selection, on purpose: cross-checking the body would mean a full MIME parse of every message before even knowing what it is, which is too expensive to do unconditionally. A wrong subject just produces a grammar mismatch, which becomes a `status = 'error'` row instead of a silent misparse. Correctness comes from the grammar rejecting the wrong structure, not from getting classification right on the first try.
-
-**HAWB-to-ULD allocation is underdetermined.** When a MAWB's freight is split across several ULDs, FFM gives per-ULD/per-AWB manifest entries, but FHL only gives per-house-bill weight and piece counts under the MAWB as a whole. No message states which portion of a given HAWB physically rode in which ULD. Given a MAWB's total weight spread across ULDs of different weights, and a set of HAWBs summing to that total, recovering the exact split is a constraint-satisfaction problem with more unknowns than equations — multiple allocations reproduce the same marginal totals, so there's no unique answer to compute. Rather than guess, the reporting logic classifies at the ULD level instead: `loose` if any MAWB inside it is still missing a matching FWB, `uld` once every MAWB in it has one. That's a coarser but decidable question, and since FWB messages arrive independently and out of order, the classification isn't monotonic — a ULD can flip from `loose` to `uld` as later messages land.
+**HAWB-to-ULD allocation is underdetermined.** When a MAWB's freight is split across several ULDs, FFM gives per-ULD/per-AWB manifest entries, but FHL only gives per-house-bill weight and piece counts under the MAWB as a whole. No message states which portion of a given HAWB physically flew with which ULD. Given a MAWB's total weight spread across ULDs of different weights, and a set of HAWBs summing to that total, recovering the exact split is a constraint-satisfaction problem with more unknowns than equations, so there's no unique answers to compute. Rather than guess, the reporting logic classifies at the ULD level instead: `loose` if any MAWB inside it is still missing a matching FWB, `uld` once every MAWB in it has one. Since FWB messages arrive independently and out of order, the classification is flexible: a ULD can flip from `loose` to `uld` as later messages are received.
 
 ## Pipeline
 
 ```mermaid
-flowchart LR
-    A[IMAP mailbox] -->|subject classification\nUID-cursor scan| B[(emails_raw)]
-    B -->|typed rows, batched| C[C++ parser binary\nper message type]
-    C -->|status ok/error\n+ payload_json| D[(messages_parsed)]
-    D -->|status = ok, one txn| E[(ffm_*/fwb_*/fhl_*/mvt_event)]
-    E --> F[Reporting views]
-    F --> G[Express API /api/*]
-    G --> H[React client\neditable tables]
-    H -->|PATCH batch/archive| E
+flowchart TD
+    A["IMAP mailbox"] -->|"subject classification<br/>UID-cursor scan"| B[("emails_raw")]
+    B -->|"typed rows, batched"| C["C++ parser binary<br/>(per message type)"]
+    C -->|"status: ok / error<br/>+ payload_json"| D[("messages_parsed")]
+    D -->|"status = ok<br/>one transaction"| E[("ffm_* / fwb_* / fhl_*<br/>mvt_event")]
+    E --> F["Reporting views"]
+    F --> G["Express API<br/>/api/*"]
+    G --> H["React client<br/>editable tables"]
+    H -->|"PATCH batch / archive"| E
 ```
 
-1. **Extract** (`extract_to_db`) scans the IMAP mailbox by UID, checkpointed on the last-seen UID per mailbox so re-running never rescans old mail. Each message is classified from its subject alone (`FFM/*`, `FWB/*`, `FHL/*`, `MVT`, or a notification pattern like `RCF_933-34474602` carrying an embedded MAWB) and upserted into `emails_raw` — idempotent on `(mailbox, uid)`. Full MIME parsing only happens for subject-recognized types; notification-only mail is recorded without a body.
+1. **Extract** (`extract_to_db`) scans the IMAP mailbox by UID, checkpointed on the last-seen UID per mailbox so re-running never rescans old mail. Each message is classified from its subject alone (`FFM/*`, `FWB/*`, `FHL/*`, `MVT`, or a notification pattern like `RCF_933-34474602` carrying an embedded MAWB) and inserted into `emails_raw`. Full body parsing only happens for message-recognized types; notification-only mail is recorded without a body. 
 2. **Parse** (`parse_to_db`) runs the matching parser binary as a subprocess against each raw row with a known type, and records `ok`/`error`, stdout/stderr, and `payload_json` into `messages_parsed`. Candidates are selected by `NOT EXISTS` against prior attempts, so a row is parsed at most once unless `--force` reprocesses a batch — handy after rebuilding a parser.
-3. **Normalize** decomposes `payload_json` into per-type relational tables (`ffm_flight`/`ffm_route`/`ffm_uld`/`ffm_awb`, `fwb_master`/`fwb_flight_booking`/`fwb_routing_leg`, `fhl_master`/`fhl_house`, `mvt_event`) whenever a parse succeeds. The parse-result insert and the normalization writes share one transaction per message, so nothing is ever left half-normalized after a crash mid-write.
+3. **Normalize** decomposes `payload_json` into per-type relational tables once a parse succeeds (e.g. `ffm_flight`, `fwb_master`, `mvt_event` — full set under [Repository layout](#repository-layout)). The parse-result insert and the normalization writes share one transaction per message, so nothing is ever left half-normalized after a crash mid-write.
 4. **Serve**: an Express API (`/api/pipeline`, `/api/messages`, `/api/reports`) reads from reporting views/tables in Postgres.
-5. **Display/edit**: a React (Vite) client renders operational tables — MAWB, HAWB, ULD, office ops, pickup, breakdown manifest, new messages, parse errors — and writes edits back through `PATCH` endpoints. `client/src/lib/tableEdits.js` diffs the in-memory rows against what was last fetched and only ships changed, whitelisted-editable columns, so the server doesn't have to trust the client about what's editable.
+5. **Display/edit**: a React (Vite) client renders the operational tables (MAWB, HAWB, ULD, pickup, and others) and writes edits back through `PATCH` endpoints. `client/src/lib/tableEdits.js` diffs the in-memory rows against what was last fetched and only ships changed, whitelisted-editable columns, so the server doesn't have to trust the client about what's editable.
 
 Every run is itself observable as data — `pipeline_runs`/`pipeline_run_steps` rows plus a per-run JSON report under `server/data/logs/pipeline-runs/`, guarded by a PID lock file so overlapping runs refuse to start. Schema history lives in `server/migrations/` (node-pg-migrate) as an append-only record; `db/schema.sql` is a generated snapshot used to baseline a fresh database rather than a hand-maintained source of truth.
 
 See [docs/app_flow.md](docs/app_flow.md) for the full data-flow spec, including a field-by-field reference of every parsed payload key.
 
-Subject-only notification events (`RCF`, `Arrival Notice`, `Delivery Complete`, `Ready For Pick Up`, `DLV`, `NFD`) are also recognized and recorded against a MAWB without going through a CIMP parser at all; they roll up into `mawb_notification_status` / `has_*` flags on the New Messages and MAWB pages.
+Subject-only notification events (`RCF`, `Arrival Notice`, `Delivery Complete`, `Ready For Pick Up`, `DLV`, `NFD`) are also recognized and recorded against a MAWB without going through a CIMP parser at all. They roll up into `mawb_notification_status` / `has_*` flags on the New Messages and MAWB pages.
 
 ## Repository layout
 
@@ -150,8 +143,8 @@ npm install   # installs both workspaces from the repo root
 Create `server/.env`:
 
 ```bash
-ALIMAIL_NCA_USER=...     # IMAP mailbox user
-ALIMAIL_NCA_PASS=...     # IMAP mailbox password
+EMAIL_USER=...     # IMAP mailbox user
+EMAIL_PASS=...     # IMAP mailbox password
 DB_USER=...              # Postgres role (see db/init.sql)
 DB_PASSWORD=...
 PARSER_VERSION=...       # optional, recorded alongside parse attempts
@@ -181,12 +174,9 @@ npm run server:pipeline:force   # run once, reprocessing a batch of already-type
 
 All routes mounted under `/api` (`server/src/routes/index.js`):
 
-- `GET /health` — DB reachability check
 - `GET /pipeline/runs`, `GET /pipeline/runs/:id` — pipeline run history/detail
 - `GET /messages`, `GET /messages/:id` — parsed messages + parse diagnostics (joins `messages_parsed` with `emails_raw`)
 - `GET /reports/mawbs` / `/hawbs` / `/ulds` and their `-table` variants — reporting views backing each client page
 - `GET /reports/new-messages`, `GET /reports/email-xxx-table` — notification/event rollups
 - `GET /reports/office-operation-table`, `GET /reports/pickup-table`, `GET /reports/breakdown-manifest-table` — operational tables
 - `PATCH .../batch`, `PATCH .../archive-status`, `PATCH new-messages/archive` — editable-table write-back used by the client's diff-based batch updates (`client/src/lib/tableEdits.js`)
-
-See [docs/app_flow.md](docs/app_flow.md) for the full request/data flow, including which fields come from which parser payload.
