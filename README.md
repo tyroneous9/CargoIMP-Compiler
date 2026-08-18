@@ -64,8 +64,7 @@ flowchart TD
     D -->|"status = ok<br/>one transaction"| E[("ffm_* / fwb_* / fhl_*<br/>mvt_event")]
     E --> F["Reporting views"]
     F --> G["Express API<br/>/api/*"]
-    G --> H["React client<br/>editable tables"]
-    H -->|"PATCH batch / archive"| E
+    G --> H["React client<br/>editable tables<br/>(writes back via PATCH)"]
 ```
 
 1. **Extract** (`extract_to_db`) scans the IMAP mailbox by UID, checkpointed on the last-seen UID per mailbox so re-running never rescans old mail. Each message is classified from its subject alone (`FFM/*`, `FWB/*`, `FHL/*`, `MVT`, or a notification pattern like `RCF_933-34474602` carrying an embedded MAWB) and inserted into `emails_raw`. Full body parsing only happens for message-recognized types; notification-only mail is recorded without a body. 
