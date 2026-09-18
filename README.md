@@ -1,6 +1,6 @@
 # CargoIMP-Compiler
 
-Reads IATA Cargo-IMP cargo messages out of an airline mailbox, parses them with grammar-generated C++ parsers, and normalizes the result into a PostgreSQL database. An Express API and React front end uses this data to assist with day-to-day cargo operations, such as MAWB/HAWB/ULD tracking and pickup status.
+Reads IATA Cargo-IMP cargo messages out of an airline mailbox, parses them with grammar-generated C++ parsers, and normalizes the result into a PostgreSQL database. A full stack application is built on top of this (NodeJS + React) to assist our teams with daily cargo operations, such as MAWB/HAWB/ULD tracking and pickup status.
 
 In production against live mailbox traffic, the parser suite runs at an effectively 100% success rate. The remaining failures are messages that genuinely don't conform to the CIMP format, which are still recorded.
 
